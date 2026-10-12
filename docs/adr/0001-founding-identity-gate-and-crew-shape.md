@@ -68,7 +68,7 @@ The provisional naming, from Mint's ledger (entry №89), verbatim:
 ## Questions
 
 ### QST-EXT-ID: What identifier does the extension carry?
-- Status: unanswered
+- Status: answered
 - Why asking: The identifier is baked into command ids, setting keys, keybindings and the `vscode://` link. Those end up in your user settings and in recipes in other repos, where a later rename does not reach.
 - Need: pick a letter (or override — any shape answers)
 
@@ -81,13 +81,13 @@ Options:
 
 **A — porthole throughout.** *Rationale*: both of your existing extensions name their ids after the product (`jlumbroso.peacock-launcher` with `peacockLauncher.<verb>`; `jlumbroso.adrs4ai`), and Mint's entry №89 kills `minibrowser` as category-generic, so B would ship the one name the naming process rejected. Spike 0 is throwaway either way, so A and C differ only at M1. *Confidence*: 0.75 — because the house convention is read directly from both manifests, but the name itself sits at 0.65 with a consult open. *If wrong*: if the fuller consult is likely to land before M1 starts and may replace `porthole`, this flips to C.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in slug, and capitalized in display name, at least until Mint has made a more comprehensive ruling (and we can rename existing practices when that happens, if needed).
 
 ---
 
 ### QST-TRIGGER: Does porthole need to be triggerable from outside VS Code?
-- Status: unanswered
+- Status: answered
 - Why asking: It decides whether milestone M4 exists (a `vscode://` link handler, its allowlist, and a `just pin` recipe). Your original prompt does not ask for it.
 - Need: pick a letter (or override — any shape answers)
 
@@ -100,8 +100,8 @@ Options:
 
 **A — keep it, at M4.** *Rationale*: the brief sizes the handler at about ten lines plus a recipe (`docs/INITIAL-DESIGN-BRIEF.md`, "URI handler"), and `vscode-adrs-for-ai` already has the pattern to copy — a pure parser in `src/deeplink/uriTarget.ts`, a thin handler, and `onUri` activation — so the cost is small and the design is proven in your own code. It stays last because it is the only part that takes input from outside, and it should sit on top of a pop-out that already works. *Confidence*: 0.7 — because the value depends on how task pages reach you, which I am inferring from one sentence. *If wrong*: if you always open task pages by hand, this flips to B; if agents write most of them, it flips to C.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4, and credit Opus 5.5 for it. It anticipates a real need that I can certify will present itself (if the execution in the first instance is successful).
 
 ---
 

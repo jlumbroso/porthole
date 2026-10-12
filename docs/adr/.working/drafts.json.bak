@@ -1,0 +1,13 @@
+[
+  {
+    "key": "jlumbroso-porthole:2::4177d71abb05::0",
+    "adrPath": "docs/adr/0002-scaffold-follow-the-house-extension-conventions.md",
+    "adrNumber": 2,
+    "questionText": "Can Spike 0 run as a repeatable test inside a real VS Code?",
+    "draftText": "[Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->m",
+    "updatedAt": "2026-10-12T19:09:14.188Z",
+    "history": [],
+    "totalOccurrences": 1,
+    "source": "panel"
+  }
+]

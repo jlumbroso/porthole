@@ -1,0 +1,49 @@
+[
+  {
+    "key": "jlumbroso-porthole:1::7ecf3fdad28b::0",
+    "adrPath": "docs/adr/0001-founding-identity-gate-and-crew-shape.md",
+    "adrNumber": 1,
+    "questionText": "What identifier does the extension carry?",
+    "draftText": "Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in slug, and capitalized in display name, at least until Mint has made a more comprehensive ruling (and we can rename existing practices when that happens, if needed).",
+    "updatedAt": "2026-10-12T19:07:13.061Z",
+    "history": [
+      "Yes, ",
+      "Yes, Option A, `porthole` throughout per Mint's ",
+      "Yes, Option A, `porthole` throughout per Mint's naming.",
+      "Yes, Option A, `porthole` throughout per Mint's naming",
+      "Yes, Option A, `porthole` throughout per Mint's naming — all lowercase.",
+      "Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in",
+      "Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in ",
+      "Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in slug, and capitalized in display name, at least until Mint has made a more comprehensive ruling (and we can rename",
+      "Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in slug, and capitalized in display name, at least until Mint has made a more comprehensive ruling (and we can rename existing practices when that happens)."
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-12T19:07:13.311Z",
+    "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:1::5a4775773bb3::0",
+    "adrPath": "docs/adr/0001-founding-identity-gate-and-crew-shape.md",
+    "adrNumber": 1,
+    "questionText": "Does porthole need to be triggerable from outside VS Code?",
+    "draftText": "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4, and credit Opus 5.5 for it. It anticipates a real need that I can certify will present itself (if the execution in the first instance is successful).",
+    "updatedAt": "2026-10-12T19:09:06.946Z",
+    "history": [
+      "Yes, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 ",
+      "Yes, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 sesion",
+      "Yes, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session",
+      "Yes, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at ",
+      "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at ",
+      "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4",
+      "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4, ",
+      "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4, and credit ",
+      "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4, and credit t",
+      "Yes, Option A, I think this is an ingenious contribution from the original co-designer, who was also an Opus 5.5 session. We should keep it, at M4, and credit Opus 5.5 for it."
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-12T19:09:09.604Z",
+    "reason": "promoted"
+  }
+]
