@@ -1,0 +1,184 @@
+{
+  "name": "porthole",
+  "displayName": "Porthole",
+  "description": "Pop the HTML page you are looking at into a small floating window: only the rendered page, pinned above your other windows.",
+  "publisher": "jlumbroso",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jlumbroso/porthole"
+  },
+  "engines": {
+    "vscode": "^1.141.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "porthole.popOut",
+        "title": "Pop Out to Mini Window",
+        "category": "Porthole",
+        "icon": "$(multiple-windows)"
+      },
+      {
+        "command": "porthole.dockBack",
+        "title": "Dock Back into Main Window",
+        "category": "Porthole"
+      },
+      {
+        "command": "porthole.cycleSize",
+        "title": "Cycle Mini Window Size",
+        "category": "Porthole"
+      },
+      {
+        "command": "porthole.togglePin",
+        "title": "Toggle Always on Top",
+        "category": "Porthole"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "porthole.dockBack",
+          "when": "isAuxiliaryWindowFocusedContext"
+        },
+        {
+          "command": "porthole.cycleSize",
+          "when": "isAuxiliaryWindowFocusedContext"
+        },
+        {
+          "command": "porthole.togglePin",
+          "when": "isAuxiliaryWindowFocusedContext"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "porthole.popOut",
+          "group": "navigation",
+          "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i && !isAuxiliaryWindowFocusedContext"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "porthole.popOut",
+          "group": "navigation@30",
+          "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "porthole.popOut",
+        "key": "ctrl+alt+m",
+        "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i && !isAuxiliaryWindowFocusedContext"
+      },
+      {
+        "command": "porthole.dockBack",
+        "key": "ctrl+alt+m",
+        "when": "isAuxiliaryWindowFocusedContext"
+      }
+    ],
+    "configuration": {
+      "title": "Porthole",
+      "properties": {
+        "porthole.sizes": {
+          "type": "array",
+          "markdownDescription": "Size presets for the mini window. The first is used when a page is popped out; **Cycle Mini Window Size** steps through the rest. VS Code will not make a window smaller than 400×270.",
+          "default": [
+            {
+              "name": "S",
+              "width": 420,
+              "height": 640
+            },
+            {
+              "name": "M",
+              "width": 480,
+              "height": 720
+            },
+            {
+              "name": "L",
+              "width": 640,
+              "height": 900
+            }
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "width",
+              "height"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "width": {
+                "type": "number",
+                "minimum": 400
+              },
+              "height": {
+                "type": "number",
+                "minimum": 270
+              }
+            }
+          }
+        },
+        "porthole.position": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "markdownDescription": "Where the mini window opens, in screen pixels, for example `{ \"x\": 40, \"y\": 80 }`. Leave as `null` to let VS Code center it on the current window.",
+          "default": null,
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          }
+        },
+        "porthole.compact": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the mini window in compact mode: no tabs, breadcrumbs or status bar."
+        },
+        "porthole.alwaysOnTop": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the mini window pinned above other windows."
+        },
+        "porthole.useInternalApi": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Open the mini window with one internal VS Code call, at the exact preset size. Turn this off to use public commands only; the window then opens at VS Code's default size."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "check:package": "node scripts/check-package-contents.mjs",
+    "check": "npm run lint && npm test && npm run build && npm run check:package",
+    "package": "vsce package --out releases/",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.100.0",
+    "@vscode/vsce": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
+  }
+}

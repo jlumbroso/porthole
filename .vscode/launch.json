@@ -2,10 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            // The real extension, built from src/, in a second VS Code window on the
+            // samples/ folder. Your other extensions stay enabled here, on purpose:
+            // this is the environment porthole has to work in.
+            "name": "Run Porthole",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--disable-workspace-trust",
+                "${workspaceFolder}/samples"
+            ],
+            "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+            "preLaunchTask": "build"
+        },
+        {
             // Spike 0 (docs/adr/0003): a second VS Code window that loads only the
             // throwaway spike extension. Other extensions are disabled so that what
             // we observe is VS Code's own behavior, and workspace trust is off so
             // the integrated browser does not fall back to ephemeral storage.
+            // Re-run it after a VS Code update: it is the regression check for the
+            // internal call (ADR-0005).
             "name": "Spike 0 — one-shot pop-out",
             "type": "extensionHost",
             "request": "launch",

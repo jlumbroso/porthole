@@ -12,6 +12,7 @@ spike/.run/
 
 # Extension build output and packages
 node_modules/
+releases/
 dist/
 out/
 *.vsix

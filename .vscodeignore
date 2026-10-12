@@ -1,0 +1,10 @@
+# Allowlist, not deny-list: everything is excluded, then the few files the
+# extension needs are let back in. The house's other extensions shipped
+# CLAUDE.md, .mcp.json and pneumatic's ledger from deny-lists that fell behind
+# (ADR-0002). `npm run check:package` verifies the real package contents.
+**
+!package.json
+!README.md
+!CHANGELOG.md
+!LICENSE
+!dist/extension.js

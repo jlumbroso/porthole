@@ -556,6 +556,22 @@ gate:
     fi
     echo "✅ gate green"
 
+# Build, package, and install porthole into the VS Code you actually use
+# (ADR-0009). Installs the exact file it just built, by name, because a fix
+# "verified in git" is not a fix in the running editor until that file is
+# installed and the window reloaded (ADR-0002).
+[group('project')]
+[doc("Check, package and install porthole from a local .vsix, then reload the window yourself")]
+install-local:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    npm run check
+    VERSION=$(node -p "require('./package.json').version")
+    mkdir -p releases
+    npm run package
+    code --install-extension "releases/porthole-${VERSION}.vsix" --force
+    echo "✅ installed porthole ${VERSION} — now reload the VS Code window (Developer: Reload Window)"
+
 # Spike 0 from a terminal — the same window F5 opens with the "Spike 0"
 # launch configuration: a second VS Code window with only the throwaway spike
 # extension loaded, on the samples/ folder. What to do in it: docs/adr/0003.
