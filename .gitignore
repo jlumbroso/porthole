@@ -4,6 +4,16 @@
 # Temporary files
 ~*
 
+# pneumatic local state (edge ledger, recruit scripts) — machine-local, never substrate
+.pneumatic/
+
+# Extension build output and packages
+node_modules/
+dist/
+out/
+*.vsix
+.vscode-test/
+
 # Python temporary files
 __pycache__/
 *.py[cod]
