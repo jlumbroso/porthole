@@ -3,7 +3,7 @@
 # The proposed browser API is optional and feature-detected
 
 * Status: proposed
-* Deciders: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5); proposed by Claude Opus 5.5 in the design brief
+* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); awaiting Jérémie Lumbroso
 * Date: 2026-10-12
 
 Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0003. Not yet tested; belongs to milestone M2.

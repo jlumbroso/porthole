@@ -2,8 +2,8 @@
 
 # Resize means re-open with new bounds
 
-* Status: accepted
-* Deciders: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5); proposed by Claude Opus 5.5 in the design brief
+* Status: proposed — confirmed by evidence (Spike 0, ADR-0003; hands-on test, ADR-0010), not yet ratified by Jérémie
+* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); awaiting Jérémie Lumbroso (corrected 2026-10-12: I first listed him as a decider of a decision he had not made)
 * Date: 2026-10-12
 
 Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0004; confirmed by [ADR-0003](0003-spike-0-does-the-one-shot-call-hold.md).

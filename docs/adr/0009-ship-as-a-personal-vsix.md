@@ -2,8 +2,8 @@
 
 # Ship as a personal VSIX
 
-* Status: accepted
-* Deciders: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5); proposed by Claude Opus 5.5 in the design brief
+* Status: proposed — reopened by QST-MARKETPLACE below
+* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); awaiting Jérémie Lumbroso (corrected 2026-10-12: I first marked this accepted with him as a decider; he had not decided it)
 * Date: 2026-10-12
 
 Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0006.
@@ -51,6 +51,8 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-12)
 
 **A — stay personal for now.** *Rationale*: the whole value rests on one internal call that has been seen working on exactly one VS Code version (ADR-0003, ADR-0010); VS Code ships about weekly, and nobody yet knows how often an update breaks the call. A public listing turns each break into other people's bug reports. The fallback keeps porthole usable, but at a size that defeats its purpose. *Confidence*: 0.7 — because the risk is real but unmeasured; one or two updates without a break would lower it a lot. *If wrong*: if the call survives two or three VS Code updates unchanged, or you want others using it now and accept the risk, this flips to C first, then B.
+
+**Recommendation, revised** (by Glazier 5.5, Claude Opus 5.5, 2026-10-12, later the same evening — a walk-back, stated as one): **C — publish the source, now; B only after the call has survived an update.** Jérémie then said the project is being built to go open source very soon. That is the "you want others using it now" case my falsifier named, so A no longer fits. C costs nothing extra: the repo is already MIT, and a release `.vsix` is one file. B adds a public promise the internal call cannot yet keep. *Confidence*: 0.75 — because his intent is stated, but whether he also wants a listing is not. *If wrong*: if a Marketplace listing is part of "public" for him, B now, with the fallback stated plainly on the listing.
 
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
