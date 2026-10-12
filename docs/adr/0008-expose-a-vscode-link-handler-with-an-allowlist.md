@@ -26,6 +26,7 @@ What is settled now:
 * Only the `/open` path is recognized. A malformed link shows an error; it is never a silent no-op.
 * The parser is a pure function, tested directly.
 * A local path must end in `.html` or `.htm`.
+* **Which URLs a link may open** (QST-LINK-ALLOWLIST, answered C by Jérémie, 2026-10-12): local files and `localhost` by default; any `https://` URL only when the setting `porthole.allowRemoteLinks` is turned on. His reason: dashboards are sometimes published to a pre-approved remote location so they can be reached from a phone, and those should be poppable too.
 
 ### Positive Consequences
 
@@ -38,7 +39,7 @@ What is settled now:
 ## Open question
 
 ### QST-LINK-ALLOWLIST: Which URLs may a link open in the pinned window?
-- Status: deferred — to be asked when M4 starts; nothing before then depends on it
+- Status: answered
 - Why asking: A `vscode://` link can be placed on any web page. Once you have told VS Code not to ask again for this extension, clicking such a link would put whatever it names in a window that stays on top of everything.
 - Need: pick a letter (or override — any shape answers)
 
@@ -51,8 +52,8 @@ Options:
 
 **A — local files and localhost only.** *Rationale*: every use named so far — the original prompt, the brief's `just pin` recipe, ADR-0001's answer — is a local task page; nothing has asked for a remote page by link, and an always-on-top window that any web page can fill is the one way this small tool could be turned against its user. *Confidence*: 0.7 — because the uses are read from three documents, but I have not checked how VS Code's own confirmation prompt behaves for this handler. *If wrong*: if you want to pop remote dashboards or docs from scripts, this flips to C.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option C. We already have mechanisms by which to publish local dashboards in some pre-approved remote location so it can be accessible, for instance, from the phone, on the go — as opposed to just the local machine. So Option C, which is Option A by default, with an opt-in override to remote (secure) links is the most convenient and sensible option.
 
 ---
 
