@@ -1,11 +1,11 @@
 # Crew Onboarding — read this first if you've been recruited
 
-Welcome to **⟦PROJECT-NAME⟧** — ⟦PROJECT-ONE-LINER⟧ <!-- one line: what this
-project is and who the human collaborator(s) are -->.
+Welcome to **porthole** — a personal VS Code extension that pops a rendered
+HTML page into a small, pinned floating window, built by Jérémie Lumbroso
+(the human) with a small crew of AI seats.
 
 This document captures **80% of what every seat needs to know** so per-recruit
-briefs can be short deltas (name, color, mission). Fill the bracketed
-placeholders when adopting the template; keep the structure.
+briefs can be short deltas (name, color, mission).
 
 If you're already familiar with the substrate, skip to **§6 Live state**.
 
@@ -57,8 +57,14 @@ the tmux hive.
 
 ## 1. What this project is
 
-⟦PROJECT-GOAL⟧ <!-- two or three sentences: the goal, the repo's role (product
-repo? coordination layer?), where implementation happens -->
+One gesture should turn the HTML page the human is looking at — usually a
+page of task instructions — into a small window showing only the rendered
+page, pinnable above other windows, easy to dock back, and triggerable from
+outside VS Code. The extension renders nothing itself: it orchestrates VS
+Code's integrated browser and floating windows. This is the **product repo**:
+implementation happens here (`src/`, `tests/`), and so does the decision
+record (`docs/adr/`). The founding research, including the build plan, is
+`docs/INITIAL-DESIGN-BRIEF.md` — read it right after `CLAUDE.md`.
 
 **Read first**, in order:
 1. `CLAUDE.md` — directives, project context, workflow
@@ -77,8 +83,8 @@ repo? coordination layer?), where implementation happens -->
   meaningful; run tests before commit
 - **Sixth**: Document metacognitive gems as vignettes
 
-<!-- adjust to your project's directive set; cite directives by canonical
-number when dispatching work -->
+The Fifth Directive's gate here is `just gate`. Cite directives by canonical
+number when dispatching work.
 
 ---
 
@@ -176,8 +182,11 @@ an expired or killed wait carries no message; re-arm freely.
 
 ## 6. Live state
 
-<!-- keep this section current — or better, point at living state (CLAUDE.md's
-current-focus section, a `just status` recipe) instead of duplicating it -->
+Not duplicated here, so it cannot rot. Three places hold it:
+
+- `CLAUDE.md` → "Current focus" — what is being worked on now
+- `just crew` — who is registered and when each seat was last active
+- the open questions in `docs/adr/` (the greps are in `CLAUDE.md`)
 
 ---
 
@@ -193,9 +202,12 @@ current-focus section, a `just status` recipe) instead of duplicating it -->
 
 ## 8. Memory / continuity
 
-<!-- if your AI tooling has a persistent memory system, name it here and the
-discipline for it. Recurring lessons graduate out of briefs into durable
-homes — see ENCODING-MAP.md -->
+Claude Code keeps a per-project memory directory outside the repo
+(`~/.claude/projects/<project-slug>/memory/`). It is private to one machine
+and invisible to every other participant, so use it only for how the human
+likes to work. Anything about porthole itself — decisions, lessons, state —
+belongs in the repo, where the next seat can read it. Recurring lessons
+graduate out of briefs into durable homes — see `ENCODING-MAP.md`.
 
 ---
 

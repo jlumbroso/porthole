@@ -1,15 +1,9 @@
 # CLAUDE.md - Project Guidance
 
-<!-- Instantiation placeholders look like ⟦THIS⟧ — fill-and-delete each one
-     (they are grep-proof on purpose; `just instantiate-check` reports which
-     remain and passes only when none do). Square-bracket text elsewhere is
-     either per-document mold slots (filled at each mint, not at birth) or
-     the frozen dialogue placeholder `[Fill this in]` — never convert those. -->
-
-- **Project**: ⟦PROJECT-NAME⟧
-- **Human**: ⟦HUMANS⟧
-- **AI**: ⟦AI-SEATS⟧ <!-- with the crew layer, the roster lives in docs/inbox/agent-sessions.json; name the coordinator seat here -->
-- **Last Updated**: ⟦LAST-UPDATED⟧
+- **Project**: porthole
+- **Human**: Jérémie Lumbroso
+- **AI**: Glazier 5.5 (Claude Opus 5.5) — founding seat and coordinator; the roster lives in `docs/inbox/agent-sessions.json`
+- **Last Updated**: 2026-10-12
 
 ---
 
@@ -48,11 +42,12 @@ IF a bug is found and fixed:
 Add a describe('Regression tests', ...) block in the existing test file for that module:
 
 ```ts
-// In src/tests/api/signups/create.test.ts
+// In tests/popOut.test.ts   (illustrative shape — not a bug we have had)
 
 describe('Regression tests', () => {
-  it('should handle null tier gracefully (fixes #123)', () => {
-    // Bug: tier=null caused TypeError in v1.2.0
+  it('runs the stable fallback once when the one-shot call opens no window', () => {
+    // Bug: a slow one-shot success plus the timeout fired the fallback too,
+    //      leaving two floating windows for one page.
     // Fixed in commit abc123
     // ...
   });
@@ -73,9 +68,9 @@ Tests should:
 - **Be maintainable**: Overly clever mocking or setup that obscures the test's intent is a code smell
 
 **Good tests answer questions like:**
-- "What happens when a student signs up for a full session?"
-- "Does faculty authorization actually block unauthorized access?"
-- "Are preparation rates calculated correctly with mixed evaluations?"
+- "When the one-shot call throws or opens no window, does the stable fallback run — exactly once?"
+- "Does the `vscode://` handler refuse a path that is not a local `.html` file?"
+- "Is a requested size below VS Code's 400×270 floor clamped instead of passed through?"
 
 **Bad tests are:**
 - Testing that a mock returns what you told it to return
@@ -94,15 +89,19 @@ Tests should:
 **RUN THIS PROJECT'S VERIFICATION GATE BEFORE EVERY COMMIT**
 
 Before serving any change:
-1. Run the project's verification gate: ⟦VERIFICATION-GATE⟧ <!-- test suite, build, linter, or a combination; e.g. `npm test`, `uv run pytest`, `hugo && bin/check` -->
+1. Run the project's verification gate: `just gate`
 2. Fix any failures before committing
 3. Never serve changes with a failing gate
 
-**Why**: ⟦GATE-WHY⟧ <!-- state what this project's gate actually catches — real classes of bug, real numbers if you have them. A directive that names a real gate gets followed; an unfollowable one teaches every seat that directives are decorative, and that lesson generalizes. -->
+**Why**: `just gate` runs every check that exists and grows with the project, so it is followable from the first commit:
+
+- **Today (before any extension code)** it catches two things: an instantiation placeholder left unfilled, and a crew registry that does not parse or whose groups name a seat that is not registered. The second happened in this project's first hour — the `crew` group pointed at an alias that did not exist yet, and `just groups` only printed a warning and exited 0.
+- **Once `package.json` exists** it also runs `npm run check` — typecheck, the command-handler tests, and the bundle — so a type error, a broken handler, or an extension that no longer builds stops the commit.
+- **What it cannot catch**: VS Code changing the internal call the extension is built on (`_workbench.openWith` into group `-3`). No test here runs inside a real VS Code window. That class is caught only by re-running Spike 0 by hand after a VS Code update (`docs/INITIAL-DESIGN-BRIEF.md`, Build plan) — a green gate is not evidence that the pop-out still works.
 
 **Process**:
 ```bash
-⟦VERIFICATION-GATE⟧            # Must be green before commit
+just gate                      # Must be green before commit
 git add <explicit paths>       # never -A: stage by path, commit by pathspec — see CONVENTIONS.md, shared-worktree awareness
 git commit -m "..." -- <paths>
 ```
@@ -252,13 +251,14 @@ If the script was successfully used, append as comments how, and what the outcom
 ## Project Context
 
 ### What we're building:
-⟦PROJECT-GOAL⟧ <!-- 1-2 sentences -->
+**porthole** is a personal VS Code extension: one gesture pops the HTML page you are looking at (typically a page of task instructions) out of the integrated browser into a small floating window that shows only the rendered page, can be pinned above other windows, docks back just as easily, and can be triggered from outside VS Code. It renders nothing itself — it orchestrates VS Code's own integrated browser and floating windows. This is the product repo: extension source in `src/`, tests in `tests/`, the decision record in `docs/adr/`. The founding research is `docs/INITIAL-DESIGN-BRIEF.md`.
 
 ### Current focus:
-⟦CURRENT-FOCUS⟧
+Founding. The template was instantiated on 2026-10-12 and no extension code exists yet. Next is Spike 0 — proving the one-shot `_workbench.openWith` call on the human's machine — which is blocked on updating VS Code from 1.130 to 1.141 or later. Then milestones M1–M5 from the brief.
 
 ### Key decisions made:
-<!-- list ADRs here as they land, e.g. `- Auth approach — see docs/adr/0001-*.md`; empty at birth is healthy -->
+- Founding decisions (name, extension identity, gate, crew shape) — see `docs/adr/0001-*.md`
+- The six product decisions proposed in the brief ("Decisions to record") are **not yet ADRs**; they are recorded once Spike 0 confirms or breaks them.
 
 ### Open questions:
 ```bash
@@ -271,8 +271,10 @@ grep 'Status: unanswered' -r docs/adr/ --exclude-dir=templates                  
 ## File Structure
 
 ```
-project/
+porthole/
 ├── docs/
+│   ├── INITIAL-DESIGN-BRIEF.md # Founding research: building blocks, routes, spec, build plan
+│   ├── TEMPLATE-FEEDBACK.md    # What was unclear when instantiating the template, and what we decided
 │   ├── adr/
 │   │   ├── 0001-*.md           # ADRs numbered sequentially
 │   │   └── templates/          # ADR templates
@@ -288,10 +290,13 @@ project/
 │   ├── last-message.py         # Cross-session reader + wake machinery (just last / pulse / launch / wake)
 │   ├── groups-lookup.py        # Group membership resolution (just groups / wait-for-brief)
 │   ├── tmux/seat.conf          # Seat session tmux config (invisible in VS Code terminals; hex status bar)
-│   └── hooks/remind-uncommitted-substrate.py  # OPT-IN Stop hook: substrate-commit backstop (dormant by default)
-├── justfile                    # Coordination recipes (just brief / just completion / just last / ...)
-├── src/                        # Source code
-├── tests/                      # Tests
+│   ├── hooks/remind-uncommitted-substrate.py  # OPT-IN Stop hook: substrate-commit backstop (dormant by default)
+│   └── ephemeral/              # One-off diagnostic scripts, date-prefixed (created on first use)
+├── justfile                    # Coordination recipes, plus ours at the bottom (just gate)
+├── kintsugi.yaml / .lock       # Template lineage: which files came from the template, at which version
+├── src/                        # Extension source (arrives with Spike 0)
+├── tests/                      # Tests (arrive with M1)
+├── .pneumatic/                 # pneumatic's machine-local state — gitignored, never substrate
 └── CLAUDE.md                   # This file
 ```
 
@@ -328,7 +333,7 @@ Recipes (from the seed `justfile`):
 
 ## Technical Debt Tracking
 
-**File**: `docs/TECHNICAL-DEBT.md`
+**File**: `docs/TECHNICAL-DEBT.md` (created with its first entry — it does not exist yet)
 
 **Purpose**: Record architectural issues, workarounds, and design compromises discovered during development.
 
@@ -337,7 +342,7 @@ Recipes (from the seed `justfile`):
 - You implement a workaround instead of a proper fix
 - You notice patterns violating good practices
 - You identify type safety gaps or excessive optional chaining
-- You find inconsistencies between database schema and TypeScript types
+- You lean on an internal VS Code command or a proposed API without a recorded fallback
 
 **Philosophy**:
 It's acceptable to conform to bad architecture when discovered mid-implementation (to maintain momentum), but it MUST be documented. Technical debt that accumulates in the dark becomes legacy code.
@@ -398,6 +403,10 @@ If context window fills mid-work, create `docs/HANDOFF-datetime.md`:
 
 <!-- anything specific to this project that doesn't fit above; empty at birth is healthy -->
 
+- **Every internal VS Code identifier is an assumption, not a fact.** `_workbench.openWith`, the editor id `workbench.editor.browser`, and group `-3` come from a source reading in the brief that was never run. Check them against the VS Code build actually installed before relying on them, log the VS Code version on activation, and fall back loudly when a call throws or opens nothing.
+- The brief was written against VS Code 1.141.0, and the human keeps VS Code on manual updates. Note the installed version (`code --version`) in any spike or bug record.
+- The working name in the brief is "Mini Browser" (`jlumbroso.mini-browser`); the project's name is **porthole**. Until ADR-0001's identity question is answered, treat every `miniBrowser.*` id in the brief as a placeholder.
+- `.pneumatic/` holds pneumatic's local ledger and recruit scripts; it is gitignored on purpose.
 - It's possible the user uses `asdf` for Node.js and Python and the runtime of most languages. You can `source .claude/agent.env` before calling the runtimes, like `python` or `node` to access them through `asdf`'s shims. See: https://asdf-vm.com/manage/configuration.html
 
 ---

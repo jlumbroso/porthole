@@ -521,3 +521,33 @@ adr TITLE:
     echo "$FILE"
     echo "↪ BEFORE writing: load the adr-authoring skill (Skill tool) — it IS the read-the-template step." >&2
     echo "  Available is not loaded: a skeleton filled without the skill is how QSTs ship unstructured." >&2
+
+# ─── porthole — project recipes (ours; everything above is the template's seed) ──
+
+# The Fifth Directive's verification gate (CLAUDE.md). It runs every check
+# that exists today and grows with the project: when package.json lands,
+# `npm run check` (typecheck + tests + bundle) joins without anyone editing
+# this recipe. What it cannot catch is named in CLAUDE.md: VS Code changing
+# the internal call the extension is built on — that is Spike 0, re-run by
+# hand after a VS Code update.
+#
+# The registry step calls groups-lookup.py --validate directly because
+# `just groups` only WARNS on a group member that is not a registered seat
+# and exits 0 (met on 2026-10-12, this project's first hour).
+[group('project')]
+[doc("Verification gate — must be green before every commit (CLAUDE.md, Fifth Directive)")]
+gate:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "▸ placeholders"
+    just instantiate-check
+    echo "▸ crew registry"
+    python3 scripts/groups-lookup.py --validate
+    echo "✅ registry parses; every group member is a registered seat"
+    if [[ -f package.json ]]; then
+        echo "▸ extension (typecheck + tests + bundle)"
+        npm run check
+    else
+        echo "▸ extension: no package.json yet — nothing to build or test"
+    fi
+    echo "✅ gate green"
