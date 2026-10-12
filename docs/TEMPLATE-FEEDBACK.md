@@ -361,3 +361,19 @@ brackets (item 15).
 - **What happened**: ADR-0002 copied its tool versions from `vscode-adrs-for-ai` (Vite 5, Vitest 2, vsce 3). `npm install` reported 12 advisories, two critical. Current versions report none and needed no config change.
 - **Not the template's fault**, but it is an estate-level lesson: "follow the house's conventions" should mean its practices, not its version numbers.
 - **Decided**: porthole is on current versions; told the human and Surveyor so the other crews can hear it.
+
+### 51. The mold lets a question lean on text elsewhere in the ADR
+- **What happened**: ADR-0010's five questions each said "after step N", with the steps in a procedure above them. Jérémie went back and forth "several dozen times" and named it a coupling failure.
+- **Clearer if**: the mold's Why-asking line said "restate the context here; the answerer may read only this block". The skill already says the Options block must stand alone; the question line deserves the same rule.
+
+### 52. pneumatic cannot reach a hive it is not federated with
+- **What happened**: authorized to brief `vscode-adrs-for-ai`, I tried `pneumatic brief --check crew@vscode-adrs-for-ai`: "Unknown hive". I wrote the file by hand in their inbox and did not commit it, because their `safe-commit` unstages everything and could disturb a seat mid-commit.
+- **Clearer if**: the protocol said how to deliver to an unconnected hive, and whether the sender or the receiver commits.
+
+### 53. Seat names are per hive, and nothing says so
+- **What I saw**: `vscode-adrs-for-ai` has a paused "Surveyor 4.6". Ours is "Surveyor 5.1". The doctrine on never reissuing a name reads as estate-wide.
+- **Clearer if**: `CONVENTIONS.md` §6 said whether names are unique per hive or across the estate.
+
+### 54. I broke the heredoc rule a second time
+- **What happened**: a python heredoc to edit an ADR header (item 24 was the first time). It worked, but the rule exists for the permission model, not for success.
+- **Why it keeps happening**: a multi-part edit of one file feels like one action, and the rule's heading still says "Temporary Scripts". Item 24's suggested fix stands.

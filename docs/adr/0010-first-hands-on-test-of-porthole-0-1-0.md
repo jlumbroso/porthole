@@ -8,11 +8,11 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # First hands-on test of porthole 0.1.0
 
 - **Date**: 2026-10-12
-- **Iteration**: 2
-- **Status**: Draft
+- **Iteration**: 3
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
-**TL;DR**: Version 0.1.0 pops out a file, cycles sizes, docks back and toggles the pin; it passes 21 tests against a mocked VS Code, and five things only a real window can show are asked below, one letter each.
+**TL;DR**: Passed — all five answers A, 15 pop-outs in the log with no fallback and no error; the lock and the single chord stay. (Written before the run:) Version 0.1.0 pops out a file, cycles sizes, docks back and toggles the pin; it passes 21 tests against a mocked VS Code, and five things only a real window can show are asked below, one letter each.
 
 ---
 
@@ -212,17 +212,42 @@ The `Toggle Always on Top` works perfectly.
 
 Version 0.1.0 is not installed into daily use until a real window has shown these five things.
 
-### Chosen: pending the run
+### Chosen: 0.1.0 stands as built — the lock stays, the single chord stays
 
-The answers decide whether the lock stays, whether the single chord works for both directions, and whether M2 and M4 can build on this as it is.
+Run by Jérémie on 2026-10-12 between 7:10 and 7:40 PM ET, VS Code 1.141.0, with his other extensions enabled. **All five answers were A**, with screenshots. Surveyor's predictions and mine were all A as well.
+
+The extension's own log (VS Code's log folder, "Porthole" channel, seven windows) agrees and adds:
+
+- **15 pop-outs, all by the internal call**, the new window reported 123–236 ms after the command started. No fallback ran, nothing threw, and porthole never skipped the lock.
+- **The size cycle**: S → M → L → S, one window each time, 123–170 ms per step.
+- **Two mini windows can be open at once**: Jérémie popped a second file out while the first was showing (QST-V1-LOCK, his extra note). Nothing in the design forbids it, and Cycle Size acts on whichever one is focused, which is why the "last opened" fallback had to go.
+
+**What this decides**:
+
+1. **The lock stays.** It kept the second file out of the mini window, and it did not stop resizing (Surveyor's source reading, now seen).
+2. **One chord for both directions stays.** `Ctrl+Alt+M` popped out from the text editor and docked from the mini window.
+3. **M2 and M4 can build on this as it is.**
+
+**Found by the run** (not predicted by anyone):
+
+- **A docked page cannot be popped back out with the chord.** After Dock Back the page is a browser tab, and the chord is deliberately inert there (fixed before this run, from Surveyor's review). The title-bar button should still work on such a tab, since it passes the file; that is milestone M2's first test.
+- **⌘P cannot open a file as text while that same file is showing in the mini window.** Jérémie had to add `other-file.html` to test the lock. I do not know yet whether this is VS Code's quick-open preferring the existing browser editor or something porthole causes. Recorded, not investigated.
+- **The user-facing words are not unified.** The menu says "Pop Out to **Mini Window**" while the project is porthole (QST-V1-PIN, Jérémie's note). He asked for an index of every user-facing term, to be put to Mint for a coherence pass. Action item below.
+
+### Consequences
+
+- 0.1.0 can be installed for daily use with `just install-local` whenever Jérémie wants it.
+- **How I write questions changes** (Jérémie's note on QST-V1-DOCK): each question restates the step it asks about, so it can be answered without scrolling back to the procedure. These five made him go back and forth several dozen times; that is a coupling I built in, and the next run's questions will not have it.
 
 ---
 
 ## Action Items
 
-- [ ] Run the test and answer the five questions — Owner: Jérémie
-- [ ] Read the log and record the result — Owner: Glazier
-- [ ] Review `src/` — Owner: Surveyor
+- [x] Run the test and answer the five questions — Owner: Jérémie (2026-10-12, all A, 17 screenshots)
+- [x] Read the log and record the result — Owner: Glazier (iteration 3)
+- [x] Review `src/` — Owner: Surveyor (done before the run; two fixes adopted)
+- [ ] Index every user-facing term (command titles, menu entries, settings descriptions, messages, README) for Mint's coherence pass — Owner: to be assigned (see the crew question in the founding seat's report of 2026-10-12)
+- [ ] Find out why ⌘P will not open a file as text while it is showing in a mini window — Owner: Glazier, at M2
 
 ---
 
@@ -239,6 +264,12 @@ The answers decide whether the lock stays, whether the single chord works for bo
 - Contributors: Surveyor 5.1 (Claude Fable 5.1) — the review and predictions; Glazier 5.5 (Claude Opus 5.5) — the two fixes and this note
 - Changes: Surveyor's predictions added beside mine; two fixes recorded; test count is now 23
 - Outcome: stays `Draft`; the questions are still open
+
+### Iteration 3 (2026-10-12)
+- Trigger: Jérémie ran the test and answered all five questions (A each), with screenshots
+- Contributors: Jérémie Lumbroso — the run, the answers, and two notes (self-contained questions; unified terminology); Glazier 5.5 (Claude Opus 5.5) — the reading of the extension's log
+- Changes: Decision and Consequences filled; two follow-ups found by the run; two action items added
+- Outcome: `Draft → Implemented`
 
 ---
 

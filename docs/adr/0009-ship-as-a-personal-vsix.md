@@ -36,6 +36,27 @@ How, following the house's practice ([ADR-0002](0002-scaffold-follow-the-house-e
 * No automatic updates: each change is a repackage and a reinstall.
 * The repo is private and carries an MIT `LICENSE` inherited from the template (ADR-0001, follow-ups); that only matters if the repo or a package is ever shared.
 
+## Open question
+
+### QST-MARKETPLACE: Should porthole go on the Marketplace after all — which reverses this decision?
+- Status: unanswered
+- Why asking: On 2026-10-12 Jérémie asked whether to recruit a seat "for publishing to the marketplaces". This ADR, accepted the same day, says porthole stays a personal `.vsix`, because it calls an internal VS Code command (`_workbench.openWith` into group `-3`) that can change in any update, and it has one user. A publishing seat only makes sense if that decision is reversed, so the decision comes first.
+- Need: pick a letter (or override — any shape answers)
+
+Options:
+- **A — stay personal for now**: keep the `.vsix`; revisit after porthole has been in daily use through at least one VS Code update, so we know how often the internal call breaks. No publishing seat yet.
+- **B — publish to the VS Code Marketplace (and Open VSX)**: a public listing, with screenshots, copy and a changelog. Users get an extension that silently drops to the larger fallback window whenever VS Code changes the internal call, and the listing has to say so. Needs a publisher account under your name.
+- **C — publish the source, not a listing**: make the GitHub repo public with a release `.vsix` attached, so others can install it knowingly. Less polish needed; no Marketplace review or promise of support.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-12)
+
+**A — stay personal for now.** *Rationale*: the whole value rests on one internal call that has been seen working on exactly one VS Code version (ADR-0003, ADR-0010); VS Code ships about weekly, and nobody yet knows how often an update breaks the call. A public listing turns each break into other people's bug reports. The fallback keeps porthole usable, but at a size that defeats its purpose. *Confidence*: 0.7 — because the risk is real but unmeasured; one or two updates without a break would lower it a lot. *If wrong*: if the call survives two or three VS Code updates unchanged, or you want others using it now and accept the risk, this flips to C first, then B.
+
+**ANS:** (by Jérémie)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Links
 
 * Packaging lessons: [ADR-0002](0002-scaffold-follow-the-house-extension-conventions.md), Supporting Materials
