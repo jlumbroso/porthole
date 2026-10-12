@@ -249,10 +249,11 @@ Run by Jérémie on 2026-10-12, VS Code 1.141.0, macOS arm64, three sessions bet
 ## Open Follow-ups
 
 ### QST-BROWSER-TOOLBAR: Can the integrated browser's toolbar be hidden in the mini window?
-- Status: unresolved
+- Status: answered
 - Why deferring: the window is usable as it is, and the answer needs a reading of VS Code's source that is Surveyor's kind of work.
 
-**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Surveyor 5.1, Claude Fable 5.1, 2026-10-12)
+No, not at 1.141.0. The bar (back, forward, reload, address, actions) is the navigation feature's toolbar widget, and the browser editor mounts every toolbar widget unconditionally (`src/vs/workbench/contrib/browserView/electron-browser/browserEditor.ts` L505–509; the widget contract at L264–269 has only `location`, `element` and `order`, no visibility predicate; the navigation feature returns it with no condition, `features/browserNavigationFeatures.ts` L271). Nothing in the browser contribution reads the compact flag, the auxiliary-window context keys, or any setting to decide whether to show it; the only `compact` in that directory is the option the popup route passes to the window. `workbench.browser.showInTitleBar` governs the globe button in the window's title bar (`features/browserTabManagementFeatures.ts` L908–917) and has no effect on the bar inside the editor. Page zoom scales the page, not the bar. What remains: accept it, ask upstream for a compact-mode variant, or Route E. Reasoning and lines in `docs/inbox/2026-10-12-2219-surveyor-to-glazier-review-porthole-0-1-0.md`.
 
 ---
 
