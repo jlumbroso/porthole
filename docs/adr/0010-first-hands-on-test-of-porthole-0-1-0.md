@@ -79,7 +79,7 @@ Two things were fixed before this test because of the review, each with a regres
 ## Questions
 
 ### QST-V1-POPOUT: After step 2, what did Ctrl+Alt+M do?
-- Status: unanswered
+- Status: answered
 - Why asking: The spike was run from the palette. A key binding depends on a `when` clause that only a real editor evaluates.
 - Need: pick a letter (or override — any shape answers)
 
@@ -93,13 +93,19 @@ Options:
 
 **A — the porthole** (a prediction). *Rationale*: the call is the one the spike ran five times, with the same arguments (`src/miniWindow.ts`), and the `when` clause uses context keys Surveyor found declared with exactly these spellings (source check, note 8). *Confidence*: 0.7 — because the call is proven, but the binding and the title-bar button have never been evaluated by a real VS Code. *If wrong*: C means the `when` clause or the key is wrong and the palette command should still work — try **Porthole: Pop Out to Mini Window** and tell me; B or D means something in the product's additions changed the call.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+First, here's a screenshot for the developer log: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.01.20 PM.png` it is a conversation with Glazier 5.5 about to prepare for this experimentation.
+
+Option A.
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.10.01 PM.png` about to run the Porthole debug;
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.10.47 PM.png` host open and `tasks.html` code tab is open;
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.10.58 PM.png` after pressing Ctrl+Alt+M, the porthole opens to the foreground and stays there persistently.
 
 ---
 
 ### QST-V1-RESIZE: After step 3, what did cycling the size do?
-- Status: unanswered
+- Status: answered
 - Why asking: The window is now locked to one tab, which the spike's window was not. This shows whether VS Code still moves a tab out of a locked window.
 - Need: pick a letter (or override — any shape answers)
 
@@ -113,13 +119,20 @@ Options:
 
 **A — one window each time** (a prediction). *Rationale*: the spike showed the move and the automatic close for an unlocked window (ADR-0003); a lock in VS Code stops editors opening *into* a group, and I know of nothing that stops one leaving. *Confidence*: 0.55 — because that last clause is my reading of how locks behave, not something anyone here has run or read in source. *If wrong*: B or C means the lock interferes with the move, and porthole should unlock before re-opening, or not lock at all and accept that compact mode can be lost.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A.
+
+Cycling of the size of the window, one window each time, changing size until it gets its initial size back:
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.11.09 PM.png` the screenshot where the palette is selected with Cmd+P in the porthole window, and the option `Cycle Mini Window Size` is selected;
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.11.22 PM.png` window was resized, and option is reselected;
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.11.27 PM.png` window was resized again (much noticeable as much larger), and option is again reselected;
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.11.38 PM.png` seems like it cycles back to the initial size (the one from `7.11.09 PM`).
 
 ---
 
 ### QST-V1-LOCK: After step 4, where did the other file open?
-- Status: unanswered
+- Status: answered
 - Why asking: This is what the lock is for. Compact mode switches itself off when a second tab enters the window.
 - Need: pick a letter (or override — any shape answers)
 
@@ -132,13 +145,21 @@ Options:
 
 **A — in the main window** (a prediction). *Rationale*: this is the documented purpose of a locked editor group, and the brief cites the command for exactly this use. *Confidence*: 0.65 — because I have not seen how a locked group in a *floating* window redirects an open. *If wrong*: B means the lock did not take (the log will say whether porthole skipped it) or does not do what the brief says, and the "one tab" promise needs another mechanism.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+I had to add a new file to the project, because otherwise, the only option possible was `tasks.html` and it did not provide the right conditions to test this (trying to open to `tasks.html` while in the mini-window displaying that file does not work, it doesn't open that specific file in the code editor). So I created `other-file.html`. 
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.32.17 PM.png` From the mini window, invoking the palette and trying to open `other-file.html`
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.32.07 PM.png` This file then opens in the editor area, leaving the mini window alone.
+
+This was not requested but I wanted to note that it is possible to do Ctrl+Alt+M from the alternate file to launch a second mini window:
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.26.51 PM.png`
 
 ---
 
 ### QST-V1-DOCK: After step 5, what did Ctrl+Alt+M do in the mini window?
-- Status: unanswered
+- Status: answered
 - Why asking: The same key is meant to pop out and to put back, depending on which window has focus.
 - Need: pick a letter (or override — any shape answers)
 
@@ -152,13 +173,17 @@ Options:
 
 **A — docked** (a prediction). *Rationale*: the command behind it is public (`workbench.action.restoreEditorsToMainWindow`) and the key is bound on `isAuxiliaryWindowFocusedContext`, a real context key (Surveyor's source check, note 8). *Confidence*: 0.65 — because the two bindings share one chord and I have not seen VS Code choose between them. *If wrong*: D means the pop-out binding won the chord, so its `when` clause must exclude the mini window more strictly; C means focus inside the page does not count as the window being focused, and docking needs the palette.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+[Note to Glazier: The ORRCF QST are better if self-contained: So it is better if in the QST itself, you provider a refresher for what "step 5" is — for every single question now, I have had to go back and forth between the QST and the top of the ADR — several dozen times, because of this design choice. This is typical failure of architecture of complexity design, giving coupled questions.]
+
+Option A.
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.29.48 PM.png` -> when pressing Ctrl+Alt+M on the mini window itself, it docks. This docked window can no longer be cycled: Doing Ctrl+Alt+M doesn't do anything further, the window must be closed and then reinstantiated from the HTML file.
 
 ---
 
 ### QST-V1-PIN: After step 6, did the Explorer entry work, and did the pin come off?
-- Status: unanswered
+- Status: answered
 - Why asking: Two small things in one step: the right-click entry on a file that is not open, and unpinning.
 - Need: pick a letter (or override — any shape answers)
 
@@ -172,8 +197,12 @@ Options:
 
 **A — both worked** (a prediction). *Rationale*: the Explorer entry uses the same command with the file passed as its argument, which the tests cover; the toggle is one public command. *Confidence*: 0.7 — because menu placement is declared in the manifest and never exercised. *If wrong*: B points at the menu's `when` clause; C means the toggle acts on a different window than the one that looks focused.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A.
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 7.37.57 PM.png` this is the right-click context menu with the mini browser option. BTW, you use the "Mini Browser" terminology — we should make an index of all user-facing terminology and then submit it to the naming authority for unification/coherence pass.
+
+The `Toggle Always on Top` works perfectly.
 
 ---
 
