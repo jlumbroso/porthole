@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # First hands-on test of porthole 0.1.0
 
 - **Date**: 2026-10-12
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Draft
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
@@ -49,6 +49,23 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 - `just gate` is green: typecheck, 21 tests, bundle, and a check that the package would ship exactly five files. I broke the code on purpose in two places and the right two tests failed.
 - A `.vsix` builds (7 files, about 11 KB). I have **not** installed it, and I have **not** run the extension in a real VS Code.
 - Surveyor has been asked to review the code; no review had arrived when this was written.
+
+**What Surveyor's review adds, at iteration 2** (`docs/inbox/archive/2026-10-12-2219-surveyor-to-glazier-review-porthole-0-1-0.md`). The run procedure is unchanged. My five predictions below are left as written; Surveyor's, from VS Code's source at 1.141.0, are:
+
+| Question | Surveyor | Why, in one line |
+| --- | --- | --- |
+| POPOUT | A, 0.8 | — |
+| RESIZE | A, 0.85 | a lock is consulted only when VS Code picks a group to open *into*; moving a tab *out* never checks it, and the emptied locked group is removed like any other |
+| LOCK | A, 0.85 | a locked active group makes VS Code take the first unlocked group, which is the main window's; compact mode also redirects any new group to the main window |
+| DOCK | A, 0.75 | the browser forwards modified key presses from inside the page to VS Code; the page-side half of that rule was not read |
+| PIN | A, 0.8 | — |
+
+So the question I was least sure of (RESIZE, 0.55) is the one the source is clearest about, and the one to watch is DOCK.
+
+Two things were fixed before this test because of the review, each with a regression test:
+
+- **`Ctrl+Alt+M` no longer fires on a docked browser tab.** There it could only answer "open or select a local HTML file first", on the very page you wanted popped out. The title-bar button on such a tab should work, since it passes the file; that is worth one click if you are curious, but it belongs to M2.
+- **Cycle Size no longer falls back to "the last file popped out".** After Dock Back it would have pulled the page straight out again.
 
 **Assumptions**:
 
@@ -187,6 +204,12 @@ The answers decide whether the lock stays, whether the single chord works for bo
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-12)
+- Trigger: Surveyor's review of `src/` arrived before the test was run
+- Contributors: Surveyor 5.1 (Claude Fable 5.1) — the review and predictions; Glazier 5.5 (Claude Opus 5.5) — the two fixes and this note
+- Changes: Surveyor's predictions added beside mine; two fixes recorded; test count is now 23
+- Outcome: stays `Draft`; the questions are still open
 
 ---
 

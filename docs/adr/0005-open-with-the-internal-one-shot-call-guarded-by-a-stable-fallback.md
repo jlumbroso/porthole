@@ -25,7 +25,7 @@ No public VS Code API opens an editor in a new floating window at a chosen size.
 
 ## Decision Outcome
 
-Chosen option: "Internal call as the primary path, with a public-command fallback", because only the internal call sets size, compact and pin at window creation, and the spike showed both paths working on 1.141.0: the internal call in five runs out of five (new tab group within 142 ms), the fallback in three out of three.
+Chosen option: "Internal call as the primary path, with a public-command fallback", because only the internal call sets size, compact and pin at window creation, and the spike showed both paths working on 1.141.0: the internal call in five runs out of five (new tab group within 142 ms), the fallback in four out of four.
 
 The rules that go with it:
 
@@ -41,7 +41,7 @@ The rules that go with it:
 ### Negative Consequences
 
 * May break on any update. The fallback then gives a working but larger window (about 1024×768), and it shows: the page opens in the main window first and is then moved out.
-* The fallback's compact and pin commands act on the active window, so it depends on focus having moved within a 200 ms pause (Surveyor's source check). Clean in three runs; not proven.
+* The fallback's compact and pin commands act on the active window, so it depends on focus having moved within a 200 ms pause (Surveyor's source check). Clean in four runs; not proven.
 
 ## Pros and Cons of the Options
 

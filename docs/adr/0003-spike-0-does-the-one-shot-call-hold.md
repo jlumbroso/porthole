@@ -225,7 +225,7 @@ Run by Jérémie on 2026-10-12, VS Code 1.141.0, macOS arm64, three sessions bet
 
 1. **The internal call is the primary path** and the public-command chain is the fallback, as the brief proposed.
 2. **Resize-by-reopening works.** A second pop-out moves the tab, the emptied window closes itself, and the page keeps its state.
-3. **The fallback's 200 ms pause was enough here**, three runs out of three. It stays as written; Surveyor's point that it depends on focus having moved is kept as a follow-up, not a blocker.
+3. **The fallback's 200 ms pause was enough here**, four runs out of four (I first wrote three; Surveyor counted the log). It stays as written; Surveyor's point that it depends on focus having moved is kept as a follow-up, not a blocker.
 4. **The brief's success check has ten times the margin it needs.** A new group arrived within 142 ms against a 1.5 s timeout, so my doubt about the fallback firing on top of a slow success is unlikely on this machine. The product should still treat a late success as a success.
 
 **What the run taught that nobody predicted**:
@@ -257,7 +257,15 @@ No, not at 1.141.0. The bar (back, forward, reload, address, actions) is the nav
 
 ---
 
-- [ ] Concern: the fallback's fixed 200 ms pause depends on the new window having focus (Surveyor, source check). Three clean runs is not proof; replace it with a wait on window focus if it ever misfires.
+NOT: a second route to the same answer (added by Glazier 5.5, 2026-10-12). Jérémie shared a report made by Fable 5.1 in Perplexity Computer, working from VS Code's documentation and the web instead of the source. It reaches the same conclusion — no setting hides the toolbar — and it agrees with Surveyor that `workbench.browser.showInTitleBar` is only the globe button in the window's title bar. What it adds, and what I checked:
+
+- **Individual toolbar items can be hidden** from the toolbar's overflow menu (it names History, Add to Chat and Developer Tools). That trims the bar; the strip itself stays. Not tried here.
+- **It suggests upvoting microsoft/vscode#320016**, "Browser toolbar items should be more customizable", as the place upstream tracks this. I looked it up: the issue exists, but it is **closed**, with milestone 1.124.0 and the labels `insiders-released` and `verified`. It asked for more items to be customizable and that shipped; it never asked for the bar to be hidden. Upvoting it would do nothing.
+- **I found no open upstream request** to hide the bar in a compact floating window, from two searches of that repository. That is not an exhaustive search.
+
+So the three routes left are the ones Surveyor named: accept the bar, file a new upstream request for a compact-mode variant, or a native panel outside VS Code (the brief's Route E).
+
+- [ ] Concern: the fallback's fixed 200 ms pause depends on the new window having focus (Surveyor, source check). Four clean runs is not proof; replace it with a wait on window focus if it ever misfires.
 - [ ] Unverified: popping out a tab opened with the globe button. The source says it duplicates instead of moving (Surveyor). To be run at M2.
 - [ ] Note from the run: the spike's step notifications time out and cannot be recalled. The product must not depend on a notification for anything the user needs.
 
@@ -267,7 +275,7 @@ No, not at 1.141.0. The bar (back, forward, reload, address, actions) is the nav
 
 - [x] Run the spike and answer the four questions — Owner: Jérémie (2026-10-12, all A)
 - [x] Read the log, record the results and the decisions they force — Owner: Glazier (iteration 3)
-- [ ] Check my reading of the results against the log, and take QST-BROWSER-TOOLBAR — Owner: Surveyor
+- [x] Check my reading of the results against the log, and take QST-BROWSER-TOOLBAR — Owner: Surveyor (done 2026-10-12: every number checks; one correction, the fallback ran four times, not three)
 
 ---
 
