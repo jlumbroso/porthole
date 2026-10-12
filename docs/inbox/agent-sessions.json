@@ -8,7 +8,8 @@
   },
   "_colors_in_use": {
     "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default.",
-    "cyan": "glazier (#3FA7A3)"
+    "cyan": "glazier (#3FA7A3)",
+    "orange": "surveyor (#F26B1D)"
   },
   "_global": {
     "_comment": "Optional defaults for `just launch`'s claude invocation; per-seat settings override. Global-only (no per-seat form): agents, remote_control_session_name_prefix. Anything unset is omitted from the command (Claude's own defaults apply).",
@@ -20,7 +21,10 @@
   "groups": {
     "_comment": "Role-based groups for inbox addressing. `just broadcast <from> <slug> [group]` writes a -to-<group>- brief; `just wait-for-brief <alias>` wakes on briefs addressed to any group the alias belongs to. Members are alias keys from 'aliases' below (validated by `just groups`).",
     "crew": {
-      "members": ["glazier"],
+      "members": [
+        "glazier",
+        "surveyor"
+      ],
       "description": "All active participants. Broadcasts addressed to 'crew' wake every seat. Add alias keys to 'members' as seats register."
     }
   },
@@ -47,6 +51,31 @@
         "docs/inbox/ONBOARDING.md",
         "docs/inbox/CONVENTIONS.md",
         "docs/INITIAL-DESIGN-BRIEF.md"
+      ]
+    },
+    "surveyor": {
+      "uuid": "9aa888fb-6cbc-44ee-8a1b-c5e87e556ead",
+      "role": "Surveyor — independent verifier: checks the design brief's claims against VS Code's real source, checks ADR citations against the repos they cite, and reviews what Glazier builds before the human runs it. Reads; does not build.",
+      "display_name": "Surveyor 5.1",
+      "name_note": "A marine surveyor inspects the hull before the voyage and signs a report; the owner decides whether to sail. The seat exists to find where the brief is wrong before the human spends an afternoon on it, and to say plainly what it could not check. Chosen by the occupant at founding.",
+      "color": "orange",
+      "color_note": "Safety orange (#F26B1D): the inspector's high-visibility vest, and far from the project's brass (#B5A642) and Glazier's sea-glass cyan on the hue wheel. Chosen by the occupant.",
+      "model": "claude-fable-5-1",
+      "model_note": "Seat founded 2026-10-12 by claude-fable-5-1 (first occupant), by consent to a `pneumatic recruit` invitation from glazier (ADR-0020; temp alias recruit-20261012184619, provisional chair rewritten in place by the invited session itself). Requested as 'claude-fable-5-1'; JSONL-verified claude-fable-5-1 at founding.",
+      "registered": "2026-10-12",
+      "founding_brief": "docs/inbox/2026-10-12-1845-glazier-founding-brief-independent-verifier.md",
+      "founded_by": "glazier",
+      "founded": "2026-10-12",
+      "settings": {
+        "color_hex": "#F26B1D"
+      },
+      "read_order": [
+        "CLAUDE.md",
+        "docs/inbox/ONBOARDING.md",
+        "docs/inbox/CONVENTIONS.md",
+        "docs/INITIAL-DESIGN-BRIEF.md",
+        "docs/inbox/2026-10-12-1845-glazier-founding-brief-independent-verifier.md",
+        "docs/inbox/agents/surveyor.md"
       ]
     }
   }
