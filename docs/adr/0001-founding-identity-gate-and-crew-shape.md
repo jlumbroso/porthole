@@ -8,11 +8,11 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Founding: identity, gate and crew shape
 
 - **Date**: 2026-10-12
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
-**TL;DR**: The project is named porthole (provisional), its window is brass, its gate is `just gate`, and its crew starts at two seats; two questions about the extension's identity and scope need Jérémie before any code is scaffolded.
+**TL;DR**: The project is named porthole (provisional) and the extension carries that name throughout (`jlumbroso.porthole`, `porthole.*`); its window is brass, its gate is `just gate`, its crew starts at two seats, and it keeps the outside-VS-Code trigger, built last and credited to the brief's author.
 
 ---
 
@@ -113,6 +113,20 @@ A freshly instantiated project needs an identity a human can recognize at a glan
 
 ### Chosen
 
+**Identity — porthole throughout** (QST-EXT-ID, answered A by Jérémie, 2026-10-12). Lowercase in every slug and id, capitalized in the display name:
+
+| Where | Value |
+| --- | --- |
+| Extension id | `jlumbroso.porthole` |
+| Display name and command category | `Porthole` |
+| Commands | `porthole.popOut`, `porthole.popOutBrowserTab`, `porthole.dockBack`, `porthole.cycleSize`, `porthole.togglePin`, `porthole.openUrl` |
+| Settings | `porthole.sizes`, `porthole.position`, `porthole.compact`, `porthole.alwaysOnTop`, `porthole.useInternalApi`, `porthole.closeSourceTab` |
+| Link | `vscode://jlumbroso.porthole/open` |
+
+This holds until Mint makes a fuller ruling; if the name changes then, existing ids are renamed with it.
+
+**External trigger — kept, built at M4** (QST-TRIGGER, answered A by Jérémie, 2026-10-12). The idea is not in the original prompt. It is the contribution of the brief's author, a Claude Opus 5.5 session, and is credited to them here and in `README.md`. Jérémie certifies the need is real, provided the pop-out itself works.
+
 **Window color — brass, `#B5A642`.** A porthole is a brass ring around glass, and the window chrome is literally the frame around the page. The founding seat's own color is sea glass, so the seat's status bar sits inside the project's frame the way glass sits in brass. It is also free: a survey of the Peacock colors in the sibling projects under `~/Programming` on 2026-10-12 found nine windows still on the template's default teal `#3CA7AC`, clusters of limes, oranges, blues and purples, and nothing in the muted-gold range. The nearest neighbors are a bright yellow (`#F6CB1C`) and a pale tan (`#C7B9A1`), both clearly different in saturation and lightness.
 
 **Gate — `just gate`.** It runs every check that exists and gains `npm run check` automatically once `package.json` lands. `CLAUDE.md` states what it catches today and, as importantly, what it cannot: whether VS Code's internal call still works.
@@ -123,8 +137,9 @@ A freshly instantiated project needs an identity a human can recognize at a glan
 
 ### Consequences
 
-- The brief's ids are placeholders until QST-EXT-ID is answered.
-- Spike 0 is blocked on updating VS Code from 1.130 to 1.141 or later.
+- Every `miniBrowser.*` id and every `jlumbroso.mini-browser` in the brief reads as its `porthole` equivalent from the table above. The brief itself is left as written; it is the founding record.
+- `"onUri"` goes into `activationEvents` (ADR-0002, adopted practice 2).
+- VS Code was updated from 1.130.0 to 1.141.0 on 2026-10-12, which unblocks Spike 0.
 - The six product decisions in the brief's "Decisions to record" table are deliberately **not** ADRs yet. They rest on a call nobody has run; they are recorded after Spike 0, as confirmed or as changed.
 
 ---
@@ -138,9 +153,9 @@ A freshly instantiated project needs an identity a human can recognize at a glan
 
 ## Action Items
 
-- [ ] Update VS Code to 1.141 or later — Owner: Jérémie
-- [ ] Answer QST-EXT-ID and QST-TRIGGER — Owner: Jérémie
-- [ ] Write Spike 0 once VS Code is updated — Owner: Glazier
+- [x] Update VS Code to 1.141 or later — Owner: Jérémie (done 2026-10-12: 1.141.0)
+- [x] Answer QST-EXT-ID and QST-TRIGGER — Owner: Jérémie (both A, 2026-10-12)
+- [ ] Write Spike 0 — Owner: Glazier (see ADR-0003)
 
 ---
 
@@ -151,6 +166,12 @@ A freshly instantiated project needs an identity a human can recognize at a glan
 - Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-12)
+- Trigger: Jérémie answered QST-EXT-ID and QST-TRIGGER (both A) and updated VS Code to 1.141.0
+- Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
+- Changes: identity table and the external-trigger decision added under Decision; the trigger credited to the brief's author at Jérémie's request; consequences and action items updated
+- Outcome: `Draft → Accepted`
 
 ---
 

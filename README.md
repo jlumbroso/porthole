@@ -84,7 +84,9 @@ still change.
 
 ## Credits and lineage
 
-- Research brief: Claude Opus 5.5, from a prompt by Jérémie Lumbroso.
+- Research brief: Claude Opus 5.5, from a prompt by Jérémie Lumbroso. The
+  outside-VS-Code trigger (test 5 above) was that session's own idea; the
+  prompt did not ask for it.
 - Built by Jérémie Lumbroso with Glazier 5.5 (Claude Opus 5.5); the full
   roster is in [`docs/inbox/agent-sessions.json`](docs/inbox/agent-sessions.json).
 - The repo's structure comes from the
