@@ -326,3 +326,38 @@ brackets (item 15).
 - **Why it mattered**: my trailer is required on commits I create, and this one is created on my behalf without it.
 - **Decided**: left the two archive commits as the recipe made them.
 - **Clearer if**: the recipe only staged the move, or documented that archive commits are tool commits.
+
+---
+
+## H. From the spike and the first build (same day, third sitting)
+
+### 45. Answering in the ADR Manager committed my uncommitted edit under the human's name
+- **What happened**: Jérémie answered a question in ADR-0008 through the extension while I had an unsaved-to-git edit in the same file (one bullet recording his answer). His commit, "docs: human feedback on ADRs 0008", contains my bullet.
+- **Why it mattered**: per-message attribution is the method's backbone, and here a seat's text entered history as the human's. Nothing was lost; the provenance is simply wrong.
+- **Decided**: left it; recorded here.
+- **Clearer if**: the extension committed only the answer hunk, or refused when the file had other uncommitted changes and said whose turn it was to commit.
+
+### 46. `just adr` mints only the deliberation mold
+- **What happened**: the brief's six product decisions are simple, already-made decisions, which is what `adr-madr.md` is for. `just adr` copies `adr.md`, so each file had to be minted and then overwritten.
+- **Decided**: minted for the numbers, then wrote the simple form over each.
+- **Clearer if**: `just adr "<title>" madr` existed.
+
+### 47. Whether a simple-form ADR may carry a question
+- **What happened**: one of those six needed a question for the human. The simple mold has no question surface and nothing says whether a `### QST-…` block is allowed in it.
+- **Decided**: added one under an "Open question" heading. It worked: Jérémie found it and answered it through the extension within the hour.
+- **Clearer if**: the mold said so in one line.
+
+### 48. Attachments exist and nothing told me
+- **What happened**: Jérémie answered the spike questions with eight screenshots, saved under `docs/adr/attachments/screenshots/<date>-<slug>/` and referenced from his answers. They settled something no log could: that the mini window keeps a toolbar.
+- **Why it mattered**: had I known, I would have asked for a screenshot at each step, and said where my own evidence would go. I put the spike's log beside them afterwards.
+- **Clearer if**: the mold and the authoring skill named the attachments convention.
+
+### 49. A prediction in the Recommendation slot worked well (follow-up to item 37)
+- **What happened**: four spike questions each carried a prediction with a confidence, written before the run. All four came true, and the record shows my confidence was too low on three of them. Surveyor's source reading, added beside them before the run, was closer.
+- **Why it mattered**: this is the method doing what it says — the author could have been caught — and it only cost four sentences.
+- **Clearer if**: the mold offered this as a named form for questions that ask for an observation.
+
+### 50. The house scaffold I was told to follow had security advisories
+- **What happened**: ADR-0002 copied its tool versions from `vscode-adrs-for-ai` (Vite 5, Vitest 2, vsce 3). `npm install` reported 12 advisories, two critical. Current versions report none and needed no config change.
+- **Not the template's fault**, but it is an estate-level lesson: "follow the house's conventions" should mean its practices, not its version numbers.
+- **Decided**: porthole is on current versions; told the human and Surveyor so the other crews can hear it.
