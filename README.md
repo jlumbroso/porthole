@@ -3,10 +3,11 @@
 A VS Code extension that pops the HTML page you are looking at into a small
 floating window: only the rendered page, pinned above your other windows.
 
-> **Status, 2026-10-12: founding.** No extension code exists yet. This repo
-> holds the research brief, the decision record, and the project's working
-> agreements. The first code will be a spike that proves the core call on a
-> real machine.
+> **Status, 2026-10-12: version 0.1.0, awaiting its first hands-on test.**
+> Popping out an HTML file, size presets, dock back and pin are written and
+> pass their tests. The core call was proven on a real machine the same day.
+> Not built yet: popping out a page that is already open in a browser tab, and
+> the trigger from outside VS Code.
 
 ## What it is for
 
@@ -28,20 +29,40 @@ The build passes when these five things are true:
 5. It can be **triggered from outside VS Code**, for example by a coding agent
    right after it writes a task page.
 
-## How it is meant to work
+## Using it
+
+| To do this | Do this |
+| --- | --- |
+| Pop an HTML file out | `Ctrl+Alt+M` with the file open, the window icon in the editor's title bar, or right-click the file in the Explorer → **Pop Out to Mini Window** |
+| Put it back | `Ctrl+Alt+M` again, with the mini window focused |
+| Change its size | **Porthole: Cycle Mini Window Size** in the mini window's command palette |
+| Unpin or re-pin it | **Porthole: Toggle Always on Top** |
+
+Settings live under `porthole.*`: the size presets (`porthole.sizes`, first one
+is the default), where the window opens (`porthole.position`), and whether it
+opens compact and pinned.
+
+## How it works
 
 porthole renders nothing itself. VS Code already has an integrated browser,
 floating windows, a compact mode with no tabs or status bar, and always-on-top.
-What is missing is a single gesture that combines them at a chosen size.
+What was missing is a single gesture that combines them at a chosen size.
 
-The plan is one internal VS Code command that opens a file in the integrated
-browser, in a new floating window, already sized, compact and pinned. If that
-call ever stops working, the extension falls back to a chain of public
-commands that does the same thing at VS Code's default window size.
+That gesture is one internal VS Code command that opens a file in the
+integrated browser, in a new floating window, already sized, compact and
+pinned. If that call ever stops working, porthole falls back to a chain of
+public commands that does the same thing at VS Code's default window size.
 
-That internal call was traced through VS Code's source but **has not been
-run**. Proving it is the first milestone. The full reasoning, with source
-links, is in [`docs/INITIAL-DESIGN-BRIEF.md`](docs/INITIAL-DESIGN-BRIEF.md).
+The internal call was traced through VS Code's source, checked independently
+against that source, and then run: on VS Code 1.141.0 it opened the window in
+five runs out of five ([ADR-0003](docs/adr/0003-spike-0-does-the-one-shot-call-hold.md)).
+It can still change in any VS Code update; `spike/` is kept as the check to
+re-run when that is suspected. The original reasoning is in
+[`docs/INITIAL-DESIGN-BRIEF.md`](docs/INITIAL-DESIGN-BRIEF.md).
+
+One thing to expect: the mini window keeps its title bar and the integrated
+browser's own toolbar. "Only the rendered page" means no tabs, breadcrumbs or
+status bar.
 
 ## Try the idea today, with no extension
 
@@ -54,10 +75,10 @@ and the exact size.
 
 ## Requirements
 
-- VS Code desktop **1.141 or later** (the brief was written against 1.141.0).
+- VS Code desktop **1.141 or later**, the version it was proven on.
 - Local HTML files. Remote and virtual workspaces are out of scope.
-- It will be installed from a local `.vsix` file. It is not going on the
-  Marketplace, because it calls an internal command.
+- It is installed from a local `.vsix` file (`just install-local`). It is not
+  going on the Marketplace, because it calls an internal command.
 
 ## Working on it
 
@@ -67,6 +88,8 @@ records, so decisions survive from one session to the next.
 | To do this | Use |
 | --- | --- |
 | Check the repo before committing | `just gate` |
+| Try the extension without installing it | press F5, **Run Porthole** |
+| Install it into your VS Code | `just install-local`, then reload the window |
 | Record a decision or open a question | `just adr "<title>"` |
 | See every recipe | `just` |
 

@@ -42,7 +42,7 @@ IF a bug is found and fixed:
 Add a describe('Regression tests', ...) block in the existing test file for that module:
 
 ```ts
-// In tests/popOut.test.ts   (illustrative shape — not a bug we have had)
+// In src/test/popOut.test.ts   (illustrative shape — not a bug we have had)
 
 describe('Regression tests', () => {
   it('runs the stable fallback once when the one-shot call opens no window', () => {
@@ -95,9 +95,9 @@ Before serving any change:
 
 **Why**: `just gate` runs every check that exists and grows with the project, so it is followable from the first commit:
 
-- **Today (before any extension code)** it catches two things: an instantiation placeholder left unfilled, and a crew registry that does not parse or whose groups name a seat that is not registered. The second happened in this project's first hour — the `crew` group pointed at an alias that did not exist yet, and `just groups` only printed a warning and exited 0.
-- **Once `package.json` exists** it also runs `npm run check` — typecheck, the command-handler tests, and the bundle — so a type error, a broken handler, or an extension that no longer builds stops the commit.
-- **What it cannot catch**: VS Code changing the internal call the extension is built on (`_workbench.openWith` into group `-3`). No test here runs inside a real VS Code window. That class is caught only by re-running Spike 0 by hand after a VS Code update (`docs/INITIAL-DESIGN-BRIEF.md`, Build plan) — a green gate is not evidence that the pop-out still works.
+- **The repo itself**: an instantiation placeholder left unfilled, and a crew registry that does not parse or whose groups name a seat that is not registered. The second happened in this project's first hour — the `crew` group pointed at an alias that did not exist yet, and `just groups` only printed a warning and exited 0.
+- **The extension** (`npm run check`, four steps): a type error; a command handler that misbehaves against a mocked VS Code (the wrong call, a fallback that runs twice or not at all, a contributed command with no handler); a bundle that does not build; and a package that would ship anything beyond five named files or that no longer asks VS Code for the real `vscode` module. That last step exists because both of the human's other extensions shipped working files such as `CLAUDE.md` in their packages (ADR-0002).
+- **What it cannot catch**: VS Code changing the internal call the extension is built on (`_workbench.openWith` into group `-3`), or anything only eyes can see (is the window compact, is it on top). No test here runs inside a real VS Code window. That class is caught only by re-running Spike 0 by hand after a VS Code update (F5 → "Spike 0", ADR-0003) — a green gate is not evidence that the pop-out still works.
 
 **Process**:
 ```bash
@@ -251,15 +251,16 @@ If the script was successfully used, append as comments how, and what the outcom
 ## Project Context
 
 ### What we're building:
-**porthole** is a personal VS Code extension: one gesture pops the HTML page you are looking at (typically a page of task instructions) out of the integrated browser into a small floating window that shows only the rendered page, can be pinned above other windows, docks back just as easily, and can be triggered from outside VS Code. It renders nothing itself — it orchestrates VS Code's own integrated browser and floating windows. This is the product repo: extension source in `src/`, tests in `tests/`, the decision record in `docs/adr/`. The founding research is `docs/INITIAL-DESIGN-BRIEF.md`.
+**porthole** is a personal VS Code extension: one gesture pops the HTML page you are looking at (typically a page of task instructions) out of the integrated browser into a small floating window that shows only the rendered page, can be pinned above other windows, docks back just as easily, and can be triggered from outside VS Code. It renders nothing itself — it orchestrates VS Code's own integrated browser and floating windows. This is the product repo: extension source in `src/`, tests in `src/test/`, the decision record in `docs/adr/`. The founding research is `docs/INITIAL-DESIGN-BRIEF.md`.
 
 ### Current focus:
-Spike 0 — proving the one-shot `_workbench.openWith` call on the human's machine (VS Code 1.141.0 since 2026-10-12). The throwaway spike is in `spike/`; how to run it and the questions it answers are in `docs/adr/0003-*.md`. No product code exists yet: the real scaffold (ADR-0002) follows the spike's result, then milestones M1–M5 from the brief.
+Version 0.1.0 is written and waiting for its first hands-on test by the human (`docs/adr/0010-*.md` has the procedure and the questions). It covers milestone M1 (pop out a file) and M3 (size presets, dock back, pin). Spike 0 passed on VS Code 1.141.0 on 2026-10-12 (ADR-0003). Still to build: M2 (pop out a page already open in a browser tab), M4 (the `vscode://` trigger and `just pin`), M5 (install into the human's VS Code for daily use).
 
 ### Key decisions made:
 - Founding decisions — name, identity (`jlumbroso.porthole`, `porthole.*`), gate, crew shape, external trigger kept at M4 — see `docs/adr/0001-*.md` (Accepted)
 - Scaffold follows the house's extension conventions (Vite, Vitest with a mocked `vscode`) instead of the brief's esbuild sketch — see `docs/adr/0002-*.md`
-- The six product decisions proposed in the brief ("Decisions to record") are **not yet ADRs**; they are recorded once Spike 0 confirms or breaks them.
+- Spike 0 passed: the internal call is the primary path — see `docs/adr/0003-*.md`
+- The brief's six product decisions — `docs/adr/0004-*.md` to `0009-*.md`: reuse the integrated browser; internal call with a public-command fallback; proposed API optional (still unproven); resize by re-opening; link handler with an allowlist; personal VSIX
 
 ### Open questions:
 ```bash
@@ -296,8 +297,12 @@ porthole/
 │   └── ephemeral/              # One-off diagnostic scripts, date-prefixed (created on first use)
 ├── justfile                    # Coordination recipes, plus ours at the bottom (just gate)
 ├── kintsugi.yaml / .lock       # Template lineage: which files came from the template, at which version
-├── src/                        # Extension source (arrives with Spike 0)
-├── tests/                      # Tests (arrive with M1)
+├── package.json                # The extension's manifest: commands, menus, keys, settings, npm scripts
+├── src/                        # Extension source: extension.ts (activation), commands.ts, miniWindow.ts, config.ts, log.ts
+│   └── test/                   # Vitest tests; helpers/vscodeMock.ts stands in for the `vscode` module
+├── spike/                      # Spike 0, kept as the by-hand regression check for the internal call
+├── samples/tasks.html          # A sample task page for trying things out
+├── releases/                   # Built .vsix files (gitignored)
 ├── .pneumatic/                 # pneumatic's machine-local state — gitignored, never substrate
 └── CLAUDE.md                   # This file
 ```

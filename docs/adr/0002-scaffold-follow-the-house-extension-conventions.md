@@ -173,6 +173,17 @@ The reason this matters: the brief's main risk mitigation is "re-run Spike 0 aft
 - Changes: citations marked verified; the command wrapper is to log unconditionally; `engines.vscode` gains a `^1.134.0` floor; three simplifications carried into M1
 - Outcome: stays `Draft` until Jérémie has read the Decision
 
+### Iteration 3 (2026-10-12)
+- Trigger: the scaffold was built; `npm install` reported 12 advisories (2 critical) on the house's versions, and Jérémie sent Vite's current troubleshooting page after seeing a deprecation warning in the build output
+- Contributors: Jérémie Lumbroso — the pointer; Glazier 5.5 (Claude Opus 5.5) — the change
+- Changes, all departures from a verbatim copy of `vscode-adrs-for-ai`, each for a stated reason:
+  - **Tool versions are current, not the house's**: Vite 8 (house: 5), Vitest 5 (house: 2), vsce 4 (house: 3). With the house's versions `npm audit` reported 12 advisories, two of them critical (remote code execution through `tinypool`, Vitest's worker pool); with these it reports none. Nothing in the config had to change. These are development tools and never ship, but they do run on this machine. **The two house extensions still carry those advisories**; that is for their crews.
+  - **The build config is ESM** (`vite.config.mts`), which removes the "CJS build of Vite's Node API is deprecated" warning.
+  - **The package's contents are checked, not only ignored**: `.vscodeignore` is an allowlist of five files, and `npm run check:package` lists what would really ship and fails on anything else. This replaces the "pin the ignore list in a test" pattern from the Supporting Materials, which checks the intention rather than the result.
+  - **Tests live in `src/test/`**, as planned; `CLAUDE.md`'s file map is corrected.
+  - **`engines.vscode` is `^1.141.0`**, the version Spike 0 passed on (ADR-0003).
+- Outcome: stays `Draft` until Jérémie has read the Decision
+
 ---
 
 ## Links
