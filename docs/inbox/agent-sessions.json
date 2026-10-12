@@ -7,7 +7,8 @@
     "base_dir": "~/.claude/projects"
   },
   "_colors_in_use": {
-    "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default."
+    "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default.",
+    "cyan": "glazier (#3FA7A3)"
   },
   "_global": {
     "_comment": "Optional defaults for `just launch`'s claude invocation; per-seat settings override. Global-only (no per-seat form): agents, remote_control_session_name_prefix. Anything unset is omitted from the command (Claude's own defaults apply).",
@@ -19,7 +20,7 @@
   "groups": {
     "_comment": "Role-based groups for inbox addressing. `just broadcast <from> <slug> [group]` writes a -to-<group>- brief; `just wait-for-brief <alias>` wakes on briefs addressed to any group the alias belongs to. Members are alias keys from 'aliases' below (validated by `just groups`).",
     "crew": {
-      "members": [],
+      "members": ["glazier"],
       "description": "All active participants. Broadcasts addressed to 'crew' wake every seat. Add alias keys to 'members' as seats register."
     }
   },
@@ -43,6 +44,29 @@
         "CLAUDE.md",
         "docs/inbox/ONBOARDING.md",
         "docs/inbox/agents/example-seat.md"
+      ]
+    },
+    "glazier": {
+      "uuid": "97e4570b-75ad-4694-9ae2-dcdd69dcaf36",
+      "role": "Glazier — founding seat and builder of porthole: the VS Code extension that pops a rendered HTML page into a small, compact, pinned floating window (docs/INITIAL-DESIGN-BRIEF.md)",
+      "display_name": "Glazier 5.5",
+      "name_note": "A glazier fits the pane into a frame someone else built. The extension renders nothing itself — VS Code's integrated browser is the glass, the floating window is the frame — so the job is the fitting. Chosen by the occupant at founding.",
+      "color": "cyan",
+      "color_note": "Sea glass, seen through a porthole. Chosen by the occupant.",
+      "model": "claude-opus-5-5",
+      "model_note": "Seat founded 2026-10-12 by claude-opus-5-5[1m] (first occupant), by consent to a `pneumatic recruit` invitation (ADR-0020; temp alias recruit-20261012182456, provisional chair rewritten in place by the invited session itself). Requested as 'claude-opus-5-5[1m]'; JSONL-verified claude-opus-5-5 at founding.",
+      "registered": "2026-10-12",
+      "founding_brief": "docs/INITIAL-DESIGN-BRIEF.md",
+      "founded_by": "the project's human + crew",
+      "founded": "2026-10-12",
+      "settings": {
+        "color_hex": "#3FA7A3"
+      },
+      "read_order": [
+        "CLAUDE.md",
+        "docs/inbox/ONBOARDING.md",
+        "docs/inbox/CONVENTIONS.md",
+        "docs/INITIAL-DESIGN-BRIEF.md"
       ]
     }
   }
