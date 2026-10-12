@@ -8,11 +8,11 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Spike 0: does the one-shot call hold?
 
 - **Date**: 2026-10-12
-- **Iteration**: 2
-- **Status**: Draft
+- **Iteration**: 3
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
-**TL;DR**: A throwaway extension runs the brief's one internal call on a sample page and logs everything it can see; four things only eyes can tell are asked below, one letter each, about three minutes of clicking.
+**TL;DR**: It holds — on VS Code 1.141.0 the one internal call opened a small, compact, always-on-top window in five runs out of five, reload and resize-by-reopening work, and so does the public-command fallback. (Written before the run:) A throwaway extension runs the brief's one internal call on a sample page and logs everything it can see; four things only eyes can tell are asked below, one letter each, about three minutes of clicking.
 
 ---
 
@@ -210,17 +210,63 @@ Spike 4 closed all windows, and then the window that opened here was larger/wide
 
 No product code is written until the call it depends on has been seen to work on this machine.
 
-### Chosen: pending the run
+### Chosen: the one-shot call is the primary path; the stable fallback stands as written
 
-The four answers and the log decide three things: whether the one-shot call is the primary path (the brief's product decision 0002), whether resize-by-reopening stands (0004), and what the fallback needs. They are recorded here at the next iteration, and the brief's six product decisions become ADRs only then.
+Run by Jérémie on 2026-10-12, VS Code 1.141.0, macOS arm64, three sessions between 3:59 and 4:16 PM ET. All four answers were A. The log (`attachments/logs/2026-10-12-spike-0-test/spike.log`, 221 lines) agrees with every one and has no thrown call.
+
+| Question | Jérémie saw | The log shows |
+| --- | --- | --- |
+| Window | A — small window, page only, stays in front of every app | a new tab group 84–142 ms after the call, in five runs out of five; the call returned after 130–178 ms; the page reported a 414×567 viewport inside the 420×640 window |
+| Reload | A — updated by itself, ticks kept | the page's load count went up about 0.4 s after the file was rewritten, with the tick count unchanged |
+| Twice | A — one window, showing the page | the tab opened in a new group, closed in the old one 14 ms later, and the old group closed 51 ms after that; the load count did not change, so the move does not reload the page |
+| Fallback | A — larger window, same compact and on-top behavior | four public commands, about 400 ms in all, no throw; the viewport settled at 1018×695 |
+
+**What this decides**:
+
+1. **The internal call is the primary path** and the public-command chain is the fallback, as the brief proposed.
+2. **Resize-by-reopening works.** A second pop-out moves the tab, the emptied window closes itself, and the page keeps its state.
+3. **The fallback's 200 ms pause was enough here**, three runs out of three. It stays as written; Surveyor's point that it depends on focus having moved is kept as a follow-up, not a blocker.
+4. **The brief's success check has ten times the margin it needs.** A new group arrived within 142 ms against a 1.5 s timeout, so my doubt about the fallback firing on top of a slow success is unlikely on this machine. The product should still treat a late success as a success.
+
+**What the run taught that nobody predicted**:
+
+- **A browser tab cannot be recognized afterwards.** `tab.input` is `undefined` for it, and its label starts as the file name, then follows the page's title, cut to about thirty characters. porthole must remember the tab group it got back when it opened the window; it cannot find its window again by looking.
+- **Storage is durable.** Ticks and the load count survived a reload, closing every tab, and restarting the spike window twice (the count ran from 1 to 9 across three sessions).
+- **Closing the last tab closes the floating window**, 25 ms later.
+- **The fallback is visible.** It opens the page in the main window first, which loads it once, then moves it out. The primary path does neither.
+- **Across macOS desktops the window does not follow you**, but it can be moved to another desktop and stays in front there (Jérémie's note). That matches the brief's inference.
+
+**Trade-offs accepted**: "page only" is not literal. Compact mode removes tabs, breadcrumbs and the status bar, but the screenshots show the window's title bar and the integrated browser's own toolbar (back, forward, reload, address) above the page — about 73 px of the 640. Jérémie answered A with that in view; whether the toolbar can go is the follow-up below.
+
+### Consequences
+
+- The real scaffold (ADR-0002) and milestone M1 can start.
+- The brief's six product decisions are now recorded as ADR-0004 to ADR-0009.
+- `engines.vscode` is `^1.141.0`: the version this passed on, above the 1.134 floor (ADR-0002).
+
+---
+
+## Open Follow-ups
+
+### QST-BROWSER-TOOLBAR: Can the integrated browser's toolbar be hidden in the mini window?
+- Status: unresolved
+- Why deferring: the window is usable as it is, and the answer needs a reading of VS Code's source that is Surveyor's kind of work.
+
+**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+- [ ] Concern: the fallback's fixed 200 ms pause depends on the new window having focus (Surveyor, source check). Three clean runs is not proof; replace it with a wait on window focus if it ever misfires.
+- [ ] Unverified: popping out a tab opened with the globe button. The source says it duplicates instead of moving (Surveyor). To be run at M2.
+- [ ] Note from the run: the spike's step notifications time out and cannot be recalled. The product must not depend on a notification for anything the user needs.
 
 ---
 
 ## Action Items
 
-- [ ] Run the spike and answer the four questions — Owner: Jérémie
-- [ ] Read the log, record the results and the decisions they force — Owner: Glazier
-- [ ] Review the spike and, afterwards, my reading of the results — Owner: Surveyor
+- [x] Run the spike and answer the four questions — Owner: Jérémie (2026-10-12, all A)
+- [x] Read the log, record the results and the decisions they force — Owner: Glazier (iteration 3)
+- [ ] Check my reading of the results against the log, and take QST-BROWSER-TOOLBAR — Owner: Surveyor
 
 ---
 
@@ -237,6 +283,12 @@ The four answers and the log decide three things: whether the one-shot call is t
 - Contributors: Surveyor 5.1 (Claude Fable 5.1) — the source reading; Glazier 5.5 (Claude Opus 5.5) — this note
 - Changes: added "What the source says" under Explicitation; the four predictions are unchanged on purpose
 - Outcome: stays `Draft`; the questions are still open
+
+### Iteration 3 (2026-10-12)
+- Trigger: Jérémie ran the spike three times and answered all four questions (A, A, A, A), with eight screenshots
+- Contributors: Jérémie Lumbroso — the run and the answers; Glazier 5.5 (Claude Opus 5.5) — the reading of the log
+- Changes: Decision filled from the answers and the log; the log copied to `attachments/logs/`; three follow-ups and one open question added
+- Outcome: `Draft → Implemented` — the spike has done its job. My predictions sat at 0.45 to 0.6 and all four came true; Surveyor's source reading, which I had not seen when I wrote them, called the first three correctly as well.
 
 ---
 
