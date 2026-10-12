@@ -24,6 +24,21 @@ describe('the manifest and the code agree', () => {
   });
 });
 
+describe('Regression tests', () => {
+  it('keeps the pop-out chord off a docked browser tab, where it could only scold', () => {
+    // Bug (found in review before 0.1.0 was ever run, Surveyor 5.1, 2026-10-12):
+    // on an HTML file shown in a docked *browser* tab the chord's `when` was true
+    // (the resource keys follow the file), but a keybinding passes no argument
+    // and a browser pane is not a text editor, so Ctrl+Alt+M answered "open or
+    // select a local HTML file first" on the very page the human wanted popped
+    // out. Until milestone M2 handles browser tabs, the chord is inert there.
+    // The mock cannot evaluate a `when` clause, so this pins the clause itself.
+    const chord = MANIFEST.contributes.keybindings.find(
+      (entry: { command: string }) => entry.command === 'porthole.popOut');
+    expect(chord.when).toContain("activeEditor != 'workbench.editor.browser'");
+  });
+});
+
 describe('every command, run with nothing set up', () => {
   it.each(contributed)('%s settles without rejecting', async id => {
     await expect(command(id)()).resolves.toBeUndefined();

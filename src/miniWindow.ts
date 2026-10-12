@@ -11,7 +11,7 @@ export const AUX_WINDOW_GROUP = -3;
 /** Spike 0 saw the new group within 142 ms in five runs; this leaves ten times that. */
 export const NEW_GROUP_TIMEOUT_MS = 1500;
 
-/** How long the fallback gives the new window to take focus (the brief's guess; clean in three runs). */
+/** How long the fallback gives the new window to take focus (the brief's guess; clean in four runs). */
 export const FALLBACK_FOCUS_PAUSE_MS = 200;
 
 const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));

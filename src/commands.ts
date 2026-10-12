@@ -11,13 +11,15 @@ interface MiniWindow {
 // A browser tab cannot be recognized afterwards: its `input` is undefined and
 // its label follows the page title (ADR-0003). So each window is remembered by
 // the tab group VS Code handed back when it opened.
+//
+// There is deliberately no "the last file popped out" fallback. With one, Cycle
+// Size in a window porthole did not open, or after Dock Back, re-opened the last
+// file and pulled it out of wherever it was (Surveyor's review, 2026-10-12).
 let windows = new WeakMap<vscode.TabGroup, MiniWindow>();
-let lastOpened: MiniWindow | undefined;
 
 /** For tests: forget every window opened so far. */
 export function resetState(): void {
   windows = new WeakMap();
-  lastOpened = undefined;
 }
 
 const isHtmlPath = (path: string) => /\.html?$/i.test(path);
@@ -33,10 +35,8 @@ function asLocalHtmlFile(value: unknown): vscode.Uri | undefined {
 async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
   let group = useInternalApi() ? await openInMiniWindow(file, size) : undefined;
   if (!group) { group = await fallbackPopOut(file); }
-  const opened: MiniWindow = { file, sizeIndex };
-  lastOpened = opened;
   if (group) {
-    windows.set(group, opened);
+    windows.set(group, { file, sizeIndex });
     await keepToOneTab(group);
   }
 }
@@ -59,9 +59,9 @@ export async function popOut(arg?: unknown): Promise<void> {
  * moves the tab into the new window and closes the old one (ADR-0007).
  */
 export async function cycleSize(): Promise<void> {
-  const current = windows.get(vscode.window.tabGroups.activeTabGroup) ?? lastOpened;
+  const current = windows.get(vscode.window.tabGroups.activeTabGroup);
   if (!current) {
-    void vscode.window.showInformationMessage('Porthole: pop a page out first; this then steps through the size presets.');
+    void vscode.window.showInformationMessage('Porthole: pop a page out first; this then steps through the size presets of the window Porthole opened.');
     return;
   }
   if (!useInternalApi()) {

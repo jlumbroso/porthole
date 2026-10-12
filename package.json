@@ -76,7 +76,7 @@
       {
         "command": "porthole.popOut",
         "key": "ctrl+alt+m",
-        "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i && !isAuxiliaryWindowFocusedContext"
+        "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i && activeEditor != 'workbench.editor.browser' && !isAuxiliaryWindowFocusedContext"
       },
       {
         "command": "porthole.dockBack",

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { activateFresh, command } from './helpers/activate';
 import {
-  executedCalls, executedCommands, focusGroup, loggedLines, openFloatingGroup,
+  closeFloatingGroup, executedCalls, executedCommands, focusGroup, loggedLines, openFloatingGroup,
   setActiveDocument, setCommandBehavior, setConfig, shownMessages, Uri,
 } from './helpers/vscodeMock';
 
@@ -165,6 +165,27 @@ describe('size presets', () => {
     const last = internalOpens().at(-1)!;
     expect(last.file).toBe(page);
     expect(last.target[1].auxiliary.bounds).toEqual({ width: 480, height: 720 });
+  });
+
+  describe('Regression tests', () => {
+    it('does not pop a docked page back out when Cycle Size runs after Dock Back', async () => {
+      // Bug (found in review before 0.1.0 was ever run, Surveyor 5.1, 2026-10-12):
+      // cycleSize fell back to "the last file popped out" when the focused group
+      // was not a window porthole had opened. After Dock Back that re-opened the
+      // file at the next size, pulling the page the human had just put away out
+      // of the main window again. The same happened from any floating window
+      // porthole did not open. The fallback is gone; an unknown window explains.
+      const opened: ReturnType<typeof openFloatingGroup>[] = [];
+      setCommandBehavior(INTERNAL, () => { opened.push(openFloatingGroup()); });
+      setCommandBehavior('workbench.action.restoreEditorsToMainWindow', () => { closeFloatingGroup(opened[0]); });
+
+      await command('porthole.popOut')(page);
+      await command('porthole.dockBack')();
+      await command('porthole.cycleSize')();
+
+      expect(internalOpens()).toHaveLength(1); // only the original pop-out
+      expect(shownMessages().at(-1)).toMatch(/pop a page out first/);
+    });
   });
 
   it('explains, and opens nothing, when no page has been popped out yet', async () => {

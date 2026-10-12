@@ -77,6 +77,13 @@ export function openFloatingGroup(options: { takesFocus?: boolean } = {}): MockT
   return group;
 }
 
+/** What VS Code does when a floating window goes away: its group closes and the main window is active again. */
+export function closeFloatingGroup(target: MockTabGroup): void {
+  groups = groups.filter(group => group !== target);
+  groups.forEach((group, index) => { group.isActive = index === 0; });
+  groupListeners.slice().forEach(listener => listener({ opened: [], closed: [target], changed: [groups[0]] }));
+}
+
 export function focusGroup(target: MockTabGroup): void {
   groups.forEach(group => { group.isActive = group === target; });
 }
