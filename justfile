@@ -425,7 +425,11 @@ safe-commit message +files:
     echo "📝 Staged for commit:"
     git diff --cached --stat
     echo ""
-    git commit -m "{{message}}"
+    # quote(): the message is data. Interpolated bare inside "…", a message
+    # containing `backticks` or $(…) was EXECUTED by the shell and its output
+    # pasted into the commit (met 2026-10-12: a message naming `just gate`
+    # ran the gate and committed its output as prose).
+    git commit -m {{quote(message)}}
 
 # One-time repo setup: pull-rebase + autostash, so origin-side commits
 # (a mobile ANS, any API-writing mouth) replay cleanly under local seat work
