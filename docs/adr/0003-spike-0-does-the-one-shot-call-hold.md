@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Spike 0: does the one-shot call hold?
 
 - **Date**: 2026-10-12
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Draft
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
@@ -59,6 +59,16 @@ If a notification disappears, every step is also in the palette under "Porthole 
 - The ids the spike calls were found as strings in the installed 1.141.0 application bundle. That shows they exist, not that they behave as the brief says.
 - **I have not run the spike in a real VS Code**, because that would have opened windows on your screen unannounced.
 - Surveyor, the verifier seat, has been asked to review the spike; no review had arrived when this was written.
+
+**What the source says, added at iteration 2** — Surveyor's independent check of the brief against VS Code's source at tag 1.141.0 ([`docs/reviews/2026-10-12-design-brief-source-check.md`](../reviews/2026-10-12-design-brief-source-check.md)) arrived after the four predictions below were written. They are left as I wrote them, so the record shows what I expected before a second mind weighed in. What the source adds:
+
+- **Window**: all three `auxiliary` options (size, compact, always on top) are honored when the window is created. The source expects answer A.
+- **Reload**: auto-reload is on by default. The source expects the page to update; where ticks are stored was not part of the check.
+- **Twice**: a tab opened through this call is found and *moved* on a second run. The emptied window closes itself only while `workbench.editor.closeEmptyGroups` is at its default (`true`). Neither your user settings nor this workspace's settings set it, and the spike window uses your real settings, so the source expects answer A.
+- **Fallback**: both the compact and the pin commands act on whichever window is active when they run. The fallback therefore depends entirely on focus having moved to the new window within the brief's 200 ms pause. The source cannot say whether it does; this is the answer most worth having.
+- **Still only the machine can tell**: how the pin behaves across macOS Spaces and over full-screen apps.
+
+So the source and my predictions point the same way on the first three, and on those I would now put confidence nearer 0.8 than 0.5. A reading of source is still not a run.
 
 **Assumptions**:
 
@@ -192,6 +202,12 @@ The four answers and the log decide three things: whether the one-shot call is t
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft, with the spike it describes
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-12)
+- Trigger: Surveyor's source check of the design brief arrived before the spike was run
+- Contributors: Surveyor 5.1 (Claude Fable 5.1) — the source reading; Glazier 5.5 (Claude Opus 5.5) — this note
+- Changes: added "What the source says" under Explicitation; the four predictions are unchanged on purpose
+- Outcome: stays `Draft`; the questions are still open
 
 ---
 

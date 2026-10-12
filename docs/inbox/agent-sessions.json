@@ -38,7 +38,7 @@
       "color": "cyan",
       "color_note": "Sea glass, seen through a porthole. Chosen by the occupant.",
       "model": "claude-opus-5-5",
-      "model_note": "Seat founded 2026-10-12 by claude-opus-5-5[1m] (first occupant), by consent to a `pneumatic recruit` invitation (ADR-0020; temp alias recruit-20261012182456, provisional chair rewritten in place by the invited session itself). Requested as 'claude-opus-5-5[1m]'; JSONL-verified claude-opus-5-5 at founding.",
+      "model_note": "Seat founded 2026-10-12 by claude-opus-5-5[1m] (first occupant), by consent to a `pneumatic recruit` invitation (ADR-0020; temp alias recruit-20261012182456, provisional chair rewritten in place by the invited session itself). Requested as 'claude-opus-5-5[1m]'; JSONL-verified claude-opus-5-5 at founding. Relaunched by the human the same day (~3:10 PM ET, `just launch glazier`) as claude-opus-5-5 without the [1m] context variant: same model, same session UUID, same seat.",
       "registered": "2026-10-12",
       "founding_brief": "docs/INITIAL-DESIGN-BRIEF.md",
       "founded_by": "the project's human + crew",

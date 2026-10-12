@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Scaffold: follow the house's extension conventions
 
 - **Date**: 2026-10-12
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Draft
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
@@ -23,7 +23,9 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 - `/Users/jlumbroso/Programming/vscode-peacock-launcher` — small personal extension, the closest analog
 - `/Users/jlumbroso/Programming/vscode-adrs-for-ai` — larger, crewed extension with a mature test harness
 
-**How far to trust what follows**: the study read files and did not run either test suite. I have not re-read the cited files myself. Items the study marked as its own inference are marked *(inferred)* here. Treat every path as a pointer to check, not as a verified fact.
+**How far to trust what follows**: the study read files and did not run either test suite. I have not re-read the cited files myself. Items the study marked as its own inference are marked *(inferred)* here.
+
+**Checked since (iteration 2)**: Surveyor 5.1 read every cited path and quotation in both repos on 2026-10-12 and listed the contents of both shipped VSIX files. All hold; three need refining before porthole copies them. The check is [`docs/reviews/2026-10-12-adr-0002-citation-check.md`](../reviews/2026-10-12-adr-0002-citation-check.md), and the refinements are folded in below, marked *(Surveyor)*.
 
 **Agency Grant**: Explore options and decide the scaffold; Jérémie can override anything here.
 
@@ -108,7 +110,7 @@ The scaffold is about to be created. Copying the brief's sketch would diverge fr
 
 Adopted along with it, each traced to the materials above:
 
-1. **Every command is registered through one wrapper** that is `async`, awaits the handler, logs failures and rethrows. No bare arrows.
+1. **Every command is registered through one wrapper** that is `async`, awaits the handler, logs failures and rethrows. No bare arrows. *(Surveyor)*: copy the shape of `registerLoggedCommand`, not its body — the original writes its log only when it can derive a path from the command's first argument, so a verbatim copy would log nothing for porthole's commands, which take a `Uri` or nothing. porthole's wrapper logs unconditionally.
 2. **`"activationEvents": ["onUri"]`** if QST-TRIGGER (ADR-0001) keeps the link handler, otherwise `[]`. Never activate on startup.
 3. **The link handler is a pure parser plus thin glue**, with the parser tested directly.
 4. **The running version and the VS Code version are logged at activation.**
@@ -119,7 +121,7 @@ Adopted along with it, each traced to the materials above:
 
 Two points deliberately left to evidence rather than decided now:
 
-- **`engines.vscode`** is set to the version Spike 0 actually passes on. The house floor of `^1.85.0` would claim support for versions that lack what porthole calls; the brief's `^1.141.0` is a reading, not a result.
+- **`engines.vscode`** is set to the version Spike 0 actually passes on, **and never below `^1.134.0`**. The house floor of `^1.85.0` would claim support for versions that lack what porthole calls; the brief's `^1.141.0` is a reading, not a result. The 1.134 floor is Surveyor's finding from comparing three tags of VS Code's source: at 1.130.0 the integrated browser is not registered for local HTML files at all and has no auto-reload setting; at 1.134.0 it has both. No tag between 1.134 and 1.141 was read, so the version actually run remains the honest claim ([source check](../reviews/2026-10-12-design-brief-source-check.md), "Version floor").
 - **Test location** follows `vscode-adrs-for-ai` (`src/test/`), which differs from the `tests/` directory named in the template's `CLAUDE.md` file map. The map is corrected when the scaffold lands.
 
 **Trade-offs accepted**: more build machinery than a 300-line extension strictly needs, in exchange for being the same machinery the human already maintains.
@@ -143,14 +145,15 @@ Two points deliberately left to evidence rather than decided now:
 
 The reason this matters: the brief's main risk mitigation is "re-run Spike 0 after updates", by hand. `vscode-adrs-for-ai` already runs a second test tier in a real VS Code (`@vscode/test-cli`, one test, outside `npm test`). If a real-host test can run the one-shot call and observe a new tab group, the manual re-check becomes one command. Unknown until tried: whether the integrated browser and floating windows work in the test host at all.
 
-- [ ] Unverified assumption: every path and quotation under Supporting Materials — check before relying on it (verifier seat).
-- [ ] Unverified assumption *(inferred by the study)*: disabling source maps is the right fix for the reported map leak.
+- [x] Unverified assumption: every path and quotation under Supporting Materials — verified by Surveyor 5.1, 2026-10-12. Two small corrections to the record: the changelog's count of affected commands does not add up (0.7.110 fixed one; 0.7.111 says "four more" and names five), and the stale files in `vscode-peacock-launcher`'s `dist/` are test source *maps*, not compiled test code. Neither changes a decision here.
+- [ ] Unverified assumption *(inferred by the study)*: disabling source maps is the right fix for the reported map leak. Still inferred; nobody has tested vsce's ignore rules.
+- [ ] Carry into M1, from Surveyor's source check: `pinned: true` is already `_workbench.openWith`'s default, and VS Code clamps bounds to 400×270 itself, so the brief's `Math.max` and explicit `pinned` are redundant; and resize-by-reopening leaves an empty window behind if the user has turned `workbench.editor.closeEmptyGroups` off.
 
 ---
 
 ## Action Items
 
-- [ ] Check the cited paths against the two repos — Owner: verifier seat
+- [x] Check the cited paths against the two repos — Owner: Surveyor (done 2026-10-12)
 - [ ] Create the scaffold after Spike 0 — Owner: Glazier
 - [ ] Try QST-SPIKE-AUTOMATION once the manual spike passes — Owner: Glazier
 
@@ -163,6 +166,12 @@ The reason this matters: the brief's main risk mitigation is "re-run Spike 0 aft
 - Contributors: Glazier 5.5 (Claude Opus 5.5), with a sub-agent's report
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-12)
+- Trigger: Surveyor's completion brief (`docs/inbox/archive/2026-10-12-1919-surveyor-completion-brief-verification.md`)
+- Contributors: Surveyor 5.1 (Claude Fable 5.1) — the findings; Glazier 5.5 (Claude Opus 5.5) — folding them in
+- Changes: citations marked verified; the command wrapper is to log unconditionally; `engines.vscode` gains a `^1.134.0` floor; three simplifications carried into M1
+- Outcome: stays `Draft` until Jérémie has read the Decision
 
 ---
 
