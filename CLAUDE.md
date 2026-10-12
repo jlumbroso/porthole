@@ -254,10 +254,11 @@ If the script was successfully used, append as comments how, and what the outcom
 **porthole** is a personal VS Code extension: one gesture pops the HTML page you are looking at (typically a page of task instructions) out of the integrated browser into a small floating window that shows only the rendered page, can be pinned above other windows, docks back just as easily, and can be triggered from outside VS Code. It renders nothing itself — it orchestrates VS Code's own integrated browser and floating windows. This is the product repo: extension source in `src/`, tests in `tests/`, the decision record in `docs/adr/`. The founding research is `docs/INITIAL-DESIGN-BRIEF.md`.
 
 ### Current focus:
-Founding. The template was instantiated on 2026-10-12 and no extension code exists yet. Next is Spike 0 — proving the one-shot `_workbench.openWith` call on the human's machine — which is blocked on updating VS Code from 1.130 to 1.141 or later. Then milestones M1–M5 from the brief.
+Spike 0 — proving the one-shot `_workbench.openWith` call on the human's machine (VS Code 1.141.0 since 2026-10-12). The throwaway spike is in `spike/`; how to run it and the questions it answers are in `docs/adr/0003-*.md`. No product code exists yet: the real scaffold (ADR-0002) follows the spike's result, then milestones M1–M5 from the brief.
 
 ### Key decisions made:
-- Founding decisions (name, extension identity, gate, crew shape) — see `docs/adr/0001-*.md`
+- Founding decisions — name, identity (`jlumbroso.porthole`, `porthole.*`), gate, crew shape, external trigger kept at M4 — see `docs/adr/0001-*.md` (Accepted)
+- Scaffold follows the house's extension conventions (Vite, Vitest with a mocked `vscode`) instead of the brief's esbuild sketch — see `docs/adr/0002-*.md`
 - The six product decisions proposed in the brief ("Decisions to record") are **not yet ADRs**; they are recorded once Spike 0 confirms or breaks them.
 
 ### Open questions:
@@ -405,7 +406,7 @@ If context window fills mid-work, create `docs/HANDOFF-datetime.md`:
 
 - **Every internal VS Code identifier is an assumption, not a fact.** `_workbench.openWith`, the editor id `workbench.editor.browser`, and group `-3` come from a source reading in the brief that was never run. Check them against the VS Code build actually installed before relying on them, log the VS Code version on activation, and fall back loudly when a call throws or opens nothing.
 - The brief was written against VS Code 1.141.0, and the human keeps VS Code on manual updates. Note the installed version (`code --version`) in any spike or bug record.
-- The working name in the brief is "Mini Browser" (`jlumbroso.mini-browser`); the project's name is **porthole**. Until ADR-0001's identity question is answered, treat every `miniBrowser.*` id in the brief as a placeholder.
+- The brief says "Mini Browser", `jlumbroso.mini-browser` and `miniBrowser.*`. The real identity is **porthole** throughout — `jlumbroso.porthole`, display name "Porthole", `porthole.*` commands and settings (ADR-0001 has the full table). Read the brief's ids through that table; do not edit the brief.
 - `.pneumatic/` holds pneumatic's local ledger and recruit scripts; it is gitignored on purpose.
 - It's possible the user uses `asdf` for Node.js and Python and the runtime of most languages. You can `source .claude/agent.env` before calling the runtimes, like `python` or `node` to access them through `asdf`'s shims. See: https://asdf-vm.com/manage/configuration.html
 

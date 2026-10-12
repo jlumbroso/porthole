@@ -1,0 +1,20 @@
+{
+  "name": "porthole-spike",
+  "displayName": "Porthole Spike 0",
+  "description": "Throwaway: proves or breaks the one internal call porthole is built on. See docs/adr/0003.",
+  "publisher": "jlumbroso",
+  "version": "0.0.0",
+  "private": true,
+  "engines": { "vscode": "^1.141.0" },
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      { "command": "portholeSpike.popOut",   "category": "Porthole Spike", "title": "1 — Pop out the sample page (one-shot call)" },
+      { "command": "portholeSpike.touch",    "category": "Porthole Spike", "title": "2 — Rewrite the sample page (does the window reload?)" },
+      { "command": "portholeSpike.reset",    "category": "Porthole Spike", "title": "4 — Close every tab (do floating windows close?)" },
+      { "command": "portholeSpike.fallback", "category": "Porthole Spike", "title": "5 — Pop out with stable commands only (fallback path)" },
+      { "command": "portholeSpike.dump",     "category": "Porthole Spike", "title": "Write the current tab groups to the log" }
+    ]
+  }
+}

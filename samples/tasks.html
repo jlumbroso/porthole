@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tasks</title>
+<style>
+  :root { --bg: #fbfaf5; --fg: #1d2330; --muted: #6a6f7a; --line: #dedbcf; --accent: #8a7a1f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #171a21; --fg: #e8e6df; --muted: #9a9ea8; --line: #2e333d; --accent: #c9ba5a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg);
+         font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 17px; margin: 0 0 12px; }
+  ol { list-style: none; margin: 0 0 16px; padding: 0; border-top: 1px solid var(--line); }
+  li { border-bottom: 1px solid var(--line); }
+  label { display: flex; gap: 10px; align-items: flex-start; padding: 11px 2px; cursor: pointer; }
+  input[type=checkbox] { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--accent); flex: none; }
+  input:checked + span { color: var(--muted); text-decoration: line-through; }
+  dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px;
+       font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  dt { font-weight: 600; }
+  dd { margin: 0; }
+</style>
+</head>
+<body>
+<h1>Sample task page</h1>
+
+<ol id="tasks">
+  <li><label><input type="checkbox" data-id="a"><span>Tick this box, then run the next spike step</span></label></li>
+  <li><label><input type="checkbox" data-id="b"><span>Check that only this page is visible: no tabs, no status bar</span></label></li>
+  <li><label><input type="checkbox" data-id="c"><span>Click another app and see whether this window stays on top</span></label></li>
+  <li><label><input type="checkbox" data-id="d"><span>Watch the numbers below change when the file is rewritten</span></label></li>
+</ol>
+
+<!-- The spike rewrites the text between the STAMP markers to prove a reload happened. -->
+<dl>
+  <dt>File written</dt><dd><!--STAMP-->never (opened directly, not by the spike)<!--/STAMP--></dd>
+  <dt>Page loads</dt><dd id="loads">?</dd>
+  <dt>Viewport</dt><dd id="size">?</dd>
+  <dt>Boxes ticked</dt><dd id="ticked">?</dd>
+</dl>
+
+<script>
+  // Everything the page knows about itself goes into the TITLE as well as the
+  // page, so the spike's log can read it from the tab label without anyone
+  // transcribing numbers.
+  const KEY = 'porthole-sample-tasks';
+  let state = { ticks: {}, loads: 0 };
+  let storage = 'ok';
+  try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || '{}')); }
+  catch (err) { storage = 'unavailable'; }
+  state.loads += 1;
+
+  const boxes = [...document.querySelectorAll('input[data-id]')];
+  boxes.forEach(box => { box.checked = !!state.ticks[box.dataset.id]; });
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (err) { storage = 'unavailable'; }
+  }
+  function render() {
+    const ticked = boxes.filter(box => box.checked).length;
+    const size = `${window.innerWidth}×${window.innerHeight}`;
+    document.getElementById('loads').textContent =
+      storage === 'ok' ? `${state.loads}` : `${state.loads} (storage ${storage})`;
+    document.getElementById('size').textContent = size;
+    document.getElementById('ticked').textContent = `${ticked} of ${boxes.length}`;
+    document.title = `tasks · ${size} · load ${state.loads} · ${ticked} ticked`;
+  }
+  boxes.forEach(box => box.addEventListener('change', () => {
+    state.ticks[box.dataset.id] = box.checked; save(); render();
+  }));
+  window.addEventListener('resize', render);
+  save(); render();
+</script>
+</body>
+</html>

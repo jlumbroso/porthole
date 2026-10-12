@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Spike 0 (docs/adr/0003): a second VS Code window that loads only the
+            // throwaway spike extension. Other extensions are disabled so that what
+            // we observe is VS Code's own behavior, and workspace trust is off so
+            // the integrated browser does not fall back to ephemeral storage.
+            "name": "Spike 0 — one-shot pop-out",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/spike",
+                "--disable-extensions",
+                "--disable-workspace-trust",
+                "${workspaceFolder}/samples"
+            ]
+        }
+    ]
+}

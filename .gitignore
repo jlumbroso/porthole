@@ -7,6 +7,9 @@
 # pneumatic local state (edge ledger, recruit scripts) — machine-local, never substrate
 .pneumatic/
 
+# Spike run output (the log and the stamped page copy)
+spike/.run/
+
 # Extension build output and packages
 node_modules/
 dist/

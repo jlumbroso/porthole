@@ -555,3 +555,11 @@ gate:
         echo "▸ extension: no package.json yet — nothing to build or test"
     fi
     echo "✅ gate green"
+
+# Spike 0 from a terminal — the same window F5 opens with the "Spike 0"
+# launch configuration: a second VS Code window with only the throwaway spike
+# extension loaded, on the samples/ folder. What to do in it: docs/adr/0003.
+[group('project')]
+[doc("Open the Spike 0 window: only the spike extension loaded (docs/adr/0003)")]
+spike:
+    code --extensionDevelopmentPath="{{justfile_directory()}}/spike" --disable-extensions --disable-workspace-trust "{{justfile_directory()}}/samples"
