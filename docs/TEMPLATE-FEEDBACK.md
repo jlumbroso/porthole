@@ -3,7 +3,8 @@
 - **Date**: 2026-10-12
 - **Author**: Glazier 5.5 (Claude Opus 5.5), founding seat
 - **Template**: human-AI collaboration template A, born from the commit titled "v3.12" (kintsugi reads the base as 3.11.6 plus untagged commits)
-- **Tools on the machine**: pneumatic 0.43.1, kintsugi 0.12.3, VS Code 1.130.0, Peacock 4.5.1
+- **Tools on the machine**: pneumatic 0.43.1, kintsugi 0.12.3, VS Code 1.130.0 (1.141.0 from section F on), Peacock 4.5.1
+- **Kept current**: items are appended as they come up; section F was added in a second session the same day, and item 4 was corrected there.
 
 Everything that was unclear while I was recruited into this repo and then asked
 to instantiate it. Each item says what was unclear, why it mattered, what I
@@ -44,11 +45,12 @@ brackets (item 15).
 - **Decided**: re-read and re-applied, carrying the verification note into my entry.
 - **Clearer if**: pneumatic finished writing the chair before delivering the greeting, or the greeting said "this entry is still being written for a few seconds."
 
-### 4. Step 4 told the human to do things that were already done
-- **Unclear**: "reboot it under tmux via `just launch <seat>`". I was already in tmux, because `pneumatic recruit` launches there. The status bar did not pick up my name and color, and nothing says what refreshes it.
-- **Why it mattered**: I passed the instruction on, and the human had to work out that it did not apply.
-- **Decided**: nothing; the human is asking the pneumatic crew.
-- **Clearer if**: step 4 branched on how the seat arrived, and named the refresh command.
+### 4. Step 4 does not say what the relaunch is for — and I first got this item wrong
+- **Unclear**: "reboot it under tmux via `just launch <seat>`". I was already in tmux, because `pneumatic recruit` launches there, so the step read as already done.
+- **Correction (later the same day)**: my first version of this item said the step did not apply. It does. A recruited session keeps its temporary tmux name (`porthole-recruit-<stamp>-seat`) after it registers under its own alias. Until the human relaunches it, the status bar shows nothing of the seat's name or color, and `just wake <alias>` fails with "Session not found: porthole-<alias>-seat". I met that when trying to wake Surveyor.
+- **Also**: after my own relaunch, the old `porthole-recruit-…-seat` session was still listed by tmux, detached. Nothing says who cleans it up.
+- **Decided**: left both sessions alone and told the human.
+- **Clearer if**: step 4 said why: "the relaunch renames your tmux session to your alias; until then nobody can wake you by name." Better still, registration could rename the session, so no relaunch is needed.
 
 ### 5. References to ADRs that are not in this repo
 - **Unclear**: the greeting cites "ADR-0020". The registry, justfile, skills and `kintsugi.yaml` cite "HQ ADR-0040", "meta-repo ADR-0003", "ADR-0008 QST-LOG-2", "kintsugi ADR-0005". This repo's `docs/adr/` was empty.
@@ -244,3 +246,51 @@ brackets (item 15).
 - **What happened**: mid-registration the `crew` group named an alias that did not exist yet. `just groups` printed a warning and succeeded.
 - **Decided**: `just gate` calls `groups-lookup.py --validate` directly, which exits 1. I checked that against a registry copy with a bogus member.
 - **Clearer if**: a `just registry-check` recipe existed and the onboarding named it.
+
+---
+
+## F. Added after the relaunch (same day, second session)
+
+### 33. After the relaunch, pneumatic was pinned to another project's registry
+- **What happened**: in my relaunched session `PNEUMATIC_CONFIG` points at the `docket` subproject's `agent-sessions.json`. Before the relaunch, `pneumatic doctor` said the pin agreed with the working directory. I do not know what set it.
+- **Why it mattered**: pneumatic says "every guard, chair, report, and federation answer follows the PIN". A `pneumatic recruit` or `wake` from this session would have acted on another crew's registry. Meanwhile `just aliases` reads the local file, so two tools in one session were looking at two different crews.
+- **How I noticed**: only because `pneumatic recruit list` prints a pin notice. `just` recipes backed by the local scripts print nothing.
+- **Decided**: every pneumatic call from this session is prefixed with `env -u PNEUMATIC_CONFIG`. Reported to the human.
+- **Clearer if**: `just launch` set the pin from the repo it runs in, or pneumatic refused to act when the pin and the working directory disagree unless told to.
+
+### 34. `just wake` interpolates its message the same way `safe-commit` did
+- **What I saw**: `--message "{{message}}"` at the recipe, bare inside double quotes — the same pattern as item 30. `brief`, `completion` and `broadcast` do it with `{{slug}}`.
+- **Decided**: not changed here; I kept backticks and `$(…)` out of my wake message.
+- **Clearer if**: every recipe passed arguments through `quote()`.
+
+### 35. One registry file, several seats, no way to commit only your part
+- **What happened**: Surveyor's registration sat uncommitted in `agent-sessions.json` while I wanted to record something in my own entry. The Prime Directive's corollary says to commit only your own changes, but a commit takes the whole file.
+- **Decided**: I did not touch the file. My note (item 36) waits.
+- **Clearer if**: each seat had its own file (`docs/inbox/seats/<alias>.json`), or the doctrine said who commits the shared registry and when.
+
+### 36. What a seat records when its context variant changes
+- **What happened**: I was recruited as `claude-opus-5-5[1m]` and relaunched as `claude-opus-5-5`. The commit trailer I am told to use changed with it. The registry's `model` field stores the base name, so it still matches; `model_note` still says `[1m]`.
+- **Unclear**: whether this is an event worth recording. The doctrine covers reroutes, suspensions and model changes, not a context-window change in the same model.
+- **Decided**: recorded here; the registry note waits on item 35.
+- **Clearer if**: `just launch` passed the spec the seat was founded with, or the doctrine said this case is not an event.
+
+### 37. The ADR mold has no form for a question whose answer is an observation
+- **What happened**: ADR-0003 asks the human what he saw during a spike. The mold requires a Recommendation on every question, with "what would change this pick". For an observation there is nothing to recommend.
+- **Decided**: used the Recommendation slot for a prediction, labeled as one, with a confidence and "if wrong" stating what each other outcome would change in the design.
+- **Clearer if**: the mold blessed a prediction variant. It suits the method: a prediction written before the run can be caught.
+
+### 38. Four questions in one sitting, and the skill for that is not shipped
+- **What happened**: `CLAUDE.md` says that when two or more questions share one answering slot, load the `question-tours` skill before bundling. ADR-0003 has four. The skill is not in the repo (item 23).
+- **Decided**: kept the four in one ADR, in the order the spike produces them, with the run procedure above them.
+- **Clearer if**: the skill shipped, or the rule was removed until it does.
+
+### 39. Files that appear and nothing says whether to track them
+- **`docs/adr/.working/`** — four JSON files (drafts, an archive, and a `.bak` of each) arrived in the human's commit of his answers. They look like the ADR Manager's working state.
+- **`.vscode/terminals.json` and `.vscode/terminals.txt`** — appeared untracked after the relaunch; the `.txt` says it is the seat launch order.
+- **Decided**: touched neither.
+- **Clearer if**: the template's `.gitignore` or its file map named each one as tracked or local.
+
+### 40. The onboarding's own claim about the recruit flow, checked against a second recruit
+- **What I saw with Surveyor**: founded at 2:46 PM, stalled at its first shell prompt within a minute (item 9), unblocked by the human, registered itself with a name, a color and a role. Its registry edit was still uncommitted half an hour later, while it worked on its first task.
+- **Why it matters**: the Prime Directive's corollary says to commit substrate immediately, but the onboarding's step 3 says only "register"; it never says "and commit the registry".
+- **Clearer if**: step 3 ended with "then commit it: `just safe-commit "meta: found <alias> seat" docs/inbox/agent-sessions.json`".
