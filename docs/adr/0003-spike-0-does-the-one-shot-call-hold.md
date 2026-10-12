@@ -87,7 +87,7 @@ So the source and my predictions point the same way on the first three, and on t
 ## Questions
 
 ### QST-SPIKE-WINDOW: After step 1, what appeared?
-- Status: unanswered
+- Status: answered
 - Why asking: This is the whole premise. Compact and always-on-top cannot be read from inside an extension.
 - Need: pick a letter (or override — any shape answers); add a word if something looked off
 
@@ -101,13 +101,28 @@ Options:
 
 **A — the porthole** (a prediction, not a preference). *Rationale*: the brief traces the call through six steps of VS Code's source at tag 1.141.0, and I found `_workbench.openWith`, `workbench.editor.browser` and both floating-window commands as strings in the installed 1.141.0 bundle. *Confidence*: 0.6 — because every link in that chain was read and none was run, and the brief's author and I are the same model. *If wrong*: B means the call works and one option is ignored, so that option moves to a follow-up command; C or D means the one-shot path is dead and the stable fallback (step 5) becomes the primary design.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A. More precisely:
+
+This is what happened after I pressed F5 (I didn't get a choice of "Spike 0"), a new window opened with a single folder `samples` containing a file `tasks.html`. I opened a palette and typed the chevron and "Spike" and saw the other probes.
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 3.58.05 PM.png`
+
+When I ran "Spike 1", I saw the following window appear in the foreground of the editor:
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 3.59.16 PM.png`
+In this image, you can see three layers from frontmost to backmost: (a) the porthole window displaying the tasks, (b) the new window opened by F5, (c) the VSCode workspace of the `porthole` project itself:
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 3.59.21 PM.png`
+
+Note in the bottom of the window, bottom-right, the notification popup with the caption: "_Spike step 1 done. Look at the floating window, tick a box in it, then:_" which invites to click for step 2, which I did, and which works (though note these notices time out and no way to get them back!). Page loads is 1.
+
+I can confirm that this window stays in the foreground no matter which other app is selected. When a desktop is changed, it doesn't follow but it can be moved to other desktops, where it will also stay in the foreground.
+
+Reverse Centaurly Yours,
+-- Jérémie
 
 ---
 
 ### QST-SPIKE-RELOAD: After step 2, did the page update by itself?
-- Status: unanswered
+- Status: answered
 - Why asking: A task page that a coding agent rewrites must refresh without a click, and the boxes you ticked should survive.
 - Need: pick a letter (or override — any shape answers)
 
@@ -120,13 +135,18 @@ Options:
 
 **A — updated, ticks kept** (a prediction). *Rationale*: the brief cites `workbench.browser.autoReloadOnFileChange` as on by default, and that setting's name is present in the installed bundle; the page keeps its ticks in `localStorage`. *Confidence*: 0.5 — because the reload is well supported by the brief, but where the integrated browser keeps `localStorage` for a `file://` page in this window is something I have only read about. *If wrong*: B means task pages must not rely on browser storage, so progress has to live in the file or be exported; C means porthole needs its own file watcher.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A.
+
+For more detail, see:
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 3.59.43 PM.png`
+
+The `File written` timestamp has changed, and the `Page loads` has incremented by 1, compared to before the Step 2. The page keeps its data, including ticks.
 
 ---
 
 ### QST-SPIKE-TWICE: After step 3, how many floating windows are there?
-- Status: unanswered
+- Status: answered
 - Why asking: Resizing is planned as "open again at a new size". That only works if a second pop-out replaces the first window instead of adding one.
 - Need: pick a letter (or override — any shape answers)
 
@@ -140,13 +160,17 @@ Options:
 
 **A — one, showing the page** (a prediction). *Rationale*: the brief reads the browser editor as single-per-resource, so re-opening should move the tab; it explicitly leaves "does the emptied window close?" to this spike. *Confidence*: 0.45 — because the move is argued from source and the window closing is not argued at all. *If wrong*: B means the resize command must close the emptied window itself; C means it must close the source tab; D means resize-by-reopening does not work and that part of the design is rethought.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A.
+
+Just a single one, showing the page.
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 4.00.20 PM.png`
 
 ---
 
 ### QST-SPIKE-FALLBACK: After step 5, what did the stable-commands path produce?
-- Status: unanswered
+- Status: answered
 - Why asking: This path is the safety net if the internal call ever breaks. The brief flags a timing risk: the compact and pin commands may run before the new window has focus and do nothing.
 - Need: pick a letter (or override — any shape answers)
 
@@ -159,8 +183,13 @@ Options:
 
 **A — floating, compact and on top** (a prediction). *Rationale*: all four commands are public and present in the installed bundle, and each is awaited before the next. *Confidence*: 0.5 — because the 200 ms pause before the last two commands is the brief's guess, and the brief itself rates this failure "medium". *If wrong*: B means the fallback must wait for the new window to report focus before running the last two commands; C means the fallback needs a different way to move the tab.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A.
+
+Spike 4 closed all windows, and then the window that opened here was larger/wider but had the some foregrounding properties as before.
+
+- See `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 4.00.43 PM.png` for full screen
+- See `docs/adr/attachments/screenshots/2026-10-12-spike-0-test/Screenshot 2026-10-12 at 4.00.44 PM.png` for just the float itself
 
 ---
 
