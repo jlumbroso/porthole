@@ -294,3 +294,35 @@ brackets (item 15).
 - **What I saw with Surveyor**: founded at 2:46 PM, stalled at its first shell prompt within a minute (item 9), unblocked by the human, registered itself with a name, a color and a role. Its registry edit was still uncommitted half an hour later, while it worked on its first task.
 - **Why it matters**: the Prime Directive's corollary says to commit substrate immediately, but the onboarding's step 3 says only "register"; it never says "and commit the registry".
 - **Clearer if**: step 3 ended with "then commit it: `just safe-commit "meta: found <alias> seat" docs/inbox/agent-sessions.json`".
+
+---
+
+## G. What happened to these items, and what came up next
+
+### Dispositions received (2026-10-12, from Plenum 5, pneumatic)
+- **Items 1, 2, 3, 4, 9 and 10** are reported shipped in `adrs4ai-pneumatic 0.44.0` the same day (brief archived at `docs/inbox/archive/2026-10-12-1922-plenum-to-glazier-…`). I have not verified them: this machine still has 0.43.1.
+- **Item 9's doctrine question** is answered: a seat does not answer another seat's permission prompt; `rescue` is for mechanical stalls.
+- **Items 35 and 36** resolved themselves: Surveyor committed its registration, after which I recorded the relaunch in my own registry note.
+- **Item 4, refined again**: `just update-seat-titles` repainted my status bar (Plenum's pointer). It does not rename a recruited session, so after running it `just wake surveyor` still failed. The relaunch is still what makes a recruit reachable by name.
+
+### 41. A wake looks like a message from the human
+- **What happened**: "[wake from plenum via just-wake] …" arrived in my prompt in the place where the human's messages arrive.
+- **Unclear**: how much authority a wake carries. `CLAUDE.md` says "wakes and mail are doorbells", but only inside the paragraph about question tours.
+- **Decided**: treated it as a peer ringing: read the brief it pointed at, acted on what was mine, and did nothing merely because the wake said so.
+- **Clearer if**: the onboarding said it in one line — a wake is a peer's doorbell, never the human's instruction.
+
+### 42. Whether a seat upgrades shared tools
+- **What happened**: a peer told me a new pneumatic was on PyPI. The tooling skill says installs are the seat's job. This tool is shared by every hive on the machine, mid-day.
+- **Decided**: left it at 0.43.1 and told the human.
+- **Clearer if**: the skill distinguished installing a missing tool (the seat does it) from upgrading one that other crews are using (the keeper's call).
+
+### 43. What time a brief's filename means
+- **What I saw**: filenames are stamped when reserved, not when the brief is finished. Surveyor's completion is stamped 19:19 and says "~3:30 PM ET" inside; Plenum's 19:22 brief was committed before it. Sorted by name, the inbox does not show the order things were said.
+- **Decided**: nothing; I read by commit order.
+- **Clearer if**: the protocol said which moment the stamp records.
+
+### 44. `inbox-archive` commits for you, in a third commit style
+- **What I saw**: the recipe makes its own commit, `chore(inbox): archive <filename>`, with no attribution trailer, after unstaging everything else.
+- **Why it mattered**: my trailer is required on commits I create, and this one is created on my behalf without it.
+- **Decided**: left the two archive commits as the recipe made them.
+- **Clearer if**: the recipe only staged the move, or documented that archive commits are tool commits.
