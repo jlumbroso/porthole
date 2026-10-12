@@ -39,6 +39,20 @@
         "titleBar.border": "#b5a642"
     },
     "peacock.color": "#B5A642",
+    // Vitest extension (vitest.explorer). The extension host's PATH is the
+    // GUI's (/usr/bin:/bin:/usr/sbin:/sbin); the asdf node shim it resolves
+    // runs `exec asdf exec node`, and with no /opt/homebrew/bin on that PATH
+    // it dies "asdf: not found", exit 127, "could not load any config"
+    // (2026-10-12, Surveyor; same fix as vscode-adrs-for-ai). Absolute paths
+    // because vitest.nodeEnv does not expand ${env:...}.
+    "vitest.enable": true,
+    "vitest.rootConfig": "${workspaceFolder}/vite.config.mts",
+    "vitest.configSearchPatternExclude": "{**/node_modules/**,**/dist/**,**/.*/**,**/*.d.ts,**/docs/**}",
+    "vitest.nodeExecutable": "/Users/jlumbroso/.asdf/shims/node",
+    "vitest.nodeEnv": {
+        "PATH": "/opt/homebrew/bin:/Users/jlumbroso/.asdf/shims:/usr/local/bin:/usr/bin:/bin",
+        "ASDF_DATA_DIR": "/Users/jlumbroso/.asdf"
+    },
     "python.terminal.activateEnvironment": false,
     "terminal.integrated.env.osx": {
         "PATH": "/opt/homebrew/bin:${env:HOME}/.asdf/shims:${env:PATH}"
