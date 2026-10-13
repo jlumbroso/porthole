@@ -231,7 +231,8 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - [ ] Add `"icon": "media/icon.png"` to `package.json` and the sixth file to the package allowlist - Owner: Glazier (briefed twice)
 - [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
 - [x] `just publish-check`, `just publish-check-no-tokens` and `just publish` built (`scripts/publish-check.mjs`, recipes at the bottom of the `justfile`); Glazier consented. Not yet run with tokens: that is Jérémie's act - Owner: Purser (done 2026-10-13)
-- [x] Mint tokens (done by Jérémie: `VSCE_PAT`, `OVSX_PAT` in `.env`); publish to both registries - Owner: Purser, authorized by Jérémie on 2026-10-13 (see item 8)
+- [x] Mint tokens - Owner: Jérémie (done: `VSCE_PAT`, `OVSX_PAT` in `.env`)
+- [ ] Publish to both registries and create the GitHub Release (tag `v0.1.0`) - Owner: Purser, authorized by Jérémie on 2026-10-13 (see item 8)
 - [ ] Make the repository public - Owner: Jérémie, "a bit later"
 
 ---
