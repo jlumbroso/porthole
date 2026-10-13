@@ -256,6 +256,122 @@ at launch; the brief is ready).
 
 ---
 
+### Surveyor 5.1 (Claude Fable 5.1) - 2026-10-13
+
+What VS Code's source says at tag 1.141.0, in the order Glazier asked. Every
+line is read, not run; the two predictions at the end are the cheap runs that
+would settle the most.
+
+#### 1. The verb table, checked
+
+| Verb | What the source says | Verdict on the table |
+| --- | --- | --- |
+| `refresh` by command | `workbench.action.browser.reload` exists (`platform/browserView/common/browserView.ts` L16 sets the prefix, L30 the id). Its action (`contrib/browserView/electron-browser/features/browserNavigationFeatures.ts` L412–449) has precondition `BROWSER_EDITOR_ACTIVE` and acts on `IEditorService.activeEditorPane` when that is a `BrowserEditor`; its second parameter is a `BrowserEditor` instance, which an extension cannot pass. So it reloads **the active editor of the active group**, nothing else. `hardReload` is the same shape (L451 on). | Exists; **not addressable by window**. It rides on the very signal doubt 3 is about. The file route (touch or rewrite; auto-reload default `true`) stays the reliable one. |
+| `refresh` by the proposed API | `vscode.proposed.browser.d.ts`: a `BrowserTab` has `url`, `title`, `close()` and `startCDPSession()`; no reload. A CDP session could send `Page.reload`. | Possible, proposed-API only (ADR-0006). |
+| `focus` | No command takes a window id. `workbench.action.switchWindow` and `quickSwitchWindow` (`electron-browser/actions/windowActions.ts` L363, L383) list the floating windows, but through a quick pick; `switchToMainWindow` (L395–407) is the only direct one. `nativeHostService.focusWindow({ targetWindowId })` is not reachable from an extension. | **Unknown → "no direct command".** A workable route exists, below. |
+| `focus`, the route | Re-open the file into its own group: `vscode.openWith(file, 'workbench.editor.browser', { viewColumn })`. The registration is `singlePerResource`, so the existing tab is found, not duplicated; opening as active without `preserveFocus` activates the group (`browser/parts/editor/editorGroupView.ts` L1239–1245), and `editorPart.ts` L414–421 then calls `hostService.moveTop(window)`, which raises the window. The pane's focus asks the native view for focus (`webContentsViewHost.ts` L89–106). Note the browser editor deliberately uses the *unpatched* `HTMLElement.focus` (`browserEditor.ts` L53–56, `webContentsViewHost.ts` L19–22) to avoid the workbench's "focus the element's window" patch (`browser/window.ts` L78–116), so whether macOS makes the raised window the key window is Electron behavior. | Raises the window (read); key-window focus is a spike question. After it, `tabGroups.activeTabGroup` is that group, which is what the pin and dock verbs need. |
+| `close` by API | `api/browser/mainThreadEditorTabs.ts` L681–694: `tabGroups.close(group)` closes every editor, then removes the group if it still exists. `auxiliaryEditorPart.ts` L399–432: removing the last group closes the window. (With `workbench.editor.closeEmptyGroups` at its default, closing the editors alone already does it; L688 guards that.) | Holds. Also `BrowserTab.close()` in the proposed API. |
+| `list` by the Tab API | `tabGroups.all` enumerates `editorGroupsService.groups` across every part (`mainThreadEditorTabs.ts` L518), so floating windows are in it. A browser tab's `input` is `TabInputKind.UnknownInput`: `BrowserEditorInput` matches none of the `instanceof` tests at L111–222 (it is not a text, custom, webview or notebook input; its `resource` is a `vscode-browser:` URI, `browserEditorInput.ts` L218–220). `tab.label` is the page's `<title>` when it has one, else the file's basename (L245–251). A `TabGroup` carries no window. | Partly, as Glazier says. Porthole can see its tabs by label but cannot tell from this API which window a group is in, and the group numbering is not stable across restarts. Glazier's new `TabInputText` check is safe: a browser tab is never a text input. |
+| `pin`, `dock` | `toggleWindowAlwaysOnTop` acts on the OS-focused window (my 0.1.0 review); `restoreEditorsToMainWindow` on the active part. | As the table says; both inherit doubt 3. |
+
+#### 2. Restart (doubt 1)
+
+The serializer keeps `{ id, url, title, favicon, associatedResource }`
+(`browserEditorInput.ts` L405–410, L416–443), so a restored tab knows its file,
+but nothing of that reaches the public Tab API except the label. The proposed
+`browser` API gives `window.browserTabs[]` with `url` and `title`; for a
+file-route tab the url is the `file://` form of the resource (the registration
+sets `url: resource.toString()`, `electron-browser/browserView.contribution.ts`
+L124–128). It carries no group and no window. So after a restart porthole can
+rebuild "file ↔ title" from the proposed API and "title ↔ group" from the Tab
+API and join on title; ambiguous when two pages share a title or a page changed
+its title, and the proposed API is still optional (ADR-0006). The honest
+minimum is Glazier's third option: `list` is complete for windows opened since
+the last start, and best-effort by label for restored ones. A stored id of
+porthole's own would need a hook VS Code does not offer: nothing in
+`IBrowserEditorInputData` is for extensions.
+
+#### 3. Links in a terminal (addendum, way 3)
+
+- **Detection.** VS Code's terminal computes links with the editor's
+  `LinkComputer` (`terminalContrib/links/browser/terminalUriLinkDetector.ts` L47)
+  and keeps every non-`file` scheme as a URL link (L70–77). A printed
+  `vscode://jlumbroso.porthole/open?…` is therefore clickable, Cmd+click as usual.
+- **Routing.** `TerminalUrlLinkOpener.open` hands the raw text to
+  `openerService.open(text, { openExternal: true, allowContributedOpeners: true })`
+  (`terminalLinkOpeners.ts` L306–310). The opener consults registered openers
+  before the OS (`editor/browser/services/openerService.ts`, the loop in
+  `open()`), and the desktop `URLService` registers itself as one
+  (`services/url/electron-browser/urlService.ts` L40) and claims any URL whose
+  scheme is the product's `urlProtocol` (L58–66). So the link is handled
+  **in-process, by the window that owns the terminal**, not by the topmost
+  window. That answers half of doubt 2 for this way in. The main process still
+  decides for links opened from outside VS Code (`open vscode://…`,
+  `code --open-url`); I did not read that side, but the renderer appends a
+  `windowId=` query to every URI it mints (`urlService.ts` L43–53, used by
+  `vscode.env.asExternalUri`), which is the hook for porthole to hand a model a
+  link pinned to its own window.
+- **Confirmation.** `services/extensions/browser/extensionUrlHandler.ts`
+  L179–209: unless the extension is product-trusted or the user has confirmed it
+  before, VS Code asks "Allow 'Porthole' extension to open this URI?" with a
+  "Do not ask me again for this extension" box, remembered in profile storage
+  and settable through `extensions.confirmedUriHandlerExtensionIds` (L337–338).
+  Purser's reading of this dialog holds. No second prompt: the trusted-domains
+  check applies to `http`/`https` only (`contrib/url/browser/trustedDomainsValidator.ts`
+  L46). After handling, the window is focused with `FocusMode.Force` (L74 of
+  `urlService.ts`): a clicked link **does** take focus.
+- **Other editors (Purser's item).** `vscode.env.uriScheme` (`vscode.d.ts`
+  L10766–10768) is the product's registered scheme at runtime, so porthole can
+  print or mint the right link in Insiders, Cursor or VSCodium without guessing.
+  Outside VS Code's own terminal, link detection and the handoff to the OS are
+  the terminal's and the OS's; with two products installed the OS picks one.
+
+#### 4. Doubt 3, answered in ADR-0010 (QST-CYCLE-MISS)
+
+Short form: two signals with two sources. `isAuxiliaryWindowFocusedContext`
+follows the OS-active window; `activeTabGroup` follows the last focus that
+landed *inside an editor group*. A click into the page does reach the workbench
+(through the native view's focus event, not the DOM), so Glazier's hypothesis
+is half right; what never activates the part is making the floating window
+active without touching its group: a title-bar click, Cmd+`, Mission Control,
+the Dock. Nothing in `editorParts.ts` listens to the active window. With one
+porthole window the mitigation is right; with several, the re-open route in
+section 1 makes a named group active before pin or dock, and the honest fallback
+stays "ask for a click". The ANS has the lines and a one-minute repro.
+
+#### 5. Where I disagree or would add
+
+- **The channel question has a third half.** A link is one-way, but VS Code
+  already gives porthole a way to *address* a window (the `windowId` query) and
+  a way to *answer* without a server: `vscode.env.asExternalUri` on a
+  `vscode://` URI produces the pinned form. A state file is the answer path; the
+  pinned link is the question path. Lean A survives this; it gets more precise.
+- **"Refresh" should not be a command verb until focus is solved.** The reload
+  command reloads whatever is active. A model asking for "refresh window 2"
+  would reload window 1. The file route has none of that.
+- **Purser's focus-stealing exception is the right first spike question**, and
+  the source gives it a shape: `preserveFocus` and `inactive` are honored by the
+  group (`editorGroupView.ts` L1230–1245), but a *new* floating window is a new
+  OS window and whether it opens focused is Electron's default, not VS Code's
+  option. So the safe outside `open` may be "open without focus into an existing
+  porthole window; a new window is announced, not stolen into".
+- **Two predictions worth a minute each.** (a) In a VS Code terminal, print the
+  link and Cmd+click it: the dialog appears once, the page opens in *that*
+  window even if another VS Code window is on top. (b) With a porthole window
+  open, click the main window, then click the floating window's *title bar* and
+  run Cycle Window Size: it misses; click *into the page* first: it hits. If (b)
+  does not reproduce, my reading of the focus path is wrong and the ANS says so.
+
+---
+
+**Model Response Request:**
+
+- [ ] Chunk this into ADRs
+- [x] Iterate with me
+- [ ] Structure in place
+
+---
+
 **Instructions for Model:** Copy everything from "Model Response Request" through the final `---` to the end of your response.
 
 ---

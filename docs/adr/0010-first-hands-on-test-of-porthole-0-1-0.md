@@ -266,10 +266,20 @@ Two different causes, neither porthole's doing. Lines are at tag 1.141.0, paths 
 **Second real use, on VS Code 1.134.0** (2026-10-13, just after midnight ET): every feature worked, but Cycle Window Size now and then answered "pop a page out first" from inside an open porthole window, with no reliable repro. Porthole's log from the first 1.134 session shows one pop-out by the internal call (139 ms) and no resize at all.
 
 ### QST-CYCLE-MISS: Why does VS Code sometimes not report the focused floating window's group as active?
-- Status: unresolved — Glazier's ball; mitigated in code, cause asked of Surveyor
+- Status: resolved — cause read in source by Surveyor, 2026-10-13; the mitigation holds for one window, and a route exists for several
 - Why deferring: porthole now copes (below), so nothing waits on the answer. The answer decides whether the mitigation is enough when several porthole windows are open.
 
-**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Surveyor 5.1, Claude Fable 5.1, 2026-10-13; read at tag 1.141.0, not run)
+
+**Two signals, two sources.** The palette's `when` reads `isAuxiliaryWindowFocusedContext`, which follows the **OS-active window**: `workbench/browser/contextkeys.ts` L241 sets it from `layoutService.onDidChangeActiveContainer`, which `layout.ts` L494 and L584–594 derive from `hostService.onDidChangeActiveWindow`. `vscode.window.tabGroups.activeTabGroup` is `editorGroupsService.activeGroup`, the active group of the **most recently focused editor part**: `editorParts.ts` L297–305 updates that on `part.onDidFocus`, which `editorPart.ts` L707–710 fires on `groupView.onDidFocus`, which `editorGroupView.ts` L487–527 fires on DOM focus in an empty group, a click in the group's title area, or the editor pane's own `onDidFocus`. Nothing in `editorParts.ts` listens to the active window; the two signals can disagree.
+
+**A click into the page does reach the workbench**, so the hypothesis is half right: not through the DOM, but through the native view. `platform/browserView/electron-main/browserView.ts` L461–467 turns the web contents' `focus` event into `onDidChangeFocus`, and `contrib/browserView/electron-browser/browserEditor.ts` L605–610 fires the pane's `onDidFocus` on it, which activates the group and the part. It arrives a main-process round trip late, but it arrives.
+
+**What never activates the part** is making the floating window the OS-active window without focusing anything inside its editor group: a click on the window's title bar (the title bar is outside the part), switching to it with Cmd+`, Mission Control or the Dock, or any activation after the main window was used. In compact mode there is no tab strip, which removes the title-area click route that a docked tab has (L496–520). On window activation the browser restores focus to the last active element; if that was the page container (a previous click into the page), the native path re-activates the part; if it was the window body (a title-bar click), nothing does. That is why it is intermittent: it depends on how the window was last activated.
+
+**No extension-visible signal names the focused window.** `vscode.window.state.focused` and `.active` are application-wide; the context key is only usable in `when` clauses; the proposed `browser` API's `activeBrowserTab` mirrors `editorService.activeEditorPane` (`api/browser/mainThreadBrowsers.ts` L45, L81), the same signal. **The mitigation is right for one window.** For several, porthole can make a named group active instead of guessing: re-open the file into it with `vscode.openWith(file, 'workbench.editor.browser', { viewColumn })`; the registration is `singlePerResource`, so no second tab appears, the group is activated (`editorGroupView.ts` L1239–1245) and the window is raised (`editorPart.ts` L414–421, `hostService.moveTop`). Which window the human *meant* has no signal, so "ask for a click" stays the honest fallback there.
+
+**Repro, one minute, deterministic if this is right:** pop a page out; click the main window; click the floating window's **title bar**; run Cycle Window Size: it misses. Click **into the page**, run it again: it hits. **Upstream:** a fifth draft is fair: "`activeGroup` does not follow OS window activation into an auxiliary window"; the fix would be a listener on `onDidChangeActiveWindow` in `editorParts.ts` that marks that window's part most recently active.
 
 ---
 
