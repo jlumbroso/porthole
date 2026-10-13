@@ -48,7 +48,7 @@ jobs:
             echo
             echo "---"
             echo
-            echo "**Install**: search for \"Porthole\" in VS Code's Extensions view, or run \`code --install-extension jlumbroso.porthole\`. The attached \`.vsix\` is the exact package that was published; install it with \`code --install-extension porthole-${version}.vsix\`."
+            echo "**Install**: search for \"Porthole\" in VS Code's Extensions view, or run \`code --install-extension jlumbroso.porthole\`. The attached \`.vsix\` was built by CI from this tag, and the registries were published from the same commit; install it with \`code --install-extension porthole-${version}.vsix\`."
             echo
             echo "Full history: [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/CHANGELOG.md)"
           } >> release-notes.md

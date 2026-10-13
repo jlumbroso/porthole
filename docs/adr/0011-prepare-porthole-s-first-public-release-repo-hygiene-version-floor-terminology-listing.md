@@ -211,6 +211,10 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 6. **Screenshots (QST-SHOTS, B now, A later).** The existing screenshots are used, cropped. Jérémie chose four from the first real use (`2026-10-12-first-real-in-situ-trial`: the window alone, beside the instructions, beside the Azure form, beside the editor). Purser looked at each, made cleaned copies in `docs/images/` and put them in the README under "See it". A staged retake stays possible later.
 7. **Icon (QST-ICON A; QST-ICON-PICK A).** Purser drew a first icon and ran twelve concepts through `batch-renderer` with Nano-Banana-Pro, as Jérémie suggested. He picked **concept 1.2, the flat brass tile**, which ships as `media/icon.png` (256 px, transparent). He liked 2.2 and the hand-drawn SVG as well; they are kept in `docs/release/icon/`.
 
+8. **Publish before the repository is public (Jérémie, 2026-10-13, after the answers above).** He authorized Purser to run the publish commands himself and said the repo goes public "a bit later". The consequence, stated so nobody is surprised: the README's images and relative links are rewritten into absolute `github.com` URLs when the package is built, so on the listing they do not load for strangers until the repo is public, and then they work with no new version. `scripts/publish-check.mjs --allow-private-repo` records the override (`ALLOW_PRIVATE_REPO=1 just publish`); without it the check still fails on a private repo.
+9. **Prerequisites he reported done**: the Open VSX publisher agreement is signed; Spike 0 was run on the current VS Code version ("for now that's enough"; no log of the run is kept in the repo).
+10. **GitHub infrastructure for releases**: a `tests` workflow (credential-shape scan, `npm run check`, coverage; on main it writes the coverage figure to a `badges` branch), a `release` workflow (a `v*` tag creates a GitHub Release whose notes are that version's CHANGELOG section, with the `.vsix` attached; it does not publish to the registries, whose tokens are not stored as repository secrets), Dependabot (with `@types/vscode` ignored on purpose), issue templates, README badges (tests, coverage, MIT, both registries) and the README freshened. Coverage on the first run: 93.93% of lines.
+
 ### Action Items
 
 - [x] Cleanliness scans, version-floor check, terminology index, release plan, README and changelog rewritten, feedback for Lintel written - Owner: Purser (done 2026-10-13)
@@ -227,7 +231,8 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - [ ] Add `"icon": "media/icon.png"` to `package.json` and the sixth file to the package allowlist - Owner: Glazier (briefed twice)
 - [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
 - [x] `just publish-check`, `just publish-check-no-tokens` and `just publish` built (`scripts/publish-check.mjs`, recipes at the bottom of the `justfile`); Glazier consented. Not yet run with tokens: that is Jérémie's act - Owner: Purser (done 2026-10-13)
-- [ ] Make the repository public; mint tokens; publish to both registries - Owner: Jérémie (his acts)
+- [x] Mint tokens (done by Jérémie: `VSCE_PAT`, `OVSX_PAT` in `.env`); publish to both registries - Owner: Purser, authorized by Jérémie on 2026-10-13 (see item 8)
+- [ ] Make the repository public - Owner: Jérémie, "a bit later"
 
 ---
 

@@ -1,5 +1,5 @@
 // Read-only pre-publication check: one ✓ / ✗ line per fact the release depends on.
-// Usage: node scripts/publish-check.mjs [--no-tokens]
+// Usage: node scripts/publish-check.mjs [--no-tokens] [--allow-private-repo]
 // Run by `just publish-check` (and by `just publish` before it asks for a confirmation).
 // It publishes nothing and never prints a token value.
 //
@@ -57,12 +57,18 @@ const env = NO_TOKENS ? {} : readEnvFile();
 // --- the repository ------------------------------------------------------------
 const repoUrl = (typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url) ?? '';
 const slug = repoUrl.match(/github\.com[/:]([^/]+\/[^/.]+)/)?.[1];
+// `--allow-private-repo`: Jérémie decided on 2026-10-13 to publish before the repository is made
+// public. The listing's relative images and links are rewritten at package time into absolute
+// github.com URLs, so they are broken until the repo is public and then work without a new
+// version. The check says so instead of passing quietly.
+const ALLOW_PRIVATE = process.argv.includes('--allow-private-repo');
 if (!slug) {
   bad('repository field names a GitHub repo', `package.json repository is "${repoUrl}"`);
 } else {
   const r = run('gh', ['repo', 'view', slug, '--json', 'visibility', '-q', '.visibility']);
   const vis = r.stdout.trim();
   if (vis === 'PUBLIC') { ok(`GitHub repo ${slug} is public (the listing's relative links and images resolve against it)`); }
+  else if (vis === 'PRIVATE' && ALLOW_PRIVATE) { skip(`GitHub repo ${slug} is public`, '--allow-private-repo: it is PRIVATE, so the listing\'s images and links will not load for strangers until it is made public (then they work with no new version)'); }
   else { bad(`GitHub repo ${slug} is public`, r.status === 0 ? `it is ${vis}; relative README links would 404 for a stranger (playbook V.2)` : 'could not ask GitHub (gh not installed or not logged in)'); }
 }
 

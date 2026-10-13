@@ -438,5 +438,24 @@
     "source": "panel",
     "archivedAt": "2026-10-13T03:49:22.670Z",
     "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:11::cb0c00598377::0",
+    "adrPath": "docs/adr/0011-prepare-porthole-s-first-public-release-repo-hygiene-version-floor-terminology-listing.md",
+    "adrNumber": 11,
+    "questionText": "Which icon concept does porthole carry forward?",
+    "draftText": "Option A is approved. I like 2.2 and the original SVG draft, but I have been sold by your recommendation.",
+    "updatedAt": "2026-10-13T04:45:19.671Z",
+    "history": [
+      "Option A is okay. ",
+      "Option A ",
+      "Option A is approved. ",
+      "Option A is approved. I like 2.2, but I ",
+      "Option A is approved. I like 2.2, but I have been sold by your recommendation."
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-13T04:45:21.955Z",
+    "reason": "promoted"
   }
 ]

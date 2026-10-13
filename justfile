@@ -607,7 +607,8 @@ publish:
     echo "▸ gate"
     just gate
     echo "▸ publish-check (every line must be ✓)"
-    node scripts/publish-check.mjs
+    # ALLOW_PRIVATE_REPO=1 just publish: publish before the repo is public (Jérémie, 2026-10-13)
+    node scripts/publish-check.mjs ${ALLOW_PRIVATE_REPO:+--allow-private-repo}
     VERSION=$(node -p "require('./package.json').version")
     NAME=$(node -p "require('./package.json').name")
     ID=$(node -p "require('./package.json').publisher + '.' + require('./package.json').name")
