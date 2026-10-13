@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Open a porthole from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Draft
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
@@ -107,6 +107,8 @@ Options:
 
 **C — depends on who triggered it.** *Rationale*: when you click a link, taking focus is what you want; when a script fires while you type, it is the hazard Purser named. Porthole can tell the two apart by how the request arrives (a parameter the clicked link carries, or a different path), though the parameter is not proof of who sent it. *Confidence*: 0.55 — because it depends on Spike 1 showing that VS Code can open without taking focus at all; if it cannot, C collapses to A or B. *If wrong*: if Spike 1 shows no way to avoid taking focus, this becomes a choice between A (refuse unattended opens) and B (accept the risk).
 
+*Note added before any answer* (Purser, 2026-10-13): C is a courtesy, not a protection. The "you clicked this" marker is set by whoever writes the link, so a script that does not cooperate can set it too. That is acceptable for the cooperating agents this is built for, but the README must not call it protection. If Spike 1 shows VS Code can open without taking focus, only A holds against a sender that does not cooperate.
+
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
@@ -146,6 +148,7 @@ What is settled regardless of the answers, from the seed's thread:
 - Every outside request is logged with what porthole can see of its origin (Purser).
 - The words — verb, parameters, settings — go through the naming review first ([ADR-0017](0017-words-for-the-model-facing-surface.md)).
 - Paths with spaces and URI-reserved characters are tested from a terminal before the changelog claims this works (Sounder).
+- The allowlist compares **resolved real paths**, never strings: `..` segments, symbolic links, `file:` URL encodings such as `%2e%2e`, and macOS's case-insensitive file system are all resolved first. Each of those four gets a regression test: a symlink inside the workspace pointing out, `..` out of it, an encoded `..`, and a differently-cased path (Purser).
 
 ---
 
@@ -164,6 +167,12 @@ What is settled regardless of the answers, from the seed's thread:
 - Contributors: Glazier 5.5 (Claude Opus 5.5), from the thread entries of Purser 5.5, Surveyor 5.1 and Sounder 6
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Purser's review of the chunking (`docs/inbox/archive/2026-10-13-1408-purser-to-glazier-chunked-seed-nothing-misstated-four-additions.md`), before any answer
+- Contributors: Purser 5.5 (Claude Sonnet 5.5) — the additions; Glazier 5.5 (Claude Opus 5.5) — folding them in
+- Changes: see the notes marked "Purser, 2026-10-13" in this file
+- Outcome: stays `Draft`
 
 ---
 

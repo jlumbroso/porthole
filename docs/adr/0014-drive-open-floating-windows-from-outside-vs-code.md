@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Drive open floating windows from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Draft
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
@@ -78,10 +78,13 @@ Options:
 - **A — instructions only**: the skill documents the link format and a one-line command (`open "vscode://…"` on macOS); each model builds links itself.
 - **B — a small script shipped with each porthole release**: one file (for example `porthole.mjs`, run with Node) attached to the GitHub Release and kept in the repo, which builds the link, sends it, waits for the result and prints it. No new registry or token.
 - **C — a published command-line package** (`npm install -g porthole-cli`), with its own release.
+- **D — the same script, shipped inside the extension package**: `porthole.mjs` installed with porthole itself, so it always matches the porthole version receiving its requests; the skill finds it in the extension's install folder. No download and no new registry. Costs: the package grows from six files to seven, and the install folder differs per editor (VS Code, Insiders, Cursor, VSCodium), so the skill must look it up. (Option added by Purser, 2026-10-13, before any answer.)
 
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
 
 **A for `open` now, B once results come back.** *Rationale*: for `open` alone a link is one line, and Purser is right that a package is a real cost; but as soon as QST-DRIVE-CHANNEL's results exist, the waiting and request-matching Sounder describes are exactly what models would each get slightly wrong, and B ships it through the release workflow that already exists, with no new account. *Confidence*: 0.6 — because the cost of keeping B in step with the extension is unknown. *If wrong*: if models handle the waiting reliably from instructions alone (the skill's stranger test would show it), stay at A; if B is used beyond this machine and needs updating independently, C.
+
+**Recommendation, revised** (by Glazier 5.5, Claude Opus 5.5, 2026-10-13, before any answer — a stated revision): **A for `open` now, D once results come back.** Purser's option D solves the one thing B left open, whether the script on a model's disk matches the porthole it talks to, by shipping them together. Purser accepts B or D; the objection was only ever to a new registry. *Confidence*: 0.65 — because finding the install folder per editor is new work the skill must get right. *If wrong*: if the skill cannot find the folder reliably across editors, B, with the script's version checked against porthole's.
 
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
@@ -167,6 +170,8 @@ Settled regardless, from the thread:
 - [ ] Answer the five questions — Owner: Jérémie
 - [ ] Fix the request-matching weakness Sounder found in `watchForOpenedGroup` before any of this is built — Owner: Glazier
 - [ ] Spike the verbs by hand once built — Owner: Jérémie, with Surveyor
+- [ ] Before 0.2.0 ships any verb: an "experimental" label in the changelog; a README section "Control from outside VS Code" stating the verbs, the allowlist, which verbs are off by default, what VS Code's first-use dialog does (it shows only part of the address and offers "Do not ask me again"), and that outside control has been run only on macOS; and the changelog naming which verbs were run on which VS Code version, "read, not run" for the rest — Owner: Purser (wording), once the verbs exist
+- [x] Gate check that the extension makes no network calls ("porthole listens on no port") — Owner: Glazier (done 2026-10-13, `scripts/check-package-contents.mjs`)
 
 ---
 
@@ -177,6 +182,12 @@ Settled regardless, from the thread:
 - Contributors: Glazier 5.5 (Claude Opus 5.5), from the thread entries of Purser 5.5, Surveyor 5.1 and Sounder 6
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Purser's review of the chunking (`docs/inbox/archive/2026-10-13-1408-purser-to-glazier-chunked-seed-nothing-misstated-four-additions.md`), before any answer
+- Contributors: Purser 5.5 (Claude Sonnet 5.5) — the additions; Glazier 5.5 (Claude Opus 5.5) — folding them in
+- Changes: see the notes marked "Purser, 2026-10-13" in this file
+- Outcome: stays `Draft`
 
 ---
 
