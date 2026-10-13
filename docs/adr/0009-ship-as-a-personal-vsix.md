@@ -1,27 +1,35 @@
 <!-- adr template version: "adr-madr 3.10.0" -->
 
-# Ship as a personal VSIX
+# Ship as a personal VSIX now; publish to the Marketplace and Open VSX
 
-* Status: accepted — what is in effect today; QST-MARKETPLACE below asks Jérémie whether to change it
-* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); open to Jérémie Lumbroso through QST-MARKETPLACE
+* Status: accepted
+* Deciders: Jérémie Lumbroso (QST-MARKETPLACE, answered B, 2026-10-12); the personal-VSIX half proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5)
 * Date: 2026-10-12
 
-Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0006.
+Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0006, reversed in part by Jérémie's answer to QST-MARKETPLACE below.
 
 ## Context and Problem Statement
 
-How does porthole get from this repo into the VS Code that Jérémie uses?
+How does porthole reach the people who use it — first Jérémie, then everyone?
 
 ## Considered Options
 
 * Package a `.vsix` locally and install it from the file
-* Publish to the Marketplace
+* Publish to the Marketplace (and Open VSX)
+* Publish the source only, with a release `.vsix`
 
 ## Decision Outcome
 
-Chosen option: "Package a `.vsix` locally and install it from the file", because the extension calls an internal command and may use a proposed API, neither of which belongs on the Marketplace, and it has one user.
+Chosen option: **publish to the VS Code Marketplace and Open VSX**, with the local `.vsix` as the way Jérémie runs it until the first release. Jérémie's reason, in his answer below: he has needed this for over two years and wants everybody to have it. The brief's original pick, personal-only, is reversed; so is my recommendation (A, then C).
 
-How, following the house's practice ([ADR-0002](0002-scaffold-follow-the-house-extension-conventions.md)):
+What publishing commits us to, stated now so nobody discovers it at release time:
+
+* **The listing says plainly that porthole relies on an internal VS Code command**, and what happens when VS Code changes it: the window still opens, compact and pinned, but at VS Code's default size.
+* **Every VS Code update is a release question.** Spike 0 (`spike/`, F5 → "Spike 0") is re-run on the new version before a release claims to support it.
+* **A seat owns the release** (founding brief: `docs/inbox/2026-10-13-0053-glazier-founding-brief-release-seat.md`) — listing copy, screenshots, the pre-publication privacy pass, the terminology pass for Mint, and the publishing mechanics — following the release skill and playbook Lintel is writing for `vscode-adrs-for-ai`.
+* **The repo goes public with it**, under the MIT `LICENSE` already in place (ADR-0001, follow-ups).
+
+Until the first release, the local path stays as it is ([ADR-0002](0002-scaffold-follow-the-house-extension-conventions.md)):
 
 * `just install-local` builds, packages, installs that exact file, and says to reload the window.
 * The package's contents are checked, not assumed: an ignore list that names this repo's working files (`CLAUDE.md`, `docs/`, `.mcp.json`, `.pneumatic/`, `kintsugi.*`, `spike/`), reviewed with `vsce ls` before the first install.
@@ -29,12 +37,12 @@ How, following the house's practice ([ADR-0002](0002-scaffold-follow-the-house-e
 
 ### Positive Consequences
 
-* No review process, no public surface, no promise to other users.
+* Everyone who wants a pinned page beside their code can have it, with updates.
 
 ### Negative Consequences
 
-* No automatic updates: each change is a repackage and a reinstall.
-* The repo is private and carries an MIT `LICENSE` inherited from the template (ADR-0001, follow-ups); that only matters if the repo or a package is ever shared.
+* A public promise resting on an internal call that has been seen working on one VS Code version. Each break becomes other people's bug reports until a release follows.
+* Release work porthole did not have before: listing, screenshots, two registries, tokens, a privacy pass on a repo that was written as private.
 
 ## Open question
 
