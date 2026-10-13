@@ -42,7 +42,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-OVSX-PAT: After trusted publishing is proven on a real run, should the classic Open VSX token be revoked?
-- Status: unanswered
+- Status: answered
 - Why asking: the point of trusted publishing is that no long-lived token exists. As long as `OVSX_PAT` stays valid in `.env`, a stolen copy of it can still publish to Open VSX. `just publish` (the local recipe) also still uses it for the Open VSX step today. The token only becomes safe to revoke once a publish has gone through the new route, which is not true yet.
 - Need: pick a letter (or override: any shape answers)
 
@@ -55,13 +55,13 @@ Options:
 
 **A — revoke after one successful trusted publish.** *Rationale*: the token exists only because the first version had to be published the old way; its value is a single publish capability that the approved workflow now has. A fallback that is also an attack surface is worse than one more manual step if the workflow breaks (a token can be minted again in a minute). *Confidence*: 0.7 — because the argument is general and the workflow is not yet proven, so I have not seen the failure mode I am trading against. *If wrong*: if the first trusted publish fails in a way that takes more than a day to fix, this flips to B until it works.
 
-**ANS:** (by [name])
-[Fill this in]
+**ANS:** (by Jérémie Lumbroso)
+OK, approving Option A, if the trusted publishing works flawlessly.
 
 ---
 
 ### QST-MS-OIDC: Should I look into publishing to the VS Code Marketplace without a stored token too?
-- Status: unanswered
+- Status: answered
 - Why asking: the Marketplace still needs an Azure DevOps token (`VSCE_PAT`), which expires and is the more sensitive of the two. I believe `vsce` can authenticate with a Microsoft Entra identity (`--azure-credential`), which GitHub's OIDC can feed through a federated credential, but I have not read how, or tried it, and it needs an app registration in your Azure tenant, which is your account to change. I do not know what it would cost to set up or whether the Marketplace accepts such an identity as a publisher.
 - Need: pick a letter (or override: any shape answers)
 
@@ -73,8 +73,8 @@ Options:
 
 **A — research first.** *Rationale*: a research note costs you nothing and changes nothing; the unknown is large (what the Marketplace accepts) and the benefit is the removal of the one token that expires. *Confidence*: 0.6 — because I know the feature exists in `vsce`'s command line but have not read it, and Azure account changes are where a surprise would hide. *If wrong*: if the research finds it needs paid Azure resources or tenant-wide permissions, this flips to B.
 
-**ANS:** (by [name])
-[Fill this in]
+**ANS:** (by Jérémie Lumbroso)
+Yes, okay let's research this, Option A.
 
 ---
 

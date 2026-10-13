@@ -457,5 +457,37 @@
     "source": "panel",
     "archivedAt": "2026-10-13T04:45:21.955Z",
     "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:12::b1cfe1665978::0",
+    "adrPath": "docs/adr/0012-publish-to-open-vsx-through-trusted-publishing-with-the-marketplace-token-kept-for-now.md",
+    "adrNumber": 12,
+    "questionText": "After trusted publishing is proven on a real run, should the classic Open VSX token be revoked?",
+    "draftText": "OK, approving Option A, if the trusted publishing works flawlessly.",
+    "updatedAt": "2026-10-13T05:16:14.673Z",
+    "history": [
+      "OK, approving Option A.",
+      "OK, approving Option A, if ",
+      "OK, approving Option A, if the t",
+      "OK, approving Option A, if the trusted publish",
+      "OK, approving Option A, if the trusted publishing works."
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-13T05:16:14.801Z",
+    "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:12::e8cc440eb400::0",
+    "adrPath": "docs/adr/0012-publish-to-open-vsx-through-trusted-publishing-with-the-marketplace-token-kept-for-now.md",
+    "adrNumber": 12,
+    "questionText": "Should I look into publishing to the VS Code Marketplace without a stored token too?",
+    "draftText": "Yes, okay let's research this Option A",
+    "updatedAt": "2026-10-13T05:16:30.943Z",
+    "history": [],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-13T05:16:34.282Z",
+    "reason": "promoted"
   }
 ]
