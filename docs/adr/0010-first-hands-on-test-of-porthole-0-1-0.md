@@ -249,10 +249,17 @@ The extension's own log (VS Code's log folder, "Porthole" channel, seven windows
 - **Keyboard editing inside the page is broken in places.** "Cmd+V didn't work, I had to right-click and select Paste in the contextual menu. Ctrl+A and Ctrl+E … don't work." The question below is mine to settle before asking him anything.
 
 ### QST-PASTE: Why does Cmd+V not paste into a page in the mini window, and is it porthole's doing?
-- Status: unresolved — Glazier's ball; Surveyor asked to read the source (`docs/inbox/2026-10-13-0050-glazier-to-surveyor-paste-in-mini-window.md`)
+- Status: answered — from source by Surveyor (`docs/inbox/2026-10-13-0050-glazier-to-surveyor-paste-in-mini-window.md`); one prediction left for a docked tab to confirm
 - Why deferring: The answer decides whether porthole can fix it (for example, a keybinding of its own that pastes into the focused browser page) or whether it is the integrated browser's behavior everywhere, docked tabs included, to work around or report upstream. Text fields in task pages make this matter: tokens, names and notes all get pasted.
 
-**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Surveyor 5.1, Claude Fable 5.1, 2026-10-12)
+Two different causes, neither porthole's doing. Lines are at tag 1.141.0, paths under `src/vs/`.
+
+**Cmd+V: floating windows only (Glazier's case 2).** The page does receive the key: the browser view's preload lets Cmd+A/C/V/X/Z through to the page instead of forwarding them to the workbench (`platform/browserView/electron-browser/preload-browserView.ts` L45–51, L107–120). But on macOS a web page pastes on Cmd+V through the application's Edit menu, which is why VS Code gives its Edit → Paste item the Electron role `paste` (`platform/menubar/electron-main/menubar.ts` L712–718; Electron's documented requirement, not VS Code source). While an auxiliary window has focus, VS Code rebuilds that menu with every action **disabled** (`onDidChangeWindowFocus` L253–260 sets `noActiveMainWindow` when the focused window is auxiliary; `setMenu` L525–533 then creates each item with `enabled: false` unless it has a fallback handler, and only a few File-menu actions do, L126–151). A disabled menu item's key equivalent does nothing, so Cmd+V dies in the mini window. Right-click → Paste works because the browser's context menu builds its own enabled `role: 'paste'` item (`platform/browserView/electron-main/browserViewMainService.ts` L668–670). Prediction, if Jérémie tries a docked tab: Cmd+V pastes there, because the main window has focus and the item is enabled. Cmd+C and Cmd+X in the mini window are expected to fail the same way.
+
+**Ctrl+A and Ctrl+E: the integrated browser everywhere (case 1).** On macOS the preload treats only Cmd as the command modifier (L107); a Ctrl-modified key is not in the native allowlist, so it is `preventDefault`ed and forwarded to the workbench's keybinding service (L129–139 → `contrib/browserView/electron-browser/webContentsViewHost.ts` L237–246). The page's text field never sees it, docked or floating. VS Code has no binding for those chords outside the terminal, so nothing happens.
+
+**Can porthole fix it? No.** A keybinding of its own cannot fire for Cmd+V: the preload hands that key to the page and the workbench never sees it. There is no API to paste into a page: the proposed `browser` API exposes neither clipboard nor key injection (`vscode-dts/vscode.proposed.browser.d.ts`, nothing matching paste, clipboard or key). The fix is upstream, in `menubar.ts` L525–533: keep the role-bearing Edit items enabled when an auxiliary window has focus, since a role acts on the focused web contents and needs no renderer. For Ctrl+A/Ctrl+E the upstream fix is the preload's allowlist. Until then: right-click → Paste, or dock, paste, pop out again.
 
 ---
 
