@@ -2,8 +2,8 @@
 
 # The proposed browser API is optional and feature-detected
 
-* Status: proposed
-* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); awaiting Jérémie Lumbroso
+* Status: proposed — untested; Glazier tries it at milestone M2 and brings Jérémie a question only if the result needs one
+* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5)
 * Date: 2026-10-12
 
 Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0003. Not yet tested; belongs to milestone M2.

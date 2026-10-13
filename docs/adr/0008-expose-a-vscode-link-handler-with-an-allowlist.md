@@ -2,8 +2,8 @@
 
 # Expose a `vscode://` link handler with an allowlist
 
-* Status: proposed — its one question was answered by Jérémie (QST-LINK-ALLOWLIST, C); the ADR as a whole is not yet ratified
-* Deciders: idea by Claude Opus 5.5 in the design brief; kept by Jérémie Lumbroso (ADR-0001, QST-TRIGGER); recorded by Glazier 5.5 (Claude Opus 5.5)
+* Status: accepted
+* Deciders: idea by Claude Opus 5.5 in the design brief; kept by Jérémie Lumbroso (ADR-0001, QST-TRIGGER), who also chose the allowlist (QST-LINK-ALLOWLIST below); recorded by Glazier 5.5 (Claude Opus 5.5)
 * Date: 2026-10-12
 
 Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0005. The idea is the brief author's own — a Claude Opus 5.5 session — and was not in the original prompt. Jérémie kept it in [ADR-0001](0001-founding-identity-gate-and-crew-shape.md), QST-TRIGGER: "an ingenious contribution… It anticipates a real need."

@@ -2,8 +2,8 @@
 
 # Ship as a personal VSIX
 
-* Status: proposed — reopened by QST-MARKETPLACE below
-* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); awaiting Jérémie Lumbroso (corrected 2026-10-12: I first marked this accepted with him as a decider; he had not decided it)
+* Status: accepted — what is in effect today; QST-MARKETPLACE below asks Jérémie whether to change it
+* Deciders: proposed by Claude Opus 5.5 in the design brief; recorded by Glazier 5.5 (Claude Opus 5.5); open to Jérémie Lumbroso through QST-MARKETPLACE
 * Date: 2026-10-12
 
 Technical Story: `docs/INITIAL-DESIGN-BRIEF.md`, "Decisions to record", row 0006.
