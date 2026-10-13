@@ -627,5 +627,12 @@ publish:
     npx --yes ovsx@1.2.0 publish "${VSIX}"
     echo "▸ confirm each registry on its own (playbook I and V.3)"
     node_modules/.bin/vsce show "${ID}" | head -12 || true
-    curl -s "https://open-vsx.org/api/${ID%%.*}/${NAME}" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log('Open VSX:', j.version ?? j.error)})"
+    # Open VSX validates a new upload before showing it: "not found" for a few minutes is normal (met 2026-10-13)
+    for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+        OV=$(curl -s "https://open-vsx.org/api/${ID%%.*}/${NAME}" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log(j.version ?? '')})")
+        if [[ -n "${OV}" ]]; then echo "Open VSX: ${OV}"; break; fi
+        echo "Open VSX: not visible yet (attempt ${attempt} of 12; a new upload is validated first), waiting 20 s"
+        sleep 20
+    done
+    if [[ -z "${OV:-}" ]]; then echo "Open VSX: still not visible after 4 minutes; check https://open-vsx.org/extension/${ID%%.*}/${NAME} later"; fi
     echo "✅ done. The listing page can lag a few minutes; vsce show and the API are the truth."

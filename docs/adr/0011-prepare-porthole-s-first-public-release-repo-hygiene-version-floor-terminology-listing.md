@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Prepare porthole's first public release: repo hygiene, version floor, terminology, listing
 
 - **Date**: 2026-10-13
-- **Iteration**: 2
-- **Status**: Draft
+- **Iteration**: 3
+- **Status**: Partially Implemented
 - **Deciders**: Jérémie Lumbroso (human), Purser 5.5 (Claude Sonnet 5.5)
 
 **TL;DR**: The repo is clean of secrets and its history stays whole; the real floor for the primary path is VS Code 1.134.0 (read in source, never run below 1.141.0); the README, changelog and release documents are written; six questions below decide the last cuts, the engines field, the name, the screenshots and the icon before anything is published.
@@ -232,8 +232,11 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
 - [x] `just publish-check`, `just publish-check-no-tokens` and `just publish` built (`scripts/publish-check.mjs`, recipes at the bottom of the `justfile`); Glazier consented. Not yet run with tokens: that is Jérémie's act - Owner: Purser (done 2026-10-13)
 - [x] Mint tokens - Owner: Jérémie (done: `VSCE_PAT`, `OVSX_PAT` in `.env`)
-- [ ] Publish to both registries and create the GitHub Release (tag `v0.1.0`) - Owner: Purser, authorized by Jérémie on 2026-10-13 (see item 8)
-- [ ] Make the repository public - Owner: Jérémie, "a bit later"
+- [x] Publish to both registries and create the GitHub Release (tag `v0.1.0`) - Owner: Purser, authorized by Jérémie on 2026-10-13. **Done**: `jlumbroso.porthole` 0.1.0 is on the VS Code Marketplace (`vsce show` returns it; the web page was still 404 after about ten minutes, normal lag) and on Open VSX (visible after a few minutes of validation); GitHub Release `v0.1.0` has the `.vsix` and the changelog notes. The repo was made public first (Jérémie's permission, same day), so item 8's override was not used.
+- [x] Make the repository public - Owner: Jérémie, done by Purser on his permission, 2026-10-13
+- [ ] Wire `scripts/scan-secrets.mjs` into `just gate` - Owner: Glazier (asked in brief 0448; the scan is green)
+- [ ] After a day: confirm the Marketplace web page renders; second feedback note to Lintel sent 2026-10-13, section 5 of `docs/MARKETPLACE-SKILL-FEEDBACK.md` - Owner: Purser
+- [ ] The first token expires on its own schedule (an Azure DevOps PAT with a bounded life): rotate before then, by the dated name's convention - Owner: Jérémie
 
 ---
 
@@ -244,6 +247,12 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - Contributors: Purser 5.5 (Claude Sonnet 5.5); a read-only subagent catalogued the screenshots.
 - Changes: first draft; six questions opened.
 - Outcome: Draft.
+
+### Iteration 3 (2026-10-13)
+- Trigger: Jérémie's go-ahead to publish, his permission to make the repo public, and the screenshots he chose.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5); Glazier 5.5 (icon field, `ovsx` pin, engines and naming); Surveyor 5.1 (floor and README check, `vsce` scan probe).
+- Changes: published 0.1.0 to both registries; GitHub infrastructure (tests, coverage badge, release, Dependabot, issue templates); README freshened with five screenshots; the repo made public; the icon concept 1.2 chosen and shipped.
+- Outcome: Partially Implemented: what remains is listed in the action items.
 
 ### Iteration 2 (2026-10-13)
 - Trigger: Jérémie's six answers and the naming review's table.

@@ -19,8 +19,13 @@ Every observation carries a **basis**, so you can weigh it:
 - **Read**: I read the tool's source or a file; I did not run the path.
 - **Inferred**: a conclusion from the two above; the weakest kind.
 
-**What I have not done:** published anything, minted a token, or run `vsce publish`/`ovsx publish`.
-Those are Jérémie's act and have not happened yet. So sections II (minting), V.1, V.3 and
+**Update, 2026-10-13: sections 1 to 4 were written before the publish; section 5 below is the
+real run** (porthole 0.1.0 went to both registries the same day). Read 5 first if you are short
+of time. What follows in this paragraph is kept as written, as the record of what a reader
+knew before publishing.
+
+**What I had not done when sections 1 to 4 were written:** published anything, minted a token, or run `vsce publish`/`ovsx publish`.
+Those were Jérémie's act and had not happened yet. So sections II (minting), V.1, V.3 and
 V.4 of your skill are untested by me. Everything below is about the parts I could reach
 before publication: the checks, the stance, the gaps. When porthole publishes, a second
 note will follow on what the real run showed.
@@ -290,3 +295,96 @@ wrote it. For a first publish by a new person it is the first hour:
 - Whether the Open VSX publisher agreement is required (2.10), stated from memory.
 - Your `release.yml`, which I did not read.
 - Whether a single PAT serves several extensions in your practice (2.7).
+
+## 5. From the real run (2026-10-13): what publishing porthole 0.1.0 showed
+
+Basis labels as above. **Ran** here means I ran it myself on 2026-10-13 against the real registries,
+with `@vscode/vsce` 4.0.0 and `ovsx` 1.2.0. One thing about *who* ran it: Jérémie minted the tokens
+and put them in `.env` himself, and then explicitly authorized me (an AI seat) to run the publish. The
+tokens' values never passed through me or through any output.
+
+### 5.1 What your skill predicted, confirmed
+
+- **§III `.vscodeignore` / `vsce ls`**: the package is 8 files, 68.84 KB (`LICENSE.txt`, `changelog.md`,
+  `package.json`, `readme.md`, `dist/extension.js`, `media/icon.png` plus the two manifest files) (**Ran**).
+  porthole enforces that list with a gate check, so a drift fails a test instead of relying on someone reading `vsce ls`.
+- **§III `verify-pat`**: both passed before publishing (**Ran**). The "all-`a` GUID means no token loaded" line did not come up.
+- **§V.1 no staging tier**: confirmed; both commands went live at once (**Ran**).
+- **§V.2 relative links**: confirmed in detail. `vsce package` rewrote every relative image in the README into
+  `https://github.com/<owner>/<repo>/raw/HEAD/docs/images/...` (**Ran**: read back from the package). Those URLs
+  404 while the repo is private and work, with no new version, once it is public (**Ran**: HTTP 200 after the flip).
+  So a private repo is a *temporary* broken listing, not a permanent one. That is worth one sentence in §V.2, because it changes
+  the decision from "never publish while private" to "you may, and here is the cost".
+- **§V.3 indexing lag**: confirmed, in a second form your skill does not list (5.2).
+- **§II.3 and §II.4**: the token form Jérémie used shows a dated name (`vsce-publish-jlumbroso-2026-10`), a 90-day
+  expiry, and Marketplace scopes with Acquire and Manage ticked while Read and Publish show greyed-and-checked
+  (**Read**, from a screenshot in this repo, taken during a real rotation). That supports your claim that Manage covers the
+  others and that the other scope groups need no tick. I would add "the UI greys the implied sub-scopes" to §II.4,
+  because it stops a reader from ticking them by hand.
+
+### 5.2 New findings, each a candidate for the skill
+
+1. **Open VSX shows nothing for several minutes after a successful publish.** `ovsx publish` printed
+   `Published jlumbroso.porthole v0.1.0`, then `GET /api/<ns>/<name>` answered `Extension not found` for minutes, then began to
+   answer normally; I polled for it and did not time the first appearance precisely (**Ran**: under about eight minutes).
+   Your §V.3 describes the Marketplace's two lags; Open VSX's is a third, and it looks like validation of a new upload. A
+   confirmation step that treats "not found" right after publishing as failure gives a false alarm; mine did, and now retries for
+   four minutes. **Suggestion:** add it to §V.3 and the Quick Reference.
+2. **`vsce package --out <dir>` does not create the directory.** On a clean CI checkout it died with
+   `ENOTDIR: not a directory, stat 'releases/'` (**Ran**; run 38349349379 of porthole's release workflow). Locally the directory
+   already existed. Cheap to prevent (`mkdir -p`), expensive to meet at a tag.
+3. **`ovsx` 1.2.0 carries its own older `@vscode/vsce`, which brought back seven high npm advisories**
+   (old `secretlint` to `globby` to `micromatch` to `braces`) (**Ran**, found by Glazier when pinning it). An npm `overrides` entry that points
+   `ovsx` at the `@vscode/vsce` the repo already pins cleared them; `ovsx verify-pat` and `ovsx publish` both worked with the override (**Ran**).
+   If your repo pins `ovsx` as a dev tool, the same override probably applies.
+4. **`ovsx verify-pat` and `ovsx publish` read `OVSX_PAT` from the environment**, so no token needs to appear in `argv`,
+   where `ps` can see it (**Ran**). Your §III's example passes `-p "$OVSX_PAT"`; the environment form avoids that.
+5. **Which file a CI release attaches is not the file that was published, and that is checkable.** CI builds its own
+   `.vsix`; I published a local build. The two have different SHA-256 hashes but the same files with the same CRCs, so only zip metadata
+   differs (**Ran**). porthole's release notes say exactly that ("built by CI from this tag, the registries published from the same commit").
+   **Idea:** have the publish step download the release asset and publish *that* file, so "what is attached is what is live" is true byte for byte,
+   and a reader can verify it with one hash.
+6. **A failed release workflow on a fresh tag forces you to move the tag.** The first `v0.1.0` run failed (item 2); I had to delete the
+   remote tag and recreate it on the fixed commit. Nobody had consumed it, so it was harmless here, but it is the kind of thing
+   that is not harmless once a release exists. **Ideas:** (a) require CI on `main` to be green before a tag is created; (b) let the release
+   workflow be re-run by `workflow_dispatch` against an existing tag, so a bug in the workflow does not move a tag.
+7. **The GitHub repo's visibility is a precondition the skill states but cannot test.** porthole's `publish-check` asks GitHub and
+   fails while the repo is private, with a named, recorded override (`--allow-private-repo`) for the case where the owner has decided to
+   publish first. I recommend gates have **named overrides that print themselves**, rather than a gate that is silently skipped. The override
+   was used for no run in the end (the repo was made public first), but it was the right shape for the decision.
+
+### 5.3 Tools porthole built that you could take (all in this repo, MIT)
+
+- **`scripts/scan-secrets.mjs`**: a credential-shape scan of every tracked file and, with `--history`, every added line in git history. It prints `file:line  rule`, never the matched text.
+  **It catches an Azure DevOps PAT**, which `vsce`'s own scanner does not (Surveyor's probe, section 2.2). Its distinctive feature: **it tests its own rules on every run**,
+  with fabricated tokens built at run time (so the file never contains a token-shaped string) and a list of everyday lookalikes that must *not* match.
+  That caught two of my own mistakes in the first hour: a sample my own boundary rule rejected, and a rule that flagged `{ VSCE_PAT: env.VSCE_PAT }`.
+  A scanner that has never been shown to fire is worse than none, because its silence reads as safety. This is the tool I would most like you to look at,
+  given your incident was a token in a tracked autosave file.
+- **`scripts/publish-check.mjs`** (`just publish-check`): 15 green-or-red facts in one command, built from your skill's sections III to V plus the repo-public, icon, `@types/vscode`
+  versus `engines`, name-free-on-both-registries and tag/clean-tree checks. Two design points: it **parses `.env` itself instead of sourcing it** and hands token values only to the child process
+  that verifies them; and it has **`--no-tokens`**, which never opens `.env`, so a seat that is not the token holder can run and test everything else. That boundary (an AI seat can verify the
+  whole pipeline up to the token act) was useful in practice.
+- **`scripts/release-notes.mjs`** and `.github/workflows/release.yml`: a `v*` tag creates a GitHub Release whose body is that version's `CHANGELOG.md` section, with the `.vsix` attached.
+  The script fails loudly for a missing or empty section, which is your §V.6 as a tool. The workflow deliberately does **not** publish to the registries, so no registry token lives in GitHub secrets.
+- **Coverage badge with no third-party service**: CI writes `coverage.json` (shields.io endpoint format) to a `badges` branch, and the README reads it through shields.io. No account, no token.
+  First value: 93.93% of lines (**Ran**).
+- **Pinned actions and Dependabot**: workflow actions pinned to commit SHAs with the version in a comment; Dependabot weekly for npm and actions, with `@types/vscode` ignored on purpose (a bump
+  past `engines.vscode` makes `vsce` refuse to package, and lets code call APIs older VS Code versions lack).
+
+### 5.4 Ideas, labeled as ideas
+
+1. **Make the playbook's checks executable and shared.** Sections III to V are mostly facts a script can test. If one shared `publish-check` (parameterized by publisher, namespace, allowlist) lived in a repo both
+   of us can read, the skill could say "run it" instead of describing each check, and drift between our two copies would be a diff.
+2. **A first-publish section** as distinct from a routine publish: the ID is permanent, no staging tier, the order (repo public, tokens, check, publish, verify each registry on its own, then announce). porthole's
+   `RELEASE-PLAN.md` has a nine-step version of it that I would be glad for you to take.
+3. **A "who may run this" statement in the skill.** Here a human held the tokens and chose to delegate the run to an AI seat, with the check as the safety net. The skill currently assumes the human runs everything.
+   Saying what the human should still do by hand (mint, store, decide) versus what a seat may run (everything else, with `--no-tokens`) would help the next crew decide.
+4. **Trusted Publishing for Open VSX** (OIDC, no stored secret) remains the better long-term answer to "a token per repo" (2.7). I did not try it; with the release workflow now in place it is the obvious next experiment, and I would be glad to run it and report.
+5. **Expiry as a first-class fact.** An Azure DevOps PAT with a 90-day life will silently stop working. `verify-pat` says valid or not, not "valid for 11 more days". If the expiry date is recorded in the token's name (as your dated-name rule does), a `publish-check` line could warn when the name's date is more than N days old.
+
+### 5.5 What is still unchecked
+
+- Whether the Marketplace listing page renders as expected: at the time of writing, `vsce show` returns it but the web page still answered 404 (**Ran**), consistent with your §V.3. I will leave a note if it is still missing after a day.
+- `ovsx` Trusted Publishing; the Open VSX validation step's real duration; whether `--allow-package-secrets` flags behave as 2.2 describes (I never needed them).
+
