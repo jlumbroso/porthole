@@ -1,0 +1,61 @@
+# Publishes the .vsix attached to a GitHub Release to Open VSX, with no stored token: the job
+# proves its identity to the registry with a short-lived OIDC token ("Trusted Publishing",
+# https://github.com/eclipse-openvsx/openvsx/wiki/Trusted-Publishing). It waits for a person to
+# approve the `open-vsx` environment, so the publish stays a human act.
+#
+# The registration on open-vsx.org (Settings, Trusted Publishers) names THIS FILE, so renaming
+# it breaks publishing until the registration is redone. Registered values:
+#   owner jlumbroso, repository porthole, workflow publish-open-vsx.yml, environment open-vsx.
+#
+# Started by release.yml after it creates the Release, or by hand:
+#   gh workflow run publish-open-vsx.yml -f tag=v0.1.0
+# It publishes the file the Release carries, so what is attached is what is live. The VS Code
+# Marketplace is not covered: it has no OIDC path in this setup, so `just publish` still does it.
+name: publish-open-vsx
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag whose .vsix to publish, for example v0.1.0"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: open-vsx
+    permissions:
+      contents: read
+      id-token: write   # lets the job request the OIDC token the registry verifies
+    steps:
+      - name: The tag looks like a version tag
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::'$TAG' is not a tag of the form vX.Y.Z"
+            exit 1
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci   # installs the pinned ovsx (devDependency) so no `npx` fetch happens at publish time
+      - name: Download the .vsix the Release carries
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.vsix' --dir releases
+      - name: Publish to Open VSX with an OIDC token
+        run: |
+          set -euo pipefail
+          file=$(ls releases/*.vsix)
+          echo "Publishing $file"
+          node_modules/.bin/ovsx publish "$file" --trusted-publishing

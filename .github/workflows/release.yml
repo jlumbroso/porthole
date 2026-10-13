@@ -3,6 +3,8 @@
 # Marketplace or Open VSX: that is `just publish`, run from a machine that holds the tokens
 # (the tokens are deliberately not stored as repository secrets). A tag whose version does
 # not match package.json, or has no CHANGELOG section, fails here before anything is created.
+# After the Release exists it asks publish-open-vsx.yml to run; that waits for a person to
+# approve the `open-vsx` environment before anything reaches Open VSX.
 name: release
 
 on:
@@ -11,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # to ask publish-open-vsx.yml to run, which then waits for approval
 
 jobs:
   release:
@@ -58,3 +61,7 @@ jobs:
             --title "porthole ${version}" \
             --notes-file release-notes.md \
             --verify-tag
+      - name: Ask for the Open VSX publish (it waits for approval)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish-open-vsx.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f tag="$GITHUB_REF_NAME"
