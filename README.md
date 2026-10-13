@@ -64,6 +64,16 @@ One thing to expect: the mini window keeps its title bar and the integrated
 browser's own toolbar. "Only the rendered page" means no tabs, breadcrumbs or
 status bar.
 
+**Known limits, both VS Code's rather than porthole's** (traced in VS Code's
+source, [ADR-0010](docs/adr/0010-first-hands-on-test-of-porthole-0-1-0.md),
+QST-PASTE):
+
+- **Cmd+V does not paste into a page in the mini window** on macOS: VS Code
+  disables its Edit menu while a floating window has focus. Right-click →
+  **Paste** works.
+- **Ctrl+A and Ctrl+E** (start and end of line) do nothing in a page's text
+  field, in any integrated-browser tab.
+
 ## Try the idea today, with no extension
 
 1. Open an HTML file in the integrated browser.
