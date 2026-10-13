@@ -241,6 +241,25 @@ The extension's own log (VS Code's log folder, "Porthole" channel, seven windows
 
 ---
 
+## Open Follow-ups
+
+**First real use** (2026-10-12, ~8:20–8:48 PM ET, after the install): Jérémie walked Lintel's ten-card PAT-refresh page from `vscode-adrs-for-ai` in a porthole window, start to finish. Two things it showed about porthole itself, from his notes in the page's export:
+
+- **Downloads work.** The page's Export button saved its JSON file to `~/Downloads`, twice. I had not known whether the integrated browser would allow it.
+- **Keyboard editing inside the page is broken in places.** "Cmd+V didn't work, I had to right-click and select Paste in the contextual menu. Ctrl+A and Ctrl+E … don't work." The question below is mine to settle before asking him anything.
+
+### QST-PASTE: Why does Cmd+V not paste into a page in the mini window, and is it porthole's doing?
+- Status: unresolved — Glazier's ball; Surveyor asked to read the source (`docs/inbox/2026-10-13-0050-glazier-to-surveyor-paste-in-mini-window.md`)
+- Why deferring: The answer decides whether porthole can fix it (for example, a keybinding of its own that pastes into the focused browser page) or whether it is the integrated browser's behavior everywhere, docked tabs included, to work around or report upstream. Text fields in task pages make this matter: tokens, names and notes all get pasted.
+
+**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+The other notes in that export (copy buttons, clickable addresses) are about the page, not porthole, and belong to Lintel, its author.
+
+---
+
 ## Action Items
 
 - [x] Run the test and answer the five questions — Owner: Jérémie (2026-10-12, all A, 17 screenshots)
