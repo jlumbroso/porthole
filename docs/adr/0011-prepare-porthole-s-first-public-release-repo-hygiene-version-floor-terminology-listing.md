@@ -179,7 +179,7 @@ https://pypi.org/project/batch-renderer/
 ---
 
 ### QST-ICON-PICK: Which icon concept does porthole carry forward?
-- Status: unanswered
+- Status: answered
 - Why asking: The icon is the first thing a stranger sees on the Marketplace card, and a taste call that only you can make. Round 1 of the icon concepts rendered 12 images with Nano-Banana-Pro (the model you named as best); see `docs/release/icon/round-1/contact-sheet.jpg` (all twelve in one view, in prompt order, left to right: 1.1 to 1.4, 1.5 and 2.1 to 2.3, 3.1 to 3.4) and the individual 512 px files in the same folder, plus `docs/release/icon/README.md` for how they were made. The placeholder in the package today (`media/icon.png`) is my hand-drawn vector of a brass-ringed porthole with a page inside. Every concept shows a round window with a page seen through it. Whatever is picked will need a transparent background (the renders have a white one) before it ships, and I will do that. The Marketplace extension list shows the icon at roughly 40 to 50 pixels, so small-size legibility counts.
 - Need: pick a letter (or override: any shape answers, such as "1.1 but flatter" or "round 2 with these changes")
 
@@ -195,7 +195,7 @@ Options:
 **A — 1.2, flat brass tile.** *Rationale*: of the twelve it has the thickest shapes and the fewest details, so it holds up at the 40 to 50 pixels of the extension list, and its gold is the banner colour, so the card looks designed. I judged by eye from a contact sheet, not by testing it at small sizes. *Confidence*: 0.55, because a taste call is yours and I have not checked the candidates at real size on dark and light themes. *If wrong*: if you want richness over robustness, this is B; if you want the two extensions to look related, C.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]
+Option A is approved. I like 2.2 and the original SVG draft, but I have been sold by your recommendation.
 
 ---
 
