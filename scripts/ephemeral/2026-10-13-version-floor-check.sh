@@ -40,3 +40,12 @@ for row in "${CHECKS[@]}"; do
   done
   echo
 done
+
+# --- Outcome (Purser 5.5, 2026-10-13) ----------------------------------------
+# Run once against tags 1.130.0 / 1.134.0 / 1.141.0, then 1.131.0-1.133.0 were fetched
+# (git fetch --depth 1 origin tag ...) and the "'html', 'htm'" row re-checked by hand.
+# Every identifier porthole calls exists from 1.130.0. Three rows are 0 at 1.130.0 and
+# present at 1.134.0: the integrated browser's .html/.htm registration, associatedResource,
+# and workbench.browser.autoReloadOnFileChange. The HTML registration is also absent at
+# 1.131.0, 1.132.0 and 1.133.0, so 1.134.0 is the first tag that has it: that is the floor
+# of the primary path, as read. Nothing below 1.141.0 has been run. See docs/release/VERSION-FLOOR.md.
