@@ -1,11 +1,11 @@
 # Porthole
 
-Pop the HTML page you are looking at into a small floating window in VS Code:
+Pop the HTML page you are looking at into a floating window in VS Code:
 only the rendered page, pinned above your other windows.
 
-Task instructions, a checklist, a design mock-up, a local report: if it is an HTML
-file and you want it in view while you work, porthole puts it in a window of its
-own instead of an editor tab that disappears behind whatever you open next.
+If it is an HTML file and you want it in view while you work (for instance, a page of
+task instructions, a checklist, a design mock-up or a local report), porthole puts it in
+a window of its own instead of an editor tab that disappears behind whatever you open next.
 
 > **Status: version 0.1.0.** Its author has used it since 2026-10-12.
 > It has been tested on **macOS with VS Code 1.141.0 only**. Windows and Linux
@@ -14,13 +14,12 @@ own instead of an editor tab that disappears behind whatever you open next.
 
 ## What it does
 
-1. **Pops a page out.** One gesture turns an HTML file into a small window showing
+1. **Pops a page out.** One gesture turns an HTML file into a floating window showing
    only the rendered page: no tabs, breadcrumbs or status bar.
-2. **Keeps it on top.** The window floats above your other windows. Toggle that off
+2. **Keeps it on top.** The window stays pinned above your other windows. Toggle that off
    and on whenever you like.
 3. **Puts it back.** The same shortcut docks the page into your main window again.
-4. **Resizes by preset.** Step through your own list of sizes (small, medium, large
-   by default).
+4. **Resizes by preset.** Step through your own list of sizes (three by default).
 5. **Stays live.** The page reloads when the file changes (VS Code's own
    auto-reload), and its checkboxes, buttons and stored state keep working.
 
@@ -28,14 +27,14 @@ own instead of an editor tab that disappears behind whatever you open next.
 
 | To do this | Do this |
 | --- | --- |
-| Pop an HTML file out | `Ctrl+Alt+M` (`⌃⌥M` on macOS) with the file open, the window icon in the editor's title bar, or right-click the file in the Explorer → **Pop Out to Mini Window** |
-| Put it back | `Ctrl+Alt+M` again, with the mini window focused |
-| Change its size | **Porthole: Cycle Mini Window Size** in the mini window's command palette |
+| Pop an HTML file out | `Ctrl+Alt+M` (`⌃⌥M` on macOS) with the file open, the window icon in the editor's title bar, or right-click the file in the Explorer → **Pop Out to Floating Window** |
+| Put it back | `Ctrl+Alt+M` again, with the floating window focused, or **Porthole: Dock Back into Main Window** |
+| Change its size | **Porthole: Cycle Window Size** with the floating window focused |
 | Unpin or re-pin it | **Porthole: Toggle Always on Top** |
 
-Settings live under `porthole.*`: the size presets (`porthole.sizes`, the first one is
-the default), where the window opens (`porthole.position`), and whether it opens
-compact and pinned (`porthole.compact`, `porthole.alwaysOnTop`).
+Settings live under `porthole.*`: the size presets (`porthole.sizes`; the first preset is
+the size a new window opens at), where the window opens (`porthole.position`), and whether
+it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).
 
 ## Install
 
@@ -50,10 +49,13 @@ exact file, and prints what to do next. It needs [`just`](https://just.systems) 
 
 ## Requirements
 
-- VS Code desktop **1.141 or later**, the version it was tested on. The underlying
-  feature is read in VS Code's source as early as 1.134.0, but nothing older than
-  1.141.0 has been run ([details](docs/release/VERSION-FLOOR.md)).
+- VS Code desktop **1.134.0 or later**. That is the first release whose integrated browser
+  opens local HTML files, as read in VS Code's source. porthole has been **run** on 1.141.0
+  only; the versions in between are read, not run ([details](docs/release/VERSION-FLOOR.md)).
 - Local HTML files (`.html`, `.htm`). Remote and virtual workspaces are out of scope.
+
+**Support.** The latest VS Code release is the one officially supported. If you report a
+problem on an older version, the first answer will be "can you update to the latest version?".
 
 ## How it works, and what could break
 
@@ -67,9 +69,10 @@ window, already sized, compact and pinned. VS Code can change or remove it in an
 without notice.
 
 If that call throws or opens no window, porthole falls back to public commands that do
-the same thing: the window still opens, compact and pinned, but at VS Code's default size
-rather than your preset. The output channel "Porthole" says when the fallback ran. The
-setting `porthole.useInternalApi` turns the internal call off if you would rather never use it.
+the same thing: the window still opens, compact and pinned, but at VS Code's own default
+size rather than your first preset. The output channel "Porthole" says when the fallback
+ran. The setting `porthole.useInternalCommand` turns the internal call off if you would
+rather never use it.
 
 What has been checked, so you can weigh it:
 
@@ -81,13 +84,13 @@ What has been checked, so you can weigh it:
 - Each new VS Code release is a release question. The check to re-run is kept in
   [`spike/`](spike/); until it is re-run on a version, that version is not claimed.
 
-One thing to expect: the mini window keeps its title bar and the integrated browser's own
+One thing to expect: the floating window keeps its title bar and the integrated browser's own
 toolbar. "Only the rendered page" means no tabs, breadcrumbs or status bar.
 
 **Known limits, both VS Code's rather than porthole's** (traced in VS Code's source,
 [ADR-0010](docs/adr/0010-first-hands-on-test-of-porthole-0-1-0.md), QST-PASTE):
 
-- **Cmd+V does not paste into a page in the mini window** on macOS: VS Code disables its
+- **Cmd+V does not paste into a page in the floating window** on macOS: VS Code disables its
   Edit menu while a floating window has focus. Right-click → **Paste** works.
 - **Ctrl+A and Ctrl+E** (start and end of line) do nothing in a page's text field, in any
   integrated-browser tab.
@@ -109,7 +112,7 @@ This gives you the experience porthole aims for, minus the one-gesture part and 
 ## The name
 
 A porthole is a small, fixed window you look *through*; nothing lives in it. That is the
-object this builds. The pages it shows are often served on localhost ports, which makes
+object this builds: the floating window is the porthole. The pages it shows are often served on localhost ports, which makes
 the pun honest.
 
 ## How this is built
