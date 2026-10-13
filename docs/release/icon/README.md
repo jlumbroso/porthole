@@ -13,7 +13,7 @@
 
 ## How round 1 was run, and what went wrong before it worked
 
-- **Model**: `Nano-Banana-Pro` on Poe, 12 of 12 succeeded (about 18,000 tokens). `Nano-Banana-2` was tried on concept 1.1 only and also works. The model the prompts named, `Nano-Banana`, **is no longer on Poe's list**, which is why the first attempt (pushed to the brand-studio repo's workflow, twice) returned 12 server errors out of 12 and still showed a green check.
+- **Model**: `Nano-Banana-Pro` on Poe, 12 of 12 succeeded (about 18,000 tokens). `Nano-Banana-2` was tried on concept 1.1 only and also works. The model the prompts named, `Nano-Banana`, **is no longer on Poe's list**, which is the likely reason (inferred; the retired name was not re-tried) that the first attempt (pushed to the brand-studio repo's workflow, twice) returned 12 server errors out of 12 and still showed a green check.
 - **Tool version matters**: the `batch-renderer` installed on this machine was 1.5.0, which does not know the inline `[TAG]: text` form. It sent the literal text `[ICON_BASE] [BRASS] …` to the model and got an unrelated lightbulb back, with no error. Version 1.12.0 expands the tags. `uv tool upgrade batch-renderer` fixed the install.
 - **Command**: `POE_API_KEY=… batch-renderer porthole-icon-concepts.md -m Nano-Banana-Pro -o out --no-confirm`, key from the git-ignored `.env`, never printed.
 - **Lesson for the prompts**: concept 2.1 asked for an overlap that "says" a phrase, and the model drew the phrase as text. Prompts should not quote anything that must not appear in the picture. The wording is fixed in the prompt file; the image is kept as the specimen.
