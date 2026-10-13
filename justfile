@@ -579,3 +579,52 @@ install-local:
 [doc("Open the Spike 0 window: only the spike extension loaded (docs/adr/0003)")]
 spike:
     code --extensionDevelopmentPath="{{justfile_directory()}}/spike" --disable-extensions --disable-workspace-trust "{{justfile_directory()}}/samples"
+
+# ─── Release (Purser 5.5; Glazier agreed to these recipes, 2026-10-13) ───────
+# Policy lives in docs/release/RELEASE-PLAN.md and the playbook in
+# .claude/skills/extension-marketplace-publishing. Neither recipe takes an
+# argument, so nothing needs quoting. `publish` is for Jérémie's hand only: it
+# reads the tokens from .env and talks to both registries.
+
+# Read-only: one ✓/✗ per fact a first publish depends on. Publishes nothing, prints no token.
+[group('project')]
+[doc("Pre-publication facts, one ✓/✗ each. Read-only. Opens .env to check the tokens authenticate")]
+publish-check:
+    node scripts/publish-check.mjs
+
+# Same, without ever opening .env (for anyone who does not hold the tokens)
+[group('project')]
+[doc("Pre-publication facts without opening .env or checking tokens")]
+publish-check-no-tokens:
+    node scripts/publish-check.mjs --no-tokens
+
+# THE publish. Instant, public, and the extension ID is permanent. Only Jérémie runs this.
+[group('project')]
+[doc("Publish to the VS Code Marketplace and Open VSX. Irreversible. Jérémie only")]
+publish:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "▸ gate"
+    just gate
+    echo "▸ publish-check (every line must be ✓)"
+    node scripts/publish-check.mjs
+    VERSION=$(node -p "require('./package.json').version")
+    NAME=$(node -p "require('./package.json').name")
+    ID=$(node -p "require('./package.json').publisher + '.' + require('./package.json').name")
+    echo
+    echo "This publishes ${ID} ${VERSION} to BOTH registries, live at once, with no review."
+    echo "The ID is permanent; there is no undo. Spike 0 on the version the listing claims is on you."
+    read -r -p "Type the version (${VERSION}) to go ahead: " ANSWER
+    if [[ "${ANSWER}" != "${VERSION}" ]]; then echo "Not confirmed. Nothing was published."; exit 1; fi
+    mkdir -p releases
+    npm run package
+    VSIX="releases/${NAME}-${VERSION}.vsix"
+    set -a; source .env; set +a   # VSCE_PAT and OVSX_PAT stay in this process only
+    echo "▸ VS Code Marketplace"
+    node_modules/.bin/vsce publish --packagePath "${VSIX}"
+    echo "▸ Open VSX"
+    npx --yes ovsx@1.2.0 publish "${VSIX}"
+    echo "▸ confirm each registry on its own (playbook I and V.3)"
+    node_modules/.bin/vsce show "${ID}" | head -12 || true
+    curl -s "https://open-vsx.org/api/${ID%%.*}/${NAME}" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log('Open VSX:', j.version ?? j.error)})"
+    echo "✅ done. The listing page can lag a few minutes; vsce show and the API are the truth."

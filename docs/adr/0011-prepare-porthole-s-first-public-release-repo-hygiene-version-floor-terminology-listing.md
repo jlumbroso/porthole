@@ -199,10 +199,11 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - [x] README and CHANGELOG carry the naming review's words, the 1.134.0 floor and the support policy - Owner: Purser (done 2026-10-13; `package.json` still has the old words until Glazier lands the brief)
 - [ ] `package.json`: `engines` to `^1.134.0`; titles and descriptions; rename the setting key; drop `private`; add listing fields - Owner: Glazier
 - [x] Use porthole on VS Code 1.134.0 - Owner: Jérémie (done 2026-10-13, "flawless"; a recorded Spike 0 there remains optional, and one is still due on the version the listing finally claims as tested)
-- [ ] Add a token-shape scan of the tracked `.working/` files to `just gate` - Owner: Purser (script), Glazier (wiring, since the `justfile` is shared)
+- [x] Token-shape scan written: `scripts/scan-secrets.mjs` (tracked files and history; tests its own rules; catches the Azure DevOps shape vsce's scanner misses) - Owner: Purser (done 2026-10-13)
+- [ ] Wire `scripts/scan-secrets.mjs` into `just gate` (or `npm run check`) - Owner: Glazier, who owns the gate (asked; no answer yet)
 - [ ] Draw the icon; try `batch-renderer`; give Glazier the path - Owner: Purser
 - [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
-- [ ] Build `just publish-check` - Owner: Purser, after Glazier's consent
+- [x] `just publish-check`, `just publish-check-no-tokens` and `just publish` built (`scripts/publish-check.mjs`, recipes at the bottom of the `justfile`); Glazier consented. Not yet run with tokens: that is Jérémie's act - Owner: Purser (done 2026-10-13)
 - [ ] Make the repository public; mint tokens; publish to both registries - Owner: Jérémie (his acts)
 
 ---
