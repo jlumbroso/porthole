@@ -37,7 +37,9 @@ jobs:
       - name: Typecheck, tests, bundle, package contents
         run: npm run check
       - name: Package
-        run: npm run package
+        run: |
+          mkdir -p releases   # vsce does not create its --out folder, and a clean checkout has none
+          npm run package
       - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}
