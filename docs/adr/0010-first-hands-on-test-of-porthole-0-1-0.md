@@ -285,6 +285,41 @@ Two different causes, neither porthole's doing. Lines are at tag 1.141.0, paths 
 
 What porthole now does (commit "fix: Cycle Window Size finds the porthole window when VS Code misreports focus"): it forgets a window the moment VS Code closes it, and when the active group is not one of its windows but exactly one is open, it resizes that one. With several open it says so and asks for a click on the right window's title bar. My hypothesis, unconfirmed: the workbench marks a group active from DOM focus inside it (`workbench/browser/parts/editor/editorParts.ts` L297–305, at 1.141.0), and a click that lands inside the page goes to a native view the DOM does not see.
 
+### QST-CYCLE-REPRO: Does a title-bar click leave VS Code's active group in the other window (the cause Surveyor read for QST-CYCLE-MISS)?
+- Status: unanswered
+- Why asking: Surveyor read in VS Code's source that clicking a floating window's **title bar** makes it the focused window but does **not** make its tab group the "active" one, while clicking **inside the page** does. That is the cause of the intermittent "pop a page out first" from Cycle Window Size. It has only been read, not seen. If you see it, the fifth upstream issue (`docs/issues/vscode/05-active-group-ignores-window-activation.md`) gets filed; if not, it does not.
+- Need: pick a letter (or override — any shape answers). About two minutes. Screenshots welcome but not needed.
+
+**Before you start.** You need VS Code 1.141.0 with Porthole installed: open the Extensions view (the four-squares icon in the left bar, or Cmd+Shift+X), and check that "Porthole" is listed and enabled. If you installed or updated it today and have not restarted VS Code since, run **Developer: Reload Window** first (Cmd+Shift+P, type "Reload Window", press Enter).
+
+**Steps.** Do them in this order, one action each.
+
+1. **Open Porthole's log.** In the main VS Code window, open the menu **View → Output**. A panel opens at the bottom. At its top right is a drop-down list of channels; choose **Porthole**. Leave this panel open for the whole test. Each thing Porthole does adds one line at the bottom.
+2. **Open a page.** In the main window's Explorer (left side), open `samples/tasks.html` from the porthole repository, or any other `.html` file. It opens as text. Click once anywhere in that text.
+3. **Pop it out.** Press **Ctrl+Alt+M** (Control, Option, and the M key). A small floating window appears showing the rendered page. The Output panel gains a line starting `internal open: new window after`.
+4. **Click the main window.** Click once anywhere in the text of the main window's editor (not in the floating window).
+5. **Click the floating window's title bar.** Click once on the thin strip across the very top of the floating window, where its name is written. Do not click the page, the address bar, or the buttons below the strip.
+6. **Run Cycle Window Size.** With the floating window in front, press **Cmd+Shift+P** to open its command palette, type `Cycle Window Size`, and press **Enter**.
+7. **Write down what you saw for run 1:** (a) did the floating window change size? (b) in the main window's Output panel, does a new line contain the words `is not a Porthole window; using the only one open`?
+8. **Click inside the page.** Click once on the white body of the page in the floating window (not on a checkbox or button, and not on the address bar).
+9. **Run Cycle Window Size again**, exactly as in step 6.
+10. **Write down what you saw for run 2**, the same two things as in step 7.
+
+Options:
+- **A — as Surveyor read it**: run 1 resized the window **and** added a line with `using the only one open`; run 2 resized the window **without** adding such a line (only lines starting `cycle size:` and `internal open:`).
+- **B — never misreported**: neither run added a `using the only one open` line. Both resized.
+- **C — always misreported**: both runs added a `using the only one open` line. Both resized.
+- **D — something else**: a run did not resize the window, a message appeared at the bottom right of VS Code, or the lines differ from both patterns. Say what you saw.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
+
+**A — as Surveyor read it** (a prediction). *Rationale*: Surveyor traced both paths at tag 1.141.0 — the title bar lies outside the editor part, so nothing activates the group (`workbench/browser/parts/editor/editorGroupView.ts` L487–527), while a click into the page reaches the workbench through the browser view's native focus event (`platform/browserView/electron-main/browserView.ts` L461–467) — and it explains your intermittent misses. The resize itself should succeed in both runs, because porthole now falls back to the only open window. *Confidence*: 0.7 — because the reading is detailed and consistent with what you saw, but it has not been run. *If wrong*: **B** means the title-bar click does activate the group on macOS, so issue 05 is not filed and the cause of your misses is still open; **C** means the click into the page does not activate it either, so the native-focus reading is wrong and issue 05 must be rewritten before filing; **D** means a new bug, and the Output lines tell me where.
+
+**ANS:** (by Jérémie)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 The other notes in that export (copy buttons, clickable addresses) are about the page, not porthole, and belong to Lintel, its author.
 
 ---

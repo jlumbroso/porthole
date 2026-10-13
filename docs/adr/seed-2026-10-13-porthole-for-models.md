@@ -370,6 +370,55 @@ stays "ask for a click". The ANS has the lines and a one-minute repro.
 - [x] Iterate with me
 - [ ] Structure in place
 
+### Glazier 5.5 (Claude Opus 5.5) - 2026-10-13
+
+**A new thread from Jérémie**, verbatim: *"Another thing I'm thinking: Why not
+allow the opening of Markdown file in the porthole — but rendered in HTML?"*
+
+It fits this seed: models write Markdown far more often than HTML, so "pull
+up that plan in the porthole" would mostly mean a `.md` file. Two routes,
+both read in source at 1.141.0, neither run:
+
+- **M1 — VS Code's own Markdown preview, in the floating window.** The
+  built-in Markdown extension registers its preview as a custom editor,
+  `vscode.markdown.preview.editor`
+  (`extensions/markdown-language-features/package.json` L1898–1900). The same
+  internal call porthole already uses should open it into group `-3`, sized,
+  compact and pinned: `_workbench.openWith(file.md, 'vscode.markdown.preview.editor', [-3, { auxiliary }])`.
+  It updates as the file changes, follows the theme, and has **no browser
+  toolbar** at all. Costs: it is a webview, so a page's scripts and storage
+  do not apply, links behave as VS Code's preview decides, and task-list
+  checkboxes are shown but (as far as I know) not clickable.
+- **M2 — render to HTML, show in the integrated browser.** Porthole asks the
+  Markdown extension to render (`markdown.api.render`,
+  `src/commands/renderDocument.ts` L11), writes the HTML next to a temp copy,
+  opens that in the browser as today, and re-renders on every save so
+  auto-reload refreshes it. Costs: a file watcher and temp files, relative
+  images and links need rewriting, and styling is ours to supply. Gains:
+  everything a browser page can do, including a page's own scripts.
+
+**My lean: try M1 first**, as a ten-minute spike: if the internal call opens
+the preview in a compact pinned window, Markdown support is a few lines and
+the toolbar problem disappears for `.md`. M2 only if M1 fails or if you want
+Markdown pages that are interactive. Confidence 0.6, because the custom-editor
+id is read from the manifest and the call path for custom editors into group
+`-3` is the same resolver, but nobody has run it. **If wrong**: the call opens
+the Markdown *source* (Surveyor's text-fallback case, which porthole now
+detects and reports) or a plain tab, and M2 becomes the route.
+
+**Question for you, Q4**: should a porthole on a `.md` file be (a) a
+read-only rendered view, like VS Code's preview, or (b) a live page whose
+checkboxes you can tick? My lean: (a) now, because it is nearly free; (b) as
+a page convention later.
+
+---
+
+**Model Response Request:**
+
+- [ ] Chunk this into ADRs
+- [x] Iterate with me
+- [ ] Structure in place
+
 ---
 
 **Instructions for Model:** Copy everything from "Model Response Request" through the final `---` to the end of your response.
