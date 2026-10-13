@@ -2,7 +2,7 @@
 # Purpose: Purser 5.5, 2026-10-13. Confirm which VS Code identifiers porthole depends on
 # exist at the claimed version floor (1.134.0), and when each first appears, by grepping the
 # shallow clone's tags (1.130.0, 1.134.0, 1.141.0). Read-only; touches nothing in the clone
-# beyond `git grep` against tag objects. Output feeds docs/VERSION-FLOOR.md.
+# beyond `git grep` against tag objects. Output feeds docs/release/VERSION-FLOOR.md.
 #
 # Usage: bash scripts/ephemeral/2026-10-13-version-floor-check.sh
 set -uo pipefail

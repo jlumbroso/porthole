@@ -21,7 +21,7 @@
    without fallback in daily use ([ADR-0010](../adr/0010-first-hands-on-test-of-porthole-0-1-0.md)).
    On 1.134.0 the author installed the rebuilt `.vsix` and reported "Can confirm 1.134.0
    works. Just tried it out. Flawless." That is **use on 1.134.0**, not a recorded Spike 0:
-   it is not known which steps were repeated. Versions 1.135 to 1.140 are neither read nor run.
+   it is not known which steps were repeated. Versions 1.135 to 1.140 were read by Surveyor (see below), not run.
 3. **`package.json` says `^1.134.0`** (changed on 2026-10-13, after the author chose to claim
    the source's floor and then ran it there). The edges of the claim are therefore both
    exercised; the middle is not (see "What the listing may claim").
@@ -51,11 +51,17 @@ already present at 1.130.0.
 
 **Why this matters for the fallback too.** The public-command fallback (`vscode.openWith`
 into the browser editor, then `moveEditorToNewWindow`) still needs the browser to be
-registered for `.html`. So below 1.134.0 there is probably no degraded mode: Surveyor's
-reading of 1.130.0 is that no editor with id `workbench.editor.browser` is found for a
-`file:` resource, so porthole would fail rather than open a larger window. (Read, not run.)
+registered for `.html`. Below 1.134.0 porthole does **not** fail, which is worse: Surveyor
+traced it (`docs/reviews/2026-10-13-version-floor-and-readme-check.md`, section 3) and the
+resolver finds no browser editor for a `file:` resource, the editor service falls back to the
+**text editor**, and the group finder still creates the floating window with our bounds,
+compact and pinned. porthole would open the file as text in the floating window and report
+success. (Read, not run. No user reaches it, because `engines` blocks installs below 1.134.0;
+it is the shape a future break could take, so Glazier has been sent a suggestion to check the
+opened tab's type after the open. I had first written that porthole would fail, and attributed
+that to Surveyor; they corrected it.)
 
-**Why 1.141.0's extra extensions do not raise the floor.** 1.141.0 adds `.mhtml` and
+**Why 1.141.0's extra extensions do not raise the floor.** 1.137.0 adds `.mhtml` and
 `.mht`. porthole's menus and keybinding match only `.html` / `.htm`
 (`resourceExtname =~ /^\.html?$/i` in `package.json`), so it does not use them.
 
@@ -67,15 +73,15 @@ reading of 1.130.0 is that no editor with id `workbench.editor.browser` is found
 | The HTML registration is absent in 1.130.0 through 1.133.0 and present in 1.134.0 | **Read**: the loop is absent in four tags and present in the fifth | Read in source; unambiguous |
 | The identifiers porthole calls exist at 1.134.0 | **Read**: grep by name | Names only |
 | The internal call behaves at 1.134.0 as it does at 1.141.0 | **Read**: the `_workbench.openWith` handler file differs between the two tags by one import line; the `createAuxiliaryEditorPart` options are unchanged | Strongly suggests it, does not prove it |
-| The browser editor itself behaves the same at 1.134.0 as at 1.141.0 | **Not established.** The browser view contribution changed by about 2,350 lines added and 790 removed between the two tags (34 files) | Unknown |
-| Anything about 1.135.0 through 1.140.x | **Not read.** Only 1.134.0 and 1.141.0 were fetched on that side | Unknown |
+| The browser editor itself behaves the same at 1.134.0 as at 1.141.0 | **Read by Surveyor** (not by me), file by file by blob id across all eight tags 1.134.0 to 1.141.0: the editor service, group finder, auxiliary window and part, `browserEditor.ts` (the toolbar), the navigation and auto-reload features and `menubar.ts` are identical at every tag. The 34-file, +2,350/-790 line change I counted earlier is elsewhere: nothing on porthole's path | Strong for the path read; not a run |
+| Anything about 1.135.0 through 1.140.x | **Read by Surveyor**: the same comparison covered every tag in the range | Read, not run |
 | Anything about patch releases (for example 1.134.1) | **Not read** | Unknown, low risk |
 | macOS pin behavior across Spaces and full-screen apps | Electron behavior, not in VS Code's source | Open since Surveyor's check |
 
 So the sentence the project can defend today is:
 
-> The source says porthole could work from VS Code 1.134.0. It has only been run on
-> VS Code 1.141.0.
+> The source says porthole could work from VS Code 1.134.0 and nothing on its path changes
+> up to 1.141.0. It has been run on VS Code 1.141.0 and used on 1.134.0.
 
 ## What the listing may claim
 
@@ -94,5 +100,5 @@ Three honest choices were offered, from most to least conservative. **Jérémie 
 - A VS Code release that changes `_workbench.openWith`, the editor id, group `-3`, or the
   auxiliary options. Re-run `scripts/ephemeral/2026-10-13-version-floor-check.sh` against the
   new tag, then Spike 0 by hand ([ADR-0003](../adr/0003-spike-0-does-the-one-shot-call-hold.md)).
-- Fetching 1.135.0–1.140.0 tags would turn "unknown" into "read" for the middle of the range.
+- (Done 2026-10-13 by Surveyor: tags 1.135.0 to 1.140.0 read.) A *run* on a middle version is still absent.
 - A real run on any version below 1.141.0.

@@ -51,7 +51,7 @@ exact file, and prints what to do next. It needs [`just`](https://just.systems) 
 
 - VS Code desktop **1.134.0 or later**. That is the first release whose integrated browser
   opens local HTML files, as read in VS Code's source. porthole has been **run** on 1.134.0
-  and on 1.141.0; the versions in between are neither read nor run
+  and on 1.141.0; the versions in between were read in VS Code's source but not run
   ([details](docs/release/VERSION-FLOOR.md)).
 - Local HTML files (`.html`, `.htm`). Remote and virtual workspaces are out of scope.
 

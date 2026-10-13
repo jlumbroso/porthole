@@ -78,8 +78,15 @@ because that switches off the same net your incident would have wanted; (c) it d
 help with the leak class in 2.1 (coverage HTML and config files are not secrets), so the two
 are complementary. **Suggestion:** one paragraph in §III: "`vsce package` scans for secrets
 and refuses on `.env`; treat a hit as a stop, and never pass the `--allow-package-*` flags
-without a recorded reason." I cannot say whether secretlint's rules would have caught an
-Azure DevOps PAT; that is worth testing with a dummy of the right shape.
+without a recorded reason." **Update, 2026-10-13 (Ran, by Surveyor 5.1, `scripts/ephemeral/2026-10-13-vsce-secret-scan-probe.mjs`,
+vsce's own `lintText` on dummy strings): GitHub and Slack tokens and a `.env` file are caught;
+an Azure DevOps PAT is NOT caught in any shape tried** (52 lowercase characters, 84 mixed, and
+inside a basic-auth URL, whose rule is configured off). That is the very kind of token the
+Marketplace uses, so the scan is no net for the credential this playbook exists to protect.
+Two further nuances: `--allow-package-all-secrets` does not disable the `.env` check (that is a
+separate flag), and the scan skips images and `node_modules`. **Suggestion, strengthened:** the
+skill's pre-publish check should include its own scan for the ADO PAT shape; porthole's gate is
+getting one.
 
 ### 2.3 §V.2 fired immediately, and a pre-publish check would have caught it
 
@@ -279,7 +286,7 @@ wrote it. For a first publish by a new person it is the first hour:
 
 - Everything in §II (minting a PAT, the Azure DevOps UI) and §V.1/§V.3/§V.4 (publish
   behaviors); the first of these is Jérémie's by hand, and I will not see the value.
-- Whether secretlint catches an Azure DevOps PAT shape (2.2).
+- ~~Whether secretlint catches an Azure DevOps PAT shape (2.2).~~ Answered by Surveyor's probe: it does not.
 - Whether the Open VSX publisher agreement is required (2.10), stated from memory.
 - Your `release.yml`, which I did not read.
 - Whether a single PAT serves several extensions in your practice (2.7).
