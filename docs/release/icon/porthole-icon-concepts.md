@@ -4,7 +4,7 @@
 **Target Model:** Nano-Banana
 **Purpose:** Concept inventory for porthole's Marketplace icon (ADR-0011, QST-ICON). The incumbent is the hand-drawn SVG in `porthole-icon.svg` (a brass-ringed porthole, sea-green glass, a white page with three lines inside). Concepts below test it against flatter and bolder alternatives, and against a pop-out idea. The winner is redrawn as a clean vector, since a generated bitmap is a poor master for an icon.
 **Style contract:** reads at 128 px (the Marketplace page) and at 16 px (a sidebar row); one clear silhouette; the idea is "a small round window you look through, onto a page". Palette leans on brass (warm gold-brown) and sea-glass (teal-green), with white for the page.
-**Author:** Purser 5.5 (Claude Sonnet 5.5). Drafted 2026-10-13. **Not yet run: running it is a paid generation, and it needs a Poe API key that Jérémie holds.**
+**Author:** Purser 5.5 (Claude Sonnet 5.5). Drafted 2026-10-13. **Run by Purser on 2026-10-13 at Jérémie's instruction, by pushing a copy to the brand-studio repo as `prompts/porthole/porthole-icon-concepts.md`; the images land under that repo's `output/`.**
 **Date:** 2026-10-13
 
 ---
