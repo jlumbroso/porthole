@@ -1,6 +1,6 @@
 # [macOS] Ctrl+A, Ctrl+E and the other Ctrl text-editing keys do nothing in an integrated-browser page
 
-**Status**: draft, not filed. **Labels to suggest**: `bug`, `browser-integration`, `macos`, `keybindings`.
+**Status**: filed 2026-10-13 as [microsoft/vscode#341243](https://github.com/microsoft/vscode/issues/341243); the issue carries the filed text, this draft is kept as written. **Labels to suggest**: `bug`, `browser-integration`, `macos`, `keybindings`.
 
 ## Summary
 

@@ -1,6 +1,6 @@
 # Let the integrated browser's toolbar be hidden, at least in compact floating windows
 
-**Status**: draft, not filed. **Labels to suggest**: `feature-request`, `browser-integration`, `workbench-auxwindow`.
+**Status**: filed 2026-10-13 as [microsoft/vscode#341244](https://github.com/microsoft/vscode/issues/341244); the issue carries the filed text, this draft is kept as written. **Labels to suggest**: `feature-request`, `browser-integration`, `workbench-auxwindow`.
 
 ## Summary
 

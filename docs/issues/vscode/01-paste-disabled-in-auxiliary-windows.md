@@ -1,6 +1,6 @@
 # [macOS] Cmd+V does not paste into a page in the integrated browser when it is in a floating window
 
-**Status**: draft, not filed. **Labels to suggest**: `bug`, `browser-integration`, `workbench-auxwindow`, `macos`.
+**Status**: filed 2026-10-13 as [microsoft/vscode#341242](https://github.com/microsoft/vscode/issues/341242); the issue carries the filed text, this draft is kept as written. **Labels to suggest**: `bug`, `browser-integration`, `workbench-auxwindow`, `macos`.
 
 ## Summary
 

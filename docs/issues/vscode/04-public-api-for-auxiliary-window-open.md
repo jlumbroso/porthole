@@ -1,6 +1,6 @@
 # API: let extensions open an editor in a new floating window, with size, compact and always-on-top
 
-**Status**: draft, not filed. **Labels to suggest**: `feature-request`, `api`, `workbench-auxwindow`.
+**Status**: filed 2026-10-13 as [microsoft/vscode#341245](https://github.com/microsoft/vscode/issues/341245); the issue carries the filed text, this draft is kept as written. **Labels to suggest**: `feature-request`, `api`, `workbench-auxwindow`.
 
 ## Summary
 
