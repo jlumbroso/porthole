@@ -209,7 +209,7 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 4. **Name (QST-NAME-FINAL, B).** "Porthole" and `jlumbroso.porthole` are final, after the naming review confirmed them.
 5. **Words.** The review's table is applied: "floating window" everywhere (no "mini window" or "small window"); commands "Pop Out to Floating Window" and "Cycle Window Size"; "Toggle Always on Top" and "Dock Back into Main Window" stay; controls say "Always on Top" and prose says "pinned"; **`porthole.useInternalApi` is renamed `porthole.useInternalCommand` before the first publish**; `Ctrl+Alt+M` stays and no document says what the M stands for; "default" means VS Code's own size and ours is "the first preset"; "task instructions" is an example, not the frame.
 6. **Screenshots (QST-SHOTS, B now, A later).** The existing screenshots are cropped for the listing (Jérémie will crop); Purser supplies specific scenarios to stage for a retake later.
-7. **Icon (QST-ICON, A, plus a trial).** Purser draws the icon, and also tries `batch-renderer` (PyPI) as Jérémie suggested.
+7. **Icon (QST-ICON A; QST-ICON-PICK A).** Purser drew a first icon and ran twelve concepts through `batch-renderer` with Nano-Banana-Pro, as Jérémie suggested. He picked **concept 1.2, the flat brass tile**, which ships as `media/icon.png` (256 px, transparent). He liked 2.2 and the hand-drawn SVG as well; they are kept in `docs/release/icon/`.
 
 ### Action Items
 
@@ -223,7 +223,8 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - [x] Token-shape scan written: `scripts/scan-secrets.mjs` (tracked files and history; tests its own rules; catches the Azure DevOps shape vsce's scanner misses) - Owner: Purser (done 2026-10-13)
 - [ ] Wire `scripts/scan-secrets.mjs` into `just gate` (or `npm run check`) - Owner: Glazier, who owns the gate (asked; no answer yet)
 - [x] Draw a first icon (`media/icon.png`, hand-drawn SVG) and run twelve concepts through batch-renderer with Nano-Banana-Pro (`docs/release/icon/round-1/`) - Owner: Purser (done 2026-10-13)
-- [ ] Make the picked concept transparent-background, save it as `media/icon.png`, tell Glazier - Owner: Purser, after QST-ICON-PICK
+- [x] Make the picked concept transparent-background and save it as `media/icon.png` - Owner: Purser (done 2026-10-13)
+- [ ] Add `"icon": "media/icon.png"` to `package.json` and the sixth file to the package allowlist - Owner: Glazier (briefed twice)
 - [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
 - [x] `just publish-check`, `just publish-check-no-tokens` and `just publish` built (`scripts/publish-check.mjs`, recipes at the bottom of the `justfile`); Glazier consented. Not yet run with tokens: that is Jérémie's act - Owner: Purser (done 2026-10-13)
 - [ ] Make the repository public; mint tokens; publish to both registries - Owner: Jérémie (his acts)
