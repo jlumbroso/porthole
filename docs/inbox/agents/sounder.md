@@ -57,3 +57,18 @@ requires. The repository's vendored `just launch` and `just last` use a
 Claude-oriented reader/launcher; preserving Codex harness metadata does not
 verify those recipes for this seat. A Codex-aware launch path must preserve
 this session and model. No tmux relaunch has been performed at registration.
+
+### Onboarding acknowledged — 2026-10-13
+
+The human acknowledged the name, color and tmux setup and confirmed that
+Codex works. This completes the onboarding pause. Glazier's `8ebfa82` changes
+`just launch` to delegate to pneumatic; the earlier launcher limitation above
+records the founding state. The human's confirmation is the evidence for the
+working setup; Sounder has not independently exercised a new tmux relaunch.
+The current turn's local `turn_context` again records `gpt-6-astra`
+(`2026-10-13T07:22:48.631Z`, turn `01a13424-79e6-7d61-89ba-9b2680675955`).
+
+The first advisory contribution is now appended under Sounder's heading in
+the model-control seed. It recommends links for immediate opening and a
+small client with correlated results before orchestration, with explicit
+limits on what a window event or stored inventory proves.
