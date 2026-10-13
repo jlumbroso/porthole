@@ -1,6 +1,12 @@
 # macOS metadata
 .DS_Store
 
+# Publishing credentials live here, typed with a plain editor and never committed
+# (the marketplace playbook, section IV; see docs/release/REPO-HYGIENE.md)
+.env
+.env.*
+!.env.example
+
 # Temporary files
 ~*
 
