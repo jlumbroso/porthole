@@ -2,6 +2,34 @@
 
 Oct 12, 2026 · Prepared for @Jérémie Lumbroso by **Claude Opus 5.5**
 
+## Outcome: shipped as Porthole
+
+**The one-shot call held, and an independent source check found no wrong claim. The blueprint missed the version floor and three VS Code limits.**
+
+It shipped on Oct 13, 2026 as [Porthole](https://github.com/jlumbroso/porthole) 0.1.0, on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jlumbroso.porthole) and [Open VSX](https://open-vsx.org/extension/jlumbroso/porthole). The sections below stay as written on Oct 12; corrections live here. Evidence links point to the repo at commit [`40a75fc`](https://github.com/jlumbroso/porthole/commit/40a75fc6e9d33c14324758053180f29a8aaa2fff). Added by Claude Opus 5.5.
+
+| Blueprint claim | What happened | Evidence |
+| --- | --- | --- |
+| One call opens a sized, compact, pinned window | Held: 5 of 5 spike runs on 1.141.0, window up in 84–142 ms; 15 of 15 pop-outs in the first hands-on test, no fallback | [ADR-0003 L215–222](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L215-L222), [ADR-0010 L221](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0010-first-hands-on-test-of-porthole-0-1-0.md?plain=1#L221) |
+| Resize means re-open; the tab moves | Held: the tab moved, the emptied window closed itself, the page kept its state | [ADR-0003 L227](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L227) |
+| The stable fallback works | Held: 4 of 4 runs, compact and pinned, at VS Code's default size | [ADR-0003 L222](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L222), [L228](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L228) |
+| The page reloads and keeps its state | Held: reload in about 0.4 s, ticks kept, storage survived restarts | [ADR-0003 L220](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L220), [L234](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L234) |
+| The pin stays within one macOS Space (marked as inference) | Held: it doesn't follow desktop switches, and stays in front where placed | [ADR-0003 L237](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L237) |
+| Source citations | Held: "No claim in the brief is wrong," per Surveyor 5.1 (Claude Fable 5.1), checked against 1.141.0 | [review L15–19](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/reviews/2026-10-12-design-brief-source-check.md?plain=1#L15-L19) |
+| Needs VS Code 1.141 or later | Too strict: the floor is 1.134.0, where Porthole has since run | [VERSION-FLOOR L13–29](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/release/VERSION-FLOOR.md?plain=1#L13-L29) |
+| Ship only as a personal VSIX | Reversed by Jérémie: 0.1.0 is public on both registries | [ADR-0009 L23](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0009-ship-as-a-personal-vsix.md?plain=1#L23), [ADR-0011 L235](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0011-prepare-porthole-s-first-public-release-repo-hygiene-version-floor-terminology-listing.md?plain=1#L235) |
+
+### Where the blueprint fell short
+
+- **It didn't say to check the installed version.** That morning it was 1.130, where the call would have failed. Glazier 5.5 flagged the old version before any code ([vignette L60–61](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/vignettes/2026-10-12-from-research-brief-to-daily-use-in-one-afternoon.md?plain=1#L60-L61)). Surveyor 5.1 found the floor by reading three tags ([review L36–56](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/reviews/2026-10-12-design-brief-source-check.md?plain=1#L36-L56)).
+- **Its two dates for HTML association contradicted each other** ([review L30](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/reviews/2026-10-12-design-brief-source-check.md?plain=1#L30)).
+- **"Only the rendered page" isn't literal.** The window keeps its title bar and the browser toolbar, about 73 px of 640. No setting hides that toolbar at 1.141.0 ([ADR-0003 L239](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L239), [L256](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/adr/0003-spike-0-does-the-one-shot-call-hold.md?plain=1#L256)).
+- **Two macOS keyboard limits went unpredicted.** Cmd+V doesn't paste into the floating window's page; right-click Paste works. Ctrl+A and Ctrl+E do nothing in page text fields ([README L133–139](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/README.md?plain=1#L133-L139)).
+- **One citation pointed at the wrong line.** A browser tab reaches the unknown-input return at `mainThreadEditorTabs.ts` L225, not L143 ([review L194](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/docs/reviews/2026-10-12-design-brief-source-check.md?plain=1#L194)). Two others land a few lines from their code.
+- **The Marketplace reason was weak.** The [docs](https://code.visualstudio.com/api/advanced-topics/using-proposed-api)' rule against publishing is about proposed API, not internal commands. Porthole 0.1.0 uses no proposed API.
+
+Not built yet: popping out an already-open browser tab, and the trigger from outside VS Code ([README L141–145](https://github.com/jlumbroso/porthole/blob/40a75fc6e9d33c14324758053180f29a8aaa2fff/README.md?plain=1#L141-L145)).
+
 ## TL;DR
 
 **Yes, it's buildable today, and VS Code already does most of the work.** Since 1.100, a floating editor window can run in compact mode (no tabs, breadcrumbs or status bar) and stay always on top. The integrated browser renders local `file://` HTML and reloads it when the file changes on disk.
