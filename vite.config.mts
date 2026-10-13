@@ -27,5 +27,17 @@ export default defineConfig({
     alias: {
       vscode: resolve(import.meta.dirname, 'src/test/helpers/vscodeMock.ts'),
     },
+    // `npm run test:coverage`, and the Vitest extension's "Run with Coverage".
+    // The provider is a pinned devDependency (@vitest/coverage-v8, same version
+    // as vitest): without it, a coverage run dies with MISSING DEPENDENCY.
+    // Measured: the extension's own code. Not measured: the tests and the
+    // mock, which would only inflate the number.
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts'],
+      exclude: ['src/test/**'],
+      reporter: ['text', 'html'],
+      reportsDirectory: 'coverage',
+    },
   },
 });

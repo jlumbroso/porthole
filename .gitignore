@@ -18,6 +18,9 @@ out/
 *.vsix
 .vscode-test/
 
+# Test coverage report (npm run test:coverage; the Vitest extension's coverage run)
+coverage/
+
 # Python temporary files
 __pycache__/
 *.py[cod]
