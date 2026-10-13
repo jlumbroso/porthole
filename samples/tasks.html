@@ -22,6 +22,12 @@
        font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   dt { font-weight: 600; }
   dd { margin: 0; }
+  .clip { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 16px; }
+  .clip input { flex: 1 1 140px; min-width: 0; padding: 6px 8px; font: inherit; color: inherit;
+                background: transparent; border: 1px solid var(--line); border-radius: 4px; }
+  .clip button { padding: 6px 12px; font: inherit; color: var(--bg); background: var(--accent);
+                 border: 0; border-radius: 4px; cursor: pointer; }
+  #clip-status { flex-basis: 100%; font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -33,6 +39,15 @@
   <li><label><input type="checkbox" data-id="c"><span>Click another app and see whether this window stays on top</span></label></li>
   <li><label><input type="checkbox" data-id="d"><span>Watch the numbers below change when the file is rewritten</span></label></li>
 </ol>
+
+<!-- Clipboard check: can a page's own buttons copy and paste, given that Cmd+V
+     does not work in a floating window (docs/issues/vscode/01)? -->
+<p class="clip">
+  <input id="clip-field" value="porthole-copy-test" aria-label="Clipboard test field">
+  <button id="clip-copy" type="button">Copy</button>
+  <button id="clip-paste" type="button">Paste</button>
+  <span id="clip-status" role="status"></span>
+</p>
 
 <!-- The spike rewrites the text between the STAMP markers to prove a reload happened. -->
 <dl>
@@ -72,6 +87,30 @@
     state.ticks[box.dataset.id] = box.checked; save(); render();
   }));
   window.addEventListener('resize', render);
+
+  // Clipboard check. Each outcome is said on the page, so a screenshot answers it.
+  const field = document.getElementById('clip-field');
+  const status = document.getElementById('clip-status');
+  const say = text => { status.textContent = text; };
+  document.getElementById('clip-copy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(field.value);
+      say(`Copy: navigator.clipboard worked — paste "${field.value}" anywhere to check.`);
+    } catch (err) {
+      field.select();
+      say(document.execCommand('copy')
+        ? `Copy: navigator.clipboard failed (${err.name}); the older execCommand route worked.`
+        : `Copy failed both ways (${err.name}).`);
+    }
+  });
+  document.getElementById('clip-paste').addEventListener('click', async () => {
+    try {
+      field.value = await navigator.clipboard.readText();
+      say('Paste: worked (VS Code may have asked your permission first).');
+    } catch (err) {
+      say(`Paste: refused (${err.name}). Right-click → Paste still works.`);
+    }
+  });
   save(); render();
 </script>
 </body>
