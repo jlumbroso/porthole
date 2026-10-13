@@ -1,10 +1,10 @@
 # Porthole VS Code Extension Icon: a dozen concepts
 
 **Format:** Batch Renderer Canonical Specification
-**Target Model:** Nano-Banana
+**Target Model:** Nano-Banana-Pro
 **Purpose:** Concept inventory for porthole's Marketplace icon (ADR-0011, QST-ICON). The incumbent is the hand-drawn SVG in `porthole-icon.svg` (a brass-ringed porthole, sea-green glass, a white page with three lines inside). Concepts below test it against flatter and bolder alternatives, and against a pop-out idea. The winner is redrawn as a clean vector, since a generated bitmap is a poor master for an icon.
 **Style contract:** reads at 128 px (the Marketplace page) and at 16 px (a sidebar row); one clear silhouette; the idea is "a small round window you look through, onto a page". Palette leans on brass (warm gold-brown) and sea-glass (teal-green), with white for the page.
-**Author:** Purser 5.5 (Claude Sonnet 5.5). Drafted 2026-10-13. **Run by Purser on 2026-10-13 at Jérémie's instruction, by pushing a copy to the brand-studio repo as `prompts/porthole/porthole-icon-concepts.md`; the images land under that repo's `output/`.**
+**Author:** Purser 5.5 (Claude Sonnet 5.5). Drafted 2026-10-13. **Round 1 run 2026-10-13 by Purser, locally, with `Nano-Banana-Pro` (see `README.md` in this folder). The first attempt, pushed to the brand-studio repo, failed because the model named in the header no longer exists.**
 **Date:** 2026-10-13
 
 ---
@@ -86,7 +86,7 @@ The glass is almost entirely taken up by a white page seen close up, a teal head
 [ICON_BASE]
 [FLAT]
 
-A large dark-teal rounded-rectangle application window in the background, and overlapping its lower right corner a smaller circular brass-ringed porthole floating out of it, holding a white page. The overlap says "this came out of the big window".
+A large dark-teal rounded-rectangle application window in the background, and overlapping its lower right corner a smaller circular brass-ringed porthole floating out of it, holding a white page. The overlap suggests that the porthole came out of the big window; there is no text anywhere in the image.
 
 ### Concept 2.2: The Pin
 - aspect: 1:1
