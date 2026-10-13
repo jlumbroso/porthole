@@ -20,6 +20,14 @@ And, minutes later:
 
 > Pass it around Surveyor and Purser, and maybe let's recruit a GPT 6 Astra to consult.
 
+And then, on why:
+
+> The reason why is that it's still friction:
+> -> for the human to have to open the HTML file and then do a command chord
+> -> for the human to have to hunt for the file and then right-click and select the right option
+>
+> It woudl be nice if the human could say: Pull up that pharoscan in the porthole. Or if the model coudl wire a command to do as much. Or links opening up printed in the conversation or something.
+
 ---
 
 **Model Response Request:**
@@ -124,6 +132,28 @@ like a different vendor's model to weigh in on.
 - **Q3. Does a model acting on a window you are looking at need your
   permission each time?** My lean: no for open, refresh, list; a setting to
   allow close, resize and dock from outside, off by default.
+
+**Addendum, after your "why" (same day).** That sharpens the priority a lot.
+The friction you name is all on the *opening* side: finding the file, opening
+it, then the chord or the right-click. Your three wishes map onto one verb,
+`open`, reached three ways:
+
+1. **"Pull up that pharoscan in the porthole"** — you say it, the model runs
+   one command. That needs a command a model can run from its shell, plus
+   the skill telling it the command exists.
+2. **"The model wires a command"** — the same command, in a `just` recipe or
+   a hook, so it happens without being asked: write the page, pop it.
+3. **"Links printed in the conversation"** — a `vscode://jlumbroso.porthole/open?path=…`
+   link is just text. A terminal that makes links clickable (VS Code's own
+   terminal does, for URLs) would open the page in a porthole on one click.
+   Not yet checked: whether Claude Code's output in a VS Code terminal makes
+   a `vscode://` link clickable, and whether VS Code asks for confirmation the
+   first time.
+
+All three are the M4 link handler (ADR-0008), which is designed but not built.
+So I would split this seed: **build `open` from outside first**, since it
+removes the friction you have today, then `list`, `refresh` and the rest,
+where the channel question above actually bites.
 
 **What happens next, as you asked.** This seed goes to Surveyor (can VS Code
 do what the table says, and what does restart do to the record), to Purser
