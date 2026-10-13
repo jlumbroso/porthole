@@ -110,7 +110,14 @@
             "mcp__playwright__browser_wait_for",
             "mcp__playwright__browser_press_key",
             "mcp__playwright__browser_close",
-            "mcp__playwright__browser_install"
+            "mcp__playwright__browser_install",
+            "Bash(just gate *)",
+            "Bash(kintsugi status *)",
+            "Bash(npx vitest *)",
+            "Bash(code --install-extension releases/porthole-0.1.0.vsix --force)",
+            "Bash(code --install-extension releases/*)",
+            "Bash(code --install-extension *)",
+            "Bash(code --install-extension:*)"
         ],
         "deny": [
             "Read(.env*)",
