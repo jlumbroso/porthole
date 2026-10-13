@@ -548,6 +548,11 @@ gate:
     echo "▸ crew registry"
     python3 scripts/groups-lookup.py --validate
     echo "✅ registry parses; every group member is a registered seat"
+    # The repo is public (2026-10-13), and the ADR Manager's drafts are tracked:
+    # a credential-shaped string anywhere in a tracked file stops the commit.
+    # Purser's scan; it never prints what it found, only where.
+    echo "▸ secret scan"
+    node scripts/scan-secrets.mjs
     if [[ -f package.json ]]; then
         echo "▸ extension (typecheck + tests + bundle)"
         npm run check

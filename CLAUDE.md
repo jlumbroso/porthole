@@ -95,7 +95,7 @@ Before serving any change:
 
 **Why**: `just gate` runs every check that exists and grows with the project, so it is followable from the first commit:
 
-- **The repo itself**: an instantiation placeholder left unfilled, and a crew registry that does not parse or whose groups name a seat that is not registered. The second happened in this project's first hour — the `crew` group pointed at an alias that did not exist yet, and `just groups` only printed a warning and exited 0.
+- **The repo itself**: an instantiation placeholder left unfilled; a crew registry that does not parse or whose groups name a seat that is not registered (this happened in the project's first hour — the `crew` group pointed at an alias that did not exist yet, and `just groups` only printed a warning and exited 0); and a credential-shaped string in any tracked file (`scripts/scan-secrets.mjs`, since the repo went public on 2026-10-13; CI runs it too).
 - **The extension** (`npm run check`, four steps): a type error; a command handler that misbehaves against a mocked VS Code (the wrong call, a fallback that runs twice or not at all, a contributed command with no handler); a bundle that does not build; and a package that would ship anything beyond six named files (the icon is the sixth) or that no longer asks VS Code for the real `vscode` module. That last step exists because both of the human's other extensions shipped working files such as `CLAUDE.md` in their packages (ADR-0002).
 - **What it cannot catch**: VS Code changing the internal call the extension is built on (`_workbench.openWith` into group `-3`), or anything only eyes can see (is the window compact, is it on top). No test here runs inside a real VS Code window. That class is caught only by re-running Spike 0 by hand after a VS Code update (F5 → "Spike 0", ADR-0003) — a green gate is not evidence that the pop-out still works.
 
@@ -251,16 +251,20 @@ If the script was successfully used, append as comments how, and what the outcom
 ## Project Context
 
 ### What we're building:
-**porthole** is a personal VS Code extension: one gesture pops the HTML page you are looking at (typically a page of task instructions) out of the integrated browser into a small floating window that shows only the rendered page, can be pinned above other windows, docks back just as easily, and can be triggered from outside VS Code. It renders nothing itself — it orchestrates VS Code's own integrated browser and floating windows. This is the product repo: extension source in `src/`, tests in `src/test/`, the decision record in `docs/adr/`. The founding research is `docs/INITIAL-DESIGN-BRIEF.md`.
+**porthole** is a VS Code extension, public and published: one gesture pops the HTML page you are looking at (typically a page of task instructions) out of the integrated browser into a small floating window that shows only the rendered page, can be pinned above other windows, docks back just as easily, and can be triggered from outside VS Code. It renders nothing itself — it orchestrates VS Code's own integrated browser and floating windows. This is the product repo: extension source in `src/`, tests in `src/test/`, the decision record in `docs/adr/`. The founding research is `docs/INITIAL-DESIGN-BRIEF.md`.
 
 ### Current focus:
-Version 0.1.0 passed its hands-on test on 2026-10-12 (`docs/adr/0010-*.md`: all five answers A, 15 pop-outs with no fallback). It covers milestone M1 (pop out a file) and M3 (size presets, dock back, pin), and was installed into the human's VS Code for daily use on 2026-10-12 (`just install-local`). Its first real job: walking Lintel's PAT-refresh page from `vscode-adrs-for-ai`. Lintel (that crew's launch-surfaces seat) is to write the Marketplace release skill and playbook porthole will follow. Next: publish to the Marketplace and Open VSX (ADR-0009, decided 2026-10-12), through a release seat; meanwhile QST-PASTE in ADR-0010, the first defect from real use. Spike 0 passed on VS Code 1.141.0 on 2026-10-12 (ADR-0003). Still to build: M2 (pop out a page already open in a browser tab), M4 (the `vscode://` trigger and `just pin`), and the release itself.
+**0.1.0 is published** (2026-10-13) on the VS Code Marketplace and Open VSX as `jlumbroso.porthole`, with a GitHub Release, and the repository is public. The release record is ADR-0011, and Purser 5.5 owns releases. 0.1.0 covers milestones M1 (pop out a file) and M3 (size presets, dock back, pin); it runs on VS Code 1.134.0 and later, used by the human on both 1.134.0 and 1.141.0.
+
+**Next to build**: M2 (pop out a page already open in a browser tab; ADR-0006, the proposed API, still untested) and M4 (the `vscode://` trigger with its allowlist, ADR-0008, and `just pin`). **Open with Surveyor**: QST-CYCLE-MISS in ADR-0010 (why VS Code sometimes does not report a focused floating window as active; mitigated in code). **Known VS Code limits**, drafted as upstream issues in `docs/issues/vscode/`, not filed: Cmd+V in floating windows, Ctrl text keys, the browser toolbar, and a public API for opening a sized floating window.
+
+**After any VS Code update**: re-run Spike 0 (F5 → "Spike 0") before a release claims the new version.
 
 ### Key decisions made:
 - Founding decisions — name, identity (`jlumbroso.porthole`, `porthole.*`), gate, crew shape, external trigger kept at M4 — see `docs/adr/0001-*.md` (Accepted)
 - Scaffold follows the house's extension conventions (Vite, Vitest with a mocked `vscode`) instead of the brief's esbuild sketch — see `docs/adr/0002-*.md`
 - Spike 0 passed: the internal call is the primary path — see `docs/adr/0003-*.md`
-- The brief's six product decisions — `docs/adr/0004-*.md` to `0009-*.md`: reuse the integrated browser; internal call with a public-command fallback; proposed API optional (still unproven); resize by re-opening; link handler with an allowlist; publish to the Marketplace and Open VSX (0009, Jérémie's call)
+- The brief's six product decisions — `docs/adr/0004-*.md` to `0009-*.md`: reuse the integrated browser; internal call with a public-command fallback; proposed API optional (still unproven); resize by re-opening; link handler with an allowlist; publish to the Marketplace and Open VSX (0009, Jérémie's call; done 2026-10-13, ADR-0011)
 
 ### Open questions:
 ```bash
