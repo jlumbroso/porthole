@@ -154,3 +154,15 @@ overrides:
   QUICK-START.md:
     skip: true
     reason: "deleted — the template's quick-start card pointed at a README that is now ours; docs/METHODOLOGY.md and CLAUDE.md carry the method"
+  .vscode/vscode-optimization-guide.md:
+    skip: true
+    reason: "removed 2026-10-13 (ADR-0011, QST-HYGIENE-CUT): a generic 2026-01-04 guide that never mentions porthole; read first, nothing in it applies (VS Code already excludes node_modules and .git/objects from file watching)"
+  scripts/unwrap-adrs/README.md:
+    skip: true
+    reason: "removed 2026-10-13 (ADR-0011, QST-HYGIENE-CUT): optional ADR-line-unwrapping tools that nothing here uses"
+  scripts/unwrap-adrs/unwrap-adrs.mjs:
+    skip: true
+    reason: "removed 2026-10-13 with its README (ADR-0011, QST-HYGIENE-CUT)"
+  scripts/unwrap-adrs/unwrap-adrs.py:
+    skip: true
+    reason: "removed 2026-10-13 with its README (ADR-0011, QST-HYGIENE-CUT)"

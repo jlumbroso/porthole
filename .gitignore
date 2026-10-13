@@ -30,3 +30,8 @@ coverage/
 # Python temporary files
 __pycache__/
 *.py[cod]
+
+# ADR Manager working files: backups (redundant, useful locally) and the error report
+# the Manager team collects (decided 2026-10-13, ADR-0011). The drafts themselves stay tracked.
+docs/adr/.working/*.bak
+docs/adr/.working/errors.jsonl
