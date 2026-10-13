@@ -8,6 +8,22 @@
 - **Not covered**: the founding brief (`docs/INITIAL-DESIGN-BRIEF.md`) still says "Mini
   Browser", `jlumbroso.mini-browser` and `miniBrowser.*`. That is deliberate and recorded
   (`CLAUDE.md`, "Project-Specific Notes"); the brief is not edited.
+- **Resolved 2026-10-13.** The naming review returned and every open term in §9 is decided
+  (recorded in ADR-0011, Decision, item 5). The rest of this file is the inventory as it
+  stood before the review, kept as the record of what was weighed; the counts below describe
+  the old words.
+
+  | Term | Decision |
+  | --- | --- |
+  | The noun | "floating window"; "mini window" and "small window" retired |
+  | Command titles | "Pop Out to Floating Window", "Cycle Window Size"; "Toggle Always on Top" and "Dock Back into Main Window" stay |
+  | Pinned / Always on Top | controls say "Always on Top"; prose says "pinned" |
+  | Object named after the product | not in functional copy; "the porthole" once, in the README's name paragraph |
+  | `porthole.useInternalApi` | renamed `porthole.useInternalCommand` before the first publish |
+  | The `M` shortcut | `Ctrl+Alt+M` kept; no document says what M stands for |
+  | "default" | means VS Code's own window size; ours is "the first preset" |
+  | "task instructions" | an example, not the frame |
+
 - **Counts** are case-insensitive line counts across `README.md`, `package.json`,
   `CHANGELOG.md` and `src/*.ts` at commit `0ef1287`. They show where a word lives, not
   how important it is.

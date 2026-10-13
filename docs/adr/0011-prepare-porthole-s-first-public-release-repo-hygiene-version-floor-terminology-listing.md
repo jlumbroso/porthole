@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Prepare porthole's first public release: repo hygiene, version floor, terminology, listing
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
+- **Iteration**: 2
 - **Status**: Draft
 - **Deciders**: Jérémie Lumbroso (human), Purser 5.5 (Claude Sonnet 5.5)
 
@@ -180,16 +180,29 @@ https://pypi.org/project/batch-renderer/
 
 ## Decision
 
-*Pending: nothing here is decided until the questions above are answered. Two things are already settled by rulings recorded under "Originating Context": the history is kept whole, and the README follows ADR-0009.*
+Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming review that returned the same day.
+
+1. **Hygiene (QST-HYGIENE-CUT, B with one exception).** The two `.bak` files leave git, and `.vscode/terminals.json` **stays tracked** for now (regenerating it constantly is an inconvenience; it should eventually go). The generic optimization guide was read (nothing applies: VS Code already excludes `node_modules` and `.git/objects` from watching) and removed, together with `scripts/unwrap-adrs/`; both are recorded as `kintsugi.yaml` overrides.
+2. **Drafts (QST-DRAFTS-TRACKING, A with exceptions).** The drafts and the archive stay tracked, because watching answers form is part of the record and the repo is built in public. `*.bak` and `errors.jsonl` (the ADR Manager team's report file) are ignored. Jérémie filed a feature request for token redaction in the Manager's drafts. The gate scan that option A adds is still to be built.
+3. **Floor (QST-ENGINES-FLOOR, B).** `engines.vscode` becomes `^1.134.0` now. The latest VS Code release is the one officially supported; the first reply to a bug report on an older version is "can you update to the latest version?". Jérémie is testing a 1.134.0 install and will report. Until he does, the README says 1.141.0 is the only version run.
+4. **Name (QST-NAME-FINAL, B).** "Porthole" and `jlumbroso.porthole` are final, after the naming review confirmed them.
+5. **Words.** The review's table is applied: "floating window" everywhere (no "mini window" or "small window"); commands "Pop Out to Floating Window" and "Cycle Window Size"; "Toggle Always on Top" and "Dock Back into Main Window" stay; controls say "Always on Top" and prose says "pinned"; **`porthole.useInternalApi` is renamed `porthole.useInternalCommand` before the first publish**; `Ctrl+Alt+M` stays and no document says what the M stands for; "default" means VS Code's own size and ours is "the first preset"; "task instructions" is an example, not the frame.
+6. **Screenshots (QST-SHOTS, B now, A later).** The existing screenshots are cropped for the listing (Jérémie will crop); Purser supplies specific scenarios to stage for a retake later.
+7. **Icon (QST-ICON, A, plus a trial).** Purser draws the icon, and also tries `batch-renderer` (PyPI) as Jérémie suggested.
 
 ### Action Items
 
 - [x] Cleanliness scans, version-floor check, terminology index, release plan, README and changelog rewritten, feedback for Lintel written - Owner: Purser (done 2026-10-13)
 - [x] `.env` added to `.gitignore`; hive-of-origin notice added to `CLAUDE.md` - Owner: Purser (done 2026-10-13)
-- [ ] Brief to Glazier: manifest fields (`icon`, `keywords`, `bugs`, `homepage`, `galleryBanner`), remove `"private": true`, consider `capabilities` for virtual and untrusted workspaces, and the `porthole.useInternalApi` naming question - Owner: Purser, after the answers
-- [ ] Brief to Surveyor: check the version-floor document and the README's claims; re-run Spike 0 at release time - Owner: Purser
-- [ ] Apply the naming review's decisions to the README, changelog and listing copy - Owner: Purser, when the review is routed back
-- [ ] Build `just publish-check` - Owner: Purser, after the answers
+- [x] Brief to Glazier (engines first, manifest fields, the naming table, the key rename, consent for recipes) and to Surveyor (floor check gates the claim); both woken - Owner: Purser (done 2026-10-13, `2026-10-13-0352-*`)
+- [x] Untrack `*.bak` and `errors.jsonl`; remove the guide and `scripts/unwrap-adrs/`; kintsugi overrides - Owner: Purser (done 2026-10-13)
+- [x] README and CHANGELOG carry the naming review's words, the 1.134.0 floor and the support policy - Owner: Purser (done 2026-10-13; `package.json` still has the old words until Glazier lands the brief)
+- [ ] `package.json`: `engines` to `^1.134.0`; titles and descriptions; rename the setting key; drop `private`; add listing fields - Owner: Glazier
+- [ ] Run Spike 0 on VS Code 1.134.0 and report - Owner: Jérémie
+- [ ] Add a token-shape scan of the tracked `.working/` files to `just gate` - Owner: Purser (script), Glazier (wiring, since the `justfile` is shared)
+- [ ] Draw the icon; try `batch-renderer`; give Glazier the path - Owner: Purser
+- [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
+- [ ] Build `just publish-check` - Owner: Purser, after Glazier's consent
 - [ ] Make the repository public; mint tokens; publish to both registries - Owner: Jérémie (his acts)
 
 ---
@@ -201,6 +214,12 @@ https://pypi.org/project/batch-renderer/
 - Contributors: Purser 5.5 (Claude Sonnet 5.5); a read-only subagent catalogued the screenshots.
 - Changes: first draft; six questions opened.
 - Outcome: Draft.
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie's six answers and the naming review's table.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5).
+- Changes: Decision section written; action items updated; briefs to Glazier and Surveyor sent.
+- Outcome: Draft until the manifest lands and the 1.134.0 test is reported.
 
 ---
 
