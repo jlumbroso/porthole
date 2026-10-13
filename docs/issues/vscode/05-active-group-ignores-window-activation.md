@@ -1,6 +1,6 @@
 # The active editor group does not follow OS window activation into a floating window
 
-**Status**: draft, not filed. Waiting on the one-minute repro below being run by hand; the cause is read in source, not observed. **Labels to suggest**: `bug`, `workbench-auxwindow`, `api`.
+**Status**: draft, **not filed**. The by-hand repro (ADR-0010, QST-CYCLE-REPRO) came back B on 2026-10-13: the title-bar click did not misreport on macOS, so the cause below is not confirmed. Kept for the record; do not file as is. **Labels to suggest**: `bug`, `workbench-auxwindow`, `api`.
 
 ## Summary
 

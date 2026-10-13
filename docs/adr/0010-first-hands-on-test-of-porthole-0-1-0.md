@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # First hands-on test of porthole 0.1.0
 
 - **Date**: 2026-10-12
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso (human), Glazier 5.5 (Claude Opus 5.5)
 
@@ -286,7 +286,7 @@ Two different causes, neither porthole's doing. Lines are at tag 1.141.0, paths 
 What porthole now does (commit "fix: Cycle Window Size finds the porthole window when VS Code misreports focus"): it forgets a window the moment VS Code closes it, and when the active group is not one of its windows but exactly one is open, it resizes that one. With several open it says so and asks for a click on the right window's title bar. My hypothesis, unconfirmed: the workbench marks a group active from DOM focus inside it (`workbench/browser/parts/editor/editorParts.ts` L297–305, at 1.141.0), and a click that lands inside the page goes to a native view the DOM does not see.
 
 ### QST-CYCLE-REPRO: Does a title-bar click leave VS Code's active group in the other window (the cause Surveyor read for QST-CYCLE-MISS)?
-- Status: answered
+- Status: answered — B (never misreported); issue 05 is therefore not filed, and the cause of the original misses is open again (Glazier, 2026-10-13)
 - Why asking: Surveyor read in VS Code's source that clicking a floating window's **title bar** makes it the focused window but does **not** make its tab group the "active" one, while clicking **inside the page** does. That is the cause of the intermittent "pop a page out first" from Cycle Window Size. It has only been read, not seen. If you see it, the fifth upstream issue (`docs/issues/vscode/05-active-group-ignores-window-activation.md`) gets filed; if not, it does not.
 - Need: pick a letter (or override — any shape answers). About two minutes. Screenshots welcome but not needed.
 
@@ -396,6 +396,12 @@ The other notes in that export (copy buttons, clickable addresses) are about the
 - Contributors: Jérémie Lumbroso — the run, the answers, and two notes (self-contained questions; unified terminology); Glazier 5.5 (Claude Opus 5.5) — the reading of the extension's log
 - Changes: Decision and Consequences filled; two follow-ups found by the run; two action items added
 - Outcome: `Draft → Implemented`
+
+### Iteration 4 (2026-10-13)
+- Trigger: Jérémie answered QST-CYCLE-REPRO: B, on 1.141.0 and 1.134.0, with the full Porthole log
+- Contributors: Jérémie Lumbroso — the run and the log; Surveyor 5.1 (Claude Fable 5.1) — the reading under test; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: (1) Surveyor's title-bar reading did not reproduce on macOS: neither run fell back to "the only one open". Issue draft 05 stays unfiled and is marked so. The original intermittent miss is unexplained again; the one-window mitigation stays. (2) **New, from the same log**: three of five pop-outs logged `not locking: the new window is not the active tab group`, so those floating windows were not locked to one tab. The new group was not yet active when porthole checked, contrary to the reading that the active id is set before the event fires. Glazier's to fix. (3) Jérémie asked that the questions use "floating window" consistently for the window porthole opens, and distinguish it from the text editor tab; carried into the terminology ADR (ADR-0017).
+- Outcome: stays `Implemented`; two items open, both Glazier's
 
 ---
 

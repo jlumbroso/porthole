@@ -612,7 +612,14 @@ does not require deciding the whole automation transport today.
 
 ## Derived Into
 
-*(This seed has not yet been chunked into ADRs)*   <!-- literal placeholder — parser-significant: its presence means un-chunked; replace the line with the ADR list when chunking, never reword it in place -->
+- ADR-0013: Open a porthole from outside VS Code (QST-OPEN-CALLERS, -ALLOWLIST, -FOCUS, -CONFIRM)
+- ADR-0014: Drive open floating windows from outside VS Code (QST-DRIVE-CHANNEL, -CLIENT, -LIST, -RESTART, -PERMISSION)
+- ADR-0015: Markdown in a floating window (QST-MD-MODE)
+- ADR-0016: Teach models to use porthole (QST-SKILL-HOME)
+- ADR-0017: Words for the model-facing surface (QST-TERM-WINDOW, -VERBS, -LINK, -SOURCE), for the naming review
+- ADR-0018: Spike 1, Markdown preview and focus (QST-SPIKE1-MD, QST-SPIKE1-FOCUS), step by step
+
+Chunked 2026-10-13 by Glazier 5.5 at Jérémie's request. Q1 to Q4 of the first thread entry became QST-OPEN-CALLERS, QST-DRIVE-LIST, QST-DRIVE-PERMISSION and QST-MD-MODE. Not carried into a question, because they are design rules everyone in the thread agreed on: hostile-link tests, a version marker, per-request logging, observed versus requested values, idempotent retries (recorded under each ADR's Decision). Not processed: Sounder's proposed multi-window and restart spike, which waits until the verbs exist (ADR-0014, action items).
 
 <!-- MODEL INSTRUCTIONS: When this seed is processed, the AI should update this section with:
 - ADR-NNNN: Brief title
