@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { cycleSize, dockBack, popOut, togglePin } from './commands';
+import { cycleSize, dockBack, popOut, togglePin, trackWindows } from './commands';
 import { describeError, initLog, log } from './log';
 
 type Handler = (...args: unknown[]) => Promise<unknown>;
@@ -21,7 +21,7 @@ function register(context: vscode.ExtensionContext, id: string, handler: Handler
 }
 
 export function activate(context: vscode.ExtensionContext): void {
-  context.subscriptions.push(initLog());
+  context.subscriptions.push(initLog(), trackWindows());
   // A stale install and a changed VS Code are the two things worth seeing first.
   log(`Porthole ${context.extension.packageJSON.version} activated on ${vscode.env.appName} ${vscode.version}`);
 

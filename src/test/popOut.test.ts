@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { activateFresh, command } from './helpers/activate';
 import {
-  closeFloatingGroup, executedCalls, executedCommands, focusGroup, loggedLines, openFloatingGroup,
+  closeFloatingGroup, executedCalls, executedCommands, focusGroup, loggedLines, mainGroup, openFloatingGroup,
   setActiveDocument, setCommandBehavior, setConfig, shownMessages, Uri,
 } from './helpers/vscodeMock';
 
@@ -185,6 +185,34 @@ describe('size presets', () => {
 
       expect(internalOpens()).toHaveLength(1); // only the original pop-out
       expect(shownMessages().at(-1)).toMatch(/pop a page out first/);
+    });
+
+    it('resizes the only open window even when VS Code still reports the main window as active', async () => {
+      // Bug (Jérémie, VS Code 1.134.0, 2026-10-13, intermittent): Cycle Window
+      // Size, run from inside a porthole window, sometimes answered "pop a page
+      // out first". VS Code had not marked the floating window's group active,
+      // so the lookup by active group missed. With one porthole window open,
+      // there is no doubt which window is meant.
+      setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
+      await command('porthole.popOut')(page);
+      focusGroup(mainGroup()); // VS Code's view of focus lags behind the human's
+
+      await command('porthole.cycleSize')();
+
+      expect(widths()).toEqual([420, 480]);
+      expect(shownMessages()).toEqual([]);
+    });
+
+    it('asks which window to resize when several are open and none is reported active', async () => {
+      setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
+      await command('porthole.popOut')(page);
+      await command('porthole.popOut')(Uri.file('/work/checklist.html'));
+      focusGroup(mainGroup());
+
+      await command('porthole.cycleSize')();
+
+      expect(internalOpens()).toHaveLength(2); // no resize guessed at
+      expect(shownMessages().at(-1)).toMatch(/several floating windows are open/);
     });
   });
 

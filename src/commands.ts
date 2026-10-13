@@ -15,11 +15,43 @@ interface MiniWindow {
 // There is deliberately no "the last file popped out" fallback. With one, Cycle
 // Size in a window porthole did not open, or after Dock Back, re-opened the last
 // file and pulled it out of wherever it was (Surveyor's review, 2026-10-12).
-let windows = new WeakMap<vscode.TabGroup, MiniWindow>();
+// Instead the map only holds windows that are still open: a group is dropped
+// the moment VS Code reports it closed (see trackWindows).
+const windows = new Map<vscode.TabGroup, MiniWindow>();
 
 /** For tests: forget every window opened so far. */
 export function resetState(): void {
-  windows = new WeakMap();
+  windows.clear();
+}
+
+/** Forgets each floating window as soon as VS Code closes its group. Call once, from `activate`. */
+export function trackWindows(): vscode.Disposable {
+  return vscode.window.tabGroups.onDidChangeTabGroups(event => {
+    for (const group of event.closed) { windows.delete(group); }
+  });
+}
+
+/**
+ * The porthole window that Cycle Size should act on.
+ *
+ * Normally that is VS Code's active tab group. But VS Code does not always mark
+ * the floating window's group active when the window gains focus: on
+ * 2026-10-13 Jérémie saw "pop a page out first" from inside an open porthole
+ * window, now and then, with no reliable repro. (Likely cause, not yet
+ * confirmed: a click that lands inside the page itself is not seen by the
+ * workbench as focusing the group.) So when the active group is not one of
+ * ours and exactly one porthole window is open, that one is meant.
+ */
+function windowToResize(): MiniWindow | undefined {
+  const active = vscode.window.tabGroups.activeTabGroup;
+  const hit = windows.get(active);
+  if (hit) { return hit; }
+  if (windows.size === 1) {
+    log(`cycle size: the active tab group (column ${active.viewColumn}) is not a Porthole window; using the only one open`);
+    return windows.values().next().value;
+  }
+  log(`cycle size: the active tab group (column ${active.viewColumn}) is not a Porthole window, and ${windows.size} are open`);
+  return undefined;
 }
 
 const isHtmlPath = (path: string) => /\.html?$/i.test(path);
@@ -59,9 +91,11 @@ export async function popOut(arg?: unknown): Promise<void> {
  * moves the tab into the new window and closes the old one (ADR-0007).
  */
 export async function cycleSize(): Promise<void> {
-  const current = windows.get(vscode.window.tabGroups.activeTabGroup);
+  const current = windowToResize();
   if (!current) {
-    void vscode.window.showInformationMessage('Porthole: pop a page out first; this then steps through the size presets of the window Porthole opened.');
+    void vscode.window.showInformationMessage(windows.size === 0
+      ? 'Porthole: pop a page out first; this then steps through the size presets of the window Porthole opened.'
+      : 'Porthole: several floating windows are open. Click the title bar of the one to resize, then try again.');
     return;
   }
   if (!useInternalCommand()) {

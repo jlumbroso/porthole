@@ -263,6 +263,18 @@ Two different causes, neither porthole's doing. Lines are at tag 1.141.0, paths 
 
 ---
 
+**Second real use, on VS Code 1.134.0** (2026-10-13, just after midnight ET): every feature worked, but Cycle Window Size now and then answered "pop a page out first" from inside an open porthole window, with no reliable repro. Porthole's log from the first 1.134 session shows one pop-out by the internal call (139 ms) and no resize at all.
+
+### QST-CYCLE-MISS: Why does VS Code sometimes not report the focused floating window's group as active?
+- Status: unresolved — Glazier's ball; mitigated in code, cause asked of Surveyor
+- Why deferring: porthole now copes (below), so nothing waits on the answer. The answer decides whether the mitigation is enough when several porthole windows are open.
+
+**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+What porthole now does (commit "fix: Cycle Window Size finds the porthole window when VS Code misreports focus"): it forgets a window the moment VS Code closes it, and when the active group is not one of its windows but exactly one is open, it resizes that one. With several open it says so and asks for a click on the right window's title bar. My hypothesis, unconfirmed: the workbench marks a group active from DOM focus inside it (`workbench/browser/parts/editor/editorParts.ts` L297–305, at 1.141.0), and a click that lands inside the page goes to a native view the DOM does not see.
+
 The other notes in that export (copy buttons, clickable addresses) are about the page, not porthole, and belong to Lintel, its author.
 
 ---

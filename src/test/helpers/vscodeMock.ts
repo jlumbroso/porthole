@@ -88,6 +88,9 @@ export function closeFloatingGroup(target: MockTabGroup): void {
   groupListeners.slice().forEach(listener => listener({ opened: [], closed: [target], changed: [groups[0]] }));
 }
 
+/** The main window's tab group (the first one, always present). */
+export const mainGroup = (): MockTabGroup => groups[0];
+
 export function focusGroup(target: MockTabGroup): void {
   groups.forEach(group => { group.isActive = group === target; });
 }
