@@ -61,6 +61,10 @@ other windows. Nothing was staged.
 | Change its size | **Porthole: Cycle Window Size** with the floating window focused |
 | Unpin or re-pin it | **Porthole: Toggle Always on Top** |
 
+![The Explorer's context menu on tasks.html, with "Pop Out to Floating Window" highlighted and its shortcut, Control Option M.](docs/images/porthole-pop-out-menu.png)
+
+*Right-click an HTML file in the Explorer.*
+
 Settings live under `porthole.*`: the size presets (`porthole.sizes`; the first preset is
 the size a new window opens at), where the window opens (`porthole.position`), and whether
 it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).

@@ -74,3 +74,8 @@ The cleaned copies are in `docs/images/`; the originals are untouched.
 
 What they still show: `/Users/jlumbroso/...` in the window's URL bar and in the terminal (accepted, per the ruling on local paths).
 The shots predate the renaming, but none shows a command title, so none is stale. The four above replace the spike-run candidates (#24, #16, #17, #22) for the README.
+
+Fifth image, added the same day: `docs/images/porthole-pop-out-menu.png`, taken by Jérémie after the rename from the Downloads folder
+(`Screenshot 2026-10-13 at 1.00.01 AM.png`) to replace an earlier menu shot (`9.40.38 PM`) that still read "Pop Out to Mini Window".
+It shows the Explorer context menu on `samples/tasks.html` with "Pop Out to Floating Window ⌃⌥M". The only other text is file names
+in the Explorer and a few characters of a terminal behind the menu. Used as it came.
