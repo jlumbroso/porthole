@@ -39,7 +39,7 @@ How, following the house's practice ([ADR-0002](0002-scaffold-follow-the-house-e
 ## Open question
 
 ### QST-MARKETPLACE: Should porthole go on the Marketplace after all — which reverses this decision?
-- Status: unanswered
+- Status: answered
 - Why asking: On 2026-10-12 Jérémie asked whether to recruit a seat "for publishing to the marketplaces". This ADR, accepted the same day, says porthole stays a personal `.vsix`, because it calls an internal VS Code command (`_workbench.openWith` into group `-3`) that can change in any update, and it has one user. A publishing seat only makes sense if that decision is reversed, so the decision comes first.
 - Need: pick a letter (or override — any shape answers)
 
@@ -54,8 +54,8 @@ Options:
 
 **Recommendation, revised** (by Glazier 5.5, Claude Opus 5.5, 2026-10-12, later the same evening — a walk-back, stated as one): **C — publish the source, now; B only after the call has survived an update.** Jérémie then said the project is being built to go open source very soon. That is the "you want others using it now" case my falsifier named, so A no longer fits. C costs nothing extra: the repo is already MIT, and a release `.vsix` is one file. B adds a public promise the internal call cannot yet keep. *Confidence*: 0.75 — because his intent is stated, but whether he also wants a listing is not. *If wrong*: if a Marketplace listing is part of "public" for him, B now, with the fallback stated plainly on the listing.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option B. I would like to polish this right-sized project and release it. I have been needing this for over two years, and I just ignored the need until finally I burst. Now I want everybody to have it. We need to recruit a seat dedicated to this.
 
 ---
 
