@@ -28,3 +28,6 @@ needed) and used on 1.134.0; Windows and Linux are untested.
   update changes it, the window still opens, compact and pinned, but at VS Code's own
   default size. Known limits: Cmd+V does not paste into a page in the window on macOS (right-click →
   Paste works); Ctrl+A and Ctrl+E do nothing in a page's text field.
+
+[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/jlumbroso/porthole/releases/tag/v0.1.0

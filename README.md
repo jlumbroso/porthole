@@ -1,5 +1,11 @@
 # Porthole
 
+[![tests](https://img.shields.io/github/actions/workflow/status/jlumbroso/porthole/ci.yml?branch=main&label=tests)](https://github.com/jlumbroso/porthole/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjlumbroso%2Fporthole%2Fbadges%2Fcoverage.json)](https://github.com/jlumbroso/porthole/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jlumbroso.porthole?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=jlumbroso.porthole)
+[![Open VSX](https://img.shields.io/open-vsx/v/jlumbroso/porthole?label=Open%20VSX)](https://open-vsx.org/extension/jlumbroso/porthole)
+
 Pop the HTML page you are looking at into a floating window in VS Code:
 only the rendered page, pinned above your other windows.
 
@@ -7,10 +13,11 @@ If it is an HTML file and you want it in view while you work (for instance, a pa
 task instructions, a checklist, a design mock-up or a local report), porthole puts it in
 a window of its own instead of an editor tab that disappears behind whatever you open next.
 
-> **Status: version 0.1.0.** Its author has used it since 2026-10-12.
-> It has been used on **macOS with VS Code 1.141.0 and 1.134.0**. Windows and Linux
-> are untested. A Marketplace and Open VSX listing is being prepared; until
-> then, see [Install](#install).
+> **Status: version 0.1.0, the first public release.** Its author has used it daily since
+> 2026-10-12, on **macOS with VS Code 1.141.0 and 1.134.0**. Windows and Linux are untested
+> (the unit tests run on Linux in CI against a mocked VS Code, which says nothing about
+> how the windows behave there). It leans on an internal VS Code command; see
+> [what could break](#how-it-works-and-what-could-break).
 
 ## See it
 
@@ -60,14 +67,23 @@ it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).
 
 ## Install
 
-Not on the Marketplace yet. Until it is, from a clone of this repository:
+**From the Marketplace**: search for "Porthole" in VS Code's Extensions view, or run
 
 ```
-just install-local
+code --install-extension jlumbroso.porthole
 ```
 
-then reload the VS Code window. (That builds the extension, packages it, installs the
-exact file, and prints what to do next. It needs [`just`](https://just.systems) and Node.)
+**From Open VSX**, for VS Code-compatible editors that use it ([open-vsx.org/extension/jlumbroso/porthole](https://open-vsx.org/extension/jlumbroso/porthole)).
+It is published there, but porthole has only been run in VS Code itself, and the internal
+command it relies on is VS Code's.
+
+**From a release file**: each [GitHub release](https://github.com/jlumbroso/porthole/releases)
+carries the exact `.vsix` that was published. Install it with
+`code --install-extension porthole-<version>.vsix`.
+
+**From source**: clone this repository, then run `just install-local` and reload the VS Code
+window. (That builds the extension, packages it, installs the exact file, and prints what to
+do next. It needs [`just`](https://just.systems) and Node 22.)
 
 ## Requirements
 
@@ -135,8 +151,20 @@ This gives you the experience porthole aims for, minus the one-gesture part and 
 ## The name
 
 A porthole is a small, fixed window you look *through*; nothing lives in it. That is the
-object this builds: the floating window is the porthole. The pages it shows are often served on localhost ports, which makes
-the pun honest.
+object this builds: the floating window is the porthole. The pages it shows are often
+served on localhost ports, which makes the pun honest.
+
+## Changes, reports and contributing
+
+- What changed in each version: [`CHANGELOG.md`](CHANGELOG.md), also the notes of each
+  [GitHub release](https://github.com/jlumbroso/porthole/releases).
+- A bug or an idea: [open an issue](https://github.com/jlumbroso/porthole/issues/new/choose).
+  The bug form asks for your VS Code version and the "Porthole" output channel, which are
+  the two facts that matter most here.
+- Working on it: `npm ci`, then `npm run check` (typecheck, tests, bundle, and a check that
+  the package ships exactly its six allowed files); `just gate` runs that plus the
+  repository's own checks. Press F5 and choose **Run Porthole** to try a change in a
+  second VS Code window.
 
 ## How this is built
 
@@ -162,8 +190,9 @@ the decisions in [`docs/adr/`](docs/adr/), the briefs the collaborators sent eac
 
 - Research brief: Claude Opus 5.5, from a prompt by Jérémie Lumbroso. The
   outside-VS-Code trigger was that session's own idea; the prompt did not ask for it.
-- Built by Jérémie Lumbroso with Glazier 5.5 (Claude Opus 5.5); the release is prepared
-  with Purser 5.5 (Claude Sonnet 5.5). The full roster is in
+- Built by Jérémie Lumbroso with Glazier 5.5 (Claude Opus 5.5); claims checked against
+  VS Code's source by Surveyor 5.1 (Claude Fable 5.1); the release prepared by Purser 5.5
+  (Claude Sonnet 5.5). The full roster is in
   [`docs/inbox/agent-sessions.json`](docs/inbox/agent-sessions.json).
 - The repo's structure comes from the
   [ADRs4AI human-AI collaboration template](https://github.com/ADRs4AI/human-ai-collaboration-template-A).

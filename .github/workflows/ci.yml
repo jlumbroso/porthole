@@ -1,0 +1,73 @@
+# Tests and coverage on every push and pull request.
+# On a push to main it also writes the coverage figure to a `badges` branch, which the
+# README's coverage badge reads (shields.io "endpoint" badge). Actions are pinned to
+# commit SHAs; Dependabot keeps them current (.github/dependabot.yml).
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      coverage: ${{ steps.coverage.outputs.pct }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Credential-shape scan of the tracked files
+        run: node scripts/scan-secrets.mjs
+      - name: Typecheck, tests, bundle, package contents
+        run: npm run check
+      - name: Coverage
+        id: coverage
+        run: |
+          npx vitest run --coverage --coverage.reporter=text --coverage.reporter=json-summary
+          echo "pct=$(node -p "require('./coverage/coverage-summary.json').total.lines.pct")" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 14
+
+  badge:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Write coverage.json to the badges branch
+        env:
+          PCT: ${{ needs.test.outputs.coverage }}
+        run: |
+          set -euo pipefail
+          color=$(node -e "const p=Number(process.env.PCT);console.log(p>=90?'brightgreen':p>=80?'green':p>=70?'yellowgreen':p>=60?'yellow':'orange')")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin badges >/dev/null 2>&1; then
+            git fetch --depth 1 origin badges
+            git checkout -B badges FETCH_HEAD
+          else
+            git checkout --orphan badges
+            git rm -rf . >/dev/null
+          fi
+          printf '{"schemaVersion":1,"label":"coverage","message":"%s%%","color":"%s"}\n' "$PCT" "$color" > coverage.json
+          git add coverage.json
+          if git diff --cached --quiet; then echo "coverage unchanged"; exit 0; fi
+          git commit -m "chore: coverage ${PCT}% at ${GITHUB_SHA::7}"
+          git push origin badges

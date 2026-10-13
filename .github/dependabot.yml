@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      dev-dependencies:
+        dependency-type: development
+    ignore:
+      # Pinned to the engines.vscode floor on purpose (ADR-0002, 2026-10-13): vsce refuses to
+      # package when @types/vscode is newer than engines.vscode, and a newer type would let
+      # the code call an API older VS Code versions do not have.
+      - dependency-name: "@types/vscode"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

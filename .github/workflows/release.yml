@@ -1,0 +1,58 @@
+# Pushing a tag like v0.1.0 builds the extension and creates a GitHub Release whose notes are
+# that version's CHANGELOG.md section, with the .vsix attached. It does NOT publish to the
+# Marketplace or Open VSX: that is `just publish`, run from a machine that holds the tokens
+# (the tokens are deliberately not stored as repository secrets). A tag whose version does
+# not match package.json, or has no CHANGELOG section, fails here before anything is created.
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - name: The tag, package.json and CHANGELOG.md agree
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          package=$(node -p "require('./package.json').version")
+          if [ "$version" != "$package" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match package.json version ${package}"
+            exit 1
+          fi
+          node scripts/release-notes.mjs "$version" > release-notes.md
+      - run: npm ci
+      - name: Credential-shape scan
+        run: node scripts/scan-secrets.mjs
+      - name: Typecheck, tests, bundle, package contents
+        run: npm run check
+      - name: Package
+        run: npm run package
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          {
+            echo
+            echo "---"
+            echo
+            echo "**Install**: search for \"Porthole\" in VS Code's Extensions view, or run \`code --install-extension jlumbroso.porthole\`. The attached \`.vsix\` is the exact package that was published; install it with \`code --install-extension porthole-${version}.vsix\`."
+            echo
+            echo "Full history: [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/CHANGELOG.md)"
+          } >> release-notes.md
+          gh release create "$GITHUB_REF_NAME" "releases/porthole-${version}.vsix" \
+            --title "porthole ${version}" \
+            --notes-file release-notes.md \
+            --verify-tag
