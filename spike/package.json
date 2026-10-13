@@ -14,7 +14,11 @@
       { "command": "portholeSpike.touch",    "category": "Porthole Spike", "title": "2 — Rewrite the sample page (does the window reload?)" },
       { "command": "portholeSpike.reset",    "category": "Porthole Spike", "title": "4 — Close every tab (do floating windows close?)" },
       { "command": "portholeSpike.fallback", "category": "Porthole Spike", "title": "5 — Pop out with stable commands only (fallback path)" },
-      { "command": "portholeSpike.dump",     "category": "Porthole Spike", "title": "Write the current tab groups to the log" }
+      { "command": "portholeSpike.dump",     "category": "Porthole Spike", "title": "Write the current tab groups to the log" },
+      { "command": "portholeSpike.markdown",         "category": "Porthole Spike", "title": "S1-A — Pop out a Markdown file as VS Code's preview" },
+      { "command": "portholeSpike.markdownRewrite",  "category": "Porthole Spike", "title": "S1-B — Rewrite the Markdown file (does the preview update?)" },
+      { "command": "portholeSpike.delayedOpen",      "category": "Porthole Spike", "title": "S1-C — Pop out in 5 seconds (does it take focus?)" },
+      { "command": "portholeSpike.delayedOpenQuiet", "category": "Porthole Spike", "title": "S1-D — Pop out in 5 seconds, asking VS Code not to take focus" }
     ]
   }
 }

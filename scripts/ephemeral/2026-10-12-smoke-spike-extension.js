@@ -34,6 +34,7 @@ const vscodeStub = {
   env: { appName: 'vscode-stub' },
   Uri: { file: p => ({ fsPath: p, toString: () => `file://${p}` }) },
   window: {
+    state: { focused: true },
     createOutputChannel: () => ({ appendLine() {}, dispose() {} }),
     showInformationMessage: () => Promise.resolve(undefined), // the human pressed Escape
     tabGroups: {
@@ -73,7 +74,8 @@ Module._load = function (request, ...rest) {
   if (missing.length) { throw new Error(`contributed but not registered: ${missing.join(', ')}`); }
 
   for (const id of ['portholeSpike.popOut', 'portholeSpike.touch', 'portholeSpike.popOut',
-                    'portholeSpike.reset', 'portholeSpike.fallback', 'portholeSpike.dump']) {
+                    'portholeSpike.reset', 'portholeSpike.fallback', 'portholeSpike.dump',
+                    'portholeSpike.markdown', 'portholeSpike.markdownRewrite', 'portholeSpike.delayedOpen', 'portholeSpike.delayedOpenQuiet']) {
     await handlers.get(id)();
   }
 
@@ -87,8 +89,10 @@ Module._load = function (request, ...rest) {
     'one-shot call got [-3, {auxiliary}]': !!oneShot && oneShot[2] === 'workbench.editor.browser'
       && oneShot[3][0] === -3 && oneShot[3][1].auxiliary.bounds.width === 420
       && oneShot[3][1].auxiliary.compact === true && oneShot[3][1].auxiliary.alwaysOnTop === true,
-    'fallback ran its four commands in order': executed.map(([id]) => id).join(',').endsWith(
+    'fallback ran its four commands in order': executed.map(([id]) => id).join(',').includes(
       'vscode.openWith,workbench.action.moveEditorToNewWindow,workbench.action.enableCompactAuxiliaryWindow,workbench.action.enableWindowAlwaysOnTop'),
+    'Markdown preview opened with its own editor id into -3': executed.some(([id, , editor, target]) => id === '_workbench.openWith' && editor === 'vscode.markdown.preview.editor' && target[0] === -3),
+    'quiet open asked for preserveFocus and inactive': executed.some(([id, , , target]) => id === '_workbench.openWith' && target[1].preserveFocus === true && target[1].inactive === true),
   };
   let failed = false;
   for (const [name, ok] of Object.entries(checks)) {

@@ -145,6 +145,49 @@ async function fallback() {
   vscode.window.showInformationMessage('Spike done. The log is in spike/.run/spike.log — answer the questions in ADR-0003.');
 }
 
+// ── Spike 1 (docs/adr/0018): Markdown, and whether an open steals focus ──────
+
+const MARKDOWN_PREVIEW_EDITOR = 'vscode.markdown.preview.editor'; // built-in Markdown extension's manifest, read at 1.141.0
+
+function writeMarkdown() {
+  const file = path.join(path.dirname(pageFile), 'notes.md');
+  fs.writeFileSync(file, [
+    '# Sample notes', '',
+    `Written by the spike at ${new Date().toLocaleTimeString()}.`, '',
+    '- [ ] a task that is not done',
+    '- [x] a task that is done', '',
+    '| column | value |', '| --- | --- |', '| size | 420×640 |', '',
+  ].join('\n'));
+  return vscode.Uri.file(file);
+}
+
+async function markdown() {
+  const uri = writeMarkdown();
+  await observe(`spike 1, step md: VS Code's Markdown preview into group ${AUX_WINDOW_GROUP}`, () =>
+    vscode.commands.executeCommand('_workbench.openWith', uri, MARKDOWN_PREVIEW_EDITOR, [
+      AUX_WINDOW_GROUP,
+      { pinned: true, auxiliary: { bounds: SIZE, compact: true, alwaysOnTop: true } },
+    ]));
+}
+
+async function rewriteMarkdown() {
+  await observe('spike 1, step md-rewrite: rewrite notes.md on disk', async () => { writeMarkdown(); return 'rewritten'; });
+}
+
+/** Waits five seconds, so the human can be typing elsewhere, then pops the page out. */
+async function delayedOpen(quiet) {
+  if (!fs.existsSync(pageFile)) { writePage(); }
+  const uri = vscode.Uri.file(pageFile);
+  const options = { pinned: true, auxiliary: { bounds: SIZE, compact: true, alwaysOnTop: true } };
+  if (quiet) { Object.assign(options, { preserveFocus: true, inactive: true }); }
+  log(`spike 1, step focus (${quiet ? 'asking not to take focus' : 'default'}): opening in 5 s; VS Code focused now: ${vscode.window.state.focused}`);
+  vscode.window.showInformationMessage('Spike: the page pops out in 5 seconds. Switch to another app and keep typing.');
+  await sleep(5000);
+  await observe(`spike 1, step focus (${quiet ? 'quiet' : 'default'}): one-shot after the delay`, () =>
+    vscode.commands.executeCommand('_workbench.openWith', uri, BROWSER_EDITOR, [AUX_WINDOW_GROUP, options]));
+  log(`spike 1, step focus: VS Code focused after the open: ${vscode.window.state.focused}`);
+}
+
 function activate(context) {
   const runDir = process.env.PORTHOLE_SPIKE_RUN_DIR || path.join(context.extensionPath, '.run');
   fs.mkdirSync(runDir, { recursive: true });
@@ -165,6 +208,10 @@ function activate(context) {
   register('portholeSpike.reset', reset);
   register('portholeSpike.fallback', fallback);
   register('portholeSpike.dump', async () => logSnapshot('dump'));
+  register('portholeSpike.markdown', markdown);
+  register('portholeSpike.markdownRewrite', rewriteMarkdown);
+  register('portholeSpike.delayedOpen', () => delayedOpen(false));
+  register('portholeSpike.delayedOpenQuiet', () => delayedOpen(true));
   context.subscriptions.push(out);
 }
 
