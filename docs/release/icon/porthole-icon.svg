@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="A brass-ringed porthole with a page of text seen through sea-green glass">
+  <!-- Source of media/icon.png. Drawn by Purser 5.5, 2026-10-13 (ADR-0011, QST-ICON A).
+       Render: rsvg-convert -w 256 -h 256 porthole-icon.svg -o ../../../media/icon.png
+       Idea: a brass-ringed porthole is the object; the white page with lines is what you look at through it. -->
+  <defs>
+    <linearGradient id="brass" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#F3D58A"/>
+      <stop offset="0.45" stop-color="#C79A3D"/>
+      <stop offset="1" stop-color="#7A5A1C"/>
+    </linearGradient>
+    <linearGradient id="brassInner" x1="0.85" y1="1" x2="0.15" y2="0">
+      <stop offset="0" stop-color="#F3D58A"/>
+      <stop offset="0.5" stop-color="#B8892F"/>
+      <stop offset="1" stop-color="#6B4D16"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.38" cy="0.32" r="0.9">
+      <stop offset="0" stop-color="#C9F2E6"/>
+      <stop offset="0.55" stop-color="#6CC4B2"/>
+      <stop offset="1" stop-color="#1F6F73"/>
+    </radialGradient>
+    <clipPath id="glassClip"><circle cx="128" cy="128" r="76"/></clipPath>
+  </defs>
+
+  <!-- outer brass ring -->
+  <circle cx="128" cy="128" r="120" fill="url(#brass)"/>
+  <circle cx="128" cy="128" r="120" fill="none" stroke="#5A4010" stroke-width="3" opacity="0.55"/>
+  <!-- bolts -->
+  <g fill="#8B6720" stroke="#F3D58A" stroke-width="1.5">
+    <circle cx="128" cy="30"  r="7"/><circle cx="197.3" cy="58.7" r="7"/>
+    <circle cx="226" cy="128" r="7"/><circle cx="197.3" cy="197.3" r="7"/>
+    <circle cx="128" cy="226" r="7"/><circle cx="58.7" cy="197.3" r="7"/>
+    <circle cx="30"  cy="128" r="7"/><circle cx="58.7" cy="58.7" r="7"/>
+  </g>
+  <!-- inner brass lip -->
+  <circle cx="128" cy="128" r="88" fill="url(#brassInner)"/>
+  <circle cx="128" cy="128" r="80" fill="#3E2E0E" opacity="0.7"/>
+
+  <!-- glass -->
+  <circle cx="128" cy="128" r="76" fill="url(#glass)"/>
+  <g clip-path="url(#glassClip)">
+    <!-- the page seen through the glass -->
+    <rect x="86" y="80" width="84" height="100" rx="8" fill="#FFFFFF" opacity="0.94"/>
+    <rect x="98" y="97"  width="60" height="9"  rx="4.5" fill="#1F6F73"/>
+    <rect x="98" y="116" width="48" height="7"  rx="3.5" fill="#7FA9A4"/>
+    <rect x="98" y="131" width="56" height="7"  rx="3.5" fill="#7FA9A4"/>
+    <rect x="98" y="146" width="40" height="7"  rx="3.5" fill="#7FA9A4"/>
+    <!-- glass sheen over the page -->
+    <ellipse cx="104" cy="92" rx="52" ry="30" fill="#FFFFFF" opacity="0.18" transform="rotate(-28 104 92)"/>
+  </g>
+  <circle cx="128" cy="128" r="76" fill="none" stroke="#3E2E0E" stroke-width="3" opacity="0.6"/>
+</svg>
