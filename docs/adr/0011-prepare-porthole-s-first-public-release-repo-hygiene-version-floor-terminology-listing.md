@@ -178,6 +178,27 @@ https://pypi.org/project/batch-renderer/
 
 ---
 
+### QST-ICON-PICK: Which icon concept does porthole carry forward?
+- Status: unanswered
+- Why asking: The icon is the first thing a stranger sees on the Marketplace card, and a taste call that only you can make. Round 1 of the icon concepts rendered 12 images with Nano-Banana-Pro (the model you named as best); see `docs/release/icon/round-1/contact-sheet.jpg` (all twelve in one view, in prompt order, left to right: 1.1 to 1.4, 1.5 and 2.1 to 2.3, 3.1 to 3.4) and the individual 512 px files in the same folder, plus `docs/release/icon/README.md` for how they were made. The placeholder in the package today (`media/icon.png`) is my hand-drawn vector of a brass-ringed porthole with a page inside. Every concept shows a round window with a page seen through it. Whatever is picked will need a transparent background (the renders have a white one) before it ships, and I will do that. The Marketplace extension list shows the icon at roughly 40 to 50 pixels, so small-size legibility counts.
+- Need: pick a letter (or override: any shape answers, such as "1.1 but flatter" or "round 2 with these changes")
+
+Options:
+- **A — 1.2, flat brass tile**: a rounded square in warm gold with a brass ring, bolts, a green glass and a white page with a teal heading bar. Thick flat shapes, so it stays readable when tiny. It matches the brass of the listing banner `package.json` now sets (`#B5A642`), and it is the closest to the sibling extension's flat style among the colourful ones.
+- **B — 1.1, the shaded brass porthole**: the richest and most object-like: a round brass ring with bolts, shaded sea-green glass, a white page. It is a professional render of the hand-drawn placeholder. It looks best large and loses its shading detail at 40 pixels.
+- **C — 1.3, monoline**: one deep-teal colour: a circular ring with four bolts and a page outline inside. The same one-colour line idiom as the `vscode-adrs-for-ai` extension icon (terracotta), so the two read as a family. It is the plainest and the least "brass porthole".
+- **D — 2.2, the pin**: the shaded brass porthole with a small brass pin stuck into the ring, to say "stays on top", and three white lines on a green glass. It tells more of the story, and the pin is one more detail to survive at 40 pixels.
+- **E — another round**: none of these; I run a second round with what you say to change.
+
+**Recommendation**: (by Purser 5.5, Claude Sonnet 5.5, 2026-10-13)
+
+**A — 1.2, flat brass tile.** *Rationale*: of the twelve it has the thickest shapes and the fewest details, so it holds up at the 40 to 50 pixels of the extension list, and its gold is the banner colour, so the card looks designed. I judged by eye from a contact sheet, not by testing it at small sizes. *Confidence*: 0.55, because a taste call is yours and I have not checked the candidates at real size on dark and light themes. *If wrong*: if you want richness over robustness, this is B; if you want the two extensions to look related, C.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]
+
+---
+
 ## Decision
 
 Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming review that returned the same day.
@@ -201,7 +222,8 @@ Decided 2026-10-13 by Jérémie, from the six answers above, and by the naming r
 - [x] Use porthole on VS Code 1.134.0 - Owner: Jérémie (done 2026-10-13, "flawless"; a recorded Spike 0 there remains optional, and one is still due on the version the listing finally claims as tested)
 - [x] Token-shape scan written: `scripts/scan-secrets.mjs` (tracked files and history; tests its own rules; catches the Azure DevOps shape vsce's scanner misses) - Owner: Purser (done 2026-10-13)
 - [ ] Wire `scripts/scan-secrets.mjs` into `just gate` (or `npm run check`) - Owner: Glazier, who owns the gate (asked; no answer yet)
-- [ ] Draw the icon; try `batch-renderer`; give Glazier the path - Owner: Purser
+- [x] Draw a first icon (`media/icon.png`, hand-drawn SVG) and run twelve concepts through batch-renderer with Nano-Banana-Pro (`docs/release/icon/round-1/`) - Owner: Purser (done 2026-10-13)
+- [ ] Make the picked concept transparent-background, save it as `media/icon.png`, tell Glazier - Owner: Purser, after QST-ICON-PICK
 - [ ] Crop the screenshots Purser names in `docs/release/SCREENSHOT-CATALOG.md`, and place them in `docs/images/` - Owner: Jérémie, with Purser's list
 - [x] `just publish-check`, `just publish-check-no-tokens` and `just publish` built (`scripts/publish-check.mjs`, recipes at the bottom of the `justfile`); Glazier consented. Not yet run with tokens: that is Jérémie's act - Owner: Purser (done 2026-10-13)
 - [ ] Make the repository public; mint tokens; publish to both registries - Owner: Jérémie (his acts)
