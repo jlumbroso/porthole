@@ -30,6 +30,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 
 **Each question below stands alone**: it repeats how to start the spike window, so you can answer either one first.
 
+**What the source says, added before the run** (Surveyor 5.1, 2026-10-13, read at 1.141.0, not run): S1-A is not blocked by the spike window's disabled extensions, because built-in extensions such as Markdown are exempt; and S1-D will most likely still take the keyboard, because a *new* floating window is created without any "do not focus" option, while a quiet re-open into an *existing* floating window would not move focus. My predictions below are left as written.
+
 **Confirm**: Jérémie, by answering the two questions.
 
 ---
