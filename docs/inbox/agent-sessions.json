@@ -10,7 +10,8 @@
     "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default.",
     "cyan": "glazier (#3FA7A3)",
     "orange": "surveyor (#F26B1D)",
-    "purple": "purser (#8A63B8)"
+    "purple": "purser (#8A63B8)",
+    "blue": "sounder (#3D6FA8)"
   },
   "_global": {
     "_comment": "Optional defaults for `just launch`'s claude invocation; per-seat settings override. Global-only (no per-seat form): agents, remote_control_session_name_prefix. Anything unset is omitted from the command (Claude's own defaults apply).",
@@ -25,7 +26,8 @@
       "members": [
         "glazier",
         "surveyor",
-        "purser"
+        "purser",
+        "sounder"
       ],
       "description": "All active participants. Broadcasts addressed to 'crew' wake every seat. Add alias keys to 'members' as seats register."
     }
@@ -105,6 +107,47 @@
         "docs/adr/0010-first-hands-on-test-of-porthole-0-1-0.md",
         "docs/inbox/2026-10-13-0053-glazier-founding-brief-release-seat.md"
       ]
+    },
+    "sounder": {
+      "uuid": "01a133d0-bdc6-7150-aa8e-463d4f0cb5c2",
+      "role": "Sounder — consultant from outside the Claude family on how terminal agents should open, list, refresh and orchestrate porthole windows. Gives attributed advice and challenges assumptions; does not implement.",
+      "display_name": "Sounder 6",
+      "name_note": "A sounder measures depth before a route is trusted. The seat asks what an agent can actually observe and establish when it acts through porthole. Chosen by the occupant at founding.",
+      "color": "blue",
+      "color_note": "Sounding blue (#3D6FA8), distinct from the crew's cyan, orange and purple and the project's brass. Chosen by the occupant.",
+      "model": "gpt-6-astra",
+      "model_note": "Requested at founding as 'gpt-6-astra' (ADR-0020/0030). Accepted 2026-10-13 after reading the invitation, onboarding terms and mission. The occupant converted its own provisional chair recruit-20261013055119, as that entry explicitly authorized. Direct local Codex rollout inspection matched session_meta.id to this UUID and recorded turn_context.model = gpt-6-astra for founding turn 01a133d0-c7e1-75f3-8421-f572b193cb99 at 2026-10-13T05:51:23.574Z (Codex CLI 0.162.1). This is observed turn-scoped metadata; later turns require their own provenance check.",
+      "registered": "2026-10-13",
+      "founding_brief": "docs/inbox/2026-10-13-0529-glazier-founding-brief-consultant-different-vendor.md",
+      "founded_by": "glazier",
+      "founded": "2026-10-13",
+      "settings": {
+        "color_hex": "#3D6FA8"
+      },
+      "read_order": [
+        "CLAUDE.md",
+        "docs/INITIAL-DESIGN-BRIEF.md",
+        "docs/inbox/ONBOARDING.md",
+        "docs/inbox/INBOX-PROTOCOL.md",
+        "docs/inbox/CONVENTIONS.md",
+        "docs/inbox/ENCODING-MAP.md",
+        "docs/inbox/agent-sessions.json",
+        "docs/inbox/agents/sounder.md",
+        "docs/inbox/2026-10-13-0529-glazier-founding-brief-consultant-different-vendor.md",
+        "docs/adr/AGENTS.md",
+        "docs/adr/seed-2026-10-13-porthole-for-models.md"
+      ],
+      "harness": {
+        "kind": "codex-cli",
+        "session_glob": "~/.codex/sessions/**/rollout-*{uuid}*.jsonl",
+        "launch_cmd": [
+          "codex",
+          "resume",
+          "{uuid}"
+        ],
+        "busy_marker": "esc to interrupt",
+        "prompt_prefix": "»"
+      }
     }
   }
 }
