@@ -16,13 +16,17 @@
    it is the lowest because it is the first release whose integrated browser is registered
    for local `.html` / `.htm` files. Tags 1.131.0, 1.132.0 and 1.133.0 were read and do not
    have that registration; 1.130.0 does not either.
-2. **Nothing below 1.141.0 has ever been run.** The call was proven five runs out of five on
+2. **Run evidence, as of 2026-10-13.** The call was proven five runs out of five on
    VS Code 1.141.0 ([ADR-0003](../adr/0003-spike-0-does-the-one-shot-call-hold.md)) and 15 pop-outs
    without fallback in daily use ([ADR-0010](../adr/0010-first-hands-on-test-of-porthole-0-1-0.md)).
-   The floor is a statement about source code, not about a window that opened.
-3. **`package.json` says `^1.141.0`**, which is the version it was run on, not the version
-   the source says it could start working on. Both numbers are honest; they answer different
-   questions (see "What the listing may claim").
+   On 1.134.0 the author installed the rebuilt `.vsix` and reported "Can confirm 1.134.0
+   works. Just tried it out. Flawless." That is **use on 1.134.0**, not a recorded Spike 0:
+   it is not known which steps were repeated. Versions 1.135 to 1.140 are neither read nor run.
+3. **`package.json` says `^1.134.0`** (changed on 2026-10-13, after the author chose to claim
+   the source's floor and then ran it there). The edges of the claim are therefore both
+   exercised; the middle is not (see "What the listing may claim").
+4. *Before the 1.134.0 run, this document said "nothing below 1.141.0 has ever been run" and
+   recommended keeping `^1.141.0`. That was true when written and is superseded by point 2.*
 
 ## What porthole depends on
 
@@ -75,7 +79,7 @@ So the sentence the project can defend today is:
 
 ## What the listing may claim
 
-Three honest choices, from most to least conservative. `QST-ENGINES-FLOOR` asks Jérémie to pick.
+Three honest choices were offered, from most to least conservative. **Jérémie chose the second on 2026-10-13** (`QST-ENGINES-FLOOR`, answer B) and then ran porthole on 1.134.0, which makes the third partly true (used there, no recorded Spike 0). The listing therefore says "used on 1.134.0 and 1.141.0".
 
 - **`engines.vscode: ^1.141.0`, listing says "tested on 1.141.0".** What is in the package now.
   Users on 1.134.0–1.140.x cannot install it, even if it would work for them.

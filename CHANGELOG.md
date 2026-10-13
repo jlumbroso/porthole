@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [0.1.0] - 2026-10-12
 
 First version. Tested by hand on macOS with VS Code 1.141.0 (15 pop-outs, no fallback
-needed); Windows and Linux are untested.
+needed) and used on 1.134.0; Windows and Linux are untested.
 
 - **Pop Out to Floating Window**: opens a local HTML file in a floating
   window, compact and pinned, from the editor's title bar, the Explorer, or
@@ -23,7 +23,7 @@ needed); Windows and Linux are untested.
   **Toggle Always on Top**.
 - Settings: `porthole.sizes`, `porthole.position`, `porthole.compact`,
   `porthole.alwaysOnTop`, `porthole.useInternalCommand`.
-- Requires VS Code 1.134.0 or later (run on 1.141.0 only; the latest release is the one
+- Requires VS Code 1.134.0 or later (used on 1.134.0 and 1.141.0; the latest release is the one
   officially supported). Relies on an internal VS Code command; if a VS Code
   update changes it, the window still opens, compact and pinned, but at VS Code's own
   default size. Known limits: Cmd+V does not paste into a page in the window on macOS (right-click →
