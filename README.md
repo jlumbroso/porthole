@@ -12,6 +12,28 @@ a window of its own instead of an editor tab that disappears behind whatever you
 > are untested. A Marketplace and Open VSX listing is being prepared; until
 > then, see [Install](#install).
 
+## See it
+
+The first real use, on 2026-10-12: a page of step-by-step instructions (for replacing the
+publishing tokens of another project) kept in view while the person following it works in
+other windows. Nothing was staged.
+
+![The floating window on its own: a task page with an Export button and a row of shortcuts, in a small window with no tabs or status bar.](docs/images/porthole-window-alone.png)
+
+*The window alone: just the rendered page.*
+
+![A VS Code window with the page's source and a terminal, and the floating window above them on the right showing the instructions.](docs/images/porthole-beside-the-instructions.png)
+
+*Beside the place the instructions came from.*
+
+![A browser showing a form to create an access token, with the floating window on its left showing step 5, "Generate the token", and a counter reading 4 of 10 answered.](docs/images/porthole-beside-the-token-form.png)
+
+*Beside a different application: the steps stay in front while the person works in a web form.*
+
+![VS Code with a decisions tree on the left and the floating window on the right, now on the step "Paste the value directly into .env".](docs/images/porthole-beside-the-editor.png)
+
+*And on to the next tool, without the page ever being moved.*
+
 ## What it does
 
 1. **Pops a page out.** One gesture turns an HTML file into a floating window showing

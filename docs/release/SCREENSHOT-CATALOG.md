@@ -57,3 +57,20 @@ For a polished listing, a retake with the installed (non-dev-host) extension in 
 - **#19, #23**: Quick Open over a floating window, the interaction that led to #20 / the empty-editor state in #23 (the editor area is empty with the watermark, suggesting the file moved or closed).
 - **#1, #3-#7**: Spike 0 step-by-step with the "All installed extensions are temporarily disabled" notification; useful as the spike's record (ADR-0003), not for users.
 - **#14, #15**: mid-resize states with the command palette open; **#15** also captures a macOS screenshot thumbnail in the corner.
+
+
+## Addendum, 2026-10-13: the four Jérémie chose (from the in-situ trial, not the spike run above)
+
+Jérémie recommended four screenshots from `docs/adr/attachments/screenshots/2026-10-12-first-real-in-situ-trial/`
+("they tell a story"). Purser (not a subagent) looked at each at full size. No credential value is visible in any.
+The cleaned copies are in `docs/images/`; the originals are untouched.
+
+| Copy in `docs/images/` | From | What was done |
+| --- | --- | --- |
+| `porthole-window-alone.png` | `8.17.33 PM` | nothing; it is a window-only capture with a drop shadow |
+| `porthole-beside-the-instructions.png` | `8.17.22 PM` | cropped to the editor, terminal and floating window (the Explorer column listed file names from other projects; the macOS menu bar and status bars dropped); a strip showing two other seats' names beside the window covered |
+| `porthole-beside-the-token-form.png` | `8.27.57 PM` | macOS menu bar cropped; the rest kept (it shows an Azure DevOps form before a token is created, the organisation name, the token's name and Jérémie's name) |
+| `porthole-beside-the-editor.png` | `8.32.03 PM` | nothing. It shows a `.env` tab with key names (`VSCE_PAT=`, `NPM_TOKEN`, `OVSX_PAT=`, `POSTMARK_`) and the floating window covering the values; Jérémie confirmed on 2026-10-13 that nothing in it is sensitive and that it is there to show the project's full lifecycle |
+
+What they still show: `/Users/jlumbroso/...` in the window's URL bar and in the terminal (accepted, per the ruling on local paths).
+The shots predate the renaming, but none shows a command title, so none is stale. The four above replace the spike-run candidates (#24, #16, #17, #22) for the README.
