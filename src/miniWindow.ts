@@ -93,6 +93,43 @@ export async function fallbackPopOut(file: vscode.Uri): Promise<vscode.TabGroup 
   return group;
 }
 
+/** The group's first tab, waiting briefly: VS Code reports a new group about 5 ms before its tab (Spike 0 log). */
+function firstTab(group: vscode.TabGroup, ms = 500): Promise<vscode.Tab | undefined> {
+  if (group.activeTab) { return Promise.resolve(group.activeTab); }
+  return new Promise(resolve => {
+    const done = (tab: vscode.Tab | undefined) => { clearTimeout(timer); subscription.dispose(); resolve(tab); };
+    const subscription = vscode.window.tabGroups.onDidChangeTabs(() => { if (group.activeTab) { done(group.activeTab); } });
+    const timer = setTimeout(() => done(group.activeTab), ms);
+  });
+}
+
+let warnedAboutText = false;
+
+/**
+ * Says so when the window opened, but with the page's source as plain text.
+ *
+ * If VS Code ever stops handing `.html` files to its integrated browser, the
+ * internal call still opens a correctly sized, compact, pinned window — with
+ * the file's source in a text editor — and reports success. Below 1.134.0
+ * that is exactly what happens (Surveyor, source at 1.130.0, 2026-10-13). A
+ * browser tab's input is opaque to extensions; a text tab's is `TabInputText`,
+ * so this one check turns a silent break into a visible one.
+ */
+export async function warnIfOpenedAsText(group: vscode.TabGroup, file: vscode.Uri): Promise<void> {
+  const tab = await firstTab(group);
+  if (!(tab?.input instanceof vscode.TabInputText)) { return; }
+  log(`the window opened ${file.toString()} as text, not in the integrated browser (VS Code ${vscode.version})`);
+  if (warnedAboutText) { return; }
+  warnedAboutText = true;
+  void vscode.window.showWarningMessage(
+    'Porthole: VS Code opened the file as text; its integrated browser did not take it. Porthole needs VS Code 1.134.0 or later with the integrated browser available.');
+}
+
+/** For tests: warn again as if freshly activated. */
+export function resetTextWarning(): void {
+  warnedAboutText = false;
+}
+
 /**
  * Compact mode switches itself off when a second tab enters the window, so the
  * new group is locked to keep it to one. Only ever locks the group we were just

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { sizes, useInternalCommand, type Size } from './config';
 import { log } from './log';
-import { fallbackPopOut, keepToOneTab, openInMiniWindow } from './miniWindow';
+import { fallbackPopOut, keepToOneTab, openInMiniWindow, resetTextWarning, warnIfOpenedAsText } from './miniWindow';
 
 interface MiniWindow {
   file: vscode.Uri;
@@ -22,6 +22,7 @@ const windows = new Map<vscode.TabGroup, MiniWindow>();
 /** For tests: forget every window opened so far. */
 export function resetState(): void {
   windows.clear();
+  resetTextWarning();
 }
 
 /** Forgets each floating window as soon as VS Code closes its group. Call once, from `activate`. */
@@ -69,6 +70,7 @@ async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<vo
   if (!group) { group = await fallbackPopOut(file); }
   if (group) {
     windows.set(group, { file, sizeIndex });
+    await warnIfOpenedAsText(group, file);
     await keepToOneTab(group);
   }
 }

@@ -117,6 +117,29 @@ describe('popping out an HTML file', () => {
     expect(loggedLines().join('\n')).toMatch(/not locking/);
   });
 
+  it('says so, once, when VS Code opens the page as text instead of in its browser', async () => {
+    // If VS Code stops handing .html files to its integrated browser (as below
+    // 1.134.0), the internal call still opens a sized, compact, pinned window,
+    // with the page's SOURCE in it, and looks like a success. Surveyor traced
+    // this in source (2026-10-13); nobody can hit it today because of the
+    // engines floor, which is exactly why it must not be silent when it comes.
+    setCommandBehavior(INTERNAL, () => { openFloatingGroup({ asTextOf: page }); });
+
+    await command('porthole.popOut')(page);
+    await command('porthole.popOut')(page);
+
+    expect(shownMessages()).toEqual([expect.stringMatching(/opened the file as text.*1\.134\.0 or later/)]);
+    expect(loggedLines().filter(line => /as text, not in the integrated browser/.test(line))).toHaveLength(2);
+  });
+
+  it('stays quiet when the page opens in the integrated browser', async () => {
+    setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
+
+    await command('porthole.popOut')(page);
+
+    expect(shownMessages()).toEqual([]);
+  });
+
   it('pops out the HTML file in the active editor when run from the keyboard', async () => {
     setActiveDocument(Uri.file('/work/notes.HTM'));
     setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });

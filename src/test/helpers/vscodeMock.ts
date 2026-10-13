@@ -13,6 +13,12 @@ export interface MockTabGroup {
   viewColumn: number;
   isActive: boolean;
   tabs: unknown[];
+  activeTab?: unknown;
+}
+
+/** Stand-in for vscode.TabInputText: what a tab holds when a file opened as plain text. */
+export class TabInputText {
+  constructor(readonly uri: unknown) {}
 }
 interface TabGroupChange {
   opened: MockTabGroup[];
@@ -72,10 +78,12 @@ export function setActiveDocument(uri: unknown): void {
 }
 
 /** What VS Code does when a floating window appears: a new, active tab group. */
-export function openFloatingGroup(options: { takesFocus?: boolean } = {}): MockTabGroup {
+export function openFloatingGroup(options: { takesFocus?: boolean; asTextOf?: unknown } = {}): MockTabGroup {
   const takesFocus = options.takesFocus ?? true;
   if (takesFocus) { groups.forEach(group => { group.isActive = false; }); }
-  const group: MockTabGroup = { viewColumn: groups.length + 1, isActive: takesFocus, tabs: [{ label: 'tasks.html' }] };
+  // A browser tab's input is opaque to extensions (undefined); a text tab's is a TabInputText.
+  const tab = { label: 'tasks.html', input: options.asTextOf ? new TabInputText(options.asTextOf) : undefined };
+  const group: MockTabGroup = { viewColumn: groups.length + 1, isActive: takesFocus, tabs: [tab], activeTab: tab };
   groups.push(group);
   groupListeners.slice().forEach(listener => listener({ opened: [group], closed: [], changed: [] }));
   return group;
@@ -131,6 +139,10 @@ export const window = {
     messages.push(message);
     return undefined; // the human pressed Escape
   },
+  async showWarningMessage(message: string) {
+    messages.push(message);
+    return undefined;
+  },
   get activeTextEditor() {
     return activeDocumentUri ? { document: { uri: activeDocumentUri } } : undefined;
   },
@@ -140,6 +152,9 @@ export const window = {
     onDidChangeTabGroups(listener: Listener<TabGroupChange>) {
       groupListeners.push(listener);
       return { dispose: () => { groupListeners = groupListeners.filter(entry => entry !== listener); } };
+    },
+    onDidChangeTabs(_listener: Listener<unknown>) {
+      return { dispose() {} }; // the mock creates tabs together with their group
     },
   },
 };
