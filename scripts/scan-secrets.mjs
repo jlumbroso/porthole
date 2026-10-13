@@ -41,8 +41,10 @@ export const RULES = [
   { name: 'private-key-block', re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY(?: BLOCK)?-----/ },
   // A password inside a URL: the shape vsce's scanner has switched off.
   { name: 'credentials-in-url', re: /\bhttps?:\/\/[^\s:@/]+:(?![<${])[^\s@/]{6,}@/ },
-  // The two variables the publish recipe reads, given a value (not a placeholder).
-  { name: 'publish-token-assigned', re: /\b(?:VSCE_PAT|OVSX_PAT)\s*[=:]\s*["']?(?![<$.\s"'])[^\s"']{8,}/ },
+  // The two variables the publish recipe reads, given a value that looks like a token: 20 or
+  // more token characters and nothing else. A reference such as `env.VSCE_PAT`, `$VSCE_PAT` or
+  // `<paste here>` is not a value (met 2026-10-13: it flagged publish-check.mjs itself).
+  { name: 'publish-token-assigned', re: /\b(?:VSCE_PAT|OVSX_PAT)\s*[=:]\s*["']?[A-Za-z0-9_-]{20,}["']?(?![A-Za-z0-9_.(-])/ },
 ];
 
 export function findSecrets(text) {
@@ -68,7 +70,10 @@ const MUST_CATCH = {
   'anthropic-or-openai-key': 'sk' + '-' + rep('abcdefghijklmnopqrstuvwxyz0123456789', 40),
   'private-key-block': '-----BEGIN ' + 'PRIVATE KEY-----',
   'credentials-in-url': 'https://user:hunter22' + '@example.com/x',
-  'publish-token-assigned': 'VSCE_PAT=' + rep('abcdefghijklmnopqrstuvwxyz0123456789', 20),
+  'publish-token-assigned': [
+    'VSCE_PAT=' + rep('abcdefghijklmnopqrstuvwxyz0123456789', 52),
+    'OVSX_PAT: "' + ['12345678', '9abc', 'def0', '1234', '56789abcdef0'].join('-') + '"', // a UUID-shaped Open VSX token
+  ],
 };
 // Things that look token-ish but are everyday content in this repo.
 const MUST_PASS = {
@@ -78,6 +83,8 @@ const MUST_PASS = {
   'a session uuid': '"uuid": "0943f681-7d7f-4f9e-af19-9a7b62bfc37a"',
   'a placeholder assignment': 'VSCE_PAT=<paste the token here>',
   'a variable reference': 'VSCE_PAT=$VSCE_PAT vsce publish',
+  'a JS object passing the variable on': 'run(cmd, args, { VSCE_PAT: env.VSCE_PAT });',
+  'a JS reference to process.env': 'const t = { OVSX_PAT: process.env.OVSX_PAT };',
   'a long kebab-case slug': '2026-10-13-0425-purser-to-caliper-brand-studio-renders-all-return-poe-500-and-more',
   'a url without a password': 'https://github.com/jlumbroso/porthole/issues',
   'a url with a placeholder password': 'https://user:<token>@dev.azure.com/org',
@@ -86,9 +93,11 @@ const MUST_PASS = {
 export function selfTest() {
   const failures = [];
   for (const rule of RULES) {
-    const sample = MUST_CATCH[rule.name];
-    if (sample === undefined) { failures.push(`no self-test sample for rule ${rule.name}`); continue; }
-    if (!findSecrets(sample).some(h => h.rule === rule.name)) { failures.push(`rule ${rule.name} missed its own sample`); }
+    const samples = [].concat(MUST_CATCH[rule.name] ?? []);
+    if (!samples.length) { failures.push(`no self-test sample for rule ${rule.name}`); continue; }
+    samples.forEach((sample, i) => {
+      if (!findSecrets(sample).some(h => h.rule === rule.name)) { failures.push(`rule ${rule.name} missed its own sample ${i + 1}`); }
+    });
   }
   for (const [what, text] of Object.entries(MUST_PASS)) {
     const hit = findSecrets(text);
