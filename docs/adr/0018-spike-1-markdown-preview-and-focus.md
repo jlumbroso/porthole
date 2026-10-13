@@ -39,7 +39,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-SPIKE1-MD: Does VS Code's own Markdown preview open in a compact, pinned floating window, and update when the file changes?
-- Status: unanswered
+- Status: answered
 - Why asking: If it does, porthole can open `.md` files rendered for the cost of a few lines, with no browser toolbar (ADR-0015, route 1). If it does not, porthole must render Markdown to HTML itself (route 2).
 - Need: pick a letter (or override — any shape answers). About two minutes. A screenshot of what appears in step 4 would help.
 
@@ -63,13 +63,29 @@ Options:
 
 **A — rendered, floating and live** (a prediction). *Rationale*: the preview is registered as an editor of its own, `vscode.markdown.preview.editor` (`extensions/markdown-language-features/package.json` L1898–1900 at tag 1.141.0), and porthole's internal call opens any registered editor into a floating window the same way; VS Code's preview already refreshes when the file changes. *Confidence*: 0.6 — because the call path for this kind of editor into a floating window has not been run, and the spike window starts with your other extensions disabled, which I believe leaves VS Code's built-in Markdown extension on but have not checked. *If wrong*: B means the preview works but needs different window options; C or D means route 2, rendering to HTML, becomes the way (ADR-0015, QST-MD-MODE flips to B).
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Incredible!
+
+Option A. The window popped up and had the right properties (I took a screenshot of it specifically, see `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.36.26 PM.png`), and it was modifiable through "S1-B" both when called from the floating window and it's launching window.
+
+Here are some screenshots:
+
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.35.43 PM.png` -> just a developer shot to show the environment with the debug workspace as I'm about to launch the floating window
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.36.26 PM.png` -> the floating window with the sample markdown note rendered
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.36.55 PM.png` -> full screen screenshot showing the command palette selected on the floating window, selecte "S1-B"
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.37.02 PM.png` -> full screen immediately after "S1-B" command is called (which changes timestamp)
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.37.10 PM.png` -> tried it again with command palette from main (host) window, and it was available in that command palette and made the same change
+- See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.37.38 PM.png` -> "S1-B" shown chosen from the main (host) window's palette
+
+These were excellently clear instructions!
+
+Reverse Centaurly Yours 🙌🏻,
+Jérémie.
 
 ---
 
 ### QST-SPIKE1-FOCUS: When a floating window opens while you are typing in another app, do your keystrokes stay in that app?
-- Status: unanswered
+- Status: answered
 - Why asking: A model may open a floating window while you are typing elsewhere, perhaps a password. If opening takes the keyboard, your keystrokes land in VS Code instead (ADR-0013, QST-OPEN-FOCUS). This checks the normal open, and an open that asks VS Code not to take focus.
 - Need: pick a letter (or override — any shape answers). About three minutes. Type only harmless letters.
 
@@ -94,8 +110,19 @@ Options:
 
 **C — both took the keyboard** (a guess, stated as one). *Rationale*: a new window on macOS normally becomes the active one when it is shown, and I have not found anything in VS Code's floating-window code that shows a window without activating it; the "do not take focus" options (`preserveFocus`, `inactive`) are documented for editors inside a window, not for creating one. *Confidence*: 0.4 — because this is a guess from absence; nobody has read that path closely or run it. *If wrong*: A or B means porthole can open a floating window without taking the keyboard, so ADR-0013's QST-OPEN-FOCUS can keep option C (depends on who triggered it); C, if it holds, means that option collapses to A or B there.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+[Note: As I relaunched the session after having closed it, the floating window with the markdown note popped back up — interesting!]
+
+Yes, Option C, good guess!
+
+- After S1-C: The focus was captured by the floating window.
+- After S1-D: Same thing happened
+
+See: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 7.48.57 PM.png`
+
+I tried a variation: Moving the TextEdit to a different desktop; in both cases, the floating window launched in the desktop the human (me) was currently focused on (which I guess is good!) and in both cases, the focus was taken — again as you guessed, this much be a macOS new window thing.
+
+Could be an issue to report? Though it's more of a feature request, based on what you say of the documentation?
 
 ---
 
