@@ -185,6 +185,12 @@ The reason this matters: the brief's main risk mitigation is "re-run Spike 0 aft
   - **`engines.vscode` is `^1.141.0`**, the version Spike 0 passed on (ADR-0003).
 - Outcome: stays `Draft` until Jérémie has read the Decision
 
+### Iteration 4 (2026-10-12, late evening)
+- Trigger: Jérémie answered ADR-0011's QST-ENGINES-FLOOR with B (lower the floor) and installed VS Code 1.134.0 to test it
+- Contributors: Jérémie Lumbroso — the decision and the run; Purser 5.5 (Claude Sonnet 5.5) — the brief; Glazier 5.5 (Claude Opus 5.5) — the change
+- Changes: `engines.vscode` lowered to `^1.134.0`, the floor Surveyor found in source, and `@types/vscode` pinned to `~1.134.0` so the compiler allows only what 1.134 offers. Jérémie then ran the rebuilt extension on 1.134.0: "Flawless." The floor is now run, not only read. Not recorded: whether Spike 0 itself was re-run there, or which steps of ADR-0010 were repeated.
+- Outcome: stays `Draft` until Jérémie has read the Decision
+
 ---
 
 ## Links

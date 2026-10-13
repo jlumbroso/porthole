@@ -413,7 +413,7 @@ If context window fills mid-work, create `docs/HANDOFF-datetime.md`:
 <!-- anything specific to this project that doesn't fit above; empty at birth is healthy -->
 
 - **Every internal VS Code identifier is read, not run, until a spike says otherwise.** `_workbench.openWith`, the editor id `workbench.editor.browser`, and group `-3` come from the brief's source reading. Surveyor re-read all of it independently at tag 1.141.0 and found no claim wrong (`docs/reviews/2026-10-12-design-brief-source-check.md`); ADR-0003 records what actually happened on the machine. Log the VS Code version on activation, and fall back loudly when a call throws or opens nothing.
-- **Version floor: 1.134.0.** Below it the integrated browser is not registered for local HTML files at all (Surveyor's source check, "Version floor"). `engines.vscode` never goes lower (ADR-0002).
+- **Version floor: 1.134.0, and run there.** Jérémie ran porthole on VS Code 1.134.0 on 2026-10-12 and reported it "flawless". Below 1.134 the integrated browser is not registered for local HTML files at all (Surveyor's source check, "Version floor"). `engines.vscode` never goes lower (ADR-0002).
 - The brief was written against VS Code 1.141.0, and the human keeps VS Code on manual updates. Note the installed version (`code --version`) in any spike or bug record.
 - The brief says "Mini Browser", `jlumbroso.mini-browser` and `miniBrowser.*`. The real identity is **porthole** throughout — `jlumbroso.porthole`, display name "Porthole", `porthole.*` commands and settings (ADR-0001 has the full table). Read the brief's ids through that table; do not edit the brief.
 - `.pneumatic/` holds pneumatic's local ledger and recruit scripts; it is gitignored on purpose.
