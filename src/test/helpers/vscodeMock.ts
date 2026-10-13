@@ -29,6 +29,7 @@ let groupListeners: Array<Listener<TabGroupChange>> = [];
 let groups: MockTabGroup[] = [];
 let config: Record<string, unknown> = {};
 let logged: string[] = [];
+const settingsRead = new Set<string>();
 let messages: string[] = [];
 let activeDocumentUri: unknown;
 
@@ -42,6 +43,7 @@ export function resetVscodeMock(): void {
   groups = [{ viewColumn: 1, isActive: true, tabs: [] }];
   config = {};
   logged = [];
+  settingsRead.clear();
   messages = [];
   activeDocumentUri = undefined;
 }
@@ -51,6 +53,8 @@ export const registeredCommandIds = () => [...registered.keys()];
 export const executedCommands = () => executed.map(call => call.id);
 export const executedCalls = () => executed;
 export const loggedLines = () => logged;
+/** Every `porthole.*` key the extension has read since the last reset. */
+export const settingsReadKeys = () => [...settingsRead];
 export const shownMessages = () => messages;
 
 /** Says what a command VS Code owns does when the extension executes it. */
@@ -142,6 +146,7 @@ export const workspace = {
     if (section !== 'porthole') { throw new Error(`mock: unexpected configuration section "${section}"`); }
     return {
       get<T>(key: string, fallback?: T): T | undefined {
+        settingsRead.add(key);
         return key in config ? (config[key] as T) : fallback;
       },
     };

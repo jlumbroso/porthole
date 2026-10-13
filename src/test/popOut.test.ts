@@ -86,9 +86,9 @@ describe('popping out an HTML file', () => {
     expect(loggedLines().join('\n')).toMatch(/no new window appeared within 1500 ms/);
   });
 
-  it('never touches the internal command when useInternalApi is off', async () => {
+  it('never touches the internal command when useInternalCommand is off', async () => {
     vi.useFakeTimers();
-    setConfig({ useInternalApi: false });
+    setConfig({ useInternalCommand: false });
     setCommandBehavior('workbench.action.moveEditorToNewWindow', () => { openFloatingGroup(); });
 
     await runThroughTimers(command('porthole.popOut')(page));
@@ -98,7 +98,7 @@ describe('popping out an HTML file', () => {
 
   it('skips the compact and pin commands in the fallback when those settings are off', async () => {
     vi.useFakeTimers();
-    setConfig({ useInternalApi: false, compact: false, alwaysOnTop: false });
+    setConfig({ useInternalCommand: false, compact: false, alwaysOnTop: false });
     setCommandBehavior('workbench.action.moveEditorToNewWindow', () => { openFloatingGroup(); });
 
     await runThroughTimers(command('porthole.popOut')(page));
@@ -152,7 +152,7 @@ describe('size presets', () => {
     expect(internalOpens().every(open => open.file === page)).toBe(true);
   });
 
-  it('resizes the page in the focused mini window, not the one opened last', async () => {
+  it('resizes the page in the focused floating window, not the one opened last', async () => {
     const other = Uri.file('/work/checklist.html');
     const opened: ReturnType<typeof openFloatingGroup>[] = [];
     setCommandBehavior(INTERNAL, () => { opened.push(openFloatingGroup()); });

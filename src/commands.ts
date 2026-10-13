@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { sizes, useInternalApi, type Size } from './config';
+import { sizes, useInternalCommand, type Size } from './config';
 import { log } from './log';
 import { fallbackPopOut, keepToOneTab, openInMiniWindow } from './miniWindow';
 
@@ -33,7 +33,7 @@ function asLocalHtmlFile(value: unknown): vscode.Uri | undefined {
 }
 
 async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
-  let group = useInternalApi() ? await openInMiniWindow(file, size) : undefined;
+  let group = useInternalCommand() ? await openInMiniWindow(file, size) : undefined;
   if (!group) { group = await fallbackPopOut(file); }
   if (group) {
     windows.set(group, { file, sizeIndex });
@@ -42,7 +42,7 @@ async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<vo
 }
 
 /**
- * Pops an HTML file out into the mini window. The file is the command's
+ * Pops an HTML file out into a floating window. The file is the command's
  * argument (Explorer, editor title) or, from the keyboard, the active editor.
  */
 export async function popOut(arg?: unknown): Promise<void> {
@@ -55,7 +55,7 @@ export async function popOut(arg?: unknown): Promise<void> {
 }
 
 /**
- * Re-opens the focused mini window's page at the next size preset. VS Code
+ * Re-opens the focused floating window's page at the next size preset. VS Code
  * moves the tab into the new window and closes the old one (ADR-0007).
  */
 export async function cycleSize(): Promise<void> {
@@ -64,8 +64,8 @@ export async function cycleSize(): Promise<void> {
     void vscode.window.showInformationMessage('Porthole: pop a page out first; this then steps through the size presets of the window Porthole opened.');
     return;
   }
-  if (!useInternalApi()) {
-    void vscode.window.showInformationMessage('Porthole: size presets need the "porthole.useInternalApi" setting turned on.');
+  if (!useInternalCommand()) {
+    void vscode.window.showInformationMessage('Porthole: size presets need the "porthole.useInternalCommand" setting turned on.');
     return;
   }
   const presets = sizes();

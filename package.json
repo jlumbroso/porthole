@@ -1,28 +1,54 @@
 {
   "name": "porthole",
   "displayName": "Porthole",
-  "description": "Pop the HTML page you are looking at into a small floating window: only the rendered page, pinned above your other windows.",
+  "description": "Pop the HTML page you are looking at into a floating window: only the rendered page, pinned above your other windows.",
   "publisher": "jlumbroso",
   "version": "0.1.0",
-  "private": true,
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/jlumbroso/porthole"
   },
+  "homepage": "https://github.com/jlumbroso/porthole#readme",
+  "bugs": {
+    "url": "https://github.com/jlumbroso/porthole/issues"
+  },
+  "keywords": [
+    "html",
+    "integrated browser",
+    "floating window",
+    "always on top",
+    "pin",
+    "preview",
+    "task page",
+    "checklist"
+  ],
+  "galleryBanner": {
+    "color": "#B5A642",
+    "theme": "light"
+  },
   "engines": {
-    "vscode": "^1.141.0"
+    "vscode": "^1.134.0"
   },
   "categories": [
     "Other"
   ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Porthole opens local HTML files in VS Code's integrated browser, which reads them from disk."
+    }
+  },
   "main": "./dist/extension.js",
   "activationEvents": [],
   "contributes": {
     "commands": [
       {
         "command": "porthole.popOut",
-        "title": "Pop Out to Mini Window",
+        "title": "Pop Out to Floating Window",
         "category": "Porthole",
         "icon": "$(multiple-windows)"
       },
@@ -33,7 +59,7 @@
       },
       {
         "command": "porthole.cycleSize",
-        "title": "Cycle Mini Window Size",
+        "title": "Cycle Window Size",
         "category": "Porthole"
       },
       {
@@ -89,7 +115,7 @@
       "properties": {
         "porthole.sizes": {
           "type": "array",
-          "markdownDescription": "Size presets for the mini window. The first is used when a page is popped out; **Cycle Mini Window Size** steps through the rest. VS Code will not make a window smaller than 400×270.",
+          "markdownDescription": "Size presets for the floating window. A page pops out at the first preset; **Cycle Window Size** steps through the rest. VS Code will not make a window smaller than 400×270.",
           "default": [
             {
               "name": "S",
@@ -133,7 +159,7 @@
             "object",
             "null"
           ],
-          "markdownDescription": "Where the mini window opens, in screen pixels, for example `{ \"x\": 40, \"y\": 80 }`. Leave as `null` to let VS Code center it on the current window.",
+          "markdownDescription": "Where the floating window opens, in screen pixels, for example `{ \"x\": 40, \"y\": 80 }`. Leave as `null` to let VS Code center it on the current window.",
           "default": null,
           "properties": {
             "x": {
@@ -147,17 +173,17 @@
         "porthole.compact": {
           "type": "boolean",
           "default": true,
-          "description": "Open the mini window in compact mode: no tabs, breadcrumbs or status bar."
+          "description": "Open the floating window in compact mode: no tabs, breadcrumbs or status bar."
         },
         "porthole.alwaysOnTop": {
           "type": "boolean",
           "default": true,
-          "description": "Open the mini window pinned above other windows."
+          "description": "Open the floating window pinned above other windows."
         },
-        "porthole.useInternalApi": {
+        "porthole.useInternalCommand": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Open the mini window with one internal VS Code call, at the exact preset size. Turn this off to use public commands only; the window then opens at VS Code's default size."
+          "markdownDescription": "Open the floating window with one internal VS Code command, at the exact preset size. That command is undocumented and may change in any VS Code update; Porthole then falls back on its own. Turn this off to use public commands only: the window opens at VS Code's default size, and size presets do not apply."
         }
       }
     }
@@ -176,7 +202,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "@types/vscode": "^1.100.0",
+    "@types/vscode": "~1.134.0",
     "@vitest/coverage-v8": "5.0.4",
     "@vscode/vsce": "^4.0.0",
     "typescript": "^5.4.0",

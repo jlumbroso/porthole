@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { activateFresh, command, MANIFEST } from './helpers/activate';
-import { loggedLines, registeredCommandIds, setCommandBehavior } from './helpers/vscodeMock';
+import { loggedLines, openFloatingGroup, registeredCommandIds, setCommandBehavior, settingsReadKeys, Uri } from './helpers/vscodeMock';
 
 // The manifest is the source of truth for what the extension promises; these
 // tests read it instead of keeping a second list that would drift.
@@ -36,6 +36,24 @@ describe('Regression tests', () => {
     const chord = MANIFEST.contributes.keybindings.find(
       (entry: { command: string }) => entry.command === 'porthole.popOut');
     expect(chord.when).toContain("activeEditor != 'workbench.editor.browser'");
+  });
+});
+
+describe('settings the code reads are the settings the manifest declares', () => {
+  it('reads no porthole.* key that the Settings UI does not offer', async () => {
+    // Before the first publish, porthole.useInternalApi was renamed to
+    // porthole.useInternalCommand (naming review, 2026-10-13): a key cannot be
+    // renamed after release without a migration. A rename done in the manifest
+    // but not the code (or the reverse) would silently ignore the user's
+    // setting. Exercise every path that reads settings, then compare.
+    setCommandBehavior('_workbench.openWith', () => { openFloatingGroup(); });
+    await command('porthole.popOut')(Uri.file('/work/tasks.html'));
+    await command('porthole.cycleSize')();
+
+    const declared = Object.keys(MANIFEST.contributes.configuration.properties)
+      .map(key => key.replace(/^porthole\./, ''));
+    expect(settingsReadKeys().filter(key => !declared.includes(key))).toEqual([]);
+    expect(settingsReadKeys()).toContain('useInternalCommand');
   });
 });
 

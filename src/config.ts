@@ -55,4 +55,4 @@ export function position(): Position | undefined {
 
 export const compact = (): boolean => cfg().get<boolean>('compact', true);
 export const alwaysOnTop = (): boolean => cfg().get<boolean>('alwaysOnTop', true);
-export const useInternalApi = (): boolean => cfg().get<boolean>('useInternalApi', true);
+export const useInternalCommand = (): boolean => cfg().get<boolean>('useInternalCommand', true);
