@@ -78,6 +78,20 @@ Yes, okay let's research this, Option A.
 
 ---
 
+## Supporting Materials
+
+### DOC: Publishing to the Marketplace without a stored token (research for QST-MS-OIDC, 2026-10-13)
+
+Jérémie answered A (research first). Nothing in Azure or on the Marketplace was changed. Each line has its basis: **Ran** (I ran it here), **Read** (I read it today), **Reported** (a dated statement by someone else, not verified by me).
+
+- **The deadline.** Microsoft's publishing page says "On December 1, 2026, global Personal Access Tokens (PATs) in Azure DevOps are retired" and tells publishers to use Microsoft Entra ID instead (**Read**: `microsoft/vscode-docs`, `api/working-with-extensions/publishing-extension.md`). That is about seven weeks from now, and `VSCE_PAT` in `.env` is that kind of credential. I do not know whether the token Jérémie minted is "global" in Microsoft's sense (it depends on whether it was created for all accessible organizations); the retirement notice linked from that page says how to tell.
+- **Route 1, GitHub OIDC straight to the Marketplace (what we would want).** `@vscode/vsce` 4.0.0 has `vsce publish --oidc`: it asks GitHub Actions for a token with audience `marketplace.visualstudio.com` and exchanges it at `POST /_apis/gallery/token` (**Read**: `node_modules/@vscode/vsce/out/oidc.js`). **But the backend is not ready**: the vsce maintainer wrote on 2026-10-05 that "`--oidc` is not yet fully supported by the marketplace backend. It will be soon" (**Reported**: `microsoft/vscode-vsce` issue 1275); on 2026-10-08 a user reported the endpoint still answers `TrustedPublishingNotSupportedException`; on 2026-10-12 a Marketplace team member was reported as confirming they are working on trusted publishing from GitHub Actions, configured on `marketplace.visualstudio.com`, with no PAT, and no timeline or deadline extension had been given (**Reported**: issue 1275 and `microsoft/vsmarketplace` issue 2121). There is no page to register a trusted publisher yet. I did not probe the endpoint myself.
+- **Route 2, Microsoft Entra with a managed identity (documented, works today, heavy).** Microsoft's steps (**Read**): a service connection of type "Azure Resource Manager, Workload Identity Federation (manual)" in an Azure DevOps project; a user-assigned managed identity in an Azure subscription with the Reader role; a federated credential linking the two; reading the identity's resource ID through the Azure CLI; adding that identity as a **Contributor member of the publisher**; then `vsce publish --azure-credential` inside an Azure Pipelines `AzureCLI@2` task. This is written for Azure Pipelines. I did not find documentation for running it from GitHub Actions, and one third-party article I found says that path is "realistically difficult" for personal accounts (**Reported**, not verified). It needs an Azure subscription, which may cost money and is yours to create.
+- **What I would do.** Wait for Route 1, which is clearly what Microsoft is building and would make the Marketplace work exactly like Open VSX does now. Watch the two issues named above. Set a decision date: **2026-11-15**. If Route 1 is not live by then, try Route 2 with you at the keyboard for the Azure parts, because the PAT stops on 2026-12-01 and we would not want to discover that on the day of a release.
+- **What this does not change today.** `just publish` with `VSCE_PAT` works until the retirement (I just used it).
+
+---
+
 ## Decision
 
 ### Context
@@ -107,7 +121,8 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 - [x] Workflow `publish-open-vsx.yml`, dispatch from `release.yml`, environment `open-vsx` with Jérémie as required reviewer - Owner: Purser (done 2026-10-13)
 - [ ] Register the trusted publisher at open-vsx.org (Settings, Trusted Publishers, namespace `jlumbroso`, GitHub Actions: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`) - Owner: Jérémie
 - [ ] Rehearse with `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0`, approve it, and read the log - Owner: Purser starts it, Jérémie approves
-- [ ] Update `just publish` to publish only to the Marketplace once QST-OVSX-PAT is answered A - Owner: Purser
+- [ ] Update `just publish` to publish only to the Marketplace once the trusted publish has worked (QST-OVSX-PAT is answered A, conditional on it working flawlessly) - Owner: Purser
+- [ ] Watch `microsoft/vscode-vsce#1275` and `microsoft/vsmarketplace#2121` for Marketplace trusted publishing; **decide by 2026-11-15** whether to try the Entra route; the PAT is retired on 2026-12-01 - Owner: Purser to watch, Jérémie to decide
 - [ ] Update `docs/release/RELEASE-PLAN.md` and the feedback for Lintel with what the rehearsal showed - Owner: Purser
 
 ---
