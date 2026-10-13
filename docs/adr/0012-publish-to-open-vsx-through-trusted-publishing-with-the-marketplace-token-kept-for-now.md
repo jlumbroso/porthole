@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Publish to Open VSX through trusted publishing, with the Marketplace token kept for now
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Partially Implemented
 - **Deciders**: Jérémie Lumbroso (asked for it); Purser 5.5 (Claude Sonnet 5.5) set it up
 
 **TL;DR**: Open VSX releases go out from a GitHub workflow that proves its identity with a short-lived OIDC token (no stored secret), after Jérémie approves a protected environment; the VS Code Marketplace still uses its token through `just publish`.
@@ -110,6 +110,12 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 
 **Trade-offs accepted**: a second workflow to maintain; renaming it breaks publishing until the registration is redone; the Marketplace still needs its token.
 
+### Rehearsal result (2026-10-13, run 38350586673, approved by Jérémie)
+
+**Ran.** The job passed every step up to the publish, where `ovsx publish --trusted-publishing` printed `Trusted publishing token issued for jlumbroso.porthole, expires at <five minutes later>` and then `Extension jlumbroso.porthole 0.1.0 is already published`. That is the outcome the rehearsal predicted: the registration matched, the OIDC claims (repository, workflow file and the `open-vsx` environment) were accepted, and the registry issued a five-minute token scoped to this extension. **What it did not test**: the upload itself with that token, because the version already existed. That is proven by the first real release.
+
+**On QST-OVSX-PAT** (Jérémie's condition was "if trusted publishing works flawlessly"): the exchange worked flawlessly; the upload is untested. My recommendation is to revoke the classic token after the first real release goes through the workflow, not before: the interim exposure is a token that is no more exposed than it was yesterday, and a failed first release with no fallback is a worse day than one more week of an existing token.
+
 ### How it is rehearsed without a new version
 
 0.1.0 is already on Open VSX, so a publish of it must fail, but the token exchange happens first. Running `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0` after the registration exists, and approving it, should end with the exchange succeeding and the upload refused because the version already exists. That proves the registration and the OIDC claims. The first real publish through it would be the next version.
@@ -119,8 +125,9 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 ## Action Items
 
 - [x] Workflow `publish-open-vsx.yml`, dispatch from `release.yml`, environment `open-vsx` with Jérémie as required reviewer - Owner: Purser (done 2026-10-13)
-- [ ] Register the trusted publisher at open-vsx.org (Settings, Trusted Publishers, namespace `jlumbroso`, GitHub Actions: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`) - Owner: Jérémie
-- [ ] Rehearse with `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0`, approve it, and read the log - Owner: Purser starts it, Jérémie approves
+- [x] Register the trusted publisher at open-vsx.org (Settings, Trusted Publishers, namespace `jlumbroso`, GitHub Actions: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`) - Owner: Jérémie (done 2026-10-13)
+- [x] Rehearse with `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0`, approve it, and read the log - Owner: Purser starts it, Jérémie approves (done 2026-10-13, run 38350586673; result below)
+- [ ] The first real release through the workflow (the next version) proves the upload; then decide QST-OVSX-PAT's revocation - Owner: Purser and Jérémie
 - [ ] Update `just publish` to publish only to the Marketplace once the trusted publish has worked (QST-OVSX-PAT is answered A, conditional on it working flawlessly) - Owner: Purser
 - [ ] Watch `microsoft/vscode-vsce#1275` and `microsoft/vsmarketplace#2121` for Marketplace trusted publishing; **decide by 2026-11-15** whether to try the Entra route; the PAT is retired on 2026-12-01 - Owner: Purser to watch, Jérémie to decide
 - [ ] Update `docs/release/RELEASE-PLAN.md` and the feedback for Lintel with what the rehearsal showed - Owner: Purser
