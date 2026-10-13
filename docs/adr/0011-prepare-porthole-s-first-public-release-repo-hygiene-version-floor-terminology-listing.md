@@ -62,7 +62,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-HYGIENE-CUT: Which files that add nothing should leave the repo's current files? (history stays)
-- Status: unanswered
+- Status: answered
 - Why asking: Before porthole goes public, the repo should be exemplar and clean, but you ruled that nothing recorded may be lost and history is not rewritten. A scan found four kinds of file that add nothing a reader needs: (1) two **byte-identical backup copies** the ADR extension writes on every save (`docs/adr/.working/drafts-archive.json.bak`, `docs/adr/.working/drafts.json.bak`; checked with `cmp`); (2) `.vscode/terminals.json`, **generated** by `just refresh-terminals`, whose own header says do not hand-edit and regenerate before use, and which shows as modified in `git status` whenever a seat opens; (3) `.vscode/vscode-optimization-guide.md`, a generic 319-line guide dated 2026-01-04 that never mentions porthole; (4) `scripts/unwrap-adrs/`, optional ADR-line-unwrapping tools used by nothing here. Items (3) and (4) were **kept on purpose at adoption** (`docs/TEMPLATE-FEEDBACK.md` L172: "method and tooling, not content") and are `stencil` rows in `kintsugi.yaml`, so removing them also needs a `kintsugi.yaml` entry recording the removal.
 - Need: pick a letter (or override — any shape answers)
 
@@ -76,12 +76,12 @@ Options:
 **A — duplicates and generated only.** *Rationale*: items (1) and (2) are mechanically redundant or regenerable, so removing them loses nothing (`cmp` shows the `.bak` pair identical to the originals; the terminals file regenerates). Items (3) and (4) were consciously kept by the adoption and are tracked by `kintsugi.lock`; removing them is a taste decision with a kintsugi bookkeeping cost, not a hygiene necessity. *Confidence*: 0.7 — because I have verified (1) and (2) directly but judge (3) and (4) only by their content, and I do not know whether the template's maintainers want downstream repos to carry them. *If wrong*: if you would rather the public repo contain only what porthole uses or exhibits, this flips to B.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option B, but keep `.vscode/terminals.json`. I get the point that this should be not public eventually, but for now it would be a bit of a inconvenience to constantly regenerate, but the rest are good ideas, and yes, feel free to add entries to `.gitignore`. I am all for removing the `.vscode/vscode-optimization-guide.md` guide: Let's look at it, and see if anything applies to us, then ditch it. Surveyor has already configured the Vitest tests in the VSCode testing sidebar.
 
 ---
 
 ### QST-DRAFTS-TRACKING: Should the ADR extension's autosaved answer drafts stay tracked in git?
-- Status: unanswered
+- Status: answered
 - Why asking: The ADR extension autosaves what you type in an answer box into `docs/adr/.working/` (the live `drafts.json`, plus `drafts-archive.json`, 73 KB holding 13 superseded drafts of your answers). All of it is tracked, and it is rewritten whenever the box changes, so it is always "modified" in `git status`. Lintel's incident (vscode-adrs-for-ai ADR-0045) came from exactly this: an access token typed into an answer draft was autosaved into a **tracked** `.working/` file and was exposed when that repo briefly went public. I scanned all porthole's tracked files, these included, for token shapes and long opaque strings and found nothing; but a scan for shapes cannot prove absence, and you will soon be guided through minting registry tokens near these very boxes. You also want the repo to contain all deliberations, and the archive records how some answers were reached.
 - Need: pick a letter (or override — any shape answers)
 
@@ -95,12 +95,14 @@ Options:
 **B — track the archive, ignore the live drafts.** *Rationale*: the live draft is by definition unfinished text and is exactly where an in-progress secret would sit (Lintel's incident; `docs/MARKETPLACE-SKILL-FEEDBACK.md` §2.8), while the archive is the trail of drafts that were superseded, which fits your rule that deliberations are kept. B costs one `.gitignore` edit. It does not fully close the vector, since a secret typed in a draft that is later archived would still land in the tracked archive, which is why the scan from A is worth adding either way. *Confidence*: 0.65 — because I know the incident and the files' contents today, but not how often drafts get archived with unfinished text, and Lintel may have a better rule. *If wrong*: if you expect to type anything sensitive into an answer box while publishing, this flips to C; if you want unfiled drafts visible to the crew as they are written, to A.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option A, with some exceptions: Let's ignore `errors.jsonl` (which is used to report problems with the VSCode _ADRs for AI_ Manager which are collected here by the crew working on it), and let's ignore the `*.bak` files as redundant, but useful locally. I made a feature request with the VSCode _ADRs for AI_ Manager team, to create an efficient, and basic, "token redaction" heuristics in the drafts saved, based on the tokens we've encountered that other programmers are likely to encounter, and which we can update. That way, the drafts cache is not a vector for tokens to be leaked. (Tokens that are sensitive shouldn't be drafts or answers to ADRs/seeds.)
+
+For the epistemic justification, beyond my eccentricity: In the same way as there is value as watching a model's thinking trace before the answer comes out, there is value to see the answers coalesce, be corrected, slow down, etc.. It is not a lot of data, it is in a dot folder which is invisible to users. This repository is one of the first few that we are building in public using this methodology, so, showing people how we think is part of the project.
 
 ---
 
 ### QST-ENGINES-FLOOR: Which VS Code versions should the package claim to support?
-- Status: unanswered
+- Status: answered
 - Why asking: `package.json` says `engines.vscode: ^1.141.0`, the version porthole has been **run** on (Spike 0, five of five, and 15 pop-outs in the hands-on test). Reading VS Code's source at six release tags shows the primary path could start working at **1.134.0**, the first release whose integrated browser is registered for local `.html`; 1.131.0 to 1.133.0 and 1.130.0 do not have it. The identifiers porthole calls exist unchanged from 1.130.0, so the HTML registration is the only thing that sets the floor. What is **not** known: nothing below 1.141.0 has been run, 1.135 to 1.140 were not read, and the browser editor changed by about 2,350 added and 790 removed lines between 1.134.0 and 1.141.0. The Marketplace blocks installs on versions below `engines`, and the field cannot be loosened later without a release. Evidence: [`VERSION-FLOOR.md`](../release/VERSION-FLOOR.md).
 - Need: pick a letter (or override — any shape answers)
 
@@ -114,12 +116,12 @@ Options:
 **A — keep `^1.141.0` for 0.1.0.** *Rationale*: VS Code updates itself for most people, so the population on 1.134 to 1.140 is small and shrinking, while the cost of a wrong claim is reports nobody can reproduce, and the floor can be lowered later (never raised without breaking installs) after a real test. *Confidence*: 0.8 — because the argument rests on update behavior I have not measured, but the asymmetry (lowering is free later, raising is not) does not depend on it. *If wrong*: if users on older versions ask for support, or you want reach more than caution, this flips to C and then B.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option B, now, and deploy, with a caveat, we can officially support the latest version. The first response to a bug report should be: "Can you update to the latest version?" The second caveat is that you must change the version number first, as I get error messages that the extension is not supported in the VSCode 1.134.0 that I downloaded for macOS Apple Silicon. I will test and report back.
 
 ---
 
 ### QST-NAME-FINAL: Is the name "Porthole" (ID `jlumbroso.porthole`) final, before an ID that can never change is created?
-- Status: unanswered
+- Status: answered
 - Why asking: The first publish makes the extension ID permanent: renaming later means unpublishing and republishing under a new ID, and installs, reviews and update paths do not migrate (Lintel's playbook §V.5). The README used to call the name "provisional and can still change"; I removed that sentence from the public README but nobody has said the name is final. `jlumbroso.porthole` is free on the Marketplace (`vsce show` returned "not found"), and Open VSX has nothing named porthole, but a different Marketplace extension, `Lando-00.porthole-companion` ("porthole companion", a Copilot CLI companion), already uses the word, so searches for "porthole" will show both. The terminology pass is already going to a naming review.
 - Need: pick a letter (or override — any shape answers)
 
@@ -133,12 +135,12 @@ Options:
 **B — ask for a collision read first.** *Rationale*: the ID is the one irreversible decision in publishing, B adds no work beyond a paragraph in a brief that is already being written, and the answer arrives with the terminology answer. The neighbour is not a collision of IDs, only of a word, so I do not expect it to force a rename. *Confidence*: 0.75 — because the cost is near zero, but I have not read the other extension and cannot judge from the name alone whether Marketplace moderation would object. *If wrong*: if you are already settled on the name, the wait is wasted and this is A; if the review finds the neighbour confusing, C.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Yes, Option B as part of the entire naming review.
 
 ---
 
 ### QST-SHOTS: Which screenshots should the listing use?
-- Status: unanswered
+- Status: answered
 - Why asking: The listing page needs two to four images showing the product, and a stranger reads them first. The 24 screenshots from the Spike 0 and hands-on tests are the record behind ADR-0003 and ADR-0010, and they stay in the repo. Reviewed one by one ([`SCREENSHOT-CATALOG.md`](../release/SCREENSHOT-CATALOG.md)), the useful ones all share three problems: the title bar reads `[Extension Development Host]` (confusing to a user); the macOS menu bar, clock and your main VS Code window (ADR text, git-blame lines, a time tracker) show behind the floating window in 17 full-desktop captures; and in 13 of the 24 a `/Users/jlumbroso/…` path is inside the page window's own toolbar, so cropping to the window does not remove it. The best existing candidates are #24 (the Explorer menu entry, cleanest), #16/#17 (a small floating page above code) and #22 (code beside the page).
 - Need: pick a letter (or override — any shape answers)
 
@@ -152,12 +154,12 @@ Options:
 **A — retake from the installed extension.** *Rationale*: the catalog shows that cropping cannot remove the home-directory path (it is inside the window being shown) or the dev-host label, and a retake also verifies the installed build end to end, which the release needs anyway. *Confidence*: 0.8 — because the 13-of-24 count comes from a model's reading of the images, but even if half were wrong, the dev-host title alone justifies a retake. *If wrong*: if you do not mind your username or the dev-host label on a public page, this flips to B, which is 20 minutes cheaper.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option B for now, and I'm happy to crop. Option A, later, if you give me specific scenarios to stage.
 
 ---
 
 ### QST-ICON: Who makes the extension's icon?
-- Status: unanswered
+- Status: answered
 - Why asking: The Marketplace and Open VSX list every extension with an icon, and `package.json` has none, so the listing would show a generic placeholder. The format is fixed: a **PNG** (the packaging tool rejects SVG icons), conventionally 128×128 or larger. The project's own colours are brass (`#B5A642`, the project window) and sea-glass cyan (`#3FA7A3`, Glazier's seat); the name is a porthole.
 - Need: pick a letter (or override — any shape answers)
 
@@ -171,7 +173,8 @@ Options:
 **A — Purser draws a draft.** *Rationale*: it costs you only a yes or no on an image, keeps the listing from looking unfinished, and a first draft can be replaced at any time since the icon is not part of the identifier. *Confidence*: 0.6 — because I can make a clean geometric mark but cannot see whether it looks good on a marketplace card at 32 pixels, which is your call. *If wrong*: if you would rather have a hand-made or designer mark, this is B; if the first draft disappoints, C until a better one exists.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option A, and then let's also try:
+https://pypi.org/project/batch-renderer/
 
 ---
 

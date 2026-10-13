@@ -136,10 +136,11 @@ Two points deliberately left to evidence rather than decided now:
 ## Open Follow-ups
 
 ### QST-SPIKE-AUTOMATION: Can Spike 0 run as a repeatable test inside a real VS Code?
-- Status: unresolved
+- Status: answered
 - Why deferring: it needs the manual spike to pass first, and VS Code must be updated before that.
 
-**ANS:** [Fill when resolved; or link to the ADR / discussion that resolved it]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, it looks like it was repeatable, see adr://v1/repo/jlumbroso/porthole/adr/0003
 
 ---
 
