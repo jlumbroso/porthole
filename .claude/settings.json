@@ -1,5 +1,8 @@
 {
     "cleanupPeriodDays": 99999,
+    "idleCompaction": false,
+    "autoCompactEnabled": false,
+    "switchModelsOnFlag": false,
     "alwaysThinkingEnabled": true,
     "showThinkingSummaries": true,
     "effortLevel": "high",
