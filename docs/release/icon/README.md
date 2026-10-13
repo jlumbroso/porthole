@@ -7,8 +7,10 @@
 
 | Path | What it is |
 | --- | --- |
-| `porthole-icon.svg` | The first icon, hand-drawn as vector by Purser: brass ring, bolts, sea-green glass, a white page with three lines. Its 256 px render is `media/icon.png`, the placeholder in the package until a pick is made |
+| `porthole-icon.svg` | The first icon, hand-drawn as vector by Purser: brass ring, bolts, sea-green glass, a white page with three lines. It was the placeholder until the pick below; kept as the record of the first idea |
 | `porthole-icon-concepts.md` | Twelve prompts in [batch-renderer](https://pypi.org/project/batch-renderer/)'s format |
+| `../../../media/icon.png` | **The shipped icon** (256 px, transparent): concept 1.2, picked by Jérémie on 2026-10-13 (`QST-ICON-PICK`, option A; he liked 2.2 and the hand-drawn SVG too, and was persuaded by the small-size argument) |
+| `round-1/chosen-1.2-transparent-512.png` | The same, 512 px, transparent background, the master for any later resize |
 | `round-1/` | The twelve results, reduced to 512 px (originals are 1024 px, 8.6 MB in all), and `contact-sheet.jpg` with all twelve in one view, in prompt order, left to right: 1.1 to 1.4, 1.5 and 2.1 to 2.3, 3.1 to 3.4 |
 
 ## How round 1 was run, and what went wrong before it worked
@@ -25,3 +27,7 @@
 - **Surprise**: 2.2 (a brass pin on the ring says "stays on top").
 - **Not for us**: 2.1 (baked text), 2.3 (generic "open in new window" glyph), 3.1 (the page disappeared), 3.3 (the porthole is a dot), 3.4 (too ornate and dark at 128 px).
 - **Technical to-do after a pick**: the generated image has an opaque white background. A Marketplace icon needs a transparent one so it does not show a white square on a dark theme.
+
+## What was done to the chosen image
+
+The render had an opaque white background. It was removed by flood-filling from the four corners (8% fuzz), the alpha edge eroded by 1.2 px so no white fringe survives, trimmed, padded 12% and resized. Checked: corners fully transparent at 512 and 128 px, and no fringe when composited on `#1e1e1e` and on white. It is a bitmap made by a model, not a vector: if a crisper master is ever wanted, redraw it as SVG from this one.
