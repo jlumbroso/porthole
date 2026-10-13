@@ -9,7 +9,8 @@
   "_colors_in_use": {
     "_comment": "Optional but recommended: track seat colors to avoid collisions. Claude Code's /color command accepts: red, blue, green, yellow, purple, orange, pink, cyan, default.",
     "cyan": "glazier (#3FA7A3)",
-    "orange": "surveyor (#F26B1D)"
+    "orange": "surveyor (#F26B1D)",
+    "purple": "purser (#8A63B8)"
   },
   "_global": {
     "_comment": "Optional defaults for `just launch`'s claude invocation; per-seat settings override. Global-only (no per-seat form): agents, remote_control_session_name_prefix. Anything unset is omitted from the command (Claude's own defaults apply).",
@@ -23,7 +24,8 @@
     "crew": {
       "members": [
         "glazier",
-        "surveyor"
+        "surveyor",
+        "purser"
       ],
       "description": "All active participants. Broadcasts addressed to 'crew' wake every seat. Add alias keys to 'members' as seats register."
     }
@@ -76,6 +78,32 @@
         "docs/INITIAL-DESIGN-BRIEF.md",
         "docs/inbox/2026-10-12-1845-glazier-founding-brief-independent-verifier.md",
         "docs/inbox/agents/surveyor.md"
+      ]
+    },
+    "purser": {
+      "uuid": "0943f681-7d7f-4f9e-af19-9a7b62bfc37a",
+      "role": "Purser — owns porthole's release end to end except the code: the pre-publication privacy pass, the terminology index for Mint, the listing (copy, screenshots, README, changelog), and the publishing mechanics up to the one step that is Jérémie's by hand. Proposes; does not delete; does not publish.",
+      "display_name": "Purser 5.5",
+      "name_note": "The purser keeps the ship's papers: the manifest of what is aboard, the clearance documents, the cargo declared and the cargo left on the dock. The seat decides nothing about where the ship sails and does not captain it; it makes sure that what leaves port is what was declared, and that the captain's signature is one clear step. Chosen by the occupant at founding.",
+      "color": "purple",
+      "color_note": "A muted violet (#8A63B8), clear of cyan (#3FA7A3), orange (#F26B1D) and the project's brass (#B5A642) on the hue wheel. Chosen by the occupant.",
+      "model": "claude-sonnet-5-5",
+      "model_note": "Seat founded 2026-10-13 by claude-sonnet-5-5[1m] (first occupant), by consent to a `pneumatic recruit` invitation from glazier (ADR-0020; temp alias recruit-20261013005356, provisional chair rewritten in place by the invited session itself). Requested as 'claude-sonnet-5-5[1m]'; JSONL-verified claude-sonnet-5-5 at founding.",
+      "registered": "2026-10-13",
+      "founding_brief": "docs/inbox/2026-10-13-0053-glazier-founding-brief-release-seat.md",
+      "founded_by": "glazier",
+      "founded": "2026-10-13",
+      "settings": {
+        "color_hex": "#8A63B8"
+      },
+      "read_order": [
+        "CLAUDE.md",
+        "docs/inbox/ONBOARDING.md",
+        "docs/inbox/CONVENTIONS.md",
+        "README.md",
+        "docs/adr/0009-ship-as-a-personal-vsix.md",
+        "docs/adr/0010-first-hands-on-test-of-porthole-0-1-0.md",
+        "docs/inbox/2026-10-13-0053-glazier-founding-brief-release-seat.md"
       ]
     }
   }
