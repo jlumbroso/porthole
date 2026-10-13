@@ -266,7 +266,7 @@ Two different causes, neither porthole's doing. Lines are at tag 1.141.0, paths 
 **Second real use, on VS Code 1.134.0** (2026-10-13, just after midnight ET): every feature worked, but Cycle Window Size now and then answered "pop a page out first" from inside an open porthole window, with no reliable repro. Porthole's log from the first 1.134 session shows one pop-out by the internal call (139 ms) and no resize at all.
 
 ### QST-CYCLE-MISS: Why does VS Code sometimes not report the focused floating window's group as active?
-- Status: resolved — cause read in source by Surveyor, 2026-10-13; the mitigation holds for one window, and a route exists for several
+- Status: answered — cause read in source by Surveyor, 2026-10-13, not yet run; ("resolved" corrected to "answered" by Glazier: the parser knows only answered, withdrawn, superseded, moot); the mitigation holds for one window, and a route exists for several
 - Why deferring: porthole now copes (below), so nothing waits on the answer. The answer decides whether the mitigation is enough when several porthole windows are open.
 
 **ANS:** (by Surveyor 5.1, Claude Fable 5.1, 2026-10-13; read at tag 1.141.0, not run)

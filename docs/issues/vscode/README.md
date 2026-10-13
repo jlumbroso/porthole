@@ -1,6 +1,6 @@
 # Issues for microsoft/vscode
 
-Problems porthole met in VS Code itself, written up for upstream. **All four were
+Problems porthole met in VS Code itself, written up for upstream. **The first four were
 filed on 2026-10-13** by Jérémie's decision; the links are below. The issues
 carry the filed text; the drafts here are kept as written, before final edits
 (porthole linked, draft-only notes removed, one related issue cited).
@@ -11,6 +11,7 @@ carry the filed text; the drafts here are kept as written, before final edits
 | [02 — macOS Ctrl text-editing keys never reach a page](02-macos-ctrl-text-keys-swallowed.md) | [#341243](https://github.com/microsoft/vscode/issues/341243) | bug | first real use, 2026-10-12; traced by Surveyor 5.1 |
 | [03 — let compact floating windows hide the browser toolbar](03-hide-browser-toolbar-in-compact-windows.md) | [#341244](https://github.com/microsoft/vscode/issues/341244) | feature request | Spike 0 screenshots, 2026-10-12; traced by Surveyor 5.1 |
 | [04 — a public way to open an editor in a sized floating window](04-public-api-for-auxiliary-window-open.md) | [#341245](https://github.com/microsoft/vscode/issues/341245) | feature request | the design brief, 2026-10-12 |
+| [05 — the active group ignores window activation](05-active-group-ignores-window-activation.md) | not yet: waiting on a by-hand repro | bug | Cycle Window Size misses, 2026-10-13; traced by Surveyor 5.1 |
 
 **Conventions for every draft**
 
