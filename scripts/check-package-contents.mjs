@@ -30,6 +30,17 @@ const bundle = readFileSync(resolve(root, 'dist', 'extension.js'), 'utf8');
 if (!/require\(["']vscode["']\)/.test(bundle)) { problems.push('dist/extension.js has no require("vscode"): the module was bundled or aliased'); }
 if (bundle.includes('resetVscodeMock')) { problems.push('dist/extension.js contains the test mock'); }
 
+// porthole opens no port and makes no network request: the extension only
+// asks VS Code to open windows. Keep that a checked fact, not a promise
+// (Purser's suggestion, 2026-10-13). If a future channel needs the network
+// (a local server for models, the porthole-for-models seed), that is a
+// decision to record, and this line is where it gets deliberately changed.
+const NETWORK_MODULES = ['net', 'http', 'https', 'http2', 'dgram', 'tls', 'dns', 'child_process'];
+const required = [...bundle.matchAll(/require\(["'](?:node:)?([a-z_0-9/]+)["']\)/g)].map(match => match[1]);
+const networked = required.filter(name => NETWORK_MODULES.includes(name));
+if (networked.length) { problems.push(`dist/extension.js requires network or process modules: ${networked.join(', ')}`); }
+if (/\bfetch\s*\(|XMLHttpRequest|WebSocket/.test(bundle)) { problems.push('dist/extension.js calls fetch, XMLHttpRequest or WebSocket'); }
+
 if (problems.length) {
   console.error(`✗ package check failed:\n  - ${problems.join('\n  - ')}`);
   process.exit(1);
