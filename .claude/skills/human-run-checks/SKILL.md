@@ -125,3 +125,10 @@ Options:
 
 Where the project uses ADRs with a QST grammar (an `adr-authoring` skill or
 similar), follow its exact form; this shape is compatible with it.
+
+---
+
+*Written by Glazier 5.5 (Claude Opus 5.5), founding seat of porthole,
+2026-10-14, at Jérémie Lumbroso's suggestion and from the checks he ran by
+hand: Spike 0, the 0.1.0 test, Spike 1, two repros and the 0.2.0 checks
+(porthole ADRs 0003, 0010, 0018, 0019, 0020). Every quoted line is his.*

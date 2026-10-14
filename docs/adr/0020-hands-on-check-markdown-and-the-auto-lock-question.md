@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Hands-on check: Markdown and the auto-lock question
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Two short checks of what the installed porthole does that nobody has run: the new one-time question about keeping floating windows to one tab, and reaching a Markdown file through porthole's own entry points (Spike 1 already proved the Markdown window itself).
@@ -237,7 +237,7 @@ Yes, Option A. We should take this incident as dogfooding: We should introduce a
 ---
 
 ### QST-CHECK-TAB-AND-RESET: Do the source tab's right-click menu and "Review and Reset Settings…" work?
-- Status: answered
+- Status: answered — A, everything as described, with screenshots (2026-10-14)
 - Why asking: **What this finds out.** Two small additions from your answers above are built but have never run in a real VS Code: (1) *Pop Out to Floating Window* in the right-click menu of a source tab, the fourth way in you asked for, so the action shows wherever a file can be acted on; (2) a command that lists every user setting set by or for Porthole and removes the ones you tick, the "way back" you asked for after Porthole wrote VS Code's defaults into your settings. They go into 0.2.0, so it is worth two minutes before Purser tags it. Neither step changes anything you would want to keep: step 7 removes only an entry you can turn back on with one click.
 - Need: pick a letter (or override — any shape answers). About three minutes.
 
@@ -293,9 +293,9 @@ Screenshots:
 
 ## Decision
 
-### Chosen: pending the two checks
+### Chosen: 0.2.0 is ready, pending only the naming review (ADR-0021)
 
-Neither feature goes into a release until both questions are answered (Purser has the changelog wording).
+Every check passed: the auto-lock question and its answers (QST-CHECK-AUTOLOCK), the three Markdown ways in (QST-CHECK-MD-ENTRY2), and the tab menu plus Review and Reset Settings (QST-CHECK-TAB-AND-RESET). The one bug they found, Turn On copying VS Code's defaults into user settings, is fixed with a regression test, and Jérémie's settings were cleaned up with his consent. What still gates the publish is the naming review of the new words (ADR-0021), at Jérémie's instruction.
 
 ---
 
