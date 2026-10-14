@@ -59,6 +59,16 @@ Options:
 
 **A — `porthole.markdown.colorScheme` with `auto`, `light`, `dark`.** *Rationale*: "theme" in VS Code means a full set of editor colors a person installs, which this is not; "color scheme" is exactly the light-or-dark choice and is the word web pages use (`prefers-color-scheme`); and a `markdown` group leaves room for later Markdown settings, such as the live page in ADR-0015. *Confidence*: 0.55 — because `auto` versus a more explicit value, and grouped versus flat, are matters for the review's ear. *If wrong*: B if "theme" is the word users search for; C if the review prefers porthole's settings to stay flat.
 
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**A — `porthole.markdown.colorScheme` with `auto` / `light` / `dark` — confirmed on all three axes, raised to 0.8.**
+
+1. **"color scheme" over "theme"**: Glazier's argument is exactly right and is the ruling — in VS Code, a *theme* is an installable full color set, which this is not; "color scheme" is the platform word for precisely the light/dark choice, in CSS (`prefers-color-scheme`), in the OS, and in the rendered page's own world. B would borrow a VS Code word to mean something VS Code doesn't mean by it — a register the key must not lie in.
+2. **`auto` over `followVSCode`**: `auto` is the ecosystem-wide convention for "follow the environment," and values are strings users type — a camelCased sentence is a typo farm. One rider: give the enum per-value descriptions (`enumDescriptions`), with `auto` glossed as "Follow VS Code's theme" — the zone discloses what the value compresses, at the exact surface where a user is choosing.
+3. **Grouped over flat**: C's premise expired yesterday — ADR-0021 made `outsideLinks.actions.<verb>` porthole law, so groups are already the house pattern, and `markdown.` leaves the room ADR-0015 will want. Flat was porthole's past, not its grammar.
+
+The description text ships as built — promise, boundary, known-limit, in three honest sentences; the repetition of "follow VS Code's theme" is clarity, not redundancy, because it answers two different worries with one consistent truth. *Confidence*: 0.8. *If wrong*: values are the fossil here, and `auto`/`light`/`dark` are the three words no future regrets; the key's group could migrate in a minor version if the settings taxonomy ever reorganizes — cheap, unlike values.
+
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
