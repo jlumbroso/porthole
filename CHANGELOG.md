@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- New icon: a teal double ring with eight bolts around a page, drawn as a vector with heavier strokes so it stays legible in the extension list, and transparent so it reads on light and dark themes.
+
 ## [0.1.0] - 2026-10-12
 
 First version. Tested by hand on macOS with VS Code 1.141.0 (15 pop-outs, no fallback
