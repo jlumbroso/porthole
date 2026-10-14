@@ -37,20 +37,53 @@ export function auxOptions(size: Size) {
 }
 
 /**
- * Resolves with the first tab group VS Code reports as opened, or `undefined`
- * after `timeoutMs`. Subscribe BEFORE running the command that opens the
- * window: in Spike 0 the group appeared before the command returned.
+ * How sure porthole is that a tab group is the window it just asked for.
+ * `file`: its tab says it shows this file (a Markdown preview, or a page that
+ * opened as text). `unverified`: its tab says nothing (a browser tab's input is
+ * opaque to extensions, ADR-0003), so it is taken on timing alone.
  */
-function watchForOpenedGroup(timeoutMs: number) {
-  let settle!: (group: vscode.TabGroup | undefined) => void;
-  const promise = new Promise<vscode.TabGroup | undefined>(resolve => { settle = resolve; });
-  const finish = (group: vscode.TabGroup | undefined) => {
+export type WindowMatch = 'file' | 'unverified';
+
+export interface OpenedWindow {
+  group: vscode.TabGroup;
+  match: WindowMatch;
+}
+
+/** The file a tab says it shows, when its kind of input names one (text, custom editor, notebook). */
+function fileShownBy(tab: vscode.Tab | undefined): string | undefined {
+  const uri = (tab?.input as { uri?: unknown } | undefined)?.uri;
+  return uri ? String(uri) : undefined;
+}
+
+/**
+ * Resolves with the first tab group VS Code reports as opened that can be the
+ * window for `file`, or `undefined` after `timeoutMs`. A group whose tab
+ * names a different file is someone else's (a split the person opened at that
+ * moment) and is passed over: crediting the first group opened, whatever it
+ * showed, was the weakness Sounder 6 found (ADR-0014). Subscribe BEFORE running
+ * the command that opens the window: in Spike 0 the group appeared before the
+ * command returned.
+ */
+function watchForOpenedGroup(file: vscode.Uri, timeoutMs: number) {
+  let settle!: (opened: OpenedWindow | undefined) => void;
+  const promise = new Promise<OpenedWindow | undefined>(resolve => { settle = resolve; });
+  let settled = false;
+  const finish = (opened: OpenedWindow | undefined) => {
+    if (settled) { return; }
+    settled = true;
     clearTimeout(timer);
     subscription.dispose();
-    settle(group);
+    settle(opened);
+  };
+  const consider = async (group: vscode.TabGroup) => {
+    const shown = fileShownBy(await firstTab(group));
+    if (settled) { return; }
+    if (shown === undefined) { finish({ group, match: 'unverified' }); return; }
+    if (shown === file.toString()) { finish({ group, match: 'file' }); return; }
+    log(`a tab group opened meanwhile with ${shown}; not the window for ${file.toString()}`);
   };
   const subscription = vscode.window.tabGroups.onDidChangeTabGroups(event => {
-    if (event.opened.length > 0) { finish(event.opened[0]); }
+    for (const group of event.opened) { void consider(group); }
   });
   const timer = setTimeout(() => finish(undefined), timeoutMs);
   return { promise, cancel: () => finish(undefined) };
@@ -61,9 +94,9 @@ function watchForOpenedGroup(timeoutMs: number) {
  * floating window. Returns the new tab group, or `undefined` when the call
  * threw or opened nothing; the caller then falls back.
  */
-export async function openInMiniWindow(file: vscode.Uri, size: Size): Promise<vscode.TabGroup | undefined> {
+export async function openInMiniWindow(file: vscode.Uri, size: Size): Promise<OpenedWindow | undefined> {
   const started = Date.now();
-  const watch = watchForOpenedGroup(NEW_GROUP_TIMEOUT_MS);
+  const watch = watchForOpenedGroup(file, NEW_GROUP_TIMEOUT_MS);
   try {
     await vscode.commands.executeCommand('_workbench.openWith', file, editorFor(file), [AUX_WINDOW_GROUP, auxOptions(size)]);
   } catch (err) {
@@ -71,11 +104,11 @@ export async function openInMiniWindow(file: vscode.Uri, size: Size): Promise<vs
     log(`internal open threw; falling back to public commands: ${describeError(err)}`);
     return undefined;
   }
-  const group = await watch.promise;
-  log(group
-    ? `internal open: new window after ${Date.now() - started} ms at ${size.width}×${size.height}`
+  const opened = await watch.promise;
+  log(opened
+    ? `internal open: new window after ${Date.now() - started} ms at ${size.width}×${size.height} (matched: ${opened.match})`
     : `internal open returned, but no new window appeared within ${NEW_GROUP_TIMEOUT_MS} ms; falling back to public commands`);
-  return group;
+  return opened;
 }
 
 /**
@@ -84,8 +117,8 @@ export async function openInMiniWindow(file: vscode.Uri, size: Size): Promise<vs
  * floating window; opening it again finds that tab and moves it, so this never
  * leaves two windows (seen in Spike 0's second fallback run).
  */
-export async function fallbackPopOut(file: vscode.Uri): Promise<vscode.TabGroup | undefined> {
-  const watch = watchForOpenedGroup(NEW_GROUP_TIMEOUT_MS);
+export async function fallbackPopOut(file: vscode.Uri): Promise<OpenedWindow | undefined> {
+  const watch = watchForOpenedGroup(file, NEW_GROUP_TIMEOUT_MS);
   try {
     await vscode.commands.executeCommand('vscode.openWith', file, editorFor(file));
     await vscode.commands.executeCommand('workbench.action.moveEditorToNewWindow');
@@ -98,9 +131,9 @@ export async function fallbackPopOut(file: vscode.Uri): Promise<vscode.TabGroup 
     watch.cancel();
     throw err;
   }
-  const group = await watch.promise;
-  log(group ? 'fallback: page moved into a new window at VS Code\'s default size' : 'fallback: commands ran, but no new window was reported');
-  return group;
+  const opened = await watch.promise;
+  log(opened ? `fallback: page moved into a new window at VS Code's default size (matched: ${opened.match})` : 'fallback: commands ran, but no new window was reported');
+  return opened;
 }
 
 /** The group's first tab, waiting briefly: VS Code reports a new group about 5 ms before its tab (Spike 0 log). */

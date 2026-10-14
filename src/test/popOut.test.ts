@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { activateFresh, command } from './helpers/activate';
 import {
   closeFloatingGroup, executedCalls, executedCommands, focusGroup, loggedLines, mainGroup, openFloatingGroup,
-  setActiveDocument, setCommandBehavior, setConfig, shownMessages, Uri,
+  setActiveDocument, setCommandBehavior, setConfig, shownMessages, Uri, type MockTabGroup,
 } from './helpers/vscodeMock';
 
 const INTERNAL = '_workbench.openWith';
@@ -277,5 +277,53 @@ describe('size presets', () => {
       { width: 400, height: 900 },
       { width: 420, height: 640 },
     ]);
+  });
+});
+
+describe('which window an open is credited to', () => {
+  const widths = () => internalOpens().map(open => open.target[1].auxiliary.bounds.width);
+
+  describe('Regression tests', () => {
+    it('credits the floating window, not a group someone opens with another file at the same moment', async () => {
+      // Weakness (Sounder 6, ADR-0014, 2026-10-13): porthole credited a pop-out
+      // to the first tab group VS Code reported opened, whatever it showed. A
+      // split the person opened at that moment was taken for the floating
+      // window: Cycle Size then lost the real window once the split closed, and
+      // a split showing a text file raised the "opened as text" warning.
+      const split: MockTabGroup[] = [];
+      const floating: MockTabGroup[] = [];
+      setCommandBehavior(INTERNAL, () => {
+        split.push(openFloatingGroup({ asTextOf: Uri.file('/work/notes.txt'), takesFocus: false }));
+        floating.push(openFloatingGroup());
+      });
+      await command('porthole.popOut')(page);
+      closeFloatingGroup(split[0]);
+      focusGroup(floating[0]);
+
+      await command('porthole.cycleSize')();
+
+      expect(widths()).toEqual([420, 480]);
+      expect(shownMessages()).toEqual([]);
+    });
+
+    it('gives each of two overlapping pop-outs its own window', async () => {
+      // Same weakness, second shape (Sounder 6, ADR-0014): two pop-outs in
+      // flight together, as two requests from outside VS Code will be, both
+      // took the first window to appear, and the second window was never
+      // tracked. Porthole's own opens now run one at a time.
+      const other = Uri.file('/work/checklist.html');
+      const opened: MockTabGroup[] = [];
+      setCommandBehavior(INTERNAL, () => new Promise<void>(resolve => {
+        setTimeout(() => { opened.push(openFloatingGroup()); resolve(); }, 20);
+      }));
+      await Promise.all([command('porthole.popOut')(page), command('porthole.popOut')(other)]);
+      closeFloatingGroup(opened[0]);
+      focusGroup(opened[1]);
+
+      await command('porthole.cycleSize')();
+
+      expect(internalOpens()).toHaveLength(3);
+      expect(internalOpens().at(-1)!.file).toBe(other);
+    });
   });
 });

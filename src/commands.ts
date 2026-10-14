@@ -77,14 +77,26 @@ function asLocalPageFile(value: unknown): vscode.Uri | undefined {
     : undefined;
 }
 
-async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
+// Porthole's opens run one at a time. A browser tab says nothing about the page
+// it shows, so a new window is matched to its request by timing; two opens in
+// flight together would both take the first window to appear (Sounder 6,
+// ADR-0014). Requests from outside VS Code make overlapping opens ordinary.
+let openQueue: Promise<void> = Promise.resolve();
+
+function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
+  const run = openQueue.then(() => openNow(file, sizeIndex, size));
+  openQueue = run.catch(() => undefined);
+  return run;
+}
+
+async function openNow(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
   // The stylesheet must name this file before its preview renders (ADR-0022).
   if (editorFor(file) === MARKDOWN_PREVIEW_EDITOR) { await updateMarkdownColors([file]); }
-  let group = useInternalCommand() ? await openInMiniWindow(file, size) : undefined;
-  if (!group) { group = await fallbackPopOut(file); }
-  if (group) {
-    windows.set(group, { file, sizeIndex });
-    await warnIfOpenedAsText(group, file);
+  let opened = useInternalCommand() ? await openInMiniWindow(file, size) : undefined;
+  if (!opened) { opened = await fallbackPopOut(file); }
+  if (opened) {
+    windows.set(opened.group, { file, sizeIndex });
+    await warnIfOpenedAsText(opened.group, file);
   }
 }
 
