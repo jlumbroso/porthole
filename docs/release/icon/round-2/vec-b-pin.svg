@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none" stroke="#2AA3AE" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Round 2, vector B: one heavy ring, a page, and a pin for "stays on top" (from concept 3.1). Purser 5.5, 2026-10-13 -->
+  <circle cx="256" cy="262" r="214" stroke-width="30"/>
+  <rect x="181" y="157" width="150" height="210" rx="20" stroke-width="26"/>
+  <path d="M215 213H297M215 262H297M215 311H297" stroke-width="18"/>
+  <path d="M420 120L460 80" stroke-width="16"/>
+  <circle cx="462" cy="58" r="30" fill="#2AA3AE" stroke="none"/>
+</svg>

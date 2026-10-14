@@ -31,3 +31,18 @@
 ## What was done to the chosen image
 
 The render had an opaque white background. It was removed by flood-filling from the four corners (8% fuzz), the alpha edge eroded by 1.2 px so no white fringe survives, trimmed, padded 12% and resized. Checked: corners fully transparent at 512 and 128 px, and no fringe when composited on `#1e1e1e` and on white. It is a bitmap made by a model, not a vector: if a crisper master is ever wanted, redraw it as SVG from this one.
+
+## Round 2 (2026-10-13): variations on the monoline, concept 1.3
+
+Jérémie was "not sold" on the shipped icon (1.2) and liked 1.3 (the one-colour double ring with eight bolts and a page). Round 2 asks:
+does 1.3 survive being transparent, tightly cropped, and shown at the size of an extension-list row (40 px)? Everything is in `round-2/`.
+
+- **Generated variations**: 13 prompts in `porthole-icon-round-2-monoline.md` (stroke weight, one or two rings, bolts, page shape, a pin, a hinge, colour), all rendered with `Nano-Banana-Pro`: `round-2/generated-contact-sheet.jpg`.
+- **Transparency and tight crop**: `scripts/ephemeral/2026-10-13-monoline-to-transparent.py` derives alpha from how far each pixel is from the background towards the stroke colour, so the edges stay smooth and no white fringe remains. `round-2/concept-1.3-transparent-original-colour.png` is the original 1.3 treated that way.
+- **Findings, each from looking at the images** (the 40 px strips are in the `.jpg` files):
+  1. **The deep teal of 1.3 nearly vanishes on a dark theme**; brass stays visible. The extension list shows the icon on the editor's own background, so this matters. A **mid-tone teal (`#2AA3AE`)** reads on both light and dark (`recolour-test-light-and-dark.jpg`).
+  2. **1.3's thin strokes go faint at 40 px.** Only the heavier concepts (bolder, pin, page-breaks-the-frame) hold.
+  3. **A generated bitmap is a poor master for a line drawing**, so the strongest ideas were redrawn as SVG with stroke weights chosen for 40 px, which is also exactly transparent at any size.
+- **Vectors** (`round-2/vec-*.svg`, with 512 px PNGs): **A** is 1.3 redrawn (double ring, eight bolts) and gets busy at 40 px; **A2** is 1.3 simplified (heavier rings, four bolts, bigger page); **B** and **B2** are a single heavy ring with a page and a pin for "stays on top" (B2's pin is large enough to read); **C** is the page coming out through the ring, the boldest and the least porthole-like.
+- **Not yet shipped.** `media/icon.png` is still concept 1.2. Nothing changes until Jérémie picks.
+

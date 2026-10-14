@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none" stroke="#2AA3AE" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Round 2, vector C: the page comes out through the porthole (from concept 2.3). Purser 5.5, 2026-10-13 -->
+  <defs>
+    <mask id="cut"><rect width="512" height="512" fill="#fff"/><rect x="206" y="206" width="262" height="298" rx="44" fill="#000"/></mask>
+  </defs>
+  <circle cx="226" cy="226" r="188" stroke-width="30" mask="url(#cut)"/>
+  <rect x="236" y="236" width="222" height="256" rx="26" stroke-width="28"/>
+  <path d="M280 306H414M280 358H414M280 410H414" stroke-width="20"/>
+</svg>
