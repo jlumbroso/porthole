@@ -237,7 +237,7 @@ Yes, Option A. We should take this incident as dogfooding: We should introduce a
 ---
 
 ### QST-CHECK-TAB-AND-RESET: Do the source tab's right-click menu and "Review and Reset Settings…" work?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** Two small additions from your answers above are built but have never run in a real VS Code: (1) *Pop Out to Floating Window* in the right-click menu of a source tab, the fourth way in you asked for, so the action shows wherever a file can be acted on; (2) a command that lists every user setting set by or for Porthole and removes the ones you tick, the "way back" you asked for after Porthole wrote VS Code's defaults into your settings. They go into 0.2.0, so it is worth two minutes before Purser tags it. Neither step changes anything you would want to keep: step 7 removes only an entry you can turn back on with one click.
 - Need: pick a letter (or override — any shape answers). About three minutes.
 
@@ -266,8 +266,28 @@ Options:
 
 **A — all as described** (a prediction). *Rationale*: the tab menu uses the same rule as the title-bar button, which you confirmed works for `.md` (QST-CHECK-MD-ENTRY2), and VS Code passes the tab's file to the command the same way; the review command's listing and removal are covered by four tests (`src/test/settingsReview.test.ts`). *Confidence*: 0.7 — because the multi-select list and the announcement notice have only ever run against a mocked VS Code. *If wrong*: B means the tab menu needs a different menu group or condition; C means VS Code reports the user's own values differently from what the tests assume, and the fix goes in `src/settingsReview.ts` before 0.2.0 is tagged.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+[Note: Excellent guidance, again, really excellent — no ambiguity and I was able to complete this extremely quickly, and with extreme accuracy!]
+
+Option A: Everything happened exactly as described. I have no notes, but I captured everything in screenshots.
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.33.28 AM.png` screenshot of the question itself
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.33.51 AM.png` right-clicking source tab title to show contextual menu with floating window option now added
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.33.51 AM-close-up.png` close-up of the contextual menu right-clicking from source tab
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.34.17 AM.png` summoning the "Review & Reset" action from the command palette
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.34.17 AM-close-up.png` close-up of the "Review & Reset" option
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.34.45 AM.png` Quick Pick palette selector for the settings
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.34.45 AM-close-up.png` close-up of the Quick Pick palette selector for settings
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.34.58 AM.png` full screen with notification "Porthole: removed 1 setting."
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.34.58 AM-close-up.png` close-up of notification "Porthole: removed 1 setting."
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.35.16 AM.png` second screenshot of the "Review & Reset" Quick Pick palette selector after one setting has been reset; this shows only one setting (as opposed to two, showing the other one was successfully reset)
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.35.16 AM-close-up.png` close-up of the second screenshot of the Quick Pick palette
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.35.36 AM.png` full screen screenshot of the dialog "Keep Porthole's floating windows compact?"
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.35.36 AM-close-up.png` close-up of the dialog "Keep Porthole's floating windows compact?" (possibly for documentation?)
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.35.49 AM.png` full screen screenshot displaying "Porthole changed your user settings" notification after approving the "Keep Porthole's floating windows compact?" dialog
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.35.49 AM-close-up.png` close-up of the "Porthole changed your user settings" notification message
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.46.28 AM.png` a screenshot of this completed answer with the screenshots
 
 ---
 
