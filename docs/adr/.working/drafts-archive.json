@@ -943,5 +943,29 @@
     "source": "panel",
     "archivedAt": "2026-10-14T00:41:22.163Z",
     "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:13::6495f7b1f008::0",
+    "adrPath": "docs/adr/0013-open-a-porthole-from-outside-vs-code.md",
+    "adrNumber": 13,
+    "questionText": "When several VS Code windows are open, which one should open a link, and what does a relative path mean?",
+    "draftText": "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths [with repo, that could be ignored or used to warn if discrepancy detected]\n\nThis is to facilitate communication between model and human — not to introduce new contorsions!",
+    "updatedAt": "2026-10-14T00:47:29.086Z",
+    "history": [
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths.",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths ",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths [with repo, that could be ignored or used to warn if ",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths [with repo, that could be ignored or used to warn if discrepancy detected]",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths [with repo, that could be ignored or used to warn if discrepancy detected]\n\n",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths [with repo, that could be ignored or used to warn if discrepancy detected]\n\nThis is to facila",
+      "Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.\n\nOption C, and in addition to what we said, allow jus plain relative paths. Allow:\n- relative paths alone\n- relative paths with repo\n- absolute paths [with repo, that could be ignored or used to warn if discrepancy detected]\n\nThis is to facilitate com"
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-14T00:47:31.204Z",
+    "reason": "promoted"
   }
 ]

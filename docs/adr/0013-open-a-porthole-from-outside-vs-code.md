@@ -157,7 +157,7 @@ Yes, Option C, and the notice should expressedly explain that this is not yet co
 ---
 
 ### QST-OPEN-ROUTING: When several VS Code windows are open, which one should open a link, and what does a relative path mean?
-- Status: unanswered
+- Status: answered
 - Why asking: You raised it while answering QST-TERM-LINK in ADR-0017: *"Who knows which project must open it, and is the path absolute? If it's relative what does it resolve against?"* It matters because of your allowlist: with `allowWorkspaceFolders` on and `allowLocalFiles` off, a link received by the wrong VS Code window would be refused, since the file is not in *that* window's workspace. What decides the receiving window today (read in source by Surveyor, not run): a link clicked in VS Code's own terminal goes to the window that owns that terminal; a link sent with `code --open-url` from any shell goes to the VS Code window that was most recently in front.
 - Need: pick a letter (or override — any shape answers)
 
@@ -170,8 +170,15 @@ Options:
 
 **A now, B with the state file.** *Rationale*: absolute paths are what a model in a terminal already has (its working directory is a real path), and they mean the same thing in every window; with your defaults, a link the wrong window receives is not lost, it asks once. B removes even that, but only becomes possible once each window publishes its folders (ADR-0014's state file, which is the next step anyway). C adds a second way to name a file, which every script and the skill would then have to get right; worth it only if models often know the repository but not the path. *Confidence*: 0.6 — because how often the wrong window receives a link depends on how you work with several windows, which I have not seen. *If wrong*: if wrong-window links turn out to be common in your day, B moves up to the first release of outside links; if models keep producing relative paths, C.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option C, and maybe, in addition, the option to prefix the title of floating windows with the project name in brackets followed by a space — so that there's a way to identify at a glance which project launched a floating window.
+
+Option C, and in addition to what we said, allow jus plain relative paths. Allow:
+- relative paths alone
+- relative paths with repo
+- absolute paths [with repo, that could be ignored or used to warn if discrepancy detected]
+
+This is to facilitate communication between model and human — not to introduce new contorsions!
 
 ---
 
