@@ -3,7 +3,7 @@
 [![tests](https://img.shields.io/github/actions/workflow/status/jlumbroso/porthole/ci.yml?branch=main&label=tests)](https://github.com/jlumbroso/porthole/actions/workflows/ci.yml)
 [![coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjlumbroso%2Fporthole%2Fbadges%2Fcoverage.json)](https://github.com/jlumbroso/porthole/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jlumbroso.porthole?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=jlumbroso.porthole)
+[![VS Code Marketplace](https://vsmarketplacebadges.dev/version/jlumbroso.porthole.svg?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=jlumbroso.porthole)
 [![Open VSX](https://img.shields.io/open-vsx/v/jlumbroso/porthole?label=Open%20VSX)](https://open-vsx.org/extension/jlumbroso/porthole)
 
 Pop the HTML page or Markdown file you are looking at into a floating window in VS Code:
@@ -13,12 +13,6 @@ If it is an HTML or Markdown file and you want it in view while you work (for in
 page of task instructions, a checklist, a design mock-up or a local report), porthole puts
 it in a window of its own instead of an editor tab that disappears behind whatever you
 open next.
-
-> **Status: version 0.2.0.** Its author has used it daily since 2026-10-12, on **macOS
-> with VS Code 1.141.0 and 1.134.0** (HTML), and has checked Markdown by hand on 1.141.0. Windows and Linux are untested
-> (the unit tests run on Linux in CI against a mocked VS Code, which says nothing about
-> how the windows behave there). It leans on an internal VS Code command; see
-> [what could break](#how-it-works-and-what-could-break).
 
 ## See it
 
@@ -118,6 +112,11 @@ do next. It needs [`just`](https://just.systems) and Node 22.)
   virtual workspaces are out of scope.
 - Markdown uses VS Code's own preview. It was checked by hand on 1.141.0 only. Its preview
   editor is registered in VS Code's source from 1.134.0 (read, not run).
+- **macOS, so far.** porthole has been run on macOS only. Windows and Linux are untested: the
+  unit tests run on Linux in CI against a mocked VS Code, which says nothing about how the windows
+  behave there.
+- It leans on an internal VS Code command; see
+  [what could break](#how-it-works-and-what-could-break).
 
 **Support.** The latest VS Code release is the one officially supported. If you report a
 problem on an older version, the first answer will be "can you update to the latest version?".
