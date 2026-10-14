@@ -9,13 +9,17 @@ mechanics bite, and what the next window does first.
 
 ## How one is used
 
-1. **Write it at the edge**, from the skeleton:
-   [`_prompt-v1.txt`](_prompt-v1.txt).
+1. **Write it at the edge, in your own words** — the sections that have
+   earned their place: rule zero (pointers over paraphrase), identity,
+   preserve-verbatim, live threads one line each, mechanics that bite, and
+   the closing written past the summarizer to yourself. (The matching
+   *handoff* prompt lives at
+   [`../handoffs/_prompt-v1.txt`](../handoffs/_prompt-v1.txt).)
 2. **Hand it to the compaction** — paste it as the instruction when invoking
    the harness's compact/summarize step, so the summary is built to your
    terms instead of a stranger's defaults.
 3. **Stake it here** as `YYYY-MM-DD-<seat-alias>.md`, matched to the same
-   crossing's handoff in [``](). The paste serves this
+   crossing's handoff in [`../handoffs/`](../handoffs/). The paste serves this
    crossing; the staked file serves every later one — and a prompt that lived
    only in chat is lost to the next window by definition.
 
