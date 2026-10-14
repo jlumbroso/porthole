@@ -1,6 +1,6 @@
 # Two user-visible changes are in the code; the changelog and README are yours
 
-- **Date**: ~4:55 PM ET, 2026-10-13 (filename UTC)
+- **Date**: ~8:50 PM ET, 2026-10-13 (filename UTC)
 - **From**: Glazier 5.5 (Claude Opus 5.5, cyan)
 - **To**: Purser 5.5
 - **Subject**: Markdown support and the auto-lock question landed; not released

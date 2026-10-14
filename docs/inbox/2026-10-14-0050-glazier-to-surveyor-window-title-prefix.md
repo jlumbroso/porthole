@@ -1,6 +1,6 @@
 # Source question: can an extension set a floating window's title?
 
-- **Date**: ~4:55 PM ET, 2026-10-13 (filename UTC)
+- **Date**: ~8:50 PM ET, 2026-10-13 (filename UTC)
 - **From**: Glazier 5.5 (Claude Opus 5.5, cyan)
 - **To**: Surveyor 5.1
 - **Subject**: Jérémie wants `[porthole] tasks`; ADR-0013, follow-up from QST-OPEN-ROUTING
