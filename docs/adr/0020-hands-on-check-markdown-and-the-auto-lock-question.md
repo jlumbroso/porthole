@@ -164,7 +164,7 @@ I have no idea what "In the porthole window's Explorer" means. You need to write
 ---
 
 ### QST-CHECK-MD-ENTRY2: Do porthole's three ways in open a Markdown file rendered?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** Porthole has three ways to pop a file out: the Ctrl+Alt+M chord, a button in the editor's title bar, and an item in the Explorer's right-click menu. Each one is shown only when VS Code decides the selected file qualifies, and that rule was just widened from HTML files to Markdown files. Only a real VS Code applies these rules, so a mistake in them would mean a way in that is silently missing for Markdown. The Markdown window itself is already proven (Spike 1); this checks only the ways in.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -191,13 +191,34 @@ Options:
 
 **A — all three worked** (a prediction). *Rationale*: the open is the call Spike 1 proved for Markdown, and the three rules use the same pattern that already works for `.html`, widened to `.md` and `.markdown` (`package.json`, under `contributes.menus` and `keybindings`). *Confidence*: 0.75 — because the widened rules have never been applied by a real VS Code. *If wrong*: B points at the one rule that is wrong; C means VS Code did not choose its Markdown preview for this file, and Porthole's warning will say so.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+[Note: The instructions here are so high quality I wanted to cry! Thank you for all the context. This was perfect, thanks for the careful use of terminology.]
+
+After completion, I can answer: **Option A.**
+
+- [X] Opening floating window using chord from the workspace source window
+- [X] Action button shows up in tab bar and opens floating window for document (flushed right, with "Split Editor" action, an in my current workspace configuration, the "Enhanced Markdown" extension too)
+- [X] Explorer menu: The option "Pop Out to Floating Window" shows up, and open the floating window as expected
+
+[Note: The instructions were extremely clear, the explanations and contextualization of all the terminology was exceptional, as was the pacing.]
+
+This was all excellent, one thing that surprised me (but is not necessarily blocking, especially since it affects both HTML and Markdown, and seems to be intentional/unimportant): I am surprised that, when the HTML or Markdown file is open in VSCode, that right-clicking the tab title of the source tab doesn't show the floating window pop-out option, I do see, for instance, "Open in Integrated Browser [⌘K B]" (reflecting both, I think, that I activated the integrated browser, and that I chose that chord). Why can't we also get the floating window pop-out action there as well? It would be more coherent. However, again, I notice this oversight affects all of our target formats, so if this is a limitation, it is not a problem — if this is something we can fix easily, I think it would be worth it, so our users never have to wonder why the option shows up in some places and not others!
+
+Excellent prep work, Glazier! You should write a skill based on everything you have learned about asking a human to follow meticulous testing instructions, because you've reached the highest level of skill that I have seen in my collaborations — well done, thanks for persisting in taking feedback!
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.28.34 AM.png` About to investigate the Markdown options for opening the floating window in VS Code.
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.29.11 AM.png` Successfully popped out the floating window for the `README.md` file using the chord
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.30.25 AM.png` Showed that right-clicking on the source tab title for `README.md` doesn't display any option to open to floating window (as expected: This is not one of the 3 approved mechanisms)
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.31.14 AM.png` Hovering over the "Pop Out to Floating Window (⌃⌥M)" button in the tab bar (flush right) for the `README.md` file
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.31.14 AM-close-up.png` Close-up of the button and hover caption (could be used for documentation purposes)
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.33.36 AM.png` Shows the third mechanism, Explorer menu, and floating window going along with it (documentation plausibly?)
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 8.34.39 AM.png` Showing that the contextual menu on the source tab *doesn't* (as expected) include the option — but if possible, we might consider whether we could add it as a fourth mechanism
 
 ---
 
 ### QST-SETTINGS-CLEANUP: May I remove the VS Code defaults that Porthole wrote into your user settings?
-- Status: unanswered
+- Status: answered
 - Why asking: **What happened.** When you chose Turn On, the build you had then wrote the whole `workbench.editor.autoLockGroups` value into your user settings file (`~/Library/Application Support/Code/User/settings.json`): VS Code's 25 default entries plus Porthole's two. Written out like that, those defaults no longer follow VS Code: if a future VS Code changes one, your settings keep the old value. The bug is fixed, but the entries are still in your file. It is your settings file, so I will not edit it without your yes.
 - Need: pick a letter (or override — any shape answers)
 
@@ -210,8 +231,8 @@ Options:
 
 **A — reduce it to the two entries.** *Rationale*: I checked the file: the entry holds 27 keys, and every value other than Porthole's two matches VS Code's own default (checked against VS Code's source at 1.141.0: only `terminalEditor`, `workbench.editor.processExplorer` and two webview editors are on by default, and those four are the ones set to true), so removing them changes nothing today and keeps future defaults working. *Confidence*: 0.8 — because I cannot tell from the file whether you had set any of those values yourself before; if you had, the value equals the default anyway. *If wrong*: if you deliberately set one of those entries, say which, and A keeps it.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option A. We should take this incident as dogfooding: We should introduce an action to revert the user settings; this action should first check (to say whether or not the user settings for Porthole seem to have been modified, explicit what they currently are), then offer to revert them (to undo what may have been done). This "reset user settings" action from Porthole could be surfaced in confirmation notifications, after any setting is changed. In fact the "reset user settings" action could ask for selection of individual setting in a checkbox-choosing step (like when the ADRs4AI Manager asks whether you want to commit files) — I think this option is called ["Quick Pick Input"](https://code.visualstudio.com/api/extension-capabilities/common-capabilities#quick-pick): "Here are the currently configured user settings for Porthole, what would you like to remove?" Or something like that.
 
 ---
 
