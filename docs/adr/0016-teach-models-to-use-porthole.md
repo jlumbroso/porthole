@@ -37,7 +37,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-SKILL-HOME: Where should the porthole skill live, and how does a model elsewhere get it?
-- Status: unanswered
+- Status: answered
 - Why asking: "Any local agent" (ADR-0013, QST-OPEN-CALLERS) means more than Claude Code, and a Claude skill is one tool's format. The skill also must not reach into a user's settings without asking.
 - Need: pick a letter (or override — any shape answers)
 
@@ -50,8 +50,10 @@ Options:
 
 **A — a plain document and a thin skill, in the repository.** *Rationale*: Purser's design: the portable core serves every agent and the Claude skill is a pointer; the release workflow already attaches files to each GitHub Release; and C would widen the six-file package and, in its folder-writing form, write into a user's configuration. *Confidence*: 0.75 — because it reuses machinery that exists. *If wrong*: if people install porthole from the Marketplace and never visit the repository, C's copy-to-clipboard command becomes the useful way in.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+I doubt people who install this will visit the repo, I think we are better off doing:
+- Option B and Option C
+- and the release link of the Claude skill publicly disclosed in info messages of the log?
 
 ---
 

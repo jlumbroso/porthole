@@ -54,7 +54,7 @@ Yes, Option A, as struck by the naming authority (I think qualified versions of 
 ---
 
 ### QST-TERM-VERBS: What are the verbs called?
-- Status: unanswered
+- Status: answered
 - Why asking: They become link paths, command names and words in the skill, all permanent once used.
 - Need: pick a letter (or override — any shape answers)
 
@@ -72,12 +72,12 @@ Options:
 **A — plain verbs — confirmed and raised to 0.8, on a rule worth keeping: model-facing verbs assert states, never deltas.** B's `toggle-pin` and `cycle-size` are deltas — their meaning depends on hidden current state, so a model (or a retried script) cannot know what it just asked for; `pin`/`unpin`/`resize` name destinations, and a destination is idempotent and auditable. This is the same law that governs the UI/control split elsewhere in porthole: the *menu* may say "Pop Out" and "Toggle Always on Top" (human gestures on visible state), while the *machine surface* asserts states — the two vocabularies are both correct for their reader. Glazier's residual (menus and verbs using different words) is paid with one line of documentation: the skill carries a two-column mapping table (UI title ↔ verb: "Pop Out" ↔ `open`, "Dock Back into Main Window" ↔ `dock`, "Toggle Always on Top" ↔ `pin`/`unpin`), which teaches the correspondence once instead of forcing one register to lie for the other. Keep `refresh` over C's `reload` — it is the founder's own seed word, and the window is a rendered file, not a browser navigation context. *Confidence*: 0.8. *If wrong*: if field use shows models reaching for a menu word in links, the mapping table's left column becomes accepted aliases — additive, nothing breaks.
 
 **ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Thanks to the naming review! Approving Option A as recommended.
 
 ---
 
 ### QST-TERM-LINK: What does the link look like?
-- Status: unanswered
+- Status: answered
 - Why asking: Every script and skill will build this string. The parameter names and the version marker are as permanent as the verbs.
 - Need: pick a letter (or override — any shape answers)
 
@@ -94,13 +94,15 @@ Options:
 
 **D — a synthesis, coined as invited: B's path version with C's full-word absolute parameters** — `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640`. Three grounds: (1) **the version goes in the path** because URLs are the most fossil of fossils and the version must be unmissable in every log line and grep — a parameter can be reordered, buried, or dropped by a script and silently misread later; a path segment cannot. (An unversioned `/open` still routes to v1, so Glazier's graceful-degradation point survives intact.) This also matches the convention the wider ecosystem just settled for its own served URLs — one URL grammar, everywhere. (2) **Full words** (`file`, `width`, `height`): model readers pay for ambiguity, never for length — `path` is ambiguous with URL-path, `w`/`h` are guessing games. (3) **Absolute dimensions are the canonical parameters, not named sizes**: B's `size=S` depends on the *receiver's* preset configuration, so the same link means different windows on different machines — a portability trap in strings that scripts copy between contexts. `size=<preset>` MAY be accepted as a documented receiver-local convenience, never the canonical form. *Confidence*: 0.75. *If wrong*: if the deeplink parser makes path routing costly, C with a mandatory-on-write `v` parameter is the fallback; the parameter-word rulings hold regardless.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Thanks to the naming review, approving Option D, the synthesis, exactly as recommended. (This recommendation provides its full epistemic description so it can be extended to additional parameters, or we can follow up.)
+
+Only one issue I foresee: Who knows which project must open it, and is the path absolute? If it's relative what does it resolve against? It seems like there needs to be a mechanism to match the workspace. There could be multiple mechanisms, such as absolute paths, or providing a repository (all my projects have a root repository, I don't know if that can be a criteria when routing to a workspace, or how).
 
 ---
 
 ### QST-TERM-SOURCE: What do we call the ordinary editor tab that shows the file's source?
-- Status: unanswered
+- Status: answered
 - Why asking: You asked us to distinguish it from the floating window. Instructions and logs keep needing to say "open the file as text first" or "VS Code opened it as text".
 - Need: pick a letter (or override — any shape answers)
 
@@ -117,8 +119,8 @@ Options:
 
 **B — "the source tab" — confirmed at 0.7, because the pair teaches itself.** The distinction that carries all the weight is *source versus rendered*, and B is the only candidate that names the relation: "the source tab" and "the floating window" form a pair a stranger decodes on sight (the same source/preview pair VS Code's own Markdown feature already taught every user). A ("the text editor") is accurate but names the tool rather than the contrast, and nobody says it; C ("the code tab") fails the founder's own Markdown case — a plan.md in an editor tab is source, not code. One rider: the first use in any document glosses it once — *"the source tab (the ordinary editor tab showing the file's source)"* — and thereafter the pair carries itself. *Confidence*: 0.7. *If wrong*: this is ear, and the founder's ear closes it — A costs nothing but flavor.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Thanks to the naming review for clarifying this important distinction and stating the full semantics behind it! Approving Option B (and highlighting the nomenclature of *source versus rendered*).
 
 ---
 

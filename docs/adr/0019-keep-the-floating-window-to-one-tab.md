@@ -42,7 +42,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-LOCK-METHOD: How should porthole keep its floating window to one tab?
-- Status: unanswered
+- Status: answered
 - Why asking: The current method is unreliable and, by Surveyor's reading, can lock your main window's group by mistake. Each replacement trades something different.
 - Need: pick a letter (or override — any shape answers)
 
@@ -56,13 +56,15 @@ Options:
 
 **C — VS Code's auto-lock setting, with your consent once.** *Rationale*: it is the only option where VS Code locks the right group itself, at the moment it opens, so neither failure Surveyor found can happen; asking once respects that it changes a setting of yours and affects browser tabs outside porthole; and A gives back the behavior the lock was added to prevent, which the 0.1.0 test showed working. *Confidence*: 0.6 — because the setting's code path is read, not run, and whether it fires for a group created in a new floating window (the "more than one group" condition counts groups across windows, by my reading) needs one run. *If wrong*: if the setting does not fire for floating windows, B is the fallback; if the side effect on your other browser tabs is unwelcome, D, or A.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option C, this should be asked on install, and on first use at each session, and the dialog should have a checkbox for "Don't ever ask me again" and then that setting is saved in user settings. You're right to be following on this, if the floating window is not compact, there's no point.
+
+Note that we are talking of *multiple tabs in the same floating window*, which is problematic as it makes the floating window not compact — but I see no problem (and in fact welcome) multiple floating windows (possibly floating windows from different workspaces, as the human context switches, etc.).
 
 ---
 
 ### QST-TABAPI-REPRO: Does VS Code keep reporting the wrong window as active until a window opens or closes? (step by step)
-- Status: unanswered
+- Status: answered
 - Why asking: This is Surveyor's explanation of the skipped locks and the Cycle Window Size misses. If the log shows it, a rewritten upstream issue (`docs/issues/vscode/05-…`, replacing the current draft) can be filed. You only follow the steps; I read the log afterwards.
 - Need: pick a letter (or override — any shape answers). About three minutes.
 
@@ -87,8 +89,98 @@ Options:
 
 **A — done**, with my prediction of what the log will show: in at least one of the three rounds, the group marked active stays the same between step 6 and step 8, even though you moved between windows. *Rationale*: Surveyor's reading says the reported active group changes only when a group is added or removed, which happens in step 4 and never in steps 5 to 8 (`workbench/api/browser/mainThreadEditorTabs.ts` L75–77, at tag 1.141.0). *Confidence*: 0.65 — because the reading is detailed and explains every log line we have, but it is Surveyor's second reading of this behavior and the first did not reproduce. *If wrong*: if the active group follows your clicks in every round, the cause is elsewhere again, draft 05 stays unfiled, and QST-LOCK-METHOD's C still stands on its own merits.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A. I hope I did it correctly. I wasn't sure what you were trying to see. Let me know if you need to rerun this (new QST). Here's the log:
+
+```log
+[2026-10-14T00:34:18.585Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-14T00:34:18.586Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-14T00:34:18.588Z] === step 1 (run 1): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:34:18.588Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-14T00:34:18.697Z] +109ms groups changed: opened=1 closed=0 changed=1
+[2026-10-14T00:34:18.699Z] +111ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-14T00:34:18.700Z] +112ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.729Z] +141ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.729Z] +141ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.736Z] +148ms step returned: undefined
+[2026-10-14T00:34:18.809Z] +221ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.823Z] +235ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-14T00:34:18.831Z] +243ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 36 · 2 …]
+[2026-10-14T00:34:18.835Z] +247ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 36 · 2 …]
+[2026-10-14T00:34:18.836Z] +248ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 36 · 2 …]
+[2026-10-14T00:34:18.987Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:34:19.739Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:34:21.739Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:35:31.048Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:36:23.911Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:37:21.410Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:27.410Z] === step 1 (run 2): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:38:27.411Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]}]
+[2026-10-14T00:38:27.504Z] +92ms groups changed: opened=1 closed=0 changed=1
+[2026-10-14T00:38:27.513Z] +101ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-14T00:38:27.514Z] +102ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.541Z] +129ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.542Z] +130ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.546Z] +134ms step returned: undefined
+[2026-10-14T00:38:27.603Z] +191ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.620Z] +208ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-14T00:38:27.626Z] +214ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 37 · 4 …]
+[2026-10-14T00:38:27.639Z] +227ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 37 · 4 …]
+[2026-10-14T00:38:27.640Z] +228ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 37 · 4 …]
+[2026-10-14T00:38:27.799Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:28.550Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:30.552Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:31.918Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:37.001Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:45.134Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:50.526Z] === step 1 (run 3): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:38:50.526Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]}]
+[2026-10-14T00:38:50.614Z] +88ms groups changed: opened=1 closed=0 changed=1
+[2026-10-14T00:38:50.615Z] +89ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-14T00:38:50.616Z] +90ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.639Z] +113ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.640Z] +114ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.644Z] +118ms step returned: undefined
+[2026-10-14T00:38:50.720Z] +194ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.734Z] +208ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-14T00:38:50.737Z] +211ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:38:50.768Z] +242ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:38:50.768Z] +242ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:38:50.894Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:51.645Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:53.648Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:01.383Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:04.914Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:12.444Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:16.157Z] === step 1 (run 4): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:39:16.158Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:16.247Z] +89ms groups changed: opened=1 closed=0 changed=2
+[2026-10-14T00:39:16.249Z] +91ms tabs changed: opened=[tasks · 414×567 · load 38 · 1 …] closed=[] changed=[]
+[2026-10-14T00:39:16.249Z] +91ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:39:16.256Z] +98ms tabs changed: opened=[] closed=[tasks · 414×567 · load 38 · 1 …] changed=[]
+[2026-10-14T00:39:16.263Z] +105ms step returned: undefined
+[2026-10-14T00:39:16.290Z] +132ms groups changed: opened=0 closed=1 changed=2
+[2026-10-14T00:39:16.291Z] +133ms groups changed: opened=0 closed=0 changed=2
+[2026-10-14T00:39:16.514Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:17.266Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:19.267Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:23.220Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:30.258Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:33.132Z] === step 1 (run 5): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:39:33.132Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:33.202Z] +69ms groups changed: opened=1 closed=0 changed=2
+[2026-10-14T00:39:33.203Z] +70ms tabs changed: opened=[tasks · 414×567 · load 38 · 1 …] closed=[] changed=[]
+[2026-10-14T00:39:33.203Z] +70ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:39:33.209Z] +76ms tabs changed: opened=[] closed=[tasks · 414×567 · load 38 · 1 …] changed=[]
+[2026-10-14T00:39:33.215Z] +82ms step returned: undefined
+[2026-10-14T00:39:33.256Z] +123ms groups changed: opened=0 closed=1 changed=2
+[2026-10-14T00:39:33.256Z] +123ms groups changed: opened=0 closed=0 changed=2
+[2026-10-14T00:39:33.466Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:34.217Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:36.218Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:36.268Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:39.896Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+```
 
 ---
 

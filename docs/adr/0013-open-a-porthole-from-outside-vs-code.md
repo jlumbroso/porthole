@@ -56,7 +56,7 @@ Jérémie, on the friction, verbatim:
 ## Questions
 
 ### QST-OPEN-CALLERS: Who should be able to open a porthole from outside VS Code?
-- Status: unanswered
+- Status: answered
 - Why asking: This decides what the outside interface is built for. A link that any local program can produce needs nothing Claude-specific; an MCP tool only reaches agents that have it installed.
 - Need: pick a letter (or override — any shape answers)
 
@@ -69,13 +69,13 @@ Options:
 
 **A — any local agent or script.** *Rationale*: your three wishes include "the model wires a command", which is a script, not a chat; Purser and Sounder both answered the seed this way; and A contains B and C (a Claude skill can teach the same link, and a printed link is just its text). *Confidence*: 0.8 — because the three sources agree, and the cost is the same link either way. *If wrong*: if you only ever want to click, this flips to C, and porthole needs no command-line instructions at all.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option A. [Thought: I think the threat model (until I've heard differently) should be that the human is on their local machine environment, which is not adversarial. If any adversary had the ability to call tools, they could do much worse than open a porthole from outside VS Code.] I think this is an extremely useful feature for a model to be able to quickly get something in front of the human — especially on a short timeline, and without the human have to search frantically.
 
 ---
 
 ### QST-OPEN-ALLOWLIST: What may a link from outside VS Code open, by default?
-- Status: unanswered
+- Status: answered
 - Why asking: In ADR-0008 you chose (option C there) "local files and `localhost` by default, any `https://` URL only with the setting `porthole.allowRemoteLinks` on". That was decided when you were the only sender. Now links will come from models and from anything you click, and after the first "Do not ask me again", porthole's own rule is the only check. An opened page runs its scripts.
 - Need: pick a letter (or override — any shape answers)
 
@@ -88,13 +88,33 @@ Options:
 
 **B — workspace folders plus listed folders.** *Rationale*: Purser's two cases are real — a link to a file in Downloads would run that page's scripts in a window that stays on top, and a `localhost` link makes your machine send a request to any local service the link's author chose. B covers every use so far: the pharoscan and the porthole samples are both inside a repository open in VS Code. *Confidence*: 0.65 — because B costs one setting for pages kept outside any open folder, and I do not know how often you keep them there. *If wrong*: if task pages often live in folders VS Code does not have open, this flips to A, with the risk stated in the README.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Let's do Option A and Option B — actually, after writing this whole request, I realized that B was probably a strict superset of A, and I didn't quite get it from the phrasing, because you wrote out the option for links in A but in B just alluded to it. At any rate, I think this is what you meant:
+
+- Option A entirely, with porthole.allowLocalFiles (any local `.html`, or soon `.md`), porthole.allowRemoteLinks (HTTPS only) and porthole.allowLocalHost (localhost, IPv4 and IPv6 — both HTTP/HTTPS)
+- Option B, porthole.allowWorkspaceFolders and porthole.onlyWorkspaceFolders as an override to this mode; porthole.allowedFolders
+
+By default, I would set:
+- porthole.outsideLinks.enabled = true
+- porthole.outsideLinks.allowedFolders = []
+- porthole.outsideLinks.allowWorkspaceFolders = true
+- porthole.outsideLinks.allowLocalFiles = false (no files outside of the workspace)
+- porthole.outsideLinks.allowLocalHost = true
+- porthole.outsideLinks.allowRemoteLinks = false
+
+Maybe we can add:
+- porthole.outsideLinks.restrictLocalHostPorts = [8001, 8002]
+
+By default
+- porthole.outsideLinks.restrictLocalHostPorts = false
+
+or:
+- porthole.outsideLinks.restrictLocalHostPorts = []
 
 ---
 
 ### QST-OPEN-FOCUS: When a model opens a porthole while you are typing elsewhere, may it take the keyboard?
-- Status: unanswered
+- Status: answered
 - Why asking: If opening a floating window moves keyboard focus into it, whatever you are typing at that moment — possibly a password in a terminal — goes into the page instead (Purser). Nobody knows yet whether porthole's open call takes focus; Spike 1 ([ADR-0018](0018-spike-1-markdown-preview-and-focus.md), QST-SPIKE1-FOCUS) measures it, and this question decides what to do with the answer.
 - Need: pick a letter (or override — any shape answers)
 
@@ -109,13 +129,16 @@ Options:
 
 *Note added before any answer* (Purser, 2026-10-13): C is a courtesy, not a protection. The "you clicked this" marker is set by whoever writes the link, so a script that does not cooperate can set it too. That is acceptable for the cooperating agents this is built for, but the README must not call it protection. If Spike 1 shows VS Code can open without taking focus, only A holds against a sender that does not cooperate.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Ideally, Option C, yes — but I just did Spike 1, and it looks like we don't (yet?) know how to granularly control how the window is opened — at least not on macOS (it might be very different in Windows and Linux, and we should make a note to keep on the look out for those spikes in those OSes). So ideally Option C, and degrading gracefully to what is actually possible. If it's not possible to not take focus, I believe that is acceptable: The main reason I believe that is because of three things:
+- I don't foresee models surfacing these pages frequently, it's an O(1) within a day;
+- there is a very high, systematic, never amortized cost to search for these files, for opening them, then sending them to browser (whether internal or external) — the amortized cost of dismissing an occasionally unuseful floating window is, by comparison, very small
+- in my own experience of the last year, it is very useful to have models have the ability to open a URL and grab focus and so imparting this ability to them is useful.
 
 ---
 
 ### QST-OPEN-CONFIRM: Should porthole ask you before each outside `open`?
-- Status: unanswered
+- Status: answered
 - Why asking: VS Code asks once per extension and then never again if you tick its box. Porthole could add its own confirmation on top, but that is exactly the friction this work removes. Sounder's view: your "pull up that pharoscan" already authorizes that open.
 - Need: pick a letter (or override — any shape answers)
 
@@ -128,8 +151,8 @@ Options:
 
 **C — confirm only what the allowlist would refuse.** *Rationale*: A alone turns every refusal into a dead end you have to fix in settings; B adds a click to the very gesture this work exists to remove (Purser's doubt: the feature must beat the chord). C costs a click only in the unusual case, and turns it into a lasting choice. *Confidence*: 0.6 — because it adds a small piece of interface, and it depends on the answer to QST-OPEN-ALLOWLIST. *If wrong*: if a notification from porthole would itself be noise to you, this flips to A.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option C, and the notice should expressedly explain that this is not yet covered by the settings, but it can be if they want (praxigenic).
 
 ---
 

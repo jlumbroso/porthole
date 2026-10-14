@@ -40,7 +40,7 @@ Spike 1 ([ADR-0018](0018-spike-1-markdown-preview-and-focus.md), QST-SPIKE1-MD) 
 ## Questions
 
 ### QST-MD-MODE: When porthole opens a `.md` file, should the floating window be read-only, or a live page?
-- Status: unanswered
+- Status: answered
 - Why asking: The two routes above differ in exactly this. A read-only view is nearly free if Spike 1 works. A live page, where you can tick a task's box and have it stay ticked, needs the second route and a way for ticks to reach the file.
 - Need: pick a letter (or override — any shape answers)
 
@@ -53,8 +53,8 @@ Options:
 
 **C — read-only now, a live page later if wanted.** *Rationale*: A solves "pull up that plan" for the cost of a few lines if Spike 1 passes, and Sounder agrees ("a readable plan solves much of the named need without an interactive page protocol"); B is a separate design, because a tick in a rendered page must find its way back into the Markdown source to mean anything. *Confidence*: 0.7 — because it depends on Spike 1's outcome. *If wrong*: if Spike 1 shows the preview cannot float correctly, or if ticking boxes in a plan is what you actually want, this flips to B.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, agreed with Option C, and when we get to the live page, this is a general pattern of Markdown-to-HTML converter, where we could author our own converter that does exactly what you describe, i.e.: "Render the Markdown in HTML and store checkbox toggling in local storage" but we could also do more powerful templates/filters — and users could build their own.
 
 ---
 

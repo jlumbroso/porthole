@@ -51,7 +51,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-DRIVE-CHANNEL: How should answers come back to a model that sent porthole a request?
-- Status: unanswered
+- Status: answered
 - Why asking: Everything after `open` needs a reply: the list of windows, or whether a refresh happened. A `vscode://` link carries no reply. This choice decides whether porthole ever listens on the machine.
 - Need: pick a letter (or override — any shape answers)
 
@@ -64,13 +64,13 @@ Options:
 
 **A — links in, a state file out, with results tied to request ids.** *Rationale*: it is the smallest step from ADR-0013's link and keeps "porthole listens on no port", which the gate now checks; Purser agrees; Sounder agrees as the first experiment, on the condition that each result names the request that caused it (not just a snapshot), which this option includes. *Confidence*: 0.6 — because nobody has measured how slow or racy "send a link, then read a file" feels to a model. *If wrong*: if the file approach needs an elaborate poller and recovery logic to be reliable, this flips to B (Sounder: compare it with B rather than keep "no listener" at any cost). C can be added later over either.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option A now, and then Option C on top of it (stable intermediate forms). And the format seems more appropriate for JSONL, i.e., an append-only list of events, each a JSON dictionary/object.
 
 ---
 
 ### QST-DRIVE-CLIENT: What should a model actually run to drive porthole?
-- Status: unanswered
+- Status: answered
 - Why asking: Purser and Sounder disagree. Purser: no separate tool, because another package means another registry, token and release pipeline. Sounder: once requests need waiting, retries, quoting of paths and readable errors, a small maintained program does it better than instructions every model re-implements.
 - Need: pick a letter (or override — any shape answers)
 
@@ -86,13 +86,13 @@ Options:
 
 **Recommendation, revised** (by Glazier 5.5, Claude Opus 5.5, 2026-10-13, before any answer — a stated revision): **A for `open` now, D once results come back.** Purser's option D solves the one thing B left open, whether the script on a model's disk matches the porthole it talks to, by shipping them together. Purser accepts B or D; the objection was only ever to a new registry. *Confidence*: 0.65 — because finding the install folder per editor is new work the skill must get right. *If wrong*: if the skill cannot find the folder reliably across editors, B, with the script's version checked against porthole's.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+A for now, D once results come back, and eventually C (CLI and/or MCP as package), and all of these gracefully degrading. Agreed with the skill idea that must know editor install folders, etc.
 
 ---
 
 ### QST-DRIVE-LIST: What should "list" say about each floating window?
-- Status: unanswered
+- Status: answered
 - Why asking: You asked for "what they have". Porthole can report what it asked for and some of what VS Code reports; it cannot read the page. A list that mixes the two would mislead a model.
 - Need: pick a letter (or override — any shape answers)
 
@@ -105,13 +105,13 @@ Options:
 
 **A — what porthole knows, labelled.** *Rationale*: it answers "what they have" without claiming anything porthole cannot see; Sounder's point that asked-for and observed values must stay distinct is built in; and B can be added later as a page convention taught by the skill without changing porthole. *Confidence*: 0.75 — because the data is already in porthole's memory today. *If wrong*: if what you mean by "what they have" is a page's progress (which boxes are ticked), B becomes the point of the feature, not an extra.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, let's start thinking about Option B, not as a requirements of pages, but as a possible feature. It should be a very flexible mechanism that anything can be built on top of.
 
 ---
 
 ### QST-DRIVE-RESTART: After VS Code restarts, what should porthole say about the floating windows VS Code brought back?
-- Status: unanswered
+- Status: answered
 - Why asking: VS Code restores floating windows with their size and pin, but porthole forgets them, and a restored browser tab can only be recognised by its title. A list that silently left them out would be wrong; one that claimed them confidently could be wrong in the other direction.
 - Need: pick a letter (or override — any shape answers)
 
@@ -124,13 +124,13 @@ Options:
 
 **A — listed separately, read-only.** *Rationale*: Sounder's line: a title match can help find a window but must not authorize closing it — two pages can share a title. A keeps them visible, and C hides real windows from you. *Confidence*: 0.7 — because it is the cautious middle, but adds a category to explain. *If wrong*: if restarts are rare in your day, C is simpler and honest enough.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A is great!
 
 ---
 
 ### QST-DRIVE-PERMISSION: Which actions may a model take on a floating window without your having turned on a setting?
-- Status: unanswered
+- Status: answered
 - Why asking: Opening a window is what you asked for. Closing, moving or resizing one you have arranged is different, and so is refresh, which can lose what you typed into a page.
 - Need: pick a letter (or override — any shape answers)
 
@@ -143,8 +143,8 @@ Options:
 
 **B — open, list, refresh and focus freely.** *Rationale*: refresh and focus are what make "pull it up again" useful and change nothing you arranged; resize, pin, dock and close change your layout, which is Purser's line: "porthole will not move, resize or close a window you arranged unless you turn on one setting". *Confidence*: 0.6 — because Sounder warns that refresh can lose unsaved state in a page, which argues for A, and because C's "owned by the workflow" depends on knowing who sent a request, which a link cannot prove. *If wrong*: if your task pages keep typed notes that a refresh would erase, this flips to A.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option B, but each action should have its own setting that can be changed independent from this default we both agree on, so the power user can fine tune how they attention is interacted with very precisely.
 
 ---
 

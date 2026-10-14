@@ -9,5 +9,16 @@
     "history": [],
     "totalOccurrences": 1,
     "source": "panel"
+  },
+  {
+    "key": "jlumbroso-porthole:13::d4520cfe1d8a::0",
+    "adrPath": "docs/adr/0013-open-a-porthole-from-outside-vs-code.md",
+    "adrNumber": 13,
+    "questionText": "What may a link from outside VS Code open, by default?",
+    "draftText": "Let's do Option A and Option B — actually, after writing this whole request, I realized that B was probably a strict superset of A, and I didn't quite get it from the phrasing, because you wrote out the option for links in A but in B just alluded to it. At any rate, I think this is what you meant:\n\n- Option A entirely, with porthole.allowLocalFiles (any local `.html`, or soon `.md`), porthole.allowRemoteLinks (HTTPS only) and porthole.allowLocalHost (localhost, IPv4 and IPv6 — both HTTP/HTTPS)\n- Option B, porthole.allowWorkspaceFolders and porthole.onlyWorkspaceFolders as an override to this mode; porthole.allowedFolders\n\nBy default, I would set:\n- porthole.outsideLinks.enabled = true\n- porthole.outsideLinks.allowedFolders = []\n- porthole.outsideLinks.allowWorkspaceFolders = true\n- porthole.outsideLinks.allowLocalFiles = false (no files outside of the workspace)\n- porthole.outsideLinks.allowLocalHost = true\n- porthole.outsideLinks.allowRemoteLinks = false\n\nMaybe we can add:\n- porthole.outsideLinks.restrictLocalHostPorts = [8001, 8002]\n\nBy default\n- porthole.outsideLinks.restrictLocalHostPorts = false\n\nor:\n- porthole.outsideLinks.restrictLocalHostPorts = []\n",
+    "updatedAt": "2026-10-13T23:33:09.064Z",
+    "history": [],
+    "totalOccurrences": 1,
+    "source": "panel"
   }
 ]
