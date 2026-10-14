@@ -43,7 +43,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-SITE-ADDRESS: Where does the page live?
-- Status: unanswered
+- Status: answered
 - Why asking: The address goes into the Marketplace listing's homepage link and into anything people share, so changing it later breaks links. GitHub Pages serves a repository's site at `https://jlumbroso.github.io/porthole/` with no setup beyond the repository's settings; a custom domain needs a DNS record and a name you own.
 - Need: pick a letter (or override — any shape answers)
 
@@ -56,7 +56,11 @@ Options:
 **A — GitHub's address.** *Rationale*: the repository is already public on GitHub, the GitHub Release and README links already point there, and a domain adds a renewal nobody has asked for. *Confidence*: 0.7 — because this is a preference about your name on the web, which I cannot see. *If wrong*: if you already keep a domain for your projects, B.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Yes, Option A, for now, with `https://jlumbroso.github.io/porthole/`
+
+(Not to worry, but making a mental note: At some later point, we may move this project to the [Lumbroso Commons](https://github.com/lumbroso-commons). I am waiting for publisher verification to be approved for this GitHub organization — it would be appropriate if we expect others to want to contribute to this.)
+
+Also, we are proud of any association with GitHub! A `github.io` subdomain is nothing to sneeze at! A website subsidized by the best, and only meritorious, constructive and largely epistemic social media in the world! "independent of GitHub" is not a virtue in its own, in my opinion. We could create subdomains like `porthole.lumbroso.computer` or `porthole.projects.lumbroso.computer`, but I think association with GitHub, the place where things get built, is not bad — see @johnpapa illustrating just that with his amazing `vscode-peacock` extension and website.
 
 ---
 
