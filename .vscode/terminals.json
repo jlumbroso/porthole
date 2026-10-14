@@ -16,7 +16,7 @@
       "color": "terminal.ansiCyan",
       "cwd": "${workspaceFolder}",
       "command": "source .claude/agent.env >/dev/null 2>&1; just launch glazier",
-      "target": "glazier--b03e18726702",
+      "target": "glazier--322ef093bfb8",
       "dynamicTitle": true,
       "execute": true,
       "recycle": false,
@@ -29,7 +29,7 @@
       "color": "terminal.ansiBrightRed",
       "cwd": "${workspaceFolder}",
       "command": "source .claude/agent.env >/dev/null 2>&1; just launch surveyor",
-      "target": "surveyor--b03e18726702",
+      "target": "surveyor--322ef093bfb8",
       "dynamicTitle": true,
       "execute": true,
       "recycle": false
@@ -41,7 +41,19 @@
       "color": "terminal.ansiBlue",
       "cwd": "${workspaceFolder}",
       "command": "source .claude/agent.env >/dev/null 2>&1; just launch purser",
-      "target": "purser--b03e18726702",
+      "target": "purser--322ef093bfb8",
+      "dynamicTitle": true,
+      "execute": true,
+      "recycle": false
+    },
+    {
+      "name": "Sounder 6",
+      "description": "Gives attributed advice and challenges assumptions; does not implement.",
+      "icon": "robot",
+      "color": "terminal.ansiBlue",
+      "cwd": "${workspaceFolder}",
+      "command": "source .claude/agent.env >/dev/null 2>&1; just launch sounder",
+      "target": "sounder--322ef093bfb8",
       "dynamicTitle": true,
       "execute": true,
       "recycle": false
