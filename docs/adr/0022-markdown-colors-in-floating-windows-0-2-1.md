@@ -46,7 +46,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-NAME-MD-COLORS: What are the setting and its values called?
-- Status: unanswered — routed to the naming review; blocks 0.2.1
+- Status: answered
 - Why asking: The key is permanent once published, and so are its values, since people write them into their settings. As built: `porthole.markdown.colorScheme`, values `auto` (follow VS Code's theme), `light`, `dark`; description "Colors of Markdown files shown in Porthole's floating windows. Other Markdown previews keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."
 - Need: pick a letter (or override — any shape answers)
 
@@ -69,13 +69,13 @@ Options:
 
 The description text ships as built — promise, boundary, known-limit, in three honest sentences; the repetition of "follow VS Code's theme" is clarity, not redundancy, because it answers two different worries with one consistent truth. *Confidence*: 0.8. *If wrong*: values are the fossil here, and `auto`/`light`/`dark` are the three words no future regrets; the key's group could migrate in a minor version if the settings taxonomy ever reorganizes — cheap, unlike values.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Thanks to the naming review for the strong and detailed epistemic justification for the name. Approving Option A exactly as recommended.
 
 ---
 
 ### QST-CHECK-MD-COLORS: Do Porthole's Markdown windows change color, and only they?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** The whole feature rests on one stylesheet rule recognizing which preview is in a Porthole window, and on VS Code reloading that stylesheet when Porthole rewrites it. Both are read in source, never run; only a real VS Code shows colors. It also checks the promise in the setting's description: an ordinary Markdown preview must not change. Nothing here changes anything you would want to keep; the last step puts the setting back.
 - Need: pick a letter (or override — any shape answers). About three minutes. A screenshot after step 4 would help.
 
@@ -103,8 +103,18 @@ Options:
 
 **A — all as described** (a prediction). *Rationale*: the stylesheet route and the source tag are read in the Markdown extension's source at 1.141.0 (`documentRenderer.ts` L86–117 and its `#getStyles`), `:has()` is supported by the Chromium inside VS Code, and the rule-writing is covered by seven tests (`src/test/markdownColors.test.ts`). *Confidence*: 0.5 — because two links have never run: whether VS Code reloads a contributed stylesheet after it is rewritten (it may cache the file), and whether the rule matches the page's real tag text. *If wrong*: B means the rule does not match or the file is not reloaded, and the fallback is to name the stylesheet differently each time it is written; C means the selector is too broad; D means the refresh does not reload styles, and Porthole must reopen the window instead.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+**Option A.** Exactly as described/predicted.
+
+Screenshots for the record:
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 11.48.57 AM-close-up.png` close-up of the settings with menu open and all options displayed, the default is selected, "auto"
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 11.49.06 AM.png` user settings page searching for "`porthole.markdown.colorS`" changed to "light"
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 11.49.26 AM.png` "Light" Markdown floating window
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 11.51.26 AM.png` "Light" forced Markdown floating window means that the rendered tab (of the source tab) displays with the same formatting, here "Light" (despite the "auto" 
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 11.52.13 AM.png` as predicted, opening other Markdown pages is not affected by the changes in formatting injected in the preview of the floating window; here, the rendered tab for `CHANGELOG.md` is in "dark" (= "auto"?) mode, despite both the floating window and rendered tab version of `README.md` is "light", again, as predicted
+- See: `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 11.53.00 AM.png` I've confirmed that explicitly setting "dark" also works, and that the change is propagated within 0-2s to an existing floating window
+
+This was also exceptionally described, I was able to follow, pace and remember the semantics behind this manipulation/experiment extremely well! Thank you Glazier 5.5!
 
 ---
 

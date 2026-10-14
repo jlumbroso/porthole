@@ -31,19 +31,5 @@
     "history": [],
     "totalOccurrences": 1,
     "source": "panel"
-  },
-  {
-    "key": "jlumbroso-porthole:21::ad7140c527af::0",
-    "adrPath": "docs/adr/0021-names-for-0-2-0-and-the-outside-links-settings.md",
-    "adrNumber": 21,
-    "questionText": "What is the setting that says whether Porthole may ask to keep floating windows compact?",
-    "draftText": "Excellent explanation, thanks to the naming review — Option A, `porthole.",
-    "updatedAt": "2026-10-14T13:54:37.606Z",
-    "history": [
-      "Excellent explanation",
-      "Excellent explanation, thanks to the naming review — Option A"
-    ],
-    "totalOccurrences": 1,
-    "source": "panel"
   }
 ]
