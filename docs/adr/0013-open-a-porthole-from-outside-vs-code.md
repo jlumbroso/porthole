@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Open a porthole from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
@@ -208,6 +208,7 @@ From Jérémie's answers (2026-10-13):
   This changes ADR-0008's earlier answer in one respect: `localhost` stays on by default, and local files outside the workspace move behind their own setting.
 - **Focus (QST-OPEN-FOCUS, C, degrading to what is possible)**: ideally a clicked link takes focus and an unattended open does not. Spike 1 showed that on macOS every new floating window takes the keyboard, with or without the "do not take focus" options (ADR-0018). So an outside `open` **takes focus**, and that is accepted, for three reasons Jérémie gave: models will surface a page about once a day; finding and opening the page by hand is a large cost paid every time; and a model that can open a page and take focus has proved useful over the past year. A quiet open stays the goal for re-opening into an existing window, where the source says focus is not moved (Surveyor), and is to be re-tested on Windows and Linux.
 - **Confirmation (QST-OPEN-CONFIRM, C)**: no porthole prompt for what the settings allow. For what they would refuse, porthole asks once, and the notice says plainly that this case is not yet covered by the settings and offers to add it — the prompt teaches the settings.
+- **Routing (QST-OPEN-ROUTING, C, widened)**: a link may name its file in three ways, *"to facilitate communication between model and human — not to introduce new contortions"*: a **relative path alone** (resolved against the receiving window's workspace folders), a **relative path with a repository** (`repo=porthole&file=docs/tasks.html`: the window whose workspace is that repository resolves it, found by folder name or git root), or an **absolute path**, optionally with a repository that is used only to warn when the two disagree. A link received by a window that does not own the file is handed on to the one that does (needs ADR-0014's state file). Jérémie also asked that a floating window's title can start with the project name in brackets, `[porthole] tasks`, so that one can tell at a glance which project opened it.
 
 What is also settled, from the seed's thread:
 
@@ -224,7 +225,9 @@ What is also settled, from the seed's thread:
 
 - [x] Answer the four questions — Owner: Jérémie (2026-10-13)
 - [x] Run Spike 1 — Owner: Jérémie (2026-10-13, [ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
-- [ ] Answer QST-OPEN-ROUTING — Owner: Jérémie
+- [x] Answer QST-OPEN-ROUTING — Owner: Jérémie (2026-10-13)
+- [ ] Find out whether porthole can set a floating window's title at all (the title VS Code shows is built from its own settings and the page's title) — Owner: Surveyor
+- [ ] Decide how a relative path alone resolves when the receiving window has several workspace folders, or none — Owner: Glazier, as a question if it is not obvious
 - [ ] Put the setting names in the table above through the naming review — Owner: Glazier
 - [ ] Build the handler — Owner: Glazier
 - [ ] Re-test whether a new floating window takes focus on Windows and Linux, when a machine is available — Owner: to be assigned
@@ -250,6 +253,12 @@ What is also settled, from the seed's thread:
 - Contributors: Jérémie Lumbroso — the answers, including the settings design; Glazier 5.5 (Claude Opus 5.5) — this record
 - Changes: Decision filled; QST-OPEN-ROUTING added from his note on ADR-0017's QST-TERM-LINK; the link now carries its version in the path
 - Outcome: `Draft → Accepted`; one question open (routing)
+
+### Iteration 4 (2026-10-13)
+- Trigger: Jérémie answered QST-OPEN-ROUTING
+- Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: routing recorded in the Decision; two follow-ups (window title prefix; relative paths with several folders)
+- Outcome: stays `Accepted`; no question open
 
 ---
 
