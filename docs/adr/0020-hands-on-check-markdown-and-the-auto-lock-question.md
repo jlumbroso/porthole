@@ -29,7 +29,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-CHECK-AUTOLOCK: Does the one-time question appear once, and does each answer do what it says?
-- Status: answered
+- Status: answered — A, in a different order (Turn On first); the check found a real bug: Turn On copied VS Code's defaults into user settings (fixed, commit "fix: Turn On no longer copies…"); cleanup is QST-SETTINGS-CLEANUP
 - Why asking: This dialog is new interface that only appears in a real VS Code. It also writes to your user settings, so what it writes must be right. Without it, a floating window can lose compact mode when a second file opens inside it.
 - Need: pick a letter (or override — any shape answers). About four minutes. A screenshot of the dialog would help.
 
@@ -135,7 +135,7 @@ I think the copy should be more big-picture, just a bit — why are we asking th
 ---
 
 ### QST-CHECK-MD-ENTRY: Do porthole's own ways in work for a Markdown file?
-- Status: answered
+- Status: withdrawn — the steps said "the porthole window", which could mean the porthole workspace window or the debug window; reissued with precise names as QST-CHECK-MD-ENTRY2 (Glazier, 2026-10-13)
 - Why asking: Spike 1 opened Markdown from the spike's own command. The real porthole adds three ways in — the chord, the button in the editor's title bar, and the Explorer's right-click menu — each guarded by a condition that only a real VS Code evaluates, and those conditions now include `.md`.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -160,6 +160,58 @@ Options:
 
 **ANS:** (by Jérémie Lumbroso)
 I have no idea what "In the porthole window's Explorer" means. You need to write better instructions. Writing instructions using made-up, approximate terminology wastes everyone's time.
+
+---
+
+### QST-CHECK-MD-ENTRY2: Do porthole's three ways in open a Markdown file rendered?
+- Status: unanswered
+- Why asking: **What this finds out.** Porthole has three ways to pop a file out: the Ctrl+Alt+M chord, a button in the editor's title bar, and an item in the Explorer's right-click menu. Each one is shown only when VS Code decides the selected file qualifies, and that rule was just widened from HTML files to Markdown files. Only a real VS Code applies these rules, so a mistake in them would mean a way in that is silently missing for Markdown. The Markdown window itself is already proven (Spike 1); this checks only the ways in.
+- Need: pick a letter (or override — any shape answers). About two minutes.
+
+**Where to do this.** Everything happens in **your porthole workspace window**: the VS Code window you normally use for this project, in which the folder `porthole` is open, and whose title bar ends with `porthole`. That window runs the Porthole you installed. **Do not use a debug window**: no "Run and Debug", no window whose title starts with `[Extension Development Host]`. If one is open, close it first.
+
+**Before you start.** In your porthole workspace window, run **Developer: Reload Window** (Shift+Cmd+P, type `Reload Window`, press Enter), because Porthole was reinstalled tonight with a fix.
+
+**Steps.** One action each. "The Explorer" means the file list in the left side bar of your porthole workspace window; Shift+Cmd+E shows it.
+
+1. **Chord.** In the Explorer, click `README.md` (top level of the folder). It opens as source text in an editor tab. Click once inside that text, then press **Ctrl+Alt+M**. A floating window should appear showing the README rendered: headings in large type, no `#` characters.
+2. **Close** that floating window with its red button, top left.
+3. **Title-bar button.** Look at the top right of the `README.md` source tab, on the same line as the tab's name: among the small icons there should be one showing two overlapping windows; hovering it shows "Pop Out to Floating Window". Click it. The same rendered floating window should appear.
+4. **Close** it again.
+5. **Explorer menu.** In the Explorer, right-click `CHANGELOG.md` (top level of the folder). The menu should include **Pop Out to Floating Window**. Choose it. `CHANGELOG.md` should appear rendered in a floating window.
+6. **Close** it.
+
+Options:
+- **A — all three worked**: each opened the rendered Markdown in a floating window.
+- **B — some did not**: say which step's way in was missing or did nothing.
+- **C — source instead of rendered**: a floating window showed `#` and `-` characters, possibly with a Porthole warning saying it opened the file as text.
+- **D — something else.**
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
+
+**A — all three worked** (a prediction). *Rationale*: the open is the call Spike 1 proved for Markdown, and the three rules use the same pattern that already works for `.html`, widened to `.md` and `.markdown` (`package.json`, under `contributes.menus` and `keybindings`). *Confidence*: 0.75 — because the widened rules have never been applied by a real VS Code. *If wrong*: B points at the one rule that is wrong; C means VS Code did not choose its Markdown preview for this file, and Porthole's warning will say so.
+
+**ANS:** (by Jérémie)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+### QST-SETTINGS-CLEANUP: May I remove the VS Code defaults that Porthole wrote into your user settings?
+- Status: unanswered
+- Why asking: **What happened.** When you chose Turn On, the build you had then wrote the whole `workbench.editor.autoLockGroups` value into your user settings file (`~/Library/Application Support/Code/User/settings.json`): VS Code's 25 default entries plus Porthole's two. Written out like that, those defaults no longer follow VS Code: if a future VS Code changes one, your settings keep the old value. The bug is fixed, but the entries are still in your file. It is your settings file, so I will not edit it without your yes.
+- Need: pick a letter (or override — any shape answers)
+
+Options:
+- **A — reduce it to what anyone asked for**: replace the entry with only `"workbench.editor.browser": true` and `"vscode.markdown.preview.editor": true`, the two Porthole turned on. Everything else returns to following VS Code's defaults. Nothing else in the file changes.
+- **B — leave it as it is**: everything keeps working; the defaults stay frozen.
+- **C — you clean it up yourself**, in Preferences: Open User Settings (JSON).
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
+
+**A — reduce it to the two entries.** *Rationale*: I checked the file: the entry holds 27 keys, and every value other than Porthole's two matches VS Code's own default (checked against VS Code's source at 1.141.0: only `terminalEditor`, `workbench.editor.processExplorer` and two webview editors are on by default, and those four are the ones set to true), so removing them changes nothing today and keeps future defaults working. *Confidence*: 0.8 — because I cannot tell from the file whether you had set any of those values yourself before; if you had, the value equals the default anyway. *If wrong*: if you deliberately set one of those entries, say which, and A keeps it.
+
+**ANS:** (by Jérémie)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
 ---
 
