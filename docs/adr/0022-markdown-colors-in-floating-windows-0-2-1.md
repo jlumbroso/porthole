@@ -119,7 +119,7 @@ This was also exceptionally described, I was able to follow, pace and remember t
 ---
 
 ### QST-NAME-MD-DESC: Should the setting's description say that a preview of the same file changes too?
-- Status: unanswered — routed to the naming review, then Jérémie (he asked for this revision, 2026-10-14); for 0.2.2
+- Status: answered
 - Why asking: **The description, shipped in 0.2.1, says slightly less than what happens.** It reads: *"Colors of Markdown files shown in Porthole's floating windows. Other Markdown previews keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."* Jérémie's hand check (screenshot 11.51.26 above) shows that while `README.md` is popped out with `light`, VS Code's own preview of `README.md` in the main window turns light too; a preview of `CHANGELOG.md` stays on VS Code's theme. Why: the stylesheet rule recognizes a preview by the file it shows, and every preview of that file names the same file. The rule is removed when the floating window closes, so the effect lasts only while the file is popped out. The description is the one place a person reads about this setting in VS Code's Settings editor, so a person who sees their docked preview turn light has nowhere else to learn that it is expected. The three per-value descriptions ("Follow VS Code's theme." and the two "Show Markdown in Porthole's floating windows with … colors, whatever VS Code's theme.") are not in question.
 - Need: pick a letter (or override — any shape answers), or write the sentence
 
@@ -159,7 +159,7 @@ README/CHANGELOG wording Glazier already shipped is compatible with
 this sentence; aligning them is phrasing, not semantics.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Approving Option D exactly as recommended/stated. Excellent settings prose, thanks to the naming review, and thanks for point out the value of a strong falsifier culture!
 
 ---
 
