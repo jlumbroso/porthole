@@ -37,7 +37,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-NAME-AUTOLOCK-KEY: What is the setting that says whether Porthole may ask to keep floating windows compact?
-- Status: unanswered — routed to the naming review; blocks 0.2.0
+- Status: answered
 - Why asking: At the first pop-out of each session, Porthole asks whether VS Code may lock each new floating window to its page, so the window stays compact. "Don't Ask Again" turns this setting off. It is a key, so its name is permanent once 0.2.0 ships. Today: `porthole.askToAutoLock` (boolean, default `true`).
 - Need: pick a letter (or override — any shape answers)
 
@@ -54,13 +54,13 @@ Options:
 
 **B — `porthole.askToKeepCompact` — confirmed and raised to 0.75.** The rule that decides it: *a key that controls a question should read as the question it controls* — the dialog's title asks "Keep Porthole's floating windows compact?", and a user later hunting their settings for "that compact question" will find `askToKeepCompact` and never `askToAutoLock`, because "auto-lock" is a mechanism they were never asked about. A's precision is not lost, it is relocated to its right surface: the dialog body already discloses `workbench.editor.autoLockGroups` by name, exactly once — the zone discloses, the key stays goal-named. (This is the inverse case of the `useInternalApi` rename: there the key *claimed* a mechanism falsely; here the key should not claim the mechanism at all.) *Confidence*: 0.75. *If wrong*: A costs one migration, and the dialog title would then be the surface to re-word toward "lock" — moving the whole vocabulary toward the mechanism, which nothing else in porthole wants.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Excellent explanation, thanks to the naming review — Option B, `porthole.askToKeepCompact`, as recommended. Thanks for translating the internal settings consideration into external labels that are legible to the end-user!
 
 ---
 
 ### QST-NAME-RESET-COMMAND: What is the command that lists and removes the settings set by or for Porthole called?
-- Status: unanswered — routed to the naming review; blocks 0.2.0
+- Status: answered
 - Why asking: It opens a checklist of every user setting set by or for Porthole, and removes the ones ticked. It is the way back Jérémie asked for after Porthole once wrote VS Code's defaults into his settings. Today: **Porthole: Review and Reset Settings…** (command id `porthole.reviewSettings`).
 - Need: pick a letter (or override — any shape answers)
 
@@ -77,13 +77,13 @@ Options:
 
 **A — "Review and Reset Settings…" — confirmed at 0.8, and C's exactness claim is inverted, which seals it.** The question's own text says the checklist covers settings "set by or for Porthole" — including Porthole keys the person set themselves — so C's "Changed by Porthole" would *under*-claim the list it opens: the more "exact" title is the less true one. A's virtues stand: the verb pair review-then-reset is the actual flow in order; the trailing "…" is VS Code's asks-before-acting convention; the palette category scopes it ("Porthole: Review and Reset Settings…") so B's possessive would say Porthole twice; and the founder's own mouth already says "Review & Reset" — the fluent speaker using the name unprompted is the explainer's test passing, the strongest field evidence a title gets. *Confidence*: 0.8. *If wrong*: nothing fossilizes — command titles re-strike in any release.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Option A, thanks so much to the naming review for catching a inverted exactness! This would be a wonderful topic for a metacognitive vignette about naming.
 
 ---
 
 ### QST-NAME-DIALOG-WORDS: Are the dialog's and notices' words right?
-- Status: unanswered — routed to the naming review; blocks 0.2.0
+- Status: answered
 - Why asking: These are the first words of Porthole a new user reads after the menu item. As built (`src/autoLock.ts`, `src/settingsReview.ts`):
   - Dialog title: "Keep Porthole's floating windows compact?"
   - Dialog buttons: **Turn On**, **Not Now**, **Don't Ask Again**
@@ -109,13 +109,13 @@ Options:
 
 Minor, at Glazier's discretion: "removed N setting(s)" → let the code pluralize ("removed 1 setting" / "removed 3 settings") — the "(s)" is the one place porthole's text sounds like a machine. *Confidence*: 0.7. *If wrong*: the founder saw the dialog and did not object, so A ships fine and these edits ride 0.2.1.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Accepting the naming review's recommendation exactly, as described, Option B, with the two edits ("Turn On" → "Keep Compact"; "Turning this on sets the VS Code setting…" → "Choosing Keep Compact sets the VS Code setting…"). And let's let the code pluralize rather than using the "(s)" — this is good polish. Thanks to the naming review!
 
 ---
 
 ### QST-NAME-OUTSIDE-LINKS: What are the outside-links settings, the per-action settings and the event file called?
-- Status: unanswered — routed to the naming review; does not block 0.2.0
+- Status: answered
 - Why asking: ADR-0013 and ADR-0014 decided what these settings do; their names are Jérémie's working names and have not been reviewed. They will be keys, so permanent once shipped. As decided:
   - `porthole.outsideLinks.enabled` (true), `.allowWorkspaceFolders` (true), `.allowedFolders` ([]), `.allowLocalFiles` (false), `.allowLocalHost` (true), `.restrictLocalHostPorts` ([]), `.allowRemoteLinks` (false)
   - one setting per outside action, with open, list, refresh and focus allowed by default and resize, pin, dock and close not (ADR-0014, QST-DRIVE-PERMISSION) — no names yet
@@ -138,8 +138,8 @@ Keep Jérémie's `outsideLinks` group, and use one pattern for every switch, so 
 
 *Confidence*: 0.75 on the family split and the localhost fix; 0.7 on the event grammar. *If wrong*: the `actions.` group renames in one sweep before ADR-0013/0014 build — nothing here is shipped yet, which is why this question was asked now, and asking-before-the-fossil deserves its answer in kind.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Thanks to the naming review — accepting their recommendation exactly as stated, with every detail (and in particular their three fixes). Appreciating learning about the proper way to case `localhost`; I will remember in the future (I am the one who incorrectly casified it). See screenshot at `docs/adr/attachments/screenshots/2026-10-13-additional-tests/Screenshot 2026-10-14 at 9.54.11 AM.png`.
 
 ---
 
