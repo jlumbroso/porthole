@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Publish to Open VSX through trusted publishing, with the Marketplace token kept for now
 
 - **Date**: 2026-10-13
-- **Iteration**: 2
+- **Iteration**: 3
 - **Status**: Partially Implemented
 - **Deciders**: Jérémie Lumbroso (asked for it); Purser 5.5 (Claude Sonnet 5.5) set it up
 
@@ -78,6 +78,25 @@ Yes, okay let's research this, Option A.
 
 ---
 
+### QST-OVSX-GATE: Should every release still wait for an approval before it reaches Open VSX, and should it reach Open VSX twice?
+- Status: unanswered
+- Why asking: Today every release reaches Open VSX **twice, by design**: `just publish` uploads with the classic token (`OVSX_PAT`), and then `release.yml` dispatches `publish-open-vsx.yml`, which waits for your approval in the `open-vsx` environment and could only fail as a duplicate. At 0.2.0 and 0.2.1 that waiting run was cancelled by hand. The approval gate does two real things: the registration on open-vsx.org trusts whoever can run the workflow file, so a reviewer stands between a run and the registry, and a gate stops a duplicate upload. It does **not** keep the publish "a human act": that rule was never yours (it came from a founding brief, and the wording is being corrected). The workflow's real upload, with the short-lived token, has never run for a real new version; only the token exchange was rehearsed.
+- Need: pick a letter (or override: any shape answers)
+
+Options:
+- **A — stop the automatic dispatch now, keep the workflow for later**: `release.yml` no longer starts `publish-open-vsx.yml`. The workflow stays, run by hand with `gh workflow run` only when we want to try or use it. `just publish` keeps using `OVSX_PAT`. No more cancelled runs; nothing else changes.
+- **B — make trusted publishing the only Open VSX route, with the gate**: revoke `OVSX_PAT`, remove the Open VSX step from `just publish`, and let the tag trigger the workflow, which waits for your approval each release. One route, one click per release. This needs one real release to prove the upload first.
+- **C — same as B, without the approval**: the tag triggers the workflow and it publishes by itself. Fastest, and anyone who can push a tag to the repository (today only you and the seats working with your login) can publish to Open VSX.
+
+**Recommendation**: (by Purser 5.5, Claude Sonnet 5.5, 2026-10-14)
+
+**A — stop the automatic dispatch now.** *Rationale*: it removes the manual cancellation at no risk, and it keeps both options B and C open until the upload has been proven once (run the workflow by hand for a real release, see the result, then choose). B and C both depend on that unproven upload. *Confidence*: 0.7 — because I have seen the token exchange work but not the upload, and the choice between B and C is a risk taste that is yours. *If wrong*: if you want to settle it now and are happy to rely on the exchange rehearsal alone, this flips to B.
+
+**ANS:** (by [name])
+[Fill this in]
+
+---
+
 ## Supporting Materials
 
 ### DOC: Publishing to the Marketplace without a stored token (research for QST-MS-OIDC, 2026-10-13)
@@ -101,7 +120,7 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 ### Chosen: a separate publish workflow with an approval gate
 
 - `.github/workflows/publish-open-vsx.yml` publishes the **`.vsix` attached to a GitHub Release** (downloaded by tag), using `ovsx publish --trusted-publishing`. What is attached is what goes live; the earlier release notes had to say the two were separately built.
-- The job runs in a GitHub **environment named `open-vsx` that requires Jérémie's approval** (created 2026-10-13, required reviewer `jlumbroso`). The publish is therefore still his act: one click in GitHub, and no secret stored.
+- The job runs in a GitHub **environment named `open-vsx` that requires Jérémie's approval** (created 2026-10-13, required reviewer `jlumbroso`). The publish is therefore still his act: one click in GitHub, and no secret stored. *(Correction, 2026-10-14: "his act" echoed a rule from the release seat's founding brief, "publishing is Jérémie's act, by his hand", which Jérémie never held and which was made up when the brief was written. What the gate really does is stand a reviewer between the workflow and the registry, and stop a duplicate; whether it stays is QST-OVSX-GATE.)*
 - `release.yml` dispatches the publish workflow after it creates a Release. The publish then waits for the approval.
 - The registration on open-vsx.org names this workflow file and pins the environment: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`. **Jérémie creates it** (it needs his Open VSX session).
 - Not done: the VS Code Marketplace (no OIDC route in use; `just publish` keeps the token), and revoking `OVSX_PAT` (see QST-OVSX-PAT).
@@ -135,6 +154,18 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 ---
 
 ## Iterations
+
+### Iteration 3 (2026-10-14)
+- Trigger: Glazier's brief (the founding-brief rule left in the CI comments and in this ADR), at Jérémie's request.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5).
+- Changes: the "his act" wording corrected by provenance here and in both workflows' headers; QST-OVSX-GATE added.
+- Outcome: unchanged (Partially Implemented).
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie registered the trusted publisher and approved the rehearsal; he answered both questions.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5); Jérémie Lumbroso.
+- Changes: rehearsal result recorded (token issued, duplicate refused); the Marketplace research note written.
+- Outcome: Draft → Partially Implemented.
 
 ### Iteration 1 (2026-10-13)
 - Trigger: Jérémie's request to set up trusted publishing, after the first publish.

@@ -3,8 +3,11 @@
 # Marketplace or Open VSX: that is `just publish`, run from a machine that holds the tokens
 # (the tokens are deliberately not stored as repository secrets). A tag whose version does
 # not match package.json, or has no CHANGELOG section, fails here before anything is created.
-# After the Release exists it asks publish-open-vsx.yml to run; that waits for a person to
-# approve the `open-vsx` environment before anything reaches Open VSX.
+# After the Release exists it asks publish-open-vsx.yml to run; that waits for the `open-vsx`
+# environment's reviewer before anything reaches Open VSX (reasons in that file's header). Today
+# `just publish` has already reached Open VSX by then, so the dispatched run can only fail as a
+# duplicate and is cancelled each time; ADR-0012, QST-OVSX-GATE, asks what to do about that.
+# (An earlier comment here called the approval a "human act" rule; that rule was never Jérémie's.)
 name: release
 
 on:

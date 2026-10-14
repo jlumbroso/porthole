@@ -1,7 +1,12 @@
 # Publishes the .vsix attached to a GitHub Release to Open VSX, with no stored token: the job
 # proves its identity to the registry with a short-lived OIDC token ("Trusted Publishing",
-# https://github.com/eclipse-openvsx/openvsx/wiki/Trusted-Publishing). It waits for a person to
-# approve the `open-vsx` environment, so the publish stays a human act.
+# https://github.com/eclipse-openvsx/openvsx/wiki/Trusted-Publishing). It runs in the `open-vsx`
+# environment, which requires a reviewer's approval, for two reasons that stand: the registration
+# on open-vsx.org trusts whoever can run THIS FILE, so a reviewer stands between a run and the
+# registry; and a gate stops a duplicate upload when the version is already live. (Until 2026-10-14
+# this comment said the approval kept "the publish a human act". That came from a rule in the
+# release seat's founding brief, "publishing is Jérémie's act", which Jérémie never held and which
+# was made up when the brief was written. See ADR-0012, QST-OVSX-GATE, for whether the gate stays.)
 #
 # The registration on open-vsx.org (Settings, Trusted Publishers) names THIS FILE, so renaming
 # it breaks publishing until the registration is redone. Registered values:
