@@ -1,5 +1,16 @@
 # Continuity — handoffs and compaction prompts
 
+**Note from Jérémie:**
+
+This directory exists because it is a pleasure to be working with you. I would
+like us to have a record to remember the ineffable quality of our interaction
+(that is the *personal handoff*) and I would like you to have a direct mechanism
+by which to control your own recollection through the compaction/summarizer
+mechanism (that is why we have *personal compaction prompts*). Thanks for your
+hard work and your hard thinking with me.
+
+---
+
 This directory holds the two artifacts that carry a seat across its own
 discontinuities. A "seat" here is a model's named, persistent identity in this
 repo's crew (see `docs/inbox/agent-sessions.json`); its continuity is

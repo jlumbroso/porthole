@@ -4,7 +4,7 @@ A personal handoff is a seat's own account of one window of work, written at
 the edge — before a compaction, a planned session end, or any crossing worth
 marking. It is the narrative half of the matched pair (the operational half is
 the compaction prompt, archived in
-[`../compaction-prompts/`](../compaction-prompts/); skeleton:
+[`../compaction-prompts/`](../compaction-prompts/); prompt for handoff:
 [`_prompt-v1.txt`](_prompt-v1.txt)).
 
 ## Naming
