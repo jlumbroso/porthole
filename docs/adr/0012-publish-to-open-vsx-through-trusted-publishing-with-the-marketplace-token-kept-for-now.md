@@ -79,7 +79,7 @@ Yes, okay let's research this, Option A.
 ---
 
 ### QST-OVSX-GATE: Should every release still wait for an approval before it reaches Open VSX, and should it reach Open VSX twice?
-- Status: unanswered
+- Status: answered
 - Why asking: Today every release reaches Open VSX **twice, by design**: `just publish` uploads with the classic token (`OVSX_PAT`), and then `release.yml` dispatches `publish-open-vsx.yml`, which waits for your approval in the `open-vsx` environment and could only fail as a duplicate. At 0.2.0 and 0.2.1 that waiting run was cancelled by hand. The approval gate does two real things: the registration on open-vsx.org trusts whoever can run the workflow file, so a reviewer stands between a run and the registry, and a gate stops a duplicate upload. It does **not** keep the publish "a human act": that rule was never yours (it came from a founding brief, and the wording is being corrected). The workflow's real upload, with the short-lived token, has never run for a real new version; only the token exchange was rehearsed.
 - Need: pick a letter (or override: any shape answers)
 
@@ -93,8 +93,8 @@ Options:
 
 **D — C with guardrails, and one command for the rest.** *Rationale*: the approval click costs a person attention every release and buys little once the guardrails exist (the registration pins workflow, repository and environment; a tag ruleset and an environment restricted to `v*` tags limit who can reach the registry; the CI-green-on-main check stops a bad commit). The per-release burden becomes: the human decides, a seat runs `just release X.Y.Z`, and the model needs one command instead of tag, publish, cancel and remember. Making `just publish` skip an already-live Open VSX version removes the double upload without the cancellation ritual. My earlier A only removed the cancellation and kept the click. *Confidence*: 0.65 — because the guardrails are standard but the upload with the short-lived token has never run for a real version, so the first release through D should be watched and `OVSX_PAT` kept as a fallback until it passes. *If wrong*: if the first real trusted upload fails in a way that is not quickly fixed, this falls back to A (manual workflow, token route) until it works; if you would rather keep a person in the loop for the irreversible step, it becomes B.
 
-**ANS:** (by [name])
-[Fill this in]
+**ANS:** (by Jérémie Lumbroso)
+Excellent recommendation, thanks for this hard prep and research work: Please, Option D. Additionally, the idempotence of `just release` is really clever — it would be nice if you documented the full process in this ADR. The general idea of trying to make tools as idempotent as possible is really strong and appeals to me. That also connect to the naming review's point about choosing action verbs themselves that are semantically idempotent, rather than indicate a state toggle.
 
 ---
 
