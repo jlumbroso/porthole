@@ -218,7 +218,7 @@ Screenshots:
 ---
 
 ### QST-SETTINGS-CLEANUP: May I remove the VS Code defaults that Porthole wrote into your user settings?
-- Status: answered
+- Status: answered — A, done 2026-10-14 by Glazier (backup kept outside the repo); the reset command he asked for is built and is checked in QST-CHECK-TAB-AND-RESET
 - Why asking: **What happened.** When you chose Turn On, the build you had then wrote the whole `workbench.editor.autoLockGroups` value into your user settings file (`~/Library/Application Support/Code/User/settings.json`): VS Code's 25 default entries plus Porthole's two. Written out like that, those defaults no longer follow VS Code: if a future VS Code changes one, your settings keep the old value. The bug is fixed, but the entries are still in your file. It is your settings file, so I will not edit it without your yes.
 - Need: pick a letter (or override — any shape answers)
 
@@ -233,6 +233,41 @@ Options:
 
 **ANS:** (by Jérémie Lumbroso)
 Yes, Option A. We should take this incident as dogfooding: We should introduce an action to revert the user settings; this action should first check (to say whether or not the user settings for Porthole seem to have been modified, explicit what they currently are), then offer to revert them (to undo what may have been done). This "reset user settings" action from Porthole could be surfaced in confirmation notifications, after any setting is changed. In fact the "reset user settings" action could ask for selection of individual setting in a checkbox-choosing step (like when the ADRs4AI Manager asks whether you want to commit files) — I think this option is called ["Quick Pick Input"](https://code.visualstudio.com/api/extension-capabilities/common-capabilities#quick-pick): "Here are the currently configured user settings for Porthole, what would you like to remove?" Or something like that.
+
+---
+
+### QST-CHECK-TAB-AND-RESET: Do the source tab's right-click menu and "Review and Reset Settings…" work?
+- Status: unanswered
+- Why asking: **What this finds out.** Two small additions from your answers above are built but have never run in a real VS Code: (1) *Pop Out to Floating Window* in the right-click menu of a source tab, the fourth way in you asked for, so the action shows wherever a file can be acted on; (2) a command that lists every user setting set by or for Porthole and removes the ones you tick, the "way back" you asked for after Porthole wrote VS Code's defaults into your settings. They go into 0.2.0, so it is worth two minutes before Purser tags it. Neither step changes anything you would want to keep: step 7 removes only an entry you can turn back on with one click.
+- Need: pick a letter (or override — any shape answers). About three minutes.
+
+**Where to do this.** In **your porthole workspace window**: the VS Code window in which the folder `porthole` is open, whose title bar ends with `porthole`. Not in any debug window (none titled `[Extension Development Host]`).
+
+**Before you start.** In that window, run **Developer: Reload Window** (Shift+Cmd+P, type `Reload Window`, press Enter): Porthole was reinstalled this morning with both additions.
+
+**Steps.** One action each. "The Explorer" is the file list in the left side bar (Shift+Cmd+E). "The source tab" is the ordinary editor tab showing a file's text.
+
+1. **Open a source tab.** In the Explorer, click `README.md` (top level of the folder). It opens in a source tab.
+2. **Right-click the tab itself**, on its name `README.md` in the row of tabs at the top of the editor (not inside the text). The menu should include **Pop Out to Floating Window**.
+3. **Choose it.** The README should open rendered in a floating window.
+4. **Close** the floating window with its red button, top left.
+5. **Open the review command.** Press Shift+Cmd+P, type `Review and Reset`, and press Enter on **Porthole: Review and Reset Settings…**. A list should appear titled "Porthole: Review and Reset Settings", with a line for each setting set by or for Porthole. After this morning's cleanup you should see two lines starting `workbench.editor.autoLockGroups ›`, one ending `workbench.editor.browser` and one ending `vscode.markdown.preview.editor`, each marked `is true`.
+6. **Tick only the line ending `vscode.markdown.preview.editor`** (click its checkbox), then press **Enter**. A notice should say "Porthole: removed 1 setting."
+7. **Run the command again** (as in step 5). Only the `workbench.editor.browser` line should remain. Press **Escape** to close the list without changing anything.
+8. **Put the removed entry back** the normal way: pop out any Markdown file (step 1, then Ctrl+Alt+M). Porthole should ask again whether to keep its floating windows compact, since Markdown is no longer locked. Choose **Turn On**. A notice should say "Porthole changed your user settings: …" with a **Review and Reset…** button; you can ignore it.
+
+Options:
+- **A — all as described.**
+- **B — the tab menu item was missing** (step 2), or did not open the floating window (step 3).
+- **C — the review list was wrong**: missing, empty, showing lines it should not, or not removing what was ticked. Say at which step.
+- **D — something else**, including an error message.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
+
+**A — all as described** (a prediction). *Rationale*: the tab menu uses the same rule as the title-bar button, which you confirmed works for `.md` (QST-CHECK-MD-ENTRY2), and VS Code passes the tab's file to the command the same way; the review command's listing and removal are covered by four tests (`src/test/settingsReview.test.ts`). *Confidence*: 0.7 — because the multi-select list and the announcement notice have only ever run against a mocked VS Code. *If wrong*: B means the tab menu needs a different menu group or condition; C means VS Code reports the user's own values differently from what the tests assume, and the fix goes in `src/settingsReview.ts` before 0.2.0 is tagged.
+
+**ANS:** (by Jérémie)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
 ---
 
