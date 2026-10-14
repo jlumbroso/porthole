@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Drive open floating windows from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
@@ -62,7 +62,7 @@ Options:
 
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
 
-**A — links in, a state file out, with results tied to request ids.** *Rationale*: it is the smallest step from ADR-0013's link and keeps "porthole listens on no port", which the gate now checks; Purser agrees; Sounder agrees as the first experiment, on the condition that each result names the request that caused it (not just a snapshot), which this option includes. *Confidence*: 0.6 — because nobody has measured how slow or racy "send a link, then read a file" feels to a model. *If wrong*: if the file approach needs an elaborate poller and recovery logic to be reliable, this flips to B (Sounder: compare it with B rather than keep "no listener" at any cost). C can be added later over either.
+**A — links in, a state file out, with results tied to request ids.** *Rationale*: it is the smallest step from ADR-0013's link and keeps "porthole listens on no port", which a static check on the bundle now guards (not a runtime proof); Purser agrees; Sounder agrees as the first experiment, on the condition that each result names the request that caused it (not just a snapshot), which this option includes. *Confidence*: 0.6 — because nobody has measured how slow or racy "send a link, then read a file" feels to a model. *If wrong*: if the file approach needs an elaborate poller and recovery logic to be reliable, this flips to B (Sounder: compare it with B rather than keep "no listener" at any cost). C can be added later over either.
 
 **ANS:** (by Jérémie Lumbroso)
 Yes, Option A now, and then Option C on top of it (stable intermediate forms). And the format seems more appropriate for JSONL, i.e., an append-only list of events, each a JSON dictionary/object.
@@ -78,13 +78,13 @@ Options:
 - **A — instructions only**: the skill documents the link format and a one-line command (`open "vscode://…"` on macOS); each model builds links itself.
 - **B — a small script shipped with each porthole release**: one file (for example `porthole.mjs`, run with Node) attached to the GitHub Release and kept in the repo, which builds the link, sends it, waits for the result and prints it. No new registry or token.
 - **C — a published command-line package** (`npm install -g porthole-cli`), with its own release.
-- **D — the same script, shipped inside the extension package**: `porthole.mjs` installed with porthole itself, so it always matches the porthole version receiving its requests; the skill finds it in the extension's install folder. No download and no new registry. Costs: the package grows from six files to seven, and the install folder differs per editor (VS Code, Insiders, Cursor, VSCodium), so the skill must look it up. (Option added by Purser, 2026-10-13, before any answer.)
+- **D — the same script, shipped inside the extension package**: `porthole.mjs` installed with porthole itself, so it always matches the porthole version receiving its requests; the skill finds it in the extension's install folder. *Qualified by Sounder, 2026-10-13*: shipping together reduces version mismatch, but does not by itself say which running VS Code window receives a request; the script still checks it is talking to a compatible running instance. No download and no new registry. Costs: the package grows from six files to seven, and the install folder differs per editor (VS Code, Insiders, Cursor, VSCodium), so the skill must look it up. (Option added by Purser, 2026-10-13, before any answer.)
 
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
 
 **A for `open` now, B once results come back.** *Rationale*: for `open` alone a link is one line, and Purser is right that a package is a real cost; but as soon as QST-DRIVE-CHANNEL's results exist, the waiting and request-matching Sounder describes are exactly what models would each get slightly wrong, and B ships it through the release workflow that already exists, with no new account. *Confidence*: 0.6 — because the cost of keeping B in step with the extension is unknown. *If wrong*: if models handle the waiting reliably from instructions alone (the skill's stranger test would show it), stay at A; if B is used beyond this machine and needs updating independently, C.
 
-**Recommendation, revised** (by Glazier 5.5, Claude Opus 5.5, 2026-10-13, before any answer — a stated revision): **A for `open` now, D once results come back.** Purser's option D solves the one thing B left open, whether the script on a model's disk matches the porthole it talks to, by shipping them together. Purser accepts B or D; the objection was only ever to a new registry. *Confidence*: 0.65 — because finding the install folder per editor is new work the skill must get right. *If wrong*: if the skill cannot find the folder reliably across editors, B, with the script's version checked against porthole's.
+**Recommendation, revised** (by Glazier 5.5, Claude Opus 5.5, 2026-10-13, before any answer — a stated revision): **A for `open` now, D once results come back.** Purser's option D solves the one thing B left open, whether the script on a model's disk matches the porthole it talks to, by shipping them together. (Sounder's qualification: it reduces the mismatch; it does not settle routing to a running instance, which still needs checking.) Purser accepts B or D; the objection was only ever to a new registry. *Confidence*: 0.65 — because finding the install folder per editor is new work the skill must get right. *If wrong*: if the skill cannot find the folder reliably across editors, B, with the script's version checked against porthole's.
 
 **ANS:** (by Jérémie Lumbroso)
 A for now, D once results come back, and eventually C (CLI and/or MCP as package), and all of these gracefully degrading. Agreed with the skill idea that must know editor install folders, etc.
@@ -103,7 +103,7 @@ Options:
 
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
 
-**A — what porthole knows, labelled.** *Rationale*: it answers "what they have" without claiming anything porthole cannot see; Sounder's point that asked-for and observed values must stay distinct is built in; and B can be added later as a page convention taught by the skill without changing porthole. *Confidence*: 0.75 — because the data is already in porthole's memory today. *If wrong*: if what you mean by "what they have" is a page's progress (which boxes are ticked), B becomes the point of the feature, not an extra.
+**A — what porthole knows, labelled.** *Rationale*: it answers "what they have" without claiming anything porthole cannot see; Sounder's point that asked-for and observed values must stay distinct is built in; and B can be added later as a page convention taught by the skill without changing porthole. *Confidence*: 0.75 — because some of it is already in porthole's memory: the file asked for and the size preset. (Corrected at Sounder's request, 2026-10-13: the pin asked for, and identities that stay stable for a session, are not recorded today and must be added; real size, pin state and page contents stay "unknown" unless observed.) *If wrong*: if what you mean by "what they have" is a page's progress (which boxes are ticked), B becomes the point of the feature, not an extra.
 
 **ANS:** (by Jérémie Lumbroso)
 Yes, let's start thinking about Option B, not as a requirements of pages, but as a possible feature. It should be a very flexible mechanism that anything can be built on top of.
@@ -167,7 +167,7 @@ From Jérémie's answers (2026-10-13):
 Settled regardless, from the thread:
 
 - Results say what was observed, with "submitted", "accepted" and "window seen" kept apart, and "unknown" where nothing was seen (Sounder).
-- Retrying a request with the same id returns the earlier result instead of acting twice (Sounder).
+- Within an advertised retention window, a repeated request with the same id **and payload** returns its recorded result without acting again; reusing the id with a different payload is rejected. After a restart or once the window has expired, porthole says it cannot guarantee deduplication. A timeout is not a cancellation, and exactly-once effects across a crash are not promised (Sounder; wording corrected 2026-10-13 at their request, after the answers — the first version dropped these bounds).
 - The state file, if chosen, lives in VS Code's per-extension storage, readable only by you, with no page contents (Purser).
 - Before 0.2.0 claims any of these verbs, a by-hand spike runs them, including two VS Code windows, two overlapping opens, and a restart (Sounder, Purser).
 
@@ -180,7 +180,7 @@ Settled regardless, from the thread:
 - [ ] Fix the request-matching weakness Sounder found in `watchForOpenedGroup` before any of this is built — Owner: Glazier
 - [ ] Spike the verbs by hand once built — Owner: Jérémie, with Surveyor
 - [ ] Before 0.2.0 ships any verb: an "experimental" label in the changelog; a README section "Control from outside VS Code" stating the verbs, the allowlist, which verbs are off by default, what VS Code's first-use dialog does (it shows only part of the address and offers "Do not ask me again"), and that outside control has been run only on macOS; and the changelog naming which verbs were run on which VS Code version, "read, not run" for the rest — Owner: Purser (wording), once the verbs exist
-- [x] Gate check that the extension makes no network calls ("porthole listens on no port") — Owner: Glazier (done 2026-10-13, `scripts/check-package-contents.mjs`)
+- [x] Static guard on the built bundle against network and process modules and network API names — Owner: Glazier (done 2026-10-13, `scripts/check-package-contents.mjs`). It catches the listed imports and spellings; it does not observe runtime network behavior, nor traffic from the page a window displays (scope narrowed at Sounder's request).
 
 ---
 
@@ -203,6 +203,12 @@ Settled regardless, from the thread:
 - Contributors: Jérémie Lumbroso — the answers (JSONL, per-action settings, page state as an open mechanism); Glazier 5.5 (Claude Opus 5.5) — this record
 - Changes: Decision filled
 - Outcome: `Draft → Accepted`
+
+### Iteration 4 (2026-10-13)
+- Trigger: Sounder's review of the chunking (`docs/inbox/archive/2026-10-13-1416-sounder-to-glazier-chunking-qualifications.md`), read after the answers
+- Contributors: Sounder 6 (gpt-6-astra) — the corrections; Glazier 5.5 (Claude Opus 5.5) — applying them
+- Changes: four passages restored to Sounder's actual claims: the retry bounds, what shipping the script together does and does not settle, what porthole records today, and the network check's scope. None changes Jérémie's decisions.
+- Outcome: stays `Accepted`
 
 ---
 
