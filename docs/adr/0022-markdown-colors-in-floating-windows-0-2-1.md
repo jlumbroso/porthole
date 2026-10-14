@@ -118,7 +118,7 @@ Options:
 
 ## Action Items
 
-- [ ] Rule on the names — Owner: the naming review
+- [x] Rule on the names — Owner: the naming review (2026-10-14: A confirmed, with per-value descriptions; `auto` reads "Follow VS Code's theme.", applied)
 - [ ] Run the check — Owner: Jérémie
 - [ ] Apply the ruling, update README and CHANGELOG, publish 0.2.1, install it — Owner: Glazier
 

@@ -200,7 +200,7 @@
           "type": "string",
           "enum": ["auto", "light", "dark"],
           "enumDescriptions": [
-            "Follow VS Code's color theme, like any Markdown preview.",
+            "Follow VS Code's theme.",
             "Show Markdown in Porthole's floating windows with light colors, whatever VS Code's theme.",
             "Show Markdown in Porthole's floating windows with dark colors, whatever VS Code's theme."
           ],

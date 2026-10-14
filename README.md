@@ -72,6 +72,11 @@ Settings live under `porthole.*`: the size presets (`porthole.sizes`; the first 
 the size a new window opens at), where the window opens (`porthole.position`), and whether
 it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).
 
+**Light or dark Markdown.** `porthole.markdown.colorScheme` shows Markdown in porthole's
+floating windows with `light` or `dark` colors whatever VS Code's theme, or `auto` to follow
+it (the default). Other Markdown previews keep following VS Code's theme. Code blocks keep
+VS Code's syntax colors.
+
 **One tab per floating window, with your consent.** Left alone, VS Code lets a second file
 land as an extra tab in a floating window. At your first pop-out of each session, porthole
 asks once whether VS Code may keep floating windows to one tab, by turning on its own

@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-14
+
+- **Light or dark Markdown in floating windows.** New setting `porthole.markdown.colorScheme`:
+  `auto` (follow VS Code's theme, the default), `light` or `dark`. It recolors only Markdown
+  shown in porthole's floating windows; every other Markdown preview keeps following VS Code's
+  theme. Code blocks keep VS Code's syntax colors. Named through the naming review (ADR-0022).
+
 ## [0.2.0] - 2026-10-14
 
 Markdown, one tab per window, and a new icon. Everything below was checked by hand on macOS
@@ -53,6 +60,7 @@ needed) and used on 1.134.0; Windows and Linux are untested.
   default size. Known limits: Cmd+V does not paste into a page in the window on macOS (right-click →
   Paste works); Ctrl+A and Ctrl+E do nothing in a page's text field.
 
-[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/jlumbroso/porthole/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/jlumbroso/porthole/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jlumbroso/porthole/releases/tag/v0.1.0
