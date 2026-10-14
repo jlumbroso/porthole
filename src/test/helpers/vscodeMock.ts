@@ -44,6 +44,8 @@ let defaultConfig: Record<string, Record<string, unknown>> = {};
 let updates: Array<{ section: string; key: string; value: unknown; target: unknown }> = [];
 let modalAnswers: Array<string | undefined> = [];
 let modals: Array<{ message: string; buttons: string[] }> = [];
+let quickPickAnswers: Array<(items: Array<{ label: string }>) => unknown> = [];
+let quickPicks: Array<{ labels: string[]; options: unknown }> = [];
 let logged: string[] = [];
 const settingsRead = new Set<string>();
 let messages: string[] = [];
@@ -63,6 +65,8 @@ export function resetVscodeMock(): void {
   updates = [];
   modalAnswers = [];
   modals = [];
+  quickPickAnswers = [];
+  quickPicks = [];
   logged = [];
   settingsRead.clear();
   messages = [];
@@ -100,6 +104,14 @@ export function setSectionDefaults(section: string, values: Record<string, unkno
 
 /** Settings the extension wrote, in order. */
 export const settingUpdates = () => updates;
+
+/** The quick picks the extension showed: their item labels and options. */
+export const quickPicksShown = () => quickPicks;
+
+/** How the human answers the next quick pick: a function choosing from its items (or returning undefined: Escape). */
+export function answerNextQuickPick(choose: (items: Array<{ label: string }>) => unknown): void {
+  quickPickAnswers.push(choose);
+}
 
 /** The modal questions the extension asked, in order. */
 export const modalsShown = () => modals;
@@ -179,6 +191,11 @@ export const window = {
     }
     messages.push(message);
     return undefined; // the human pressed Escape
+  },
+  async showQuickPick(items: Array<{ label: string }>, options?: unknown) {
+    quickPicks.push({ labels: items.map(item => item.label), options });
+    const choose = quickPickAnswers.shift();
+    return choose ? choose(items) : undefined;
   },
   async showWarningMessage(message: string) {
     messages.push(message);

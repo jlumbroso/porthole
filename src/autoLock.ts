@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { askToAutoLock } from './config';
 import { log } from './log';
+import { announceSettingChange } from './settingsReview';
 import { BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR } from './miniWindow';
 
 // Keeping a floating window to one tab (ADR-0019).
@@ -75,10 +76,12 @@ export async function offerAutoLock(): Promise<void> {
     await vscode.workspace.getConfiguration('workbench.editor')
       .update('autoLockGroups', next, vscode.ConfigurationTarget.Global);
     log('auto-lock: turned on workbench.editor.autoLockGroups for the integrated browser and the Markdown preview');
+    void announceSettingChange('workbench.editor.autoLockGroups now locks the integrated browser and the Markdown preview to one tab when they open in a new group.');
   } else if (choice === NEVER) {
     await vscode.workspace.getConfiguration('porthole')
       .update('askToAutoLock', false, vscode.ConfigurationTarget.Global);
     log('auto-lock: will not ask again (porthole.askToAutoLock is now false)');
+    void announceSettingChange('porthole.askToAutoLock is now false, so Porthole will not ask again.');
   } else {
     log('auto-lock: not now; will ask again next session');
   }

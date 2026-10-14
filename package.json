@@ -67,6 +67,11 @@
         "command": "porthole.togglePin",
         "title": "Toggle Always on Top",
         "category": "Porthole"
+      },
+      {
+        "command": "porthole.reviewSettings",
+        "title": "Review and Reset Settings…",
+        "category": "Porthole"
       }
     ],
     "menus": {
@@ -89,6 +94,13 @@
           "command": "porthole.popOut",
           "group": "navigation",
           "when": "resourceScheme == file && resourceExtname =~ /^\\.(html?|md|markdown)$/i && !isAuxiliaryWindowFocusedContext"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "porthole.popOut",
+          "group": "navigation@30",
+          "when": "resourceScheme == file && resourceExtname =~ /^\\.(html?|md|markdown)$/i"
         }
       ],
       "explorer/context": [

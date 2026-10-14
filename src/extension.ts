@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { cycleSize, dockBack, popOut, togglePin, trackWindows } from './commands';
+import { reviewSettings } from './settingsReview';
 import { describeError, initLog, log } from './log';
 
 type Handler = (...args: unknown[]) => Promise<unknown>;
@@ -29,6 +30,7 @@ export function activate(context: vscode.ExtensionContext): void {
   register(context, 'porthole.cycleSize', cycleSize);
   register(context, 'porthole.dockBack', dockBack);
   register(context, 'porthole.togglePin', togglePin);
+  register(context, 'porthole.reviewSettings', reviewSettings);
 }
 
 export function deactivate(): void {}
