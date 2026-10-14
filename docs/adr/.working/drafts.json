@@ -20,5 +20,16 @@
     "history": [],
     "totalOccurrences": 1,
     "source": "panel"
+  },
+  {
+    "key": "jlumbroso-porthole:20::237c85048c24::0",
+    "adrPath": "docs/adr/0020-hands-on-check-markdown-and-the-auto-lock-question.md",
+    "adrNumber": 20,
+    "questionText": "Do porthole's own ways in work for a Markdown file?",
+    "draftText": "I have no idea what \"In the porthole window's Explorer\" means. You need to write better instructions. Writing instructions using made-up, approximate terminology wastes everyone's time.",
+    "updatedAt": "2026-10-14T02:58:32.475Z",
+    "history": [],
+    "totalOccurrences": 1,
+    "source": "panel"
   }
 ]

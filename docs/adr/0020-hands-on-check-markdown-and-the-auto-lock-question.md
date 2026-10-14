@@ -29,7 +29,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-CHECK-AUTOLOCK: Does the one-time question appear once, and does each answer do what it says?
-- Status: unanswered
+- Status: answered
 - Why asking: This dialog is new interface that only appears in a real VS Code. It also writes to your user settings, so what it writes must be right. Without it, a floating window can lose compact mode when a second file opens inside it.
 - Need: pick a letter (or override — any shape answers). About four minutes. A screenshot of the dialog would help.
 
@@ -56,13 +56,86 @@ Options:
 
 **A — all as described** (a prediction). *Rationale*: the four behaviors are covered by tests against a mocked VS Code (`src/test/autoLock.test.ts`), and the lock in step 8 is VS Code's own, which locks a group when a browser tab is the first one opened in it (`workbench/browser/parts/editor/editorGroupView.ts` L1263–1272 at tag 1.141.0, read, not run). *Confidence*: 0.65 — because a modal dialog, a write to user settings, and whether VS Code's auto-lock fires for a group created in a brand-new floating window have never been run. *If wrong*: B means porthole believed auto-lock was already on (step "Before you start" tells me why); C at step 8 means VS Code's auto-lock does not apply to floating windows, and ADR-0019 falls back to its option B.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Mostly Option A, but I answered "Turn On" in the first instance, and wasn't able to reset it.
+
+Here is what I saw in Workbench Editor's auto-lock groups:
+
+```json
+"workbench.editor.autoLockGroups": {
+  "default": false,
+  "workbench.editor.chatSession": false,
+  "workbench.editor.chatDebug": false,
+  "workbench.editorinputs.searchEditorInput": false,
+  "workbench.editor.processExplorer": true,
+  "agentSessionsWelcomePage": false,
+  "workbench.editor.browser": false,
+  "notebookOutputEditor": false,
+  "jupyter-notebook": false,
+  "repl": false,
+  "workbench.editors.gettingStartedInput": false,
+  "vscode.markdown.editor": false,
+  "imagePreview.previewEditor": false,
+  "vscode.audioPreview": false,
+  "vscode.videoPreview": false,
+  "jsProfileVisualizer.cpuprofile.table": false,
+  "jsProfileVisualizer.heapprofile.table": false,
+  "jsProfileVisualizer.heapsnapshot.table": false,
+  "node-notebook": false,
+  "latex-workshop-pdf-hook": false,
+  "pdf.preview": false,
+  "markdown-preview-enhanced": false,
+  "terminalEditor": true,
+  "workbench.input.interactive": false,
+  "mainThreadWebview-markdown.preview": false,
+  "mainThreadWebview-simpleBrowser.view": true,
+  "mainThreadWebview-browserPreview": true
+}
+```
+
+and a screen scrape:
+```
+Workbench › Editor: Auto Lock Groups
+
+If an editor matching one of the listed types is opened as the first in an editor group and more than one group is open, the group is automatically locked. Locked groups will only be used for opening editors when explicitly chosen by a user gesture (for example drag and drop), but not by default. Consequently, the active editor in a locked group is less likely to be replaced accidentally with a different editor.
+
+Text Editor (default)
+Chat (workbench.editor.chatSession)
+Debug View (workbench.editor.chatDebug)
+Search Editor (workbench.editorinputs.searchEditorlnput)
+Process Explorer (workbench.editor.processExplorer)
+Agent Sessions Welcome (agentSessionWelcomePage)
+Browser (workbench.editor.browser)
+Notebook Output Editor (notebookOutputEditor)
+Jupyter Notebook (jupyter-notebook)
+repl Editor (repl)
+Welcome Page (workbench.editors.gettingStartedInput)
+Markdown Editor (vscode.markdown.editor)
+Image Preview (imagePreview.previewEditor)
+Audio Preview (vscode.audioPreview)
+Video Preview (vscode.videoPreview)
+CPU Profile Table Visualizer (isProfileVisualizer.cpuprofile.table)
+Heap Profile Table Visualizer (jsProfileVisualizer.heapprofile.table)
+Heap Snapshot Table Visualizer (jsProfileVisualizer.heapsnapshot.table)
+Node.js Notebook (node-notebook)
+LaTeX Workshop Internal PDF Viewer (latex-workshop-pdf-hook)
+Pdf Preview (pdf.preview)
+Markdown Preview Enhanced (markdown-preview-enhanced)
+Terminal (terminalEditor)
+Interactive Window (workbench.input.interactive)
+Markdown Preview (mainThreadWebview-markdown.preview)
+Simple Browser (mainThreadWebview-simpleBrowser.view)
+Live Preview (mainThreadWebview-browserPreview)
+```
+
+Took a screenshot here: `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/Screenshot 2026-10-13 at 10.52.38 PM.png`
+
+I think the copy should be more big-picture, just a bit — why are we asking this? Because multiple tabs make the window not compact. Locking prevents that from happening, and it should normally not impact them. If they want to hold off, it is likely not to affect their experience unless somehow a sequence of events ends up with multiple tabs opened. We need to always explain: "Why?" In fact your spike explanation would benefit from giving me a sense of what you are trying to figure out.
 
 ---
 
 ### QST-CHECK-MD-ENTRY: Do porthole's own ways in work for a Markdown file?
-- Status: unanswered
+- Status: answered
 - Why asking: Spike 1 opened Markdown from the spike's own command. The real porthole adds three ways in — the chord, the button in the editor's title bar, and the Explorer's right-click menu — each guarded by a condition that only a real VS Code evaluates, and those conditions now include `.md`.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -85,8 +158,8 @@ Options:
 
 **A — all three worked** (a prediction). *Rationale*: the open call is the one Spike 1 proved for Markdown, and the three conditions use the same pattern that works for `.html` today, widened to `.md` and `.markdown` (`package.json`, `contributes.menus` and `keybindings`). *Confidence*: 0.75 — because only the widened conditions are new, and they have never been evaluated by VS Code. *If wrong*: B points at the one condition that failed; C means the preview was not chosen for this file, and the warning porthole shows names the reason.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+I have no idea what "In the porthole window's Explorer" means. You need to write better instructions. Writing instructions using made-up, approximate terminology wastes everyone's time.
 
 ---
 
