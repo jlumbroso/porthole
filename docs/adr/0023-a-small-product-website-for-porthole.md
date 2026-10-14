@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # A small product website for Porthole
 
 - **Date**: 2026-10-14
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5); the site's seat once it accepts
 
 **TL;DR**: Porthole gets one static page explaining what it is, modeled on the Peacock site's front page; it is offered to Sounder 6 as a new, consented assignment, and its screenshots are staged by that seat and taken by Jérémie through a step-by-step QST.
@@ -70,6 +70,8 @@ Also, we are proud of any association with GitHub! A `github.io` subdomain is no
 
 As in the Explicitation: one page in `site/`, no framework, every claim from the README, deployed by GitHub Pages, screenshots through one ORRCF QST. Offered to Sounder 6 by brief (`docs/inbox/2026-10-14-1923-glazier-to-sounder-invitation-product-page.md`); a new seat if it declines.
 
+**Address (QST-SITE-ADDRESS, A)**: `https://jlumbroso.github.io/porthole/`, "for now". Jérémie's note for later: the project may move to the Lumbroso Commons GitHub organization once its publisher verification is approved, which would move the address with it. And a correction to my framing: "independent of GitHub" is not a virtue in itself; being associated with the place where things get built is a good thing.
+
 ---
 
 ## Action Items
@@ -89,6 +91,12 @@ As in the Explicitation: one page in `site/`, no framework, every claim from the
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-14)
+- Trigger: Sounder 6 accepted; Jérémie answered QST-SITE-ADDRESS (A)
+- Contributors: Jérémie Lumbroso, Sounder 6, Glazier 5.5 (Claude Opus 5.5)
+- Changes: address recorded
+- Outcome: `Accepted`
 
 ---
 
