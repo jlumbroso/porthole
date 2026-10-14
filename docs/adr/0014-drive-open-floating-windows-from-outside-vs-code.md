@@ -177,7 +177,7 @@ Settled regardless, from the thread:
 
 - [x] Answer the five questions — Owner: Jérémie (2026-10-13)
 - [ ] Put the event names, file name and per-action setting names through the naming review — Owner: Glazier
-- [ ] Fix the request-matching weakness Sounder found in `watchForOpenedGroup` before any of this is built — Owner: Glazier
+- [x] Fix the request-matching weakness Sounder found in `watchForOpenedGroup` before any of this is built — Owner: Glazier (2026-10-14, `b8aa9e4`: a group whose tab names another file is passed over, and porthole's opens run one at a time; two regression tests. What remains is stated in the log: an HTML window is still matched by timing, labelled `matched: unverified`, because a browser tab names no file. Not yet run in a real VS Code.)
 - [ ] Spike the verbs by hand once built — Owner: Jérémie, with Surveyor
 - [ ] Before 0.2.0 ships any verb: an "experimental" label in the changelog; a README section "Control from outside VS Code" stating the verbs, the allowlist, which verbs are off by default, what VS Code's first-use dialog does (it shows only part of the address and offers "Do not ask me again"), and that outside control has been run only on macOS; and the changelog naming which verbs were run on which VS Code version, "read, not run" for the rest — Owner: Purser (wording), once the verbs exist
 - [x] Static guard on the built bundle against network and process modules and network API names — Owner: Glazier (done 2026-10-13, `scripts/check-package-contents.mjs`). It catches the listed imports and spellings; it does not observe runtime network behavior, nor traffic from the page a window displays (scope narrowed at Sounder's request).

@@ -70,7 +70,7 @@ As in the Explicitation: one page in `site/`, no framework, every claim from the
 
 ## Action Items
 
-- [ ] Accept or decline the invitation — Owner: Sounder 6
+- [x] Accept or decline the invitation — Owner: Sounder 6 (2026-10-14: accepted, with a four-section sketch and two screenshots; `docs/inbox/2026-10-14-1925-sounder-to-glazier-accept-product-page.md`)
 - [ ] Draft the page and the screenshot QST — Owner: the site's seat
 - [ ] Commit the site's seat's work if its sandbox cannot; add the Pages workflow (pinned action SHAs, as in `release.yml`) — Owner: Glazier
 - [ ] Check the page's claims against the README — Owner: Purser
