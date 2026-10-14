@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Spike 1: Markdown preview and focus
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Two by-hand checks, each a self-contained question with every step written out: can VS Code's own Markdown preview open in a compact pinned floating window, and does opening a floating window take the keyboard away from the app you are typing in.
@@ -128,14 +128,25 @@ Could be an issue to report? Though it's more of a feature request, based on wha
 
 ## Decision
 
-### Chosen: pending the two runs
+### Chosen: both predictions held — the Markdown preview floats; a new floating window takes the keyboard on macOS
+
+Run by Jérémie on 2026-10-13, about 7:35–7:51 PM ET, VS Code 1.141.0, macOS, with screenshots in `docs/adr/attachments/screenshots/2026-10-12-spike-1-test/`.
+
+| Question | Jérémie saw | The log shows |
+| --- | --- | --- |
+| Markdown (QST-SPIKE1-MD) | A: rendered, compact, pinned, updated by S1-B from either window | a new group 105 ms after the call; its tab reports the editor type `vscode.markdown.preview.editor` and the file, so it can be recognised later, unlike a browser tab |
+| Focus (QST-SPIKE1-FOCUS) | C: both S1-C and S1-D took the keyboard, also when TextEdit was on another desktop (the window opened on the desktop he was on) | four of the five checks right after an open report VS Code focused |
+
+Also noticed by Jérémie: after he closed the spike window and started it again, the Markdown floating window came back by itself. VS Code restores floating windows, as ADR-0014's restart question assumes.
+
+**What this decides**: Markdown support uses VS Code's preview (ADR-0015). An outside `open` will take the keyboard on macOS, which Jérémie accepted (ADR-0013, QST-OPEN-FOCUS). His question whether this deserves an upstream report: yes, as a feature request — VS Code's editor options already say "do not take focus", but nothing passes that on when a new floating window is created (Surveyor's reading). Drafted as `docs/issues/vscode/06-…`, not filed.
 
 ---
 
 ## Action Items
 
-- [ ] Run both checks and answer — Owner: Jérémie
-- [ ] Read `spike/.run/spike.log` and record the results here — Owner: Glazier
+- [x] Run both checks and answer — Owner: Jérémie (2026-10-13)
+- [x] Read `spike/.run/spike.log` and record the results here — Owner: Glazier (2026-10-13)
 
 ---
 
@@ -146,6 +157,12 @@ Could be an issue to report? Though it's more of a feature request, based on wha
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft, with the four spike commands
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie ran both checks and answered
+- Contributors: Jérémie Lumbroso — the runs and screenshots; Glazier 5.5 (Claude Opus 5.5) — the log reading
+- Changes: Decision filled; the spike log copied to `attachments/logs/2026-10-13-spike-1-test/`
+- Outcome: `Draft → Implemented`
 
 ---
 

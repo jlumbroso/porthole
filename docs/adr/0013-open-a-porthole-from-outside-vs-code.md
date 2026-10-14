@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Open a porthole from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 2
-- **Status**: Draft
+- **Iteration**: 3
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
 **TL;DR**: Build `open` from outside first — a `vscode://` link a model can run or print and the human can click — because all of today's friction is on the opening side; four questions decide who may call it, what it may open, whether it may take focus, and what it confirms.
@@ -156,18 +156,56 @@ Yes, Option C, and the notice should expressedly explain that this is not yet co
 
 ---
 
+### QST-OPEN-ROUTING: When several VS Code windows are open, which one should open a link, and what does a relative path mean?
+- Status: unanswered
+- Why asking: You raised it while answering QST-TERM-LINK in ADR-0017: *"Who knows which project must open it, and is the path absolute? If it's relative what does it resolve against?"* It matters because of your allowlist: with `allowWorkspaceFolders` on and `allowLocalFiles` off, a link received by the wrong VS Code window would be refused, since the file is not in *that* window's workspace. What decides the receiving window today (read in source by Surveyor, not run): a link clicked in VS Code's own terminal goes to the window that owns that terminal; a link sent with `code --open-url` from any shell goes to the VS Code window that was most recently in front.
+- Need: pick a letter (or override — any shape answers)
+
+Options:
+- **A — absolute paths only; the receiving window decides**: the link must carry an absolute path. Whichever window receives it opens the page if its settings allow; otherwise it shows the confirmation (QST-OPEN-CONFIRM). Simple; occasionally the "wrong" window opens your page, or asks.
+- **B — absolute paths, and porthole re-routes to the window that owns the file**: each window's porthole records which folders it has open (in the state file of ADR-0014). The receiving window, if the file is not in its workspace but is in another window's, hands the link on to that window instead of opening it. Needs the state file first.
+- **C — B, plus relative paths and a repository hint**: a link may say `repo=porthole&file=docs/tasks.html`; porthole finds the window whose workspace is that repository (by its folder name or its git root) and resolves the path there. Easiest for a model that knows the project but not the absolute path.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
+
+**A now, B with the state file.** *Rationale*: absolute paths are what a model in a terminal already has (its working directory is a real path), and they mean the same thing in every window; with your defaults, a link the wrong window receives is not lost, it asks once. B removes even that, but only becomes possible once each window publishes its folders (ADR-0014's state file, which is the next step anyway). C adds a second way to name a file, which every script and the skill would then have to get right; worth it only if models often know the repository but not the path. *Confidence*: 0.6 — because how often the wrong window receives a link depends on how you work with several windows, which I have not seen. *If wrong*: if wrong-window links turn out to be common in your day, B moves up to the first release of outside links; if models keep producing relative paths, C.
+
+**ANS:** (by Jérémie)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Context
 
 All of today's friction is on the opening side. Everything else a model might do with a porthole (ADR-0014) waits on this.
 
-### Chosen: pending the four answers and Spike 1
+### Chosen: outside `open` for any local caller, with layered allowlist settings, focus taken when it must be, and a confirmation only for what the settings would refuse
 
-What is settled regardless of the answers, from the seed's thread:
+From Jérémie's answers (2026-10-13):
+
+- **Callers (QST-OPEN-CALLERS, A)**: any local agent or script. The threat model is the human's own, non-adversarial machine: anything able to send porthole a link could already do worse. The point is speed: a model can put a page in front of the human "without the human having to search frantically".
+- **What a link may open (QST-OPEN-ALLOWLIST, A and B combined)**: one switch for the whole feature and one setting per kind of target. Jérémie's defaults:
+
+  | Setting (names to be confirmed by the naming review) | Default | Meaning |
+  | --- | --- | --- |
+  | `porthole.outsideLinks.enabled` | `true` | outside links are accepted at all |
+  | `porthole.outsideLinks.allowWorkspaceFolders` | `true` | local files inside the receiving window's workspace folders |
+  | `porthole.outsideLinks.allowedFolders` | `[]` | further folders, by absolute path |
+  | `porthole.outsideLinks.allowLocalFiles` | `false` | any other local `.html` (and later `.md`) file |
+  | `porthole.outsideLinks.allowLocalHost` | `true` | `localhost`, `127.0.0.1` and `::1`, over `http` and `https` |
+  | `porthole.outsideLinks.restrictLocalHostPorts` | `[]` | if non-empty, only these ports (for example `[8001, 8002]`) |
+  | `porthole.outsideLinks.allowRemoteLinks` | `false` | any `https://` address |
+
+  This changes ADR-0008's earlier answer in one respect: `localhost` stays on by default, and local files outside the workspace move behind their own setting.
+- **Focus (QST-OPEN-FOCUS, C, degrading to what is possible)**: ideally a clicked link takes focus and an unattended open does not. Spike 1 showed that on macOS every new floating window takes the keyboard, with or without the "do not take focus" options (ADR-0018). So an outside `open` **takes focus**, and that is accepted, for three reasons Jérémie gave: models will surface a page about once a day; finding and opening the page by hand is a large cost paid every time; and a model that can open a page and take focus has proved useful over the past year. A quiet open stays the goal for re-opening into an existing window, where the source says focus is not moved (Surveyor), and is to be re-tested on Windows and Linux.
+- **Confirmation (QST-OPEN-CONFIRM, C)**: no porthole prompt for what the settings allow. For what they would refuse, porthole asks once, and the notice says plainly that this case is not yet covered by the settings and offers to add it — the prompt teaches the settings.
+
+What is also settled, from the seed's thread:
 
 - The parser refuses anything not explicitly allowed, and its tests are written against hostile links, not friendly ones (Purser, Glazier).
-- The link carries a version (`v=1`) so a skill can detect a mismatch (Purser).
+- The link carries a version, in its path: `vscode://jlumbroso.porthole/v1/open?file=…&width=…&height=…` (ADR-0017, QST-TERM-LINK, the naming review's synthesis). An unversioned `/open` is read as version 1.
 - Every outside request is logged with what porthole can see of its origin (Purser).
 - The words — verb, parameters, settings — go through the naming review first ([ADR-0017](0017-words-for-the-model-facing-surface.md)).
 - Paths with spaces and URI-reserved characters are tested from a terminal before the changelog claims this works (Sounder).
@@ -177,9 +215,12 @@ What is settled regardless of the answers, from the seed's thread:
 
 ## Action Items
 
-- [ ] Answer the four questions — Owner: Jérémie
-- [ ] Run Spike 1 — Owner: Jérémie ([ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
-- [ ] Build the handler once both are in — Owner: Glazier
+- [x] Answer the four questions — Owner: Jérémie (2026-10-13)
+- [x] Run Spike 1 — Owner: Jérémie (2026-10-13, [ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
+- [ ] Answer QST-OPEN-ROUTING — Owner: Jérémie
+- [ ] Put the setting names in the table above through the naming review — Owner: Glazier
+- [ ] Build the handler — Owner: Glazier
+- [ ] Re-test whether a new floating window takes focus on Windows and Linux, when a machine is available — Owner: to be assigned
 
 ---
 
@@ -196,6 +237,12 @@ What is settled regardless of the answers, from the seed's thread:
 - Contributors: Purser 5.5 (Claude Sonnet 5.5) — the additions; Glazier 5.5 (Claude Opus 5.5) — folding them in
 - Changes: see the notes marked "Purser, 2026-10-13" in this file
 - Outcome: stays `Draft`
+
+### Iteration 3 (2026-10-13)
+- Trigger: Jérémie answered all four questions and ran Spike 1
+- Contributors: Jérémie Lumbroso — the answers, including the settings design; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: Decision filled; QST-OPEN-ROUTING added from his note on ADR-0017's QST-TERM-LINK; the link now carries its version in the path
+- Outcome: `Draft → Accepted`; one question open (routing)
 
 ---
 

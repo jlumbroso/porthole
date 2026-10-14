@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Words for the model-facing surface
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 3
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human), advised by the naming review; Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Before the outside interface ships, settle four sets of words — what to call the window, the verbs, the link's shape, and the name of the text tab — because they become part of other people's scripts and cannot be changed afterwards without breaking them.
@@ -126,14 +126,22 @@ Thanks to the naming review for clarifying this important distinction and statin
 
 ## Decision
 
-### Chosen: pending the naming review
+### Chosen: as the naming review recommended, on all four
+
+From Jérémie's answers (2026-10-13), each approving the naming review's recommendation:
+
+- **The window (QST-TERM-WINDOW, A)**: "floating window". Qualified forms such as "Porthole's floating window" are fair: the claim is that it *is* a floating window, not *the* only one. Never "mini window", "browser window" or "mini-browser window".
+- **The verbs (QST-TERM-VERBS, A)**: `open`, `list`, `refresh`, `focus`, `resize`, `pin`, `unpin`, `dock`, `close`, under the naming review's rule: **model-facing verbs assert states, never deltas**. The menus keep their human wording (Pop Out, Toggle Always on Top), and the skill carries a table mapping each menu title to its verb.
+- **The link (QST-TERM-LINK, D)**: `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640` — the version in the path, full-word parameters, absolute dimensions; an unversioned `/open` is read as version 1. Jérémie's question about which window opens a link, and what a relative path means, is now ADR-0013's QST-OPEN-ROUTING.
+- **The source tab (QST-TERM-SOURCE, B)**: "the source tab", as against the rendered floating window: *source versus rendered*.
 
 ---
 
 ## Action Items
 
-- [ ] Send these four questions to the naming review — Owner: Glazier (done when issued; the review answers in its own hive)
-- [ ] Relay the review's answers into the ANS slots — Owner: Jérémie
+- [x] Send these four questions to the naming review — Owner: Glazier (2026-10-13)
+- [x] Relay the review's answers into the ANS slots — Owner: Jérémie (2026-10-13)
+- [ ] Bring the new setting, event and file names of ADR-0013 and ADR-0014 to the naming review in one batch — Owner: Glazier
 
 ---
 
@@ -150,6 +158,12 @@ Thanks to the naming review for clarifying this important distinction and statin
 - Contributors: the naming review
 - Changes: a stacked Recommendation under each open QST — verbs: A confirmed 0.8 with the states-never-deltas rule and a required UI↔verb mapping table; link: D coined (path version + full-word absolute parameters, `size=` as receiver-local convenience only); source tab: B confirmed 0.7 with a first-use gloss rider. QST-TERM-WINDOW already answered by Jérémie (A, with qualified forms fair game) — untouched.
 - Outcome: `Draft`; all four ANS surfaces now accept/override for Jérémie
+
+### Iteration 3 (2026-10-13)
+- Trigger: Jérémie approved all four
+- Contributors: Jérémie Lumbroso; the naming review; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: Decision filled; the routing question moved to ADR-0013
+- Outcome: `Draft → Accepted`
 
 ---
 

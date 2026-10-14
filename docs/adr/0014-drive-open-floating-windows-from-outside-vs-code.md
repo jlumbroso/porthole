@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Drive open floating windows from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 2
-- **Status**: Draft
+- **Iteration**: 3
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
 **TL;DR**: After `open` (ADR-0013), models want to list, refresh, focus, resize, pin and close floating windows; five questions decide how answers come back, what a model is given to run, what a list contains, what happens after a restart, and which actions need your setting.
@@ -154,7 +154,15 @@ Yes, Option B, but each action should have its own setting that can be changed i
 
 These verbs come after ADR-0013's `open` and depend on its answers.
 
-### Chosen: pending the five answers
+### Chosen: an append-only JSONL event file now, MCP on top later; a client that grows in stable steps; labelled lists; restored windows read-only; per-action settings
+
+From Jérémie's answers (2026-10-13):
+
+- **Channel (QST-DRIVE-CHANNEL, A, then C)**: links in, a file out, now; an MCP server on top later, each step usable on its own. The file is **JSONL**: an append-only list of events, one JSON object per line (a request received, a window opened, a refresh done), rather than a snapshot rewritten in place. Appending also suits Sounder's request-correlated results: every event can carry the request id that caused it.
+- **Client (QST-DRIVE-CLIENT, A, then D, eventually C)**: instructions only for `open` now; the script shipped inside the extension once results come back; eventually a published CLI and/or MCP package. Each step degrades gracefully to the one before. The skill knows where each editor installs extensions.
+- **List (QST-DRIVE-LIST, A now, B to explore)**: what porthole knows, labelled, with asked-for and observed values apart. A page's own state (option B) is to be explored, not as a requirement on pages but as **a flexible mechanism others can build on**.
+- **Restart (QST-DRIVE-RESTART, A)**: windows VS Code restored are listed separately as "restored, not verified", matched by title, read-only.
+- **Permissions (QST-DRIVE-PERMISSION, B, with one setting per action)**: open, list, refresh and focus are allowed by default; resize, pin, dock and close are not. **Each action has its own setting**, so a person can tune exactly how their attention may be interrupted.
 
 Settled regardless, from the thread:
 
@@ -167,7 +175,8 @@ Settled regardless, from the thread:
 
 ## Action Items
 
-- [ ] Answer the five questions — Owner: Jérémie
+- [x] Answer the five questions — Owner: Jérémie (2026-10-13)
+- [ ] Put the event names, file name and per-action setting names through the naming review — Owner: Glazier
 - [ ] Fix the request-matching weakness Sounder found in `watchForOpenedGroup` before any of this is built — Owner: Glazier
 - [ ] Spike the verbs by hand once built — Owner: Jérémie, with Surveyor
 - [ ] Before 0.2.0 ships any verb: an "experimental" label in the changelog; a README section "Control from outside VS Code" stating the verbs, the allowlist, which verbs are off by default, what VS Code's first-use dialog does (it shows only part of the address and offers "Do not ask me again"), and that outside control has been run only on macOS; and the changelog naming which verbs were run on which VS Code version, "read, not run" for the rest — Owner: Purser (wording), once the verbs exist
@@ -188,6 +197,12 @@ Settled regardless, from the thread:
 - Contributors: Purser 5.5 (Claude Sonnet 5.5) — the additions; Glazier 5.5 (Claude Opus 5.5) — folding them in
 - Changes: see the notes marked "Purser, 2026-10-13" in this file
 - Outcome: stays `Draft`
+
+### Iteration 3 (2026-10-13)
+- Trigger: Jérémie answered all five questions
+- Contributors: Jérémie Lumbroso — the answers (JSONL, per-action settings, page state as an open mechanism); Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: Decision filled
+- Outcome: `Draft → Accepted`
 
 ---
 

@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Teach models to use porthole
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5 and Sounder 6 in the seed's thread
 
 **TL;DR**: Once the outside verbs work, write a skill that teaches any model to use porthole; one question decides where it lives and how it reaches a model that has never seen this repository.
@@ -59,13 +59,23 @@ I doubt people who install this will visit the repo, I think we are better off d
 
 ## Decision
 
-### Chosen: pending QST-SKILL-HOME and the verbs of ADR-0013 and ADR-0014
+### Chosen: a Claude skill in the repository, also shipped inside the extension, and its released address printed in porthole's log
+
+From Jérémie's answer (QST-SKILL-HOME, B and C, 2026-10-13): *"I doubt people who install this will visit the repo."* So:
+
+- **The skill lives in the repository** as `.claude/skills/porthole/SKILL.md` (option B).
+- **It also ships inside the extension**, with a porthole command that copies it or writes it into a folder the person chooses (option C). This adds a seventh file to the package allowlist, which the package check will name.
+- **Porthole's log names where the released skill lives**: an information line at activation gives the skill's address on the GitHub Release, so a model reading the Porthole output channel learns it exists.
+
+One tension to keep in view, mine: ADR-0013 opened porthole to *any* local agent, and this skill is in Claude's format. A Claude skill is a Markdown file any agent can read, so the content serves everyone; only the trigger is Claude-specific. If a non-Claude agent struggles with it, a plain `docs/for-models.md` (option A) is the cheap addition.
+
+The skill is still written only after the verbs it teaches have shipped.
 
 ---
 
 ## Action Items
 
-- [ ] Answer QST-SKILL-HOME — Owner: Jérémie
+- [x] Answer QST-SKILL-HOME — Owner: Jérémie (2026-10-13)
 - [ ] Write the skill after the verbs ship, and run the stranger test — Owner: to be assigned
 
 ---
@@ -77,6 +87,12 @@ I doubt people who install this will visit the repo, I think we are better off d
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie answered QST-SKILL-HOME
+- Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: Decision filled
+- Outcome: `Draft → Accepted`
 
 ---
 

@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Markdown in a floating window
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Sounder 6 in the seed's thread
 
 **TL;DR**: Let porthole open a `.md` file rendered, not as source — most simply by putting VS Code's own Markdown preview into the floating window, which Spike 1 tests; one question decides whether that read-only view is enough.
@@ -60,7 +60,14 @@ Yes, agreed with Option C, and when we get to the live page, this is a general p
 
 ## Decision
 
-### Chosen: pending QST-MD-MODE and Spike 1
+### Chosen: read-only now, through VS Code's own Markdown preview; a live page later, through porthole's own converter
+
+From Jérémie's answer (QST-MD-MODE, C, 2026-10-13) and Spike 1 (ADR-0018, QST-SPIKE1-MD, A):
+
+- **Now**: porthole opens a `.md` file as VS Code's Markdown preview in a compact, pinned floating window. Spike 1 showed it working: rendered, the right size, staying in front, and updating by itself when the file was rewritten, whether the rewrite was triggered from the floating window or from the main window.
+- **A bonus the spike revealed**: unlike a browser tab, a Markdown preview tab tells extensions what it shows (its tab reports the editor type `vscode.markdown.preview.editor` and the file). So porthole can recognise its Markdown windows after a restart, which it cannot do for HTML pages (ADR-0014, QST-DRIVE-RESTART).
+- **Later**: a live page will come from **porthole's own Markdown-to-HTML converter**, for example rendering checkboxes that remember their state in the page's storage, and beyond that **templates and filters that users can write themselves**.
+
 
 Settled regardless: what porthole reports about a Markdown window keeps the source file and the rendered view distinct, and says whether the view is interactive (Sounder).
 
@@ -68,8 +75,9 @@ Settled regardless: what porthole reports about a Markdown window keeps the sour
 
 ## Action Items
 
-- [ ] Answer QST-MD-MODE — Owner: Jérémie
-- [ ] Run Spike 1's Markdown question — Owner: Jérémie ([ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
+- [x] Answer QST-MD-MODE — Owner: Jérémie (2026-10-13)
+- [x] Run Spike 1's Markdown question — Owner: Jérémie (2026-10-13)
+- [ ] Open `.md` files as the preview: pop-out, Explorer menu, keybinding, tests — Owner: Glazier ([ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
 
 ---
 
@@ -80,6 +88,12 @@ Settled regardless: what porthole reports about a Markdown window keeps the sour
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie answered QST-MD-MODE and ran Spike 1
+- Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: Decision filled; the preview tab's identifiability noted from the spike log
+- Outcome: `Draft → Accepted`
 
 ---
 

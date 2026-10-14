@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Keep the floating window to one tab
 
 - **Date**: 2026-10-13
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), from Surveyor 5.1's source reading
 
 **TL;DR**: Porthole's way of locking a floating window to one tab is unreliable — it was skipped on three of five opens in your log, and by Surveyor's reading it can lock the main window instead — so one question decides the replacement, and one step-by-step run confirms the cause before it goes upstream.
@@ -186,7 +186,15 @@ Option A. I hope I did it correctly. I wasn't sure what you were trying to see. 
 
 ## Decision
 
-### Chosen: pending the two answers
+### Chosen: VS Code's auto-lock setting, asked for with consent; Surveyor's explanation confirmed
+
+From Jérémie's answers (2026-10-13):
+
+- **Method (QST-LOCK-METHOD, C)**: porthole asks to turn on `workbench.editor.autoLockGroups` for the integrated browser, so that VS Code locks each new floating window's group itself. It asks at the first pop-out after installing, and again at the first pop-out of each VS Code session until the person answers. The question offers "Don't ask me again", and that answer is saved in the person's user settings. Jérémie's reason: *"if the floating window is not compact, there's no point."* VS Code's notifications cannot show a checkbox, so "Don't ask me again" will be a third button beside Yes and No.
+- **The scope of "one tab"**: the problem is several tabs inside *one* floating window. Several floating windows at once, including from different workspaces as the person moves between projects, are welcome.
+- **The repro (QST-TABAPI-REPRO, A)**: the log confirms the frozen half of Surveyor's reading. In all five rounds, after Jérémie clicked the main window, VS Code still told extensions that the floating window's group was the active one; that answer changed only when a group was opened or closed. (The other half, a new window reported *not* active, did not occur in this run; it is the race behind the three skipped locks in ADR-0010.) The rewritten issue 05 can go upstream.
+
+Whatever is built gets a regression test that fails if porthole ever issues a lock while the active group is not its own window.
 
 Whatever is chosen gets a regression test that fails if porthole ever issues a lock while the active group is not its own window.
 
@@ -194,9 +202,9 @@ Whatever is chosen gets a regression test that fails if porthole ever issues a l
 
 ## Action Items
 
-- [ ] Answer both questions — Owner: Jérémie
+- [x] Answer both questions — Owner: Jérémie (2026-10-13)
 - [ ] Implement the chosen method, with the regression test — Owner: Glazier
-- [ ] Rewrite and file issue 05 if the run confirms Surveyor's reading — Owner: Glazier
+- [x] Rewrite and file issue 05 — Owner: Glazier (2026-10-13, microsoft/vscode#341430)
 
 ---
 
@@ -207,6 +215,12 @@ Whatever is chosen gets a regression test that fails if porthole ever issues a l
 - Contributors: Surveyor 5.1 (Claude Fable 5.1) — the source reading; Glazier 5.5 (Claude Opus 5.5) — the auto-lock route and this record
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie answered both questions, with the spike log
+- Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — the log reading
+- Changes: Decision filled; log kept at `attachments/logs/2026-10-13-spike-1-test/spike.log` (from 00:34Z)
+- Outcome: `Draft → Accepted`
 
 ---
 

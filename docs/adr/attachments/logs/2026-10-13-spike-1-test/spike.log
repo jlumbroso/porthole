@@ -1,0 +1,476 @@
+[2026-10-12T19:59:12.499Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-12T19:59:12.499Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-12T19:59:12.512Z] === step 1 (run 1): one-shot _workbench.openWith into group -3 ===
+[2026-10-12T19:59:12.512Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T19:59:12.636Z] +124ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T19:59:12.641Z] +129ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T19:59:12.642Z] +130ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T19:59:12.676Z] +164ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T19:59:12.677Z] +165ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T19:59:12.688Z] +176ms step returned: undefined
+[2026-10-12T19:59:12.789Z] +277ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T19:59:12.940Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T19:59:13.187Z] +675ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T19:59:13.197Z] +685ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 1 · 0 t…]
+[2026-10-12T19:59:13.212Z] +700ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 1 · 0 t…]
+[2026-10-12T19:59:13.213Z] +701ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 1 · 0 t…]
+[2026-10-12T19:59:13.694Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 1 · 0 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T19:59:15.697Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 1 · 0 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T19:59:38.699Z] === step 2: rewrite the page on disk ===
+[2026-10-12T19:59:38.701Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 1 · 1 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T19:59:38.705Z] +4ms step returned: "stamp 3:59:38 PM"
+[2026-10-12T19:59:38.956Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 1 · 1 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T19:59:39.093Z] +392ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 1 · 1 t…]
+[2026-10-12T19:59:39.105Z] +404ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 1 · 1 t…]
+[2026-10-12T19:59:39.118Z] +417ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T19:59:39.119Z] +418ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 2 · 1 t…]
+[2026-10-12T19:59:39.120Z] +419ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 2 · 1 t…]
+[2026-10-12T19:59:39.120Z] +419ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 2 · 1 t…]
+[2026-10-12T19:59:39.708Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 2 · 1 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T19:59:41.708Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 2 · 1 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:08.443Z] === step 2: rewrite the page on disk ===
+[2026-10-12T20:00:08.444Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 2 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:08.445Z] +1ms step returned: "stamp 4:00:08 PM"
+[2026-10-12T20:00:08.697Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 2 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:08.832Z] +388ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 2 · 2 t…]
+[2026-10-12T20:00:08.849Z] +405ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 2 · 2 t…]
+[2026-10-12T20:00:08.876Z] +432ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:00:08.877Z] +433ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 3 · 2 t…]
+[2026-10-12T20:00:08.878Z] +434ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 3 · 2 t…]
+[2026-10-12T20:00:08.879Z] +435ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 3 · 2 t…]
+[2026-10-12T20:00:09.449Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:11.451Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:14.480Z] === step 1 (run 2): one-shot _workbench.openWith into group -3 ===
+[2026-10-12T20:00:14.480Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:14.589Z] +109ms groups changed: opened=1 closed=0 changed=2
+[2026-10-12T20:00:14.590Z] +110ms tabs changed: opened=[tasks · 414×567 · load 3 · 2 t…] closed=[] changed=[]
+[2026-10-12T20:00:14.591Z] +111ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 3 · 2 t…]
+[2026-10-12T20:00:14.603Z] +123ms tabs changed: opened=[] closed=[tasks · 414×567 · load 3 · 2 t…] changed=[]
+[2026-10-12T20:00:14.617Z] +137ms step returned: undefined
+[2026-10-12T20:00:14.654Z] +174ms groups changed: opened=0 closed=1 changed=2
+[2026-10-12T20:00:14.654Z] +174ms groups changed: opened=0 closed=0 changed=2
+[2026-10-12T20:00:14.867Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:15.621Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:17.624Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:22.342Z] === step 4: close every tab ===
+[2026-10-12T20:00:22.343Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 3 · 2 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:22.346Z] +3ms tabs changed: opened=[] closed=[tasks · 414×567 · load 3 · 2 t…] changed=[]
+[2026-10-12T20:00:22.352Z] +9ms step returned: "asked to close 1 tab(s); close() returned true"
+[2026-10-12T20:00:22.368Z] +25ms groups changed: opened=0 closed=1 changed=1
+[2026-10-12T20:00:22.603Z] after ~0.25s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:00:23.355Z] after ~1s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:00:25.357Z] after ~3s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:00:29.417Z] === step 5: stable commands only (openWith → move to new window → compact → always on top) ===
+[2026-10-12T20:00:29.418Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:00:29.420Z] +2ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:00:29.421Z] +3ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:00:29.444Z] +26ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:00:29.449Z] +31ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:00:29.580Z] +162ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T20:00:29.580Z] +162ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:00:29.581Z] +163ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:00:29.594Z] +176ms tabs changed: opened=[] closed=[tasks.html] changed=[]
+[2026-10-12T20:00:29.614Z] +196ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:00:29.630Z] +212ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:00:29.633Z] +215ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 4 · 2 …]
+[2026-10-12T20:00:29.635Z] +217ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 4 · 2 …]
+[2026-10-12T20:00:29.637Z] +219ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 4 · 2 …]
+[2026-10-12T20:00:29.724Z] +306ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×651 · load 4 · 2 …]
+[2026-10-12T20:00:29.759Z] +341ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×618 · load 4 · 2 …]
+[2026-10-12T20:00:29.818Z] +400ms step returned: "four commands ran without throwing"
+[2026-10-12T20:00:29.893Z] +475ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×640 · load 4 · 2 …]
+[2026-10-12T20:00:29.894Z] +476ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×673 · load 4 · 2 …]
+[2026-10-12T20:00:29.894Z] +476ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×695 · load 4 · 2 …]
+[2026-10-12T20:00:30.069Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:30.820Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:32.825Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:35.091Z] === step 5: stable commands only (openWith → move to new window → compact → always on top) ===
+[2026-10-12T20:00:35.091Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:35.093Z] +2ms tabs changed: opened=[tasks · 1018×695 · load 4 · 2 …] closed=[] changed=[]
+[2026-10-12T20:00:35.094Z] +3ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×695 · load 4 · 2 …]
+[2026-10-12T20:00:35.103Z] +12ms tabs changed: opened=[] closed=[tasks · 1018×695 · load 4 · 2 …] changed=[]
+[2026-10-12T20:00:35.213Z] +122ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×798 · load 4 · 2 …]
+[2026-10-12T20:00:35.225Z] +134ms groups changed: opened=0 closed=1 changed=1
+[2026-10-12T20:00:35.230Z] +139ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 4 · 2 …]
+[2026-10-12T20:00:35.258Z] +167ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T20:00:35.259Z] +168ms tabs changed: opened=[tasks · 1126×765 · load 4 · 2 …] closed=[] changed=[]
+[2026-10-12T20:00:35.260Z] +169ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 4 · 2 …]
+[2026-10-12T20:00:35.270Z] +179ms tabs changed: opened=[] closed=[tasks · 1126×765 · load 4 · 2 …] changed=[]
+[2026-10-12T20:00:35.312Z] +221ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×651 · load 4 · 2 …]
+[2026-10-12T20:00:35.326Z] +235ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×618 · load 4 · 2 …]
+[2026-10-12T20:00:35.490Z] +399ms step returned: "four commands ran without throwing"
+[2026-10-12T20:00:35.539Z] +448ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×673 · load 4 · 2 …]
+[2026-10-12T20:00:35.544Z] +453ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×695 · load 4 · 2 …]
+[2026-10-12T20:00:35.742Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:36.493Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:00:38.346Z] +3255ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×695 · load 4 · 3 …]
+[2026-10-12T20:00:38.494Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 4 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:08:05.072Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-12T20:08:05.073Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-12T20:08:05.078Z] === step 1 (run 1): one-shot _workbench.openWith into group -3 ===
+[2026-10-12T20:08:05.078Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:08:05.177Z] +99ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T20:08:05.179Z] +101ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:08:05.179Z] +101ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:08:05.205Z] +127ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:08:05.205Z] +127ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:08:05.212Z] +134ms step returned: undefined
+[2026-10-12T20:08:05.267Z] +189ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:08:05.282Z] +204ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:08:05.284Z] +206ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 5 · 4 t…]
+[2026-10-12T20:08:05.296Z] +218ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 5 · 4 t…]
+[2026-10-12T20:08:05.297Z] +219ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 5 · 4 t…]
+[2026-10-12T20:08:05.463Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 5 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:08:06.214Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 5 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:08:08.215Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 5 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:35.673Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-12T20:13:35.673Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-12T20:13:35.675Z] === step 1 (run 1): one-shot _workbench.openWith into group -3 ===
+[2026-10-12T20:13:35.675Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:13:35.759Z] +84ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T20:13:35.761Z] +86ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:13:35.761Z] +86ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:13:35.797Z] +122ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:13:35.797Z] +122ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:13:35.805Z] +130ms step returned: undefined
+[2026-10-12T20:13:35.883Z] +208ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:13:35.898Z] +223ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:13:35.903Z] +228ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 6 · 4 t…]
+[2026-10-12T20:13:35.913Z] +238ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 6 · 4 t…]
+[2026-10-12T20:13:35.913Z] +238ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 6 · 4 t…]
+[2026-10-12T20:13:36.056Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 6 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:36.808Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 6 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:38.810Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 6 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:44.253Z] === step 2: rewrite the page on disk ===
+[2026-10-12T20:13:44.254Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 6 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:44.272Z] +17ms step returned: "stamp 4:13:44 PM"
+[2026-10-12T20:13:44.523Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 6 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:44.657Z] +402ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 6 · 4 t…]
+[2026-10-12T20:13:44.669Z] +414ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 6 · 4 t…]
+[2026-10-12T20:13:44.688Z] +433ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:13:44.689Z] +434ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 7 · 4 t…]
+[2026-10-12T20:13:44.690Z] +435ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 7 · 4 t…]
+[2026-10-12T20:13:44.690Z] +435ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 7 · 4 t…]
+[2026-10-12T20:13:45.275Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:47.281Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:51.259Z] === step 1 (run 2): one-shot _workbench.openWith into group -3 ===
+[2026-10-12T20:13:51.260Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:51.402Z] +142ms groups changed: opened=1 closed=0 changed=2
+[2026-10-12T20:13:51.406Z] +146ms tabs changed: opened=[tasks · 414×567 · load 7 · 4 t…] closed=[] changed=[]
+[2026-10-12T20:13:51.409Z] +149ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 7 · 4 t…]
+[2026-10-12T20:13:51.424Z] +164ms tabs changed: opened=[] closed=[tasks · 414×567 · load 7 · 4 t…] changed=[]
+[2026-10-12T20:13:51.438Z] +178ms step returned: undefined
+[2026-10-12T20:13:51.493Z] +233ms groups changed: opened=0 closed=1 changed=2
+[2026-10-12T20:13:51.493Z] +233ms groups changed: opened=0 closed=0 changed=2
+[2026-10-12T20:13:51.689Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:52.441Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:13:54.443Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:14:03.708Z] === step 4: close every tab ===
+[2026-10-12T20:14:03.709Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 7 · 4 t…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:14:03.711Z] +2ms tabs changed: opened=[] closed=[tasks · 414×567 · load 7 · 4 t…] changed=[]
+[2026-10-12T20:14:03.714Z] +5ms step returned: "asked to close 1 tab(s); close() returned true"
+[2026-10-12T20:14:03.740Z] +31ms groups changed: opened=0 closed=1 changed=1
+[2026-10-12T20:14:03.966Z] after ~0.25s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:14:04.717Z] after ~1s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:14:06.719Z] after ~3s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:14:09.898Z] === step 5: stable commands only (openWith → move to new window → compact → always on top) ===
+[2026-10-12T20:14:09.898Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:14:09.903Z] +4ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:14:09.904Z] +5ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:14:09.930Z] +31ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:14:09.937Z] +38ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:14:10.060Z] +161ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T20:14:10.060Z] +161ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:14:10.061Z] +162ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:14:10.084Z] +185ms tabs changed: opened=[] closed=[tasks.html] changed=[]
+[2026-10-12T20:14:10.119Z] +220ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:14:10.123Z] +224ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:14:10.125Z] +226ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 8 · 4 …]
+[2026-10-12T20:14:10.126Z] +227ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 8 · 4 …]
+[2026-10-12T20:14:10.127Z] +228ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 8 · 4 …]
+[2026-10-12T20:14:10.179Z] +280ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×618 · load 8 · 4 …]
+[2026-10-12T20:14:10.309Z] +410ms step returned: "four commands ran without throwing"
+[2026-10-12T20:14:10.353Z] +454ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×640 · load 8 · 4 …]
+[2026-10-12T20:14:10.354Z] +455ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×673 · load 8 · 4 …]
+[2026-10-12T20:14:10.366Z] +467ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×695 · load 8 · 4 …]
+[2026-10-12T20:14:10.560Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 8 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:14:11.312Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 8 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:14:13.313Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 8 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:16:21.115Z] === step 5: stable commands only (openWith → move to new window → compact → always on top) ===
+[2026-10-12T20:16:21.116Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-12T20:16:21.117Z] +1ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:16:21.118Z] +2ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:16:21.128Z] +12ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:16:21.135Z] +19ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:16:21.258Z] +142ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T20:16:21.258Z] +142ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T20:16:21.259Z] +143ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:16:21.274Z] +158ms tabs changed: opened=[] closed=[tasks.html] changed=[]
+[2026-10-12T20:16:21.293Z] +177ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T20:16:21.302Z] +186ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T20:16:21.305Z] +189ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 9 · 4 …]
+[2026-10-12T20:16:21.312Z] +196ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 9 · 4 …]
+[2026-10-12T20:16:21.314Z] +198ms tabs changed: opened=[] closed=[] changed=[tasks · 1126×765 · load 9 · 4 …]
+[2026-10-12T20:16:21.463Z] +347ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×618 · load 9 · 4 …]
+[2026-10-12T20:16:21.538Z] +422ms step returned: "four commands ran without throwing"
+[2026-10-12T20:16:21.551Z] +435ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×640 · load 9 · 4 …]
+[2026-10-12T20:16:21.552Z] +436ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×673 · load 9 · 4 …]
+[2026-10-12T20:16:21.553Z] +437ms tabs changed: opened=[] closed=[] changed=[tasks · 1018×695 · load 9 · 4 …]
+[2026-10-12T20:16:21.788Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 9 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:16:22.539Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 9 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T20:16:24.540Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1018×695 · load 9 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T23:09:06.430Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-12T23:09:06.430Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-12T23:09:06.434Z] === step 1 (run 1): one-shot _workbench.openWith into group -3 ===
+[2026-10-12T23:09:06.435Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]}]
+[2026-10-12T23:09:06.591Z] +156ms groups changed: opened=1 closed=0 changed=1
+[2026-10-12T23:09:06.605Z] +170ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-12T23:09:06.605Z] +170ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T23:09:06.664Z] +229ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T23:09:06.666Z] +231ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T23:09:06.679Z] +244ms step returned: undefined
+[2026-10-12T23:09:06.765Z] +330ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-12T23:09:06.791Z] +356ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-12T23:09:06.795Z] +360ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 10 · 4 …]
+[2026-10-12T23:09:06.809Z] +374ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 10 · 4 …]
+[2026-10-12T23:09:06.810Z] +375ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 10 · 4 …]
+[2026-10-12T23:09:06.930Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 10 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T23:09:07.682Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 10 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-12T23:09:09.683Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 10 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:36:19.824Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-13T23:36:19.825Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-13T23:36:19.838Z] === spike 1, step md: VS Code's Markdown preview into group -3 ===
+[2026-10-13T23:36:19.838Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:36:19.943Z] +105ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:36:19.945Z] +107ms tabs changed: opened=[notes.md] closed=[] changed=[]
+[2026-10-13T23:36:19.945Z] +107ms tabs changed: opened=[] closed=[] changed=[notes.md]
+[2026-10-13T23:36:20.254Z] +416ms tabs changed: opened=[] closed=[] changed=[notes.md]
+[2026-10-13T23:36:20.255Z] +417ms step returned: undefined
+[2026-10-13T23:36:20.507Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:36:21.258Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:36:23.259Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:36:59.290Z] === spike 1, step md-rewrite: rewrite notes.md on disk ===
+[2026-10-13T23:36:59.292Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:36:59.292Z] +0ms step returned: "rewritten"
+[2026-10-13T23:36:59.543Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:00.295Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:02.296Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:08.973Z] === spike 1, step md-rewrite: rewrite notes.md on disk ===
+[2026-10-13T23:37:08.973Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:08.974Z] +1ms step returned: "rewritten"
+[2026-10-13T23:37:09.225Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:09.978Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:11.979Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:29.374Z] === spike 1, step md-rewrite: rewrite notes.md on disk ===
+[2026-10-13T23:37:29.375Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:29.376Z] +1ms step returned: "rewritten"
+[2026-10-13T23:37:29.627Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:30.379Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:31.430Z] === spike 1, step md-rewrite: rewrite notes.md on disk ===
+[2026-10-13T23:37:31.430Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:31.431Z] +0ms step returned: "rewritten"
+[2026-10-13T23:37:31.683Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:32.379Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:32.435Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:37:34.436Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"notes.md","active":true,"pinned":false,"input":{"type":"qd","uri":"file:///Users/jlumbroso/Programming/porthole/spike/.run/notes.md","viewType":"vscode.markdown.preview.editor"}}]}]
+[2026-10-13T23:47:17.966Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-13T23:47:17.967Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-13T23:47:17.968Z] spike 1, step focus (default): opening in 5 s; VS Code focused now: true
+[2026-10-13T23:47:22.970Z] === spike 1, step focus (default): one-shot after the delay ===
+[2026-10-13T23:47:22.970Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:47:23.084Z] +114ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:47:23.086Z] +116ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-13T23:47:23.087Z] +117ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:47:23.116Z] +146ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:47:23.117Z] +147ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:47:23.123Z] +153ms step returned: undefined
+[2026-10-13T23:47:23.193Z] +223ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:47:23.212Z] +242ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-13T23:47:23.216Z] +246ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 30 · 3 …]
+[2026-10-13T23:47:23.224Z] +254ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 30 · 3 …]
+[2026-10-13T23:47:23.225Z] +255ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 30 · 3 …]
+[2026-10-13T23:47:23.375Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 30 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:47:24.126Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 30 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:47:26.128Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 30 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:47:26.128Z] spike 1, step focus: VS Code focused after the open: true
+[2026-10-13T23:48:44.605Z] spike 1, step focus (default): opening in 5 s; VS Code focused now: true
+[2026-10-13T23:48:49.607Z] === spike 1, step focus (default): one-shot after the delay ===
+[2026-10-13T23:48:49.607Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:48:49.675Z] +68ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:48:49.675Z] +68ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-13T23:48:49.676Z] +69ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:48:49.699Z] +92ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:48:49.701Z] +94ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:48:49.705Z] +98ms step returned: undefined
+[2026-10-13T23:48:49.792Z] +185ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:48:49.803Z] +196ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-13T23:48:49.819Z] +212ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 31 · 3 …]
+[2026-10-13T23:48:49.820Z] +213ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 31 · 3 …]
+[2026-10-13T23:48:49.821Z] +214ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 31 · 3 …]
+[2026-10-13T23:48:49.956Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 31 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:48:50.708Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 31 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:48:52.709Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 31 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:48:52.710Z] spike 1, step focus: VS Code focused after the open: false
+[2026-10-13T23:49:22.540Z] spike 1, step focus (asking not to take focus): opening in 5 s; VS Code focused now: true
+[2026-10-13T23:49:27.541Z] === spike 1, step focus (quiet): one-shot after the delay ===
+[2026-10-13T23:49:27.542Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:49:27.652Z] +110ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:49:27.652Z] +110ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-13T23:49:27.653Z] +111ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:27.673Z] +131ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:27.673Z] +131ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:27.677Z] +135ms step returned: undefined
+[2026-10-13T23:49:27.793Z] +251ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:27.809Z] +267ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-13T23:49:27.820Z] +278ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 32 · 3 …]
+[2026-10-13T23:49:27.825Z] +283ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 32 · 3 …]
+[2026-10-13T23:49:27.825Z] +283ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 32 · 3 …]
+[2026-10-13T23:49:27.928Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 32 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:49:28.679Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 32 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:49:30.681Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 32 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:49:30.681Z] spike 1, step focus: VS Code focused after the open: true
+[2026-10-13T23:49:49.188Z] spike 1, step focus (asking not to take focus): opening in 5 s; VS Code focused now: true
+[2026-10-13T23:49:54.189Z] === spike 1, step focus (quiet): one-shot after the delay ===
+[2026-10-13T23:49:54.190Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:49:54.283Z] +93ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:49:54.284Z] +94ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-13T23:49:54.285Z] +95ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:54.304Z] +114ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:54.305Z] +115ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:54.309Z] +119ms step returned: undefined
+[2026-10-13T23:49:54.395Z] +205ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:49:54.408Z] +218ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-13T23:49:54.421Z] +231ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 33 · 3 …]
+[2026-10-13T23:49:54.422Z] +232ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 33 · 3 …]
+[2026-10-13T23:49:54.424Z] +234ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 33 · 3 …]
+[2026-10-13T23:49:54.560Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 33 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:49:55.312Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 33 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:49:57.313Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 33 · 3 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:49:57.314Z] spike 1, step focus: VS Code focused after the open: true
+[2026-10-13T23:50:57.194Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-13T23:50:57.194Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-13T23:50:57.196Z] spike 1, step focus (default): opening in 5 s; VS Code focused now: true
+[2026-10-13T23:51:02.197Z] === spike 1, step focus (default): one-shot after the delay ===
+[2026-10-13T23:51:02.198Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:51:05.969Z] +3771ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:51:05.971Z] +3773ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-13T23:51:05.971Z] +3773ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:05.999Z] +3801ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:06.000Z] +3802ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:06.007Z] +3809ms step returned: undefined
+[2026-10-13T23:51:06.063Z] +3865ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:06.085Z] +3887ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-13T23:51:06.090Z] +3892ms tabs changed: opened=[] closed=[] changed=[tasks · 1024×768 · load 34 · 2…]
+[2026-10-13T23:51:06.110Z] +3912ms tabs changed: opened=[] closed=[] changed=[tasks · 1024×768 · load 34 · 2…]
+[2026-10-13T23:51:06.110Z] +3912ms tabs changed: opened=[] closed=[] changed=[tasks · 1024×768 · load 34 · 2…]
+[2026-10-13T23:51:06.258Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1024×768 · load 34 · 2…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:51:07.010Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1024×768 · load 34 · 2…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:51:09.011Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 1024×768 · load 34 · 2…","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:51:09.012Z] spike 1, step focus: VS Code focused after the open: true
+[2026-10-13T23:51:14.140Z] spike 1, step focus (asking not to take focus): opening in 5 s; VS Code focused now: true
+[2026-10-13T23:51:19.145Z] === spike 1, step focus (quiet): one-shot after the delay ===
+[2026-10-13T23:51:19.146Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:51:25.854Z] +6708ms groups changed: opened=1 closed=0 changed=1
+[2026-10-13T23:51:25.855Z] +6709ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-13T23:51:25.856Z] +6710ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:25.874Z] +6728ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:25.883Z] +6737ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:25.884Z] +6738ms step returned: undefined
+[2026-10-13T23:51:25.954Z] +6808ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-13T23:51:25.961Z] +6815ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-13T23:51:25.974Z] +6828ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 35 · 2 …]
+[2026-10-13T23:51:25.975Z] +6829ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 35 · 2 …]
+[2026-10-13T23:51:25.975Z] +6829ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 35 · 2 …]
+[2026-10-13T23:51:26.136Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 35 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:51:26.888Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 35 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-13T23:51:28.830Z] +9684ms tabs changed: opened=[] closed=[tasks · 414×567 · load 35 · 2 …] changed=[]
+[2026-10-13T23:51:28.835Z] +9689ms groups changed: opened=0 closed=1 changed=1
+[2026-10-13T23:51:28.888Z] after ~3s: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-13T23:51:28.888Z] spike 1, step focus: VS Code focused after the open: true
+[2026-10-14T00:34:18.585Z] --- activated: Visual Studio Code 1.141.0 on darwin arm64 ---
+[2026-10-14T00:34:18.586Z] page under test: /Users/jlumbroso/Programming/porthole/spike/.run/tasks.html
+[2026-10-14T00:34:18.588Z] === step 1 (run 1): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:34:18.588Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[]}]
+[2026-10-14T00:34:18.697Z] +109ms groups changed: opened=1 closed=0 changed=1
+[2026-10-14T00:34:18.699Z] +111ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-14T00:34:18.700Z] +112ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.729Z] +141ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.729Z] +141ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.736Z] +148ms step returned: undefined
+[2026-10-14T00:34:18.809Z] +221ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:34:18.823Z] +235ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-14T00:34:18.831Z] +243ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 36 · 2 …]
+[2026-10-14T00:34:18.835Z] +247ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 36 · 2 …]
+[2026-10-14T00:34:18.836Z] +248ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 36 · 2 …]
+[2026-10-14T00:34:18.987Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:34:19.739Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:34:21.739Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:35:31.048Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:36:23.911Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:37:21.410Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 36 · 2 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:27.410Z] === step 1 (run 2): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:38:27.411Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]}]
+[2026-10-14T00:38:27.504Z] +92ms groups changed: opened=1 closed=0 changed=1
+[2026-10-14T00:38:27.513Z] +101ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-14T00:38:27.514Z] +102ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.541Z] +129ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.542Z] +130ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.546Z] +134ms step returned: undefined
+[2026-10-14T00:38:27.603Z] +191ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:27.620Z] +208ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-14T00:38:27.626Z] +214ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 37 · 4 …]
+[2026-10-14T00:38:27.639Z] +227ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 37 · 4 …]
+[2026-10-14T00:38:27.640Z] +228ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 37 · 4 …]
+[2026-10-14T00:38:27.799Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:28.550Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:30.552Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:31.918Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 4 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:37.001Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:45.134Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 37 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:50.526Z] === step 1 (run 3): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:38:50.526Z] before: 1 group(s) [{"viewColumn":1,"active":true,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]}]
+[2026-10-14T00:38:50.614Z] +88ms groups changed: opened=1 closed=0 changed=1
+[2026-10-14T00:38:50.615Z] +89ms tabs changed: opened=[tasks.html] closed=[] changed=[]
+[2026-10-14T00:38:50.616Z] +90ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.639Z] +113ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.640Z] +114ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.644Z] +118ms step returned: undefined
+[2026-10-14T00:38:50.720Z] +194ms tabs changed: opened=[] closed=[] changed=[tasks.html]
+[2026-10-14T00:38:50.734Z] +208ms tabs changed: opened=[] closed=[] changed=[tasks]
+[2026-10-14T00:38:50.737Z] +211ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:38:50.768Z] +242ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:38:50.768Z] +242ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:38:50.894Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:51.645Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:38:53.648Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:01.383Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:04.914Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:12.444Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:16.157Z] === step 1 (run 4): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:39:16.158Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:16.247Z] +89ms groups changed: opened=1 closed=0 changed=2
+[2026-10-14T00:39:16.249Z] +91ms tabs changed: opened=[tasks · 414×567 · load 38 · 1 …] closed=[] changed=[]
+[2026-10-14T00:39:16.249Z] +91ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:39:16.256Z] +98ms tabs changed: opened=[] closed=[tasks · 414×567 · load 38 · 1 …] changed=[]
+[2026-10-14T00:39:16.263Z] +105ms step returned: undefined
+[2026-10-14T00:39:16.290Z] +132ms groups changed: opened=0 closed=1 changed=2
+[2026-10-14T00:39:16.291Z] +133ms groups changed: opened=0 closed=0 changed=2
+[2026-10-14T00:39:16.514Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:17.266Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:19.267Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:23.220Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:30.258Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:33.132Z] === step 1 (run 5): one-shot _workbench.openWith into group -3 ===
+[2026-10-14T00:39:33.132Z] before: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:33.202Z] +69ms groups changed: opened=1 closed=0 changed=2
+[2026-10-14T00:39:33.203Z] +70ms tabs changed: opened=[tasks · 414×567 · load 38 · 1 …] closed=[] changed=[]
+[2026-10-14T00:39:33.203Z] +70ms tabs changed: opened=[] closed=[] changed=[tasks · 414×567 · load 38 · 1 …]
+[2026-10-14T00:39:33.209Z] +76ms tabs changed: opened=[] closed=[tasks · 414×567 · load 38 · 1 …] changed=[]
+[2026-10-14T00:39:33.215Z] +82ms step returned: undefined
+[2026-10-14T00:39:33.256Z] +123ms groups changed: opened=0 closed=1 changed=2
+[2026-10-14T00:39:33.256Z] +123ms groups changed: opened=0 closed=0 changed=2
+[2026-10-14T00:39:33.466Z] after ~0.25s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:34.217Z] after ~1s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:36.218Z] after ~3s: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:36.268Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
+[2026-10-14T00:39:39.896Z] dump: 2 group(s) [{"viewColumn":1,"active":false,"tabs":[{"label":"tasks.html","active":true,"pinned":false,"input":{"type":"zd","uri":"file:///Users/jlumbroso/Programming/porthole/samples/tasks.html"}}]},{"viewColumn":2,"active":true,"tabs":[{"label":"tasks · 414×567 · load 38 · 1 …","active":true,"pinned":false,"input":"undefined"}]}]
