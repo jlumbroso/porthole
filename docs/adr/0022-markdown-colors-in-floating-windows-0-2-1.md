@@ -132,7 +132,7 @@ The names stand as the naming review ruled and Jérémie approved (QST-NAME-MD-C
 
 - [x] Rule on the names — Owner: the naming review (2026-10-14: A confirmed, with per-value descriptions; `auto` reads "Follow VS Code's theme.", applied)
 - [x] Run the check — Owner: Jérémie (2026-10-14: A, six screenshots)
-- [ ] Apply the ruling, update README and CHANGELOG, publish 0.2.1, install it — Owner: Glazier
+- [x] Apply the ruling, update README and CHANGELOG, publish 0.2.1, install it — Owner: Glazier (2026-10-14: live on the Marketplace and Open VSX, GitHub Release by CI from tag `v0.2.1`, installed locally)
 
 ---
 
