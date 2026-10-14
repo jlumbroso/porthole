@@ -226,10 +226,15 @@ What is also settled, from the seed's thread:
 - [x] Answer the four questions — Owner: Jérémie (2026-10-13)
 - [x] Run Spike 1 — Owner: Jérémie (2026-10-13, [ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
 - [x] Answer QST-OPEN-ROUTING — Owner: Jérémie (2026-10-13)
-- [ ] Find out whether porthole can set a floating window's title at all (the title VS Code shows is built from its own settings and the page's title) — Owner: Surveyor
+- [x] Find out whether porthole can set a floating window's title at all (the title VS Code shows is built from its own settings and the page's title) — Owner: Surveyor (2026-10-13; read at 1.141.0, not run; the note below the list)
 - [ ] Decide how a relative path alone resolves when the receiving window has several workspace folders, or none — Owner: Glazier, as a question if it is not obvious
 - [ ] Put the setting names in the table above through the naming review — Owner: Glazier
 - [ ] Build the handler — Owner: Glazier
+
+NOT: **Window titles** (Surveyor 5.1, 2026-10-13). A floating window's title is built by the same `WindowTitle` as the main window's, from the same `window.title` template, with that window's own active editor (`browser/parts/editor/auxiliaryEditorPart.ts` L206–237; `browser/parts/titlebar/windowTitle.ts` L349–407). No API sets a window's title, and the two internal hooks are closed: `ITitleProperties.prefix` is set only by the debug contribution (`contrib/debug/browser/debugTitle.ts` L23–25), and the `[Extension Development Host]` prefix is the dev host only (`windowTitle.ts` L242–246), so the installed porthole never shows it. What the source does allow:
+1. **The page's own `<title>`.** `${activeEditorShort}` for a browser tab is the page title followed by the file path in parentheses (`contrib/browserView/common/browserEditorInput.ts` L253–257), so a page that says `<title>[porthole] tasks</title>` gets exactly the asked-for title, per window, with no code. For pages a model writes, this is a convention the skill can teach (ADR-0016).
+2. **`${rootName}` is already in the default template.** On macOS the default is `${activeEditorShort} — ${rootName}` (`windowTitle.ts` L42–44), so the floating window already ends with the workspace name. A template such as `[${rootName}] ${activeEditorShort}` gives `[porthole] tasks (…/tasks.html)`; `window.title` is a window-scoped setting, so it can live in a project's `.vscode/settings.json`, where it also prefixes that project's main window, which is the same "which project" answer. porthole should document this, not write it.
+3. **A porthole variable, read not run.** The internal command `registerWindowTitleVariable(name, contextKey)` (`browser/parts/titlebar/titlebarPart.ts` L137–150) makes `${name}` resolve to a context key's value (`windowTitle.ts` L368–370, re-rendered on change, L125–127); an extension can set that key with `setContext`. But `setContext` writes the root context, which every window inherits, and no built-in window-scoped key carries text, so the value cannot differ between the floating window and the main one. It buys nothing over 2 and adds an internal dependency.
 - [ ] Re-test whether a new floating window takes focus on Windows and Linux, when a machine is available — Owner: to be assigned
 
 ---
