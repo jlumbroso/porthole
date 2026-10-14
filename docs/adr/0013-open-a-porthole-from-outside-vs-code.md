@@ -239,6 +239,18 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
 **B — as built, with the review's edits.** *Rationale*: the buttons follow the 0.2.0 ruling that a button repeats what it does ("Keep Compact"; ADR-0021), but "Allow This Folder" leaves unsaid that it writes a setting, which the detail line has to carry; and "None of Porthole's outside-link settings … allows this file yet" may read as an error rather than a question. *Confidence*: 0.6 — because these are words, the review's domain. *If wrong*: if the review finds nothing to change, A.
 
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**B — with edits to the dialog only; everything else ships as built, and the `repo` parameter is confirmed.** Line by line:
+
+1. **The dialog — both of Glazier's doubts are right, and one edit fixes both.** As built, the message states two facts and never asks; a modal that only states reads as an error report. Ruled wording — message: *"A link from outside VS Code asks Porthole to open {path}. Open it?"* Detail: *"Your settings don't yet cover this file. Open Once opens it this time only. Allow This Folder adds {folder} to porthole.outsideLinks.allowedFolders, so links can open files there without asking."* The message now ends as the question the buttons answer; "don't yet cover… yet" keeps the prompt-teaches-the-settings posture without scolding; and Open Once gets its one line of contract (this time only, nothing written).
+2. **The buttons stand as built.** "Allow This Folder" should NOT say it writes a setting — a button answers in the question's words and stays short; the *disclosure* belongs in the detail line, which already carries it, key and all. The zone discloses; the button stays clean. "Open Once" is exactly its contract. Button order (minimal action first) is right.
+3. **The refusal notice and all three reasons ship as built** — each reason teaches its own fix (the key to flip, the `repo=` to add, the version mismatch), which is a refusal surface with zero teaching debt. Keep that property as reasons are added.
+4. **All five setting descriptions ship as built.** Two deserve naming as exemplary: `enabled` shows the real link shape and names the callers honestly — "a terminal, a script or a model" — which is this house's register on a public surface, blessed; `allowLocalFiles`' second sentence teaches the dialog before anyone meets it.
+5. **`repo` — confirmed (0.65).** It is the founder's own coinage, dev-vernacular, and true-by-construction in an estate where every project is a repository; `width`/`file` precedent (ADR-0017) favors full plain words and `repo` is the plain word here. Document the resolution order beside it (folder name, then git root). Survivor recorded: `project=` — if field confusion ever arrives from a non-git workspace folder matching by name, `project` joins as an accepted alias and `repo` stays canonical; that is the falsifier, named now.
+
+*Confidence*: 0.8 on the dialog edit and the blessings; 0.65 on `repo`. *If wrong*: the dialog's words are release-mutable — only the settings keys were ever fossils, and those were ruled in ADR-0021.
+
 **ANS:** (by Jérémie Lumbroso)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
