@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Markdown colors in floating windows (0.2.1)
 
 - **Date**: 2026-10-14
-- **Iteration**: 2
+- **Iteration**: 3
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; the naming review (names); Glazier 5.5 (Claude Opus 5.5)
 
@@ -118,6 +118,51 @@ This was also exceptionally described, I was able to follow, pace and remember t
 
 ---
 
+### QST-NAME-MD-DESC: Should the setting's description say that a preview of the same file changes too?
+- Status: unanswered — routed to the naming review, then Jérémie (he asked for this revision, 2026-10-14); for 0.2.2
+- Why asking: **The description, shipped in 0.2.1, says slightly less than what happens.** It reads: *"Colors of Markdown files shown in Porthole's floating windows. Other Markdown previews keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."* Jérémie's hand check (screenshot 11.51.26 above) shows that while `README.md` is popped out with `light`, VS Code's own preview of `README.md` in the main window turns light too; a preview of `CHANGELOG.md` stays on VS Code's theme. Why: the stylesheet rule recognizes a preview by the file it shows, and every preview of that file names the same file. The rule is removed when the floating window closes, so the effect lasts only while the file is popped out. The description is the one place a person reads about this setting in VS Code's Settings editor, so a person who sees their docked preview turn light has nowhere else to learn that it is expected. The three per-value descriptions ("Follow VS Code's theme." and the two "Show Markdown in Porthole's floating windows with … colors, whatever VS Code's theme.") are not in question.
+- Need: pick a letter (or override — any shape answers), or write the sentence
+
+Options:
+- **A — keep it as shipped**: "Other Markdown previews" is read as "previews of other files". No change; the README and CHANGELOG already state the same-file case (commit `79b4b2b`).
+- **B — name the same-file case**: *"Colors of Markdown files shown in Porthole's floating windows. Previews of other files keep following VS Code's theme; any other preview of a file that is popped out takes the same colors until its floating window closes. Code-block syntax colors still follow VS Code's theme."* Complete, at the cost of one long sentence.
+- **C — narrow the promise only**: *"Colors of Markdown files shown in Porthole's floating windows. Previews of other files keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."* Every word true, but silent about the same-file case, so the surprise remains.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
+**B — name the same-file case.** *Rationale*: the hand check shows the effect is real and visible (screenshot 11.51.26); the description is the only text in VS Code's Settings editor; and the case is the kind a person would otherwise report as a bug. *Confidence*: 0.6 — because the wording of B is mine, and its length may cost more than the rare surprise it prevents. *If wrong*: if the review judges the surprise rare and harmless, C, which still fixes the one word ("Other") that over-claims.
+
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**D — B's substance, re-worded on the principle the mechanism hands us: the colors follow the file.** The ruled sentence:
+
+> *"Colors of Markdown files shown in Porthole's floating windows. The colors follow the file: while a file is popped out, every preview of it shows these colors; previews of other files keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."*
+
+Why this over B's wording: B states the same-file case as an exception
+("any other preview of a file that is popped out takes the same
+colors…"), which asks the reader to memorize a special case. "The
+colors follow the file" states the *rule* — three words that make the
+docked-preview observation un-surprising by converting it from a
+bug-shaped exception into a design-shaped principle, and that cover
+the duration for free ("while a file is popped out" replaces "until
+its floating window closes", tighter and truer to the mechanism).
+C is declined: every word true and the surprise intact is exactly the
+gap a settings description exists to close — it is the only text in
+the Settings editor, as Glazier argued.
+
+One line for the record's honesty: the 0.1-shipped description was
+approved by this review word for word, and the founder's hand check
+falsified a corner of it the same day. That is the falsifier culture
+reaching into settings prose, and the review's approval aging in a
+day is the system working, not the review failing — the screenshot
+outranks the ruling, always. *Confidence*: 0.8. *If wrong*: the
+README/CHANGELOG wording Glazier already shipped is compatible with
+this sentence; aligning them is phrasing, not semantics.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: ship 0.2.1 as built
@@ -133,6 +178,7 @@ The names stand as the naming review ruled and Jérémie approved (QST-NAME-MD-C
 - [x] Rule on the names — Owner: the naming review (2026-10-14: A confirmed, with per-value descriptions; `auto` reads "Follow VS Code's theme.", applied)
 - [x] Run the check — Owner: Jérémie (2026-10-14: A, six screenshots)
 - [x] Apply the ruling, update README and CHANGELOG, publish 0.2.1, install it — Owner: Glazier (2026-10-14: live on the Marketplace and Open VSX, GitHub Release by CI from tag `v0.2.1`, installed locally)
+- [ ] Rule on the description (QST-NAME-MD-DESC), then apply it with the README and CHANGELOG wording to match, in 0.2.2 — Owner: the naming review, then Glazier
 
 ---
 
@@ -149,6 +195,12 @@ The names stand as the naming review ruled and Jérémie approved (QST-NAME-MD-C
 - Contributors: Jérémie Lumbroso, the naming review, Glazier 5.5 (Claude Opus 5.5)
 - Changes: decision recorded; README and CHANGELOG state the same-file case
 - Outcome: `Accepted`
+
+### Iteration 3 (2026-10-14)
+- Trigger: Jérémie, on whether the description should be revised: "yes revise with naming review"
+- Contributors: Glazier 5.5 (Claude Opus 5.5)
+- Changes: QST-NAME-MD-DESC added, routed to the naming review; the change ships in 0.2.2
+- Outcome: `Accepted` (0.2.1 stands; one question open for 0.2.2)
 
 ---
 
