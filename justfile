@@ -588,8 +588,11 @@ spike:
 # ─── Release (Purser 5.5; Glazier agreed to these recipes, 2026-10-13) ───────
 # Policy lives in docs/release/RELEASE-PLAN.md and the playbook in
 # .claude/skills/extension-marketplace-publishing. Neither recipe takes an
-# argument, so nothing needs quoting. `publish` is for Jérémie's hand only: it
-# reads the tokens from .env and talks to both registries.
+# argument, so nothing needs quoting. `publish` reads the tokens from .env and
+# talks to both registries. Any seat runs it when a release is decided; there is
+# no "human only" step here (Jérémie, 2026-10-14: "The publishing step is not
+# mine to run. I asked you to publish it"). Its typed-version prompt is a guard
+# against a slip, answered by whoever runs it, for example `echo 0.2.0 | just publish`.
 
 # Read-only: one ✓/✗ per fact a first publish depends on. Publishes nothing, prints no token.
 [group('project')]
@@ -603,9 +606,10 @@ publish-check:
 publish-check-no-tokens:
     node scripts/publish-check.mjs --no-tokens
 
-# THE publish. Instant, public, and the extension ID is permanent. Only Jérémie runs this.
+# THE publish. Instant, public, and the extension ID is permanent. No new user-facing
+# name ships without the naming review first (Jérémie, 2026-10-14).
 [group('project')]
-[doc("Publish to the VS Code Marketplace and Open VSX. Irreversible. Jérémie only")]
+[doc("Publish to the VS Code Marketplace and Open VSX. Irreversible: type the version to confirm")]
 publish:
     #!/usr/bin/env bash
     set -euo pipefail
