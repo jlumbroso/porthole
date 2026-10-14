@@ -35,7 +35,7 @@ These four questions go to the naming review. Its answers come back through Jér
 ## Questions
 
 ### QST-TERM-WINDOW: What do we call the window porthole opens, when other floating windows exist too?
-- Status: unanswered
+- Status: answered
 - Why asking: "Floating window" is also VS Code's name for any editor moved into its own window. Once models can list and act on windows, the words must say which floating windows are porthole's. You asked for "floating window" to be used consistently for porthole's.
 - Need: pick a letter (or override — any shape answers)
 
@@ -48,8 +48,8 @@ Options:
 
 **A — "floating window" alone, as you asked.** *Rationale*: it is your stated preference and the naming review's earlier ruling; within porthole's commands and documents there is no other kind to confuse it with, and a model's list only ever contains porthole's. *Confidence*: 0.6 — because once a skill sits beside VS Code's own vocabulary, a model may need "Porthole's floating window" to say which; that is the naming review's call. *If wrong*: if the review finds the general term ambiguous in model-facing text, B.
 
-**ANS:** (by Jérémie)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, Option A, as struck by the naming authority (I think qualified versions of it, like "Porthole's floating window" are fair game — the claim is not that it is "the" floating window — just that it is a "floating window", *NOT* a "mini window" or "browser window" or "mini-browser window", etc.).
 
 ---
 
@@ -66,6 +66,10 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
 
 **A — plain verbs.** *Rationale*: a model guesses `open` before `pop-out`; Sounder asks for explicit desired states rather than toggles, and B's `toggle-pin` and `cycle-size` are toggles; and "refresh" is your word from the seed. *Confidence*: 0.55 — because the menus and the verbs would then use different words for the same action, which the review may weigh differently. *If wrong*: if one vocabulary across menus and links matters more, B, with `pin`/`unpin` replacing `toggle-pin`.
+
+**Recommendation**: (by the naming review, 2026-10-13)
+
+**A — plain verbs — confirmed and raised to 0.8, on a rule worth keeping: model-facing verbs assert states, never deltas.** B's `toggle-pin` and `cycle-size` are deltas — their meaning depends on hidden current state, so a model (or a retried script) cannot know what it just asked for; `pin`/`unpin`/`resize` name destinations, and a destination is idempotent and auditable. This is the same law that governs the UI/control split elsewhere in porthole: the *menu* may say "Pop Out" and "Toggle Always on Top" (human gestures on visible state), while the *machine surface* asserts states — the two vocabularies are both correct for their reader. Glazier's residual (menus and verbs using different words) is paid with one line of documentation: the skill carries a two-column mapping table (UI title ↔ verb: "Pop Out" ↔ `open`, "Dock Back into Main Window" ↔ `dock`, "Toggle Always on Top" ↔ `pin`/`unpin`), which teaches the correspondence once instead of forcing one register to lie for the other. Keep `refresh` over C's `reload` — it is the founder's own seed word, and the window is a rendered file, not a browser navigation context. *Confidence*: 0.8. *If wrong*: if field use shows models reaching for a menu word in links, the mapping table's left column becomes accepted aliases — additive, nothing breaks.
 
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
@@ -86,6 +90,10 @@ Options:
 
 **C — version as a parameter, full words.** *Rationale*: Purser asked for a version marker; a parameter keeps one path per verb, so old links without `v` can still be read as version 1; `file` and `width`/`height` read better to a model than `path`, `w`, `h`. *Confidence*: 0.55 — because a path segment (B) is the more common convention in web APIs, and the review may prefer it. *If wrong*: B.
 
+**Recommendation**: (by the naming review, 2026-10-13)
+
+**D — a synthesis, coined as invited: B's path version with C's full-word absolute parameters** — `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640`. Three grounds: (1) **the version goes in the path** because URLs are the most fossil of fossils and the version must be unmissable in every log line and grep — a parameter can be reordered, buried, or dropped by a script and silently misread later; a path segment cannot. (An unversioned `/open` still routes to v1, so Glazier's graceful-degradation point survives intact.) This also matches the convention the wider ecosystem just settled for its own served URLs — one URL grammar, everywhere. (2) **Full words** (`file`, `width`, `height`): model readers pay for ambiguity, never for length — `path` is ambiguous with URL-path, `w`/`h` are guessing games. (3) **Absolute dimensions are the canonical parameters, not named sizes**: B's `size=S` depends on the *receiver's* preset configuration, so the same link means different windows on different machines — a portability trap in strings that scripts copy between contexts. `size=<preset>` MAY be accepted as a documented receiver-local convenience, never the canonical form. *Confidence*: 0.75. *If wrong*: if the deeplink parser makes path routing costly, C with a mandatory-on-write `v` parameter is the fallback; the parameter-word rulings hold regardless.
+
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
@@ -104,6 +112,10 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-13)
 
 **B — "the source tab".** *Rationale*: the distinction that matters is source versus rendered page; "text editor" is accurate but users of VS Code rarely say it; "code tab" is natural for HTML but odd for a Markdown plan. *Confidence*: 0.5 — because this is a matter of ear, which is the review's. *If wrong*: whichever the review prefers.
+
+**Recommendation**: (by the naming review, 2026-10-13)
+
+**B — "the source tab" — confirmed at 0.7, because the pair teaches itself.** The distinction that carries all the weight is *source versus rendered*, and B is the only candidate that names the relation: "the source tab" and "the floating window" form a pair a stranger decodes on sight (the same source/preview pair VS Code's own Markdown feature already taught every user). A ("the text editor") is accurate but names the tool rather than the contrast, and nobody says it; C ("the code tab") fails the founder's own Markdown case — a plan.md in an editor tab is source, not code. One rider: the first use in any document glosses it once — *"the source tab (the ordinary editor tab showing the file's source)"* — and thereafter the pair carries itself. *Confidence*: 0.7. *If wrong*: this is ear, and the founder's ear closes it — A costs nothing but flavor.
 
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
@@ -130,6 +142,12 @@ Options:
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-13)
+- Trigger: Jérémie carried the four questions to the naming review and asked for its recommendations in place
+- Contributors: the naming review
+- Changes: a stacked Recommendation under each open QST — verbs: A confirmed 0.8 with the states-never-deltas rule and a required UI↔verb mapping table; link: D coined (path version + full-word absolute parameters, `size=` as receiver-local convenience only); source tab: B confirmed 0.7 with a first-use gloss rider. QST-TERM-WINDOW already answered by Jérémie (A, with qualified forms fair game) — untouched.
+- Outcome: `Draft`; all four ANS surfaces now accept/override for Jérémie
 
 ---
 
