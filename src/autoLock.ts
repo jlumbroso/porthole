@@ -30,9 +30,21 @@ export function resetAutoLockPrompt(): void {
   askedThisSession = false;
 }
 
+const asMap = (value: unknown): Record<string, boolean> =>
+  value && typeof value === 'object' ? { ...(value as Record<string, boolean>) } : {};
+
+/** The effective value, defaults included: what VS Code actually does. */
 function currentAutoLock(): Record<string, boolean> {
-  const value = vscode.workspace.getConfiguration('workbench.editor').get<unknown>('autoLockGroups');
-  return value && typeof value === 'object' ? { ...(value as Record<string, boolean>) } : {};
+  return asMap(vscode.workspace.getConfiguration('workbench.editor').get<unknown>('autoLockGroups'));
+}
+
+/**
+ * Only what the person set in their user settings. Writing back the effective
+ * value instead copied all of VS Code's ~25 defaults into their settings.json,
+ * freezing them against future VS Code changes (seen 2026-10-13, ADR-0020).
+ */
+function userAutoLock(): Record<string, boolean> {
+  return asMap(vscode.workspace.getConfiguration('workbench.editor').inspect<unknown>('autoLockGroups')?.globalValue);
 }
 
 export function autoLockIsOn(): boolean {
@@ -45,17 +57,20 @@ export async function offerAutoLock(): Promise<void> {
   if (autoLockIsOn() || !askToAutoLock() || askedThisSession) { return; }
   askedThisSession = true;
   const choice = await vscode.window.showInformationMessage(
-    "Keep Porthole's floating windows to one tab?",
+    "Keep Porthole's floating windows compact?",
     {
       modal: true,
-      detail: 'If another file opens inside a floating window, VS Code shows its tabs and status bar again. '
-        + 'VS Code can lock each new floating window to its page. This turns on the VS Code setting '
-        + '"workbench.editor.autoLockGroups" for the integrated browser and the Markdown preview, which also locks '
-        + 'any browser tab or Markdown preview you open as the first tab of a new editor group.',
+      detail: 'Why: a floating window stays compact (just the page, no tabs or status bar) only while it holds a single tab. '
+        + 'If another file ever opens into it, VS Code brings the tabs and status bar back. Locking the window to its page prevents that.\n\n'
+        + 'It rarely affects anything else: VS Code locks a browser tab or Markdown preview only when it is the first tab '
+        + 'of a new editor group, which is how Porthole opens its windows (and also when you open one yourself in a new group). Turning this on sets the VS Code setting '
+        + '"workbench.editor.autoLockGroups" for those two editors.\n\n'
+        + 'Not Now changes nothing; a floating window loses compact mode only if a second file happens to open inside it. '
+        + 'Porthole will ask again next session.',
     },
     TURN_ON, NOT_NOW, NEVER);
   if (choice === TURN_ON) {
-    const next = currentAutoLock();
+    const next = userAutoLock();
     for (const id of LOCKED_EDITORS) { next[id] = true; }
     await vscode.workspace.getConfiguration('workbench.editor')
       .update('autoLockGroups', next, vscode.ConfigurationTarget.Global);

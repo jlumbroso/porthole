@@ -38,6 +38,9 @@ let config: Record<string, unknown> = {};
 // VS Code's auto-lock is already on, so the one-time consent question
 // (ADR-0019) stays out of tests that are not about it.
 let otherConfig: Record<string, Record<string, unknown>> = {};
+// VS Code's own defaults, per section. `get` merges them under the user's
+// values for object settings, as VS Code does; `inspect` keeps them apart.
+let defaultConfig: Record<string, Record<string, unknown>> = {};
 let updates: Array<{ section: string; key: string; value: unknown; target: unknown }> = [];
 let modalAnswers: Array<string | undefined> = [];
 let modals: Array<{ message: string; buttons: string[] }> = [];
@@ -56,6 +59,7 @@ export function resetVscodeMock(): void {
   groups = [{ viewColumn: 1, isActive: true, tabs: [] }];
   config = {};
   otherConfig = { 'workbench.editor': { autoLockGroups: { 'workbench.editor.browser': true, 'vscode.markdown.preview.editor': true } } };
+  defaultConfig = {};
   updates = [];
   modalAnswers = [];
   modals = [];
@@ -87,6 +91,11 @@ export function setConfig(values: Record<string, unknown>): void {
 /** Sets settings outside `porthole.*`, for example `setSection('workbench.editor', { autoLockGroups: {} })`. */
 export function setSection(section: string, values: Record<string, unknown>): void {
   otherConfig[section] = { ...(otherConfig[section] ?? {}), ...values };
+}
+
+/** Sets VS Code's default values for a section (not the user's). */
+export function setSectionDefaults(section: string, values: Record<string, unknown>): void {
+  defaultConfig[section] = { ...(defaultConfig[section] ?? {}), ...values };
 }
 
 /** Settings the extension wrote, in order. */
@@ -191,6 +200,9 @@ export const window = {
   },
 };
 
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  !!value && typeof value === 'object' && !Array.isArray(value);
+
 export enum ConfigurationTarget { Global = 1, Workspace = 2, WorkspaceFolder = 3 }
 
 export const workspace = {
@@ -200,7 +212,14 @@ export const workspace = {
     return {
       get<T>(key: string, fallback?: T): T | undefined {
         if (section === 'porthole') { settingsRead.add(key); }
-        return key in values ? (values[key] as T) : fallback;
+        const user = values[key];
+        const byDefault = defaultConfig[section]?.[key];
+        if (isPlainObject(user) && isPlainObject(byDefault)) { return { ...byDefault, ...user } as T; }
+        if (key in values) { return user as T; }
+        return byDefault !== undefined ? (byDefault as T) : fallback;
+      },
+      inspect<T>(key: string) {
+        return { key, defaultValue: defaultConfig[section]?.[key] as T, globalValue: values[key] as T };
       },
       async update(key: string, value: unknown, target?: unknown) {
         updates.push({ section, key, value, target });

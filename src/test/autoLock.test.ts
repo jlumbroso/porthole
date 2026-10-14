@@ -3,7 +3,7 @@ import { resetAutoLockPrompt } from '../autoLock';
 import { activateFresh, command } from './helpers/activate';
 import {
   answerNextModal, ConfigurationTarget, executedCommands, modalsShown, openFloatingGroup,
-  setCommandBehavior, setSection, settingUpdates, Uri,
+  setCommandBehavior, setSection, setSectionDefaults, settingUpdates, Uri,
 } from './helpers/vscodeMock';
 
 // ADR-0019 (Jérémie's answer to QST-LOCK-METHOD): porthole asks before turning
@@ -65,6 +65,27 @@ describe('asking to keep floating windows to one tab', () => {
     expect(settingUpdates()).toEqual([{
       section: 'porthole', key: 'askToAutoLock', value: false, target: ConfigurationTarget.Global,
     }]);
+  });
+
+  describe('Regression tests', () => {
+    it('writes only the user\'s own entries and porthole\'s two, never VS Code\'s defaults', async () => {
+      // Bug (Jérémie's hands-on check, ADR-0020, 2026-10-13): "Turn On" read the
+      // effective setting, which VS Code returns with all its defaults merged in,
+      // and wrote all of it back: some 25 default entries landed in his
+      // settings.json, frozen there against future VS Code changes.
+      setSectionDefaults('workbench.editor', {
+        autoLockGroups: { default: false, terminalEditor: true, 'workbench.editor.browser': false },
+      });
+      answerNextModal('Turn On');
+
+      await popOut();
+
+      expect(settingUpdates()[0].value).toEqual({
+        'workbench.editor.terminal': true,          // the user's own, from beforeEach
+        'workbench.editor.browser': true,
+        'vscode.markdown.preview.editor': true,
+      });
+    });
   });
 
   it('does not ask when VS Code already locks porthole\'s windows', async () => {
