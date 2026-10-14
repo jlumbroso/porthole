@@ -15,7 +15,8 @@ crossing twice in a day suffixes `-2`.
 
 ## What goes in one
 
-Write as a **delta over your previous handoffs** — they stack and are the
+If this is your first handoff, write everything you've experienced. Otherwise,
+write as a **delta over your previous handoffs** — they stack and are the
 standing board; never rewrite an old one. The parts that have earned their
 place, in the order that has worked:
 
