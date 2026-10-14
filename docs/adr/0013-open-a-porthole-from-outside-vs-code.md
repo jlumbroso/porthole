@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Open a porthole from outside VS Code
 
 - **Date**: 2026-10-13
-- **Iteration**: 4
+- **Iteration**: 5
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5, Surveyor 5.1 and Sounder 6 in the seed's thread
 
@@ -182,6 +182,68 @@ This is to facilitate communication between model and human — not to introduce
 
 ---
 
+### QST-CHECK-OUTSIDE-OPEN: Does a link typed in a terminal open a page in a floating window, and ask only when it should?
+- Status: unanswered
+- Why asking: **What this finds out.** Outside `open` is built and passes 60 tests against a mocked VS Code (commit `950faa5`), but four links in the chain have never run: that VS Code wakes Porthole for a `vscode://jlumbroso.porthole/…` link at all (the `onUri` activation event); that VS Code hands over the link's query decoded exactly once, as its source says (`src/vs/base/common/uri.ts` at 1.141.0), so a file name with a space and a plus sign arrives intact; that a relative path is found in this window's workspace folder; and that a file outside the workspace brings up Porthole's question instead of opening silently. Only a real VS Code receiving a real link can show these. Each outcome below names what it would change. **Safe**: nothing here changes a setting (step 4 says which button not to press); Porthole 0.3.0 is installed in your VS Code but not published.
+- Need: pick a letter (or override — any shape answers). About four minutes. A screenshot of Porthole's question in step 4 would help.
+
+**Where to do this.** In **your porthole workspace window**: the VS Code window in which the folder `porthole` is open, whose title bar ends with `porthole`. Not in any debug window (none titled `[Extension Development Host]`). The commands go in **that window's own terminal panel**, so that this window is the last one you used and VS Code hands it the link.
+
+**Before you start.** In that window, run **Developer: Reload Window** (press **Shift+Cmd+P**, type `Reload Window`, press **Enter**), so it runs Porthole 0.3.0. Then open its terminal panel: press **Ctrl+`** (Control and the backquote key, left of 1). "The floating window" below is the small window Porthole opens with only the page in it; close one with the red button at its top left.
+
+**Steps.** One action each. Paste each command whole, as one line, and press **Enter**.
+
+1. **An HTML file, by absolute path, with a size.** Paste:
+   `open 'vscode://jlumbroso.porthole/v1/open?file=/Users/jlumbroso/Programming/porthole/samples/tasks.html&width=500&height=700'`
+   VS Code should show its own question, **"Allow 'Porthole' extension to open this URI?"**, with a box "Do not ask me again for this extension". Leave the box unticked and click **Open**. A floating window should appear with the sample task page, pinned above other windows.
+2. **Close that floating window** (red button at its top left).
+3. **A Markdown file, by relative path, with a space and a plus sign in its name.** Paste:
+   `open 'vscode://jlumbroso.porthole/v1/open?file=samples/my%20tasks%2Bnotes.md'`
+   Click **Open** if VS Code asks again. A floating window should show the rendered Markdown page, whose heading reads **My tasks+notes**, with two unticked boxes. Close it.
+4. **A file outside the workspace.** Paste:
+   `open 'vscode://jlumbroso.porthole/v1/open?file=/private/tmp/claude-501/-Users-jlumbroso-Programming-porthole/97e4570b-75ad-4694-9ae2-dcdd69dcaf36/scratchpad/outside/notes.html'`
+   Click **Open** if VS Code asks. This time **Porthole** should ask, in a dialog beginning "A link from outside VS Code asks Porthole to open …notes.html. None of Porthole's outside-link settings (porthole.outsideLinks) allows this file yet." with buttons **Open Once**, **Allow This Folder** and **Cancel**. Click **Open Once** (not Allow This Folder, which would write a setting). A floating window should show "Outside the workspace". Close it.
+
+I read Porthole's log afterwards myself (each link, and which window it was matched to, is written there); nothing needs copying.
+
+Options:
+- **A — all as described**: VS Code's question in step 1, the HTML window in step 1, the Markdown window in step 3, Porthole's question and then the window in step 4.
+- **B — nothing happened in step 1**: no VS Code question and no floating window. The link never reached Porthole.
+- **C — VS Code asked, but no floating window appeared**, and a notice beginning "Porthole did not open a link from outside VS Code: …" did: please give its words.
+- **D — step 3 failed**: a notice said the file does not exist, or a different name appeared.
+- **E — step 4 opened the page without Porthole's question**, or refused it without asking.
+- **F — something else**: say what you saw.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
+**A — all as described** (a prediction). *Rationale*: `registerUriHandler` and the `onUri` activation event are VS Code's public, documented route for exactly this, and `onUri` is declared (`package.json`; read in `implicitActivationEvents.ts` at 1.141.0 that it is not implied). The single decode is read in `uri.ts` (`percentDecode` of the query in `URI.parse`), and Porthole no longer decodes a second time. Every refusal and the question are covered by tests, including the four hostile paths. *Confidence*: 0.55 — because none of the chain from macOS's `open` to Porthole has ever run, and I have never seen what string `open` passes on for `%20` and `%2B`. *If wrong*: B means activation or registration is wrong, to be found in VS Code's extension host log; C means the handler ran and refused, and its words say which check; D means the link's query is decoded twice or not at all on the way in, and the reader must change; E means the allowlist misreads the temporary folder's real path, which would be a safety bug, with a regression test before anything else.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+### QST-NAME-OPEN-WORDS: Are the new words of outside `open` right?
+- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing outside `open`
+- Why asking: The setting keys were ruled in ADR-0021, but building `open` added words a person reads that nobody has reviewed. The two buttons and the settings' descriptions are the permanent-feeling ones; messages can change in any release. As built (`src/outsideLinks.ts`, `package.json`):
+  - **Porthole's question** (a modal dialog, shown when a link asks for a file no setting allows): "A link from outside VS Code asks Porthole to open {path}. None of Porthole's outside-link settings (porthole.outsideLinks) allows this file yet." Detail line: "Allow This Folder adds {folder} to porthole.outsideLinks.allowedFolders, so links can open files there without asking." Buttons: **Open Once**, **Allow This Folder** (and VS Code's own **Cancel**).
+  - **A refusal**, as a notice: "Porthole did not open a link from outside VS Code: {reason}." Reasons include "outside links are turned off (porthole.outsideLinks.enabled)", "{file} exists in more than one workspace folder; add repo=<folder name> to the link", "this link is for a newer version of Porthole (/v2/open)".
+  - **Setting descriptions**: `enabled` "Accept `vscode://jlumbroso.porthole/v1/open?file=…` links from outside VS Code, for instance from a terminal, a script or a model. VS Code asks once before it hands Porthole its first link."; `actions.open` "Let outside links open a page in a floating window."; `allowWorkspaceFolders` "Let outside links open HTML and Markdown files inside the receiving window's workspace folders."; `allowedFolders` "Further folders, by absolute path, whose HTML and Markdown files outside links may open."; `allowLocalFiles` "Let outside links open any other local HTML or Markdown file. When off, Porthole asks before opening a file no setting allows."
+  - **The link parameter `repo`**: from Jérémie's own example in QST-OPEN-ROUTING (`repo=porthole&file=docs/tasks.html`); `file`, `width` and `height` were ruled in ADR-0017, `repo` was not.
+- Need: pick a letter (or override — any shape answers), or edit any line
+
+Options:
+- **A — as built**: every word above ships as it is.
+- **B — as built, with the review's edits**: the review changes what it judges wrong, line by line.
+- **C — different buttons**: the review proposes other labels for the two buttons; the rest as built or edited.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
+**B — as built, with the review's edits.** *Rationale*: the buttons follow the 0.2.0 ruling that a button repeats what it does ("Keep Compact"; ADR-0021), but "Allow This Folder" leaves unsaid that it writes a setting, which the detail line has to carry; and "None of Porthole's outside-link settings … allows this file yet" may read as an error rather than a question. *Confidence*: 0.6 — because these are words, the review's domain. *If wrong*: if the review finds nothing to change, A.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Context
@@ -227,9 +289,9 @@ What is also settled, from the seed's thread:
 - [x] Run Spike 1 — Owner: Jérémie (2026-10-13, [ADR-0018](0018-spike-1-markdown-preview-and-focus.md))
 - [x] Answer QST-OPEN-ROUTING — Owner: Jérémie (2026-10-13)
 - [x] Find out whether porthole can set a floating window's title at all (the title VS Code shows is built from its own settings and the page's title) — Owner: Surveyor (2026-10-13; read at 1.141.0, not run; the note below the list)
-- [ ] Decide how a relative path alone resolves when the receiving window has several workspace folders, or none — Owner: Glazier, as a question if it is not obvious
+- [x] Decide how a relative path alone resolves when the receiving window has several workspace folders, or none — Owner: Glazier (2026-10-14, as built: it is looked up in every workspace folder of the receiving window; found in one, that file; in several, refused with "add repo=<folder name> to the link"; in none, or with no folder open, refused and said so. Handing a link on to another window waits for ADR-0014's event file.)
 - [ ] Put the setting names in the table above through the naming review — Owner: Glazier
-- [ ] Build the handler — Owner: Glazier
+- [ ] Build the handler — Owner: Glazier (2026-10-14: files built, `950faa5`, installed locally as 0.3.0, not published; waiting on QST-CHECK-OUTSIDE-OPEN and QST-NAME-OPEN-WORDS. Not built yet: `localhost` and remote links, whose link parameter has no name yet, and handing links between windows)
 
 NOT: **Window titles** (Surveyor 5.1, 2026-10-13). A floating window's title is built by the same `WindowTitle` as the main window's, from the same `window.title` template, with that window's own active editor (`browser/parts/editor/auxiliaryEditorPart.ts` L206–237; `browser/parts/titlebar/windowTitle.ts` L349–407). No API sets a window's title, and the two internal hooks are closed: `ITitleProperties.prefix` is set only by the debug contribution (`contrib/debug/browser/debugTitle.ts` L23–25), and the `[Extension Development Host]` prefix is the dev host only (`windowTitle.ts` L242–246), so the installed porthole never shows it. What the source does allow:
 1. **The page's own `<title>`.** `${activeEditorShort}` for a browser tab is the page title followed by the file path in parentheses (`contrib/browserView/common/browserEditorInput.ts` L253–257), so a page that says `<title>[porthole] tasks</title>` gets exactly the asked-for title, per window, with no code. For pages a model writes, this is a convention the skill can teach (ADR-0016).
@@ -264,6 +326,12 @@ NOT: **Window titles** (Surveyor 5.1, 2026-10-13). A floating window's title is 
 - Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — this record
 - Changes: routing recorded in the Decision; two follow-ups (window title prefix; relative paths with several folders)
 - Outcome: stays `Accepted`; no question open
+
+### Iteration 5 (2026-10-14)
+- Trigger: Jérémie: "go for it!" (build outside `open`)
+- Contributors: Glazier 5.5 (Claude Opus 5.5)
+- Changes: handler built for local files; the relative-path rule recorded; QST-CHECK-OUTSIDE-OPEN and QST-NAME-OPEN-WORDS added
+- Outcome: `Accepted` (decision unchanged)
 
 ---
 

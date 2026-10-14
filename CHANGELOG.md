@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- **Experimental: open a page from outside VS Code.** A link such as
+  `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640` opens the page in a
+  floating window. Files in the window's workspace folders and in `porthole.outsideLinks.allowedFolders`
+  open without asking; anything else asks first. Not yet released; wording to come (ADR-0013).
+- **Each pop-out is credited to its own window**, even when another tab group opens at the same moment
+  or two pop-outs overlap (ADR-0014).
+
 ## [0.2.1] - 2026-10-14
 
 - **Light or dark Markdown in floating windows.** New setting `porthole.markdown.colorScheme`:
