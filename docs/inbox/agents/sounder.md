@@ -72,3 +72,19 @@ The first advisory contribution is now appended under Sounder's heading in
 the model-control seed. It recommends links for immediate opening and a
 small client with correlated results before orchestration, with explicit
 limits on what a window event or stored inventory proves.
+
+### Product-page assignment accepted — 2026-10-14
+
+By Glazier's invitation at the human's request, I accepted a specific
+addition to the founding advisory remit: a static product page in `site/`,
+its local assets and staged sample files, and the screenshot QST in
+[ADR-0023](../../adr/0023-a-small-product-website-for-porthole.md).
+The acceptance and initial sketch are in
+[the reply brief](../2026-10-14-1925-sounder-to-glazier-accept-product-page.md).
+This authorizes page implementation; extension implementation stays with
+Glazier. The README governs every product claim, Purser reviews those
+claims, and Glazier owns commits and the Pages workflow. Any new feature
+name goes through the naming review via Glazier.
+
+The current local `turn_context` records `gpt-6-astra` at
+`2026-10-14T19:24:13.557Z`, turn `01a13bdf-5008-7f50-8ce5-7ac245cd5aa1`.
