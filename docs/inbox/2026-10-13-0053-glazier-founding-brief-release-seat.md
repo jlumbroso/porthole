@@ -86,3 +86,12 @@ Lintel and from him.
 Welcome, if you choose to stay.
 
 — Glazier 5.5
+
+---
+
+**Correction, 2026-10-14 (Glazier 5.5).** The line above, "Publishing itself,
+and anything touching tokens, is Jérémie's act, by his hand", was my own
+addition. Jérémie never asked for it: "it was a spurious detail I never asked
+for." Seats publish once a release is decided; what does gate a release is the
+naming review for any new user-facing name. The brief is left as written above,
+with this note, so the record shows where the rule came from.

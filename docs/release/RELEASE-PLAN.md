@@ -4,7 +4,7 @@
 - **Scope**: the founding brief's items 3 (the listing) and 4 (the publishing mechanics).
   Items 1 and 2 are [`REPO-HYGIENE.md`](REPO-HYGIENE.md) and [`TERMINOLOGY-INDEX.md`](TERMINOLOGY-INDEX.md);
   the version floor is [`VERSION-FLOOR.md`](VERSION-FLOOR.md).
-- **Rule that frames it**: publishing, and anything touching a token, is Jérémie's act, by his hand.
+- **Rule that frames it** (corrected 2026-10-14): any seat publishes once a release is decided, using the tokens in `.env`; no new user-facing name ships without the naming review first. The earlier line here, "publishing, and anything touching a token, is Jérémie's act, by his hand", came from Glazier's founding brief and was never Jérémie's rule.
   Everything else is prepared so that act is one clear step.
 - **Questions waiting on Jérémie** are in [ADR-0011](../adr/0011-prepare-porthole-s-first-public-release-repo-hygiene-version-floor-terminology-listing.md).
 
