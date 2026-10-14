@@ -158,11 +158,11 @@ These verbs come after ADR-0013's `open` and depend on its answers.
 
 From Jérémie's answers (2026-10-13):
 
-- **Channel (QST-DRIVE-CHANNEL, A, then C)**: links in, a file out, now; an MCP server on top later, each step usable on its own. The file is **JSONL**: an append-only list of events, one JSON object per line (a request received, a window opened, a refresh done), rather than a snapshot rewritten in place. Appending also suits Sounder's request-correlated results: every event can carry the request id that caused it.
+- **Channel (QST-DRIVE-CHANNEL, A, then C)**: links in, a file out, now; an MCP server on top later, each step usable on its own. The file is **JSONL**: an append-only list of events, one JSON object per line (a request received, a window opened, a refresh done), rather than a snapshot rewritten in place. Appending also suits Sounder's request-correlated results: every event can carry the request id that caused it. Named by the naming review (ADR-0021): the file is `porthole-events.jsonl`; events are `<object>.<past-tense verb>`, for example `request.received`, `window.opened`, `window.refreshed`.
 - **Client (QST-DRIVE-CLIENT, A, then D, eventually C)**: instructions only for `open` now; the script shipped inside the extension once results come back; eventually a published CLI and/or MCP package. Each step degrades gracefully to the one before. The skill knows where each editor installs extensions.
 - **List (QST-DRIVE-LIST, A now, B to explore)**: what porthole knows, labelled, with asked-for and observed values apart. A page's own state (option B) is to be explored, not as a requirement on pages but as **a flexible mechanism others can build on**.
 - **Restart (QST-DRIVE-RESTART, A)**: windows VS Code restored are listed separately as "restored, not verified", matched by title, read-only.
-- **Permissions (QST-DRIVE-PERMISSION, B, with one setting per action)**: open, list, refresh and focus are allowed by default; resize, pin, dock and close are not. **Each action has its own setting**, so a person can tune exactly how their attention may be interrupted.
+- **Permissions (QST-DRIVE-PERMISSION, B, with one setting per action)**: open, list, refresh and focus are allowed by default; resize, pin, dock and close are not. **Each action has its own setting**, so a person can tune exactly how their attention may be interrupted. Named by the naming review (ADR-0021): `porthole.outsideLinks.actions.<verb>` for each of `open`, `list`, `refresh`, `focus`, `resize`, `pin`, `unpin`, `dock`, `close`.
 
 Settled regardless, from the thread:
 

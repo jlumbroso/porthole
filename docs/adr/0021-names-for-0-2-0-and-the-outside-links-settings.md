@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Names for 0.2.0 and the outside-links settings
 
 - **Date**: 2026-10-14
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Implemented
 - **Deciders**: the naming review (rules); Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: 0.2.0 adds one setting key, one command, one dialog and two notices whose words have not been reviewed; they go through the naming review before 0.2.0 is published, and the outside-links names of ADR-0013 and ADR-0014 go with them so the review sees the whole vocabulary at once.
@@ -161,7 +161,7 @@ Jérémie's ANS slots are left for him; the review's ruling is the gate he set f
 ## Action Items
 
 - [x] Rule on the four questions — Owner: the naming review (2026-10-14)
-- [ ] Apply the rulings for part 1; publish 0.2.0; install it — Owner: Glazier
+- [x] Apply the rulings for part 1; publish 0.2.0; install it — Owner: Glazier (2026-10-14; both registries list 0.2.0)
 
 ---
 
@@ -172,6 +172,12 @@ Jérémie's ANS slots are left for him; the review's ruling is the gate he set f
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-14)
+- Trigger: Jérémie answered all four, each accepting the naming review's recommendation exactly
+- Contributors: the naming review; Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — this record
+- Changes: none to the decisions; part 1 was already applied and published in 0.2.0 (tag `v0.2.0`); part 2's names carried into ADR-0013 and ADR-0014
+- Outcome: `Draft → Implemented`
 
 ### Iteration 2 (2026-10-14)
 - Trigger: Jérémie carried the ADR to the naming review

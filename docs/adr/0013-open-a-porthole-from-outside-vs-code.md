@@ -195,14 +195,14 @@ From Jérémie's answers (2026-10-13):
 - **Callers (QST-OPEN-CALLERS, A)**: any local agent or script. The threat model is the human's own, non-adversarial machine: anything able to send porthole a link could already do worse. The point is speed: a model can put a page in front of the human "without the human having to search frantically".
 - **What a link may open (QST-OPEN-ALLOWLIST, A and B combined)**: one switch for the whole feature and one setting per kind of target. Jérémie's defaults:
 
-  | Setting (names to be confirmed by the naming review) | Default | Meaning |
+  | Setting (names confirmed by the naming review, ADR-0021) | Default | Meaning |
   | --- | --- | --- |
   | `porthole.outsideLinks.enabled` | `true` | outside links are accepted at all |
   | `porthole.outsideLinks.allowWorkspaceFolders` | `true` | local files inside the receiving window's workspace folders |
   | `porthole.outsideLinks.allowedFolders` | `[]` | further folders, by absolute path |
   | `porthole.outsideLinks.allowLocalFiles` | `false` | any other local `.html` (and later `.md`) file |
-  | `porthole.outsideLinks.allowLocalHost` | `true` | `localhost`, `127.0.0.1` and `::1`, over `http` and `https` |
-  | `porthole.outsideLinks.restrictLocalHostPorts` | `[]` | if non-empty, only these ports (for example `[8001, 8002]`) |
+  | `porthole.outsideLinks.allowLocalhost` | `true` | `localhost`, `127.0.0.1` and `::1`, over `http` and `https` |
+  | `porthole.outsideLinks.restrictLocalhostPorts` | `[]` | if non-empty, only these ports (for example `[8001, 8002]`) |
   | `porthole.outsideLinks.allowRemoteLinks` | `false` | any `https://` address |
 
   This changes ADR-0008's earlier answer in one respect: `localhost` stays on by default, and local files outside the workspace move behind their own setting.
