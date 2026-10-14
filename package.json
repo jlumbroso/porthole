@@ -44,7 +44,9 @@
     }
   },
   "main": "./dist/extension.js",
-  "activationEvents": [],
+  "activationEvents": [
+    "onUri"
+  ],
   "contributes": {
     "markdown.previewStyles": [
       "./media/markdown-color-scheme.css"
@@ -206,6 +208,32 @@
           ],
           "default": "auto",
           "markdownDescription": "Colors of Markdown files shown in Porthole's floating windows. Other Markdown previews keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."
+        },
+        "porthole.outsideLinks.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Accept `vscode://jlumbroso.porthole/v1/open?file=…` links from outside VS Code, for instance from a terminal, a script or a model. VS Code asks once before it hands Porthole its first link."
+        },
+        "porthole.outsideLinks.actions.open": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Let outside links open a page in a floating window."
+        },
+        "porthole.outsideLinks.allowWorkspaceFolders": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Let outside links open HTML and Markdown files inside the receiving window's workspace folders."
+        },
+        "porthole.outsideLinks.allowedFolders": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "markdownDescription": "Further folders, by absolute path, whose HTML and Markdown files outside links may open."
+        },
+        "porthole.outsideLinks.allowLocalFiles": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Let outside links open any other local HTML or Markdown file. When off, Porthole asks before opening a file no setting allows."
         },
         "porthole.askToKeepCompact": {
           "type": "boolean",

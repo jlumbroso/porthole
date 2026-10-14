@@ -52,6 +52,8 @@ let logged: string[] = [];
 const settingsRead = new Set<string>();
 let messages: string[] = [];
 let activeDocumentUri: unknown;
+let uriHandler: { handleUri: (uri: unknown) => unknown } | undefined;
+let workspaceFolders: Array<{ name: string; uri: unknown; index: number }> | undefined;
 
 // ── helpers for tests ────────────────────────────────────────────────────────
 
@@ -75,6 +77,8 @@ export function resetVscodeMock(): void {
   settingsRead.clear();
   messages = [];
   activeDocumentUri = undefined;
+  uriHandler = undefined;
+  workspaceFolders = undefined;
 }
 
 export const getRegisteredCommand = (id: string) => registered.get(id);
@@ -136,6 +140,21 @@ export function answerNextModal(answer: string | undefined): void {
 
 export function setActiveDocument(uri: unknown): void {
   activeDocumentUri = uri;
+}
+
+/** The window's workspace folders, by absolute path; the name is the folder's own, as VS Code shows it. */
+export function setWorkspaceFolders(paths: string[]): void {
+  workspaceFolders = paths.map((path, index) => ({ name: path.split('/').filter(Boolean).at(-1)!, uri: Uri.file(path), index }));
+}
+
+/**
+ * What VS Code does with `vscode://jlumbroso.porthole<path>?<query>`: it hands
+ * the extension a URI whose query is already percent-decoded, as its `uri.ts`
+ * does (1.141.0). Pass the query as a sender would type it, encoded.
+ */
+export async function followLink(path: string, encodedQuery: string): Promise<void> {
+  if (!uriHandler) { throw new Error('mock: no URI handler registered'); }
+  await uriHandler.handleUri({ scheme: 'vscode', authority: 'jlumbroso.porthole', path, query: decodeURIComponent(encodedQuery) });
 }
 
 /** What VS Code does when a floating window appears: a new, active tab group. */
@@ -211,9 +230,12 @@ export const window = {
     const choose = quickPickAnswers.shift();
     return choose ? choose(items) : undefined;
   },
-  async showWarningMessage(message: string) {
-    messages.push(message);
-    return undefined;
+  async showWarningMessage(message: string, ...rest: unknown[]) {
+    return window.showInformationMessage(message, ...rest);
+  },
+  registerUriHandler(handler: { handleUri: (uri: unknown) => unknown }) {
+    uriHandler = handler;
+    return { dispose: () => { uriHandler = undefined; } };
   },
   get activeTextEditor() {
     return activeDocumentUri ? { document: { uri: activeDocumentUri } } : undefined;
@@ -237,6 +259,7 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> =>
 export enum ConfigurationTarget { Global = 1, Workspace = 2, WorkspaceFolder = 3 }
 
 export const workspace = {
+  get workspaceFolders() { return workspaceFolders; },
   fs: {
     async writeFile(uri: { fsPath: string }, content: Uint8Array) {
       writtenFiles.set(uri.fsPath, new TextDecoder().decode(content));
@@ -246,11 +269,16 @@ export const workspace = {
     configListeners.push(listener);
     return { dispose: () => { configListeners = configListeners.filter(entry => entry !== listener); } };
   },
-  getConfiguration(section: string) {
+  getConfiguration(scope: string) {
+    // `porthole.<group>` reads the same porthole settings, keys relative to the group.
+    const grouped = scope.startsWith('porthole.');
+    const section = grouped ? 'porthole' : scope;
+    const prefix = grouped ? `${scope.slice('porthole.'.length)}.` : '';
     const values = section === 'porthole' ? config : otherConfig[section];
-    if (!values) { throw new Error(`mock: unexpected configuration section "${section}"`); }
+    if (!values) { throw new Error(`mock: unexpected configuration section "${scope}"`); }
     return {
-      get<T>(key: string, fallback?: T): T | undefined {
+      get<T>(short: string, fallback?: T): T | undefined {
+        const key = prefix + short;
         if (section === 'porthole') { settingsRead.add(key); }
         const user = values[key];
         const byDefault = defaultConfig[section]?.[key];
@@ -258,10 +286,12 @@ export const workspace = {
         if (key in values) { return user as T; }
         return byDefault !== undefined ? (byDefault as T) : fallback;
       },
-      inspect<T>(key: string) {
+      inspect<T>(short: string) {
+        const key = prefix + short;
         return { key, defaultValue: defaultConfig[section]?.[key] as T, globalValue: values[key] as T };
       },
-      async update(key: string, value: unknown, target?: unknown) {
+      async update(short: string, value: unknown, target?: unknown) {
+        const key = prefix + short;
         updates.push({ section, key, value, target });
         values[key] = value;
       },

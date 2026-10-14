@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { cycleSize, dockBack, markdownFilesShown, popOut, togglePin, trackWindows } from './commands';
+import { cycleSize, dockBack, markdownFilesShown, openRequested, popOut, togglePin, trackWindows } from './commands';
+import { handleLink } from './outsideLinks';
 import { initMarkdownColors } from './markdownColors';
 import { reviewSettings } from './settingsReview';
 import { describeError, initLog, log } from './log';
@@ -32,6 +33,17 @@ export function activate(context: vscode.ExtensionContext): void {
   register(context, 'porthole.dockBack', dockBack);
   register(context, 'porthole.togglePin', togglePin);
   register(context, 'porthole.reviewSettings', reviewSettings);
+
+  // vscode://jlumbroso.porthole/v1/open?file=… (ADR-0013). Failures are logged, as for commands.
+  context.subscriptions.push(vscode.window.registerUriHandler({
+    handleUri: async uri => {
+      try {
+        await handleLink(uri, openRequested);
+      } catch (err) {
+        log(`outside link failed: ${describeError(err)}`);
+      }
+    },
+  }));
 }
 
 export function deactivate(): void {}

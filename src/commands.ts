@@ -116,6 +116,16 @@ export async function popOut(arg?: unknown): Promise<void> {
 }
 
 /**
+ * Opens a page an outside link asked for (ADR-0013), at the link's size or the
+ * first preset. Same path as Pop Out, consent question included.
+ */
+export async function openRequested(file: vscode.Uri, size?: Size): Promise<void> {
+  await offerAutoLock();
+  // A size from the link is not a preset; Cycle Size then starts from the first.
+  await open(file, size ? -1 : 0, size ?? sizes()[0]);
+}
+
+/**
  * Re-opens the focused floating window's page at the next size preset. VS Code
  * moves the tab into the new window and closes the old one (ADR-0007).
  */
