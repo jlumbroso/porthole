@@ -6,15 +6,16 @@
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/jlumbroso.porthole?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=jlumbroso.porthole)
 [![Open VSX](https://img.shields.io/open-vsx/v/jlumbroso/porthole?label=Open%20VSX)](https://open-vsx.org/extension/jlumbroso/porthole)
 
-Pop the HTML page you are looking at into a floating window in VS Code:
+Pop the HTML page or Markdown file you are looking at into a floating window in VS Code:
 only the rendered page, pinned above your other windows.
 
-If it is an HTML file and you want it in view while you work (for instance, a page of
-task instructions, a checklist, a design mock-up or a local report), porthole puts it in
-a window of its own instead of an editor tab that disappears behind whatever you open next.
+If it is an HTML or Markdown file and you want it in view while you work (for instance, a
+page of task instructions, a checklist, a design mock-up or a local report), porthole puts
+it in a window of its own instead of an editor tab that disappears behind whatever you
+open next.
 
-> **Status: version 0.1.0, the first public release.** Its author has used it daily since
-> 2026-10-12, on **macOS with VS Code 1.141.0 and 1.134.0**. Windows and Linux are untested
+> **Status: version 0.2.0.** Its author has used it daily since 2026-10-12, on **macOS
+> with VS Code 1.141.0 and 1.134.0** (HTML), and has checked Markdown by hand on 1.141.0. Windows and Linux are untested
 > (the unit tests run on Linux in CI against a mocked VS Code, which says nothing about
 > how the windows behave there). It leans on an internal VS Code command; see
 > [what could break](#how-it-works-and-what-could-break).
@@ -43,31 +44,43 @@ other windows. Nothing was staged.
 
 ## What it does
 
-1. **Pops a page out.** One gesture turns an HTML file into a floating window showing
-   only the rendered page: no tabs, breadcrumbs or status bar.
+1. **Pops a page out.** One gesture turns an HTML or Markdown file into a floating window
+   showing only the rendered page: no tabs, breadcrumbs or status bar.
 2. **Keeps it on top.** The window stays pinned above your other windows. Toggle that off
    and on whenever you like.
 3. **Puts it back.** The same shortcut docks the page into your main window again.
 4. **Resizes by preset.** Step through your own list of sizes (three by default).
-5. **Stays live.** The page reloads when the file changes (VS Code's own
-   auto-reload), and its checkboxes, buttons and stored state keep working.
+5. **Stays live.** The page reloads when the file changes (VS Code's own auto-reload),
+   and an HTML page's checkboxes, buttons and stored state keep working. A Markdown file
+   is shown as VS Code's own Markdown preview, which updates as you edit the file; it is
+   read-only (task-list boxes are shown, not clickable).
 
 ## Using it
 
 | To do this | Do this |
 | --- | --- |
-| Pop an HTML file out | `Ctrl+Alt+M` (`⌃⌥M` on macOS) with the file open, the window icon in the editor's title bar, or right-click the file in the Explorer → **Pop Out to Floating Window** |
+| Pop an HTML or Markdown file out | `Ctrl+Alt+M` (`⌃⌥M` on macOS) with the file open, the window icon in the editor's title bar, right-click the file's tab, or right-click the file in the Explorer → **Pop Out to Floating Window** |
 | Put it back | `Ctrl+Alt+M` again, with the floating window focused, or **Porthole: Dock Back into Main Window** |
 | Change its size | **Porthole: Cycle Window Size** with the floating window focused |
 | Unpin or re-pin it | **Porthole: Toggle Always on Top** |
 
 ![The Explorer's context menu on tasks.html, with "Pop Out to Floating Window" highlighted and its shortcut, Control Option M.](docs/images/porthole-pop-out-menu.png)
 
-*Right-click an HTML file in the Explorer.*
+*Right-click an HTML or Markdown file in the Explorer.*
 
 Settings live under `porthole.*`: the size presets (`porthole.sizes`; the first preset is
 the size a new window opens at), where the window opens (`porthole.position`), and whether
 it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).
+
+**One tab per floating window, with your consent.** Left alone, VS Code lets a second file
+land as an extra tab in a floating window. At your first pop-out of each session, porthole
+asks once whether VS Code may keep floating windows to one tab, by turning on its own
+`workbench.editor.autoLockGroups` setting for the integrated browser and the Markdown
+preview (buttons: **Turn On**, **Not Now**, **Don't Ask Again**; the last sets
+`porthole.askToAutoLock` to `false`). It writes only those two entries, never a copy of
+VS Code's defaults, and tells you each time it changes a setting, with a button that opens
+it. **Porthole: Review and Reset Settings…** lists every user setting set by or for
+porthole, so you can remove the ones you pick.
 
 ## Install
 
@@ -95,7 +108,10 @@ do next. It needs [`just`](https://just.systems) and Node 22.)
   opens local HTML files, as read in VS Code's source. porthole has been **run** on 1.134.0
   and on 1.141.0; the versions in between were read in VS Code's source but not run
   ([details](docs/release/VERSION-FLOOR.md)).
-- Local HTML files (`.html`, `.htm`). Remote and virtual workspaces are out of scope.
+- Local HTML files (`.html`, `.htm`) and Markdown files (`.md`, `.markdown`). Remote and
+  virtual workspaces are out of scope.
+- Markdown uses VS Code's own preview. It was checked by hand on 1.141.0 only. Its preview
+  editor is registered in VS Code's source from 1.134.0 (read, not run).
 
 **Support.** The latest VS Code release is the one officially supported. If you report a
 problem on an older version, the first answer will be "can you update to the latest version?".

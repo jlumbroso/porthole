@@ -4,7 +4,7 @@
   "description": "Pop the HTML page or Markdown file you are looking at into a floating window: only the rendered page, pinned above your other windows.",
   "publisher": "jlumbroso",
   "icon": "media/icon.png",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -8,7 +8,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-- New icon: a teal double ring with eight bolts around a page, drawn as a vector with heavier strokes so it stays legible in the extension list, and transparent so it reads on light and dark themes.
+## [0.2.0] - 2026-10-14
+
+Markdown, one tab per window, and a new icon. Markdown and the auto-lock question were
+checked by hand on macOS with VS Code 1.141.0; two small additions (marked below) have only
+automated tests so far.
+
+- **Markdown files pop out too.** `.md` and `.markdown` files open as VS Code's own
+  Markdown preview in the same compact, pinned floating window, and update as the file
+  changes. The preview is read-only: task-list boxes are shown, not clickable. Works from
+  the shortcut, the editor's title bar and the Explorer's right-click menu.
+- **One tab per floating window, with your consent.** At the first pop-out of each session
+  porthole asks once whether VS Code may keep floating windows to one tab (it turns on
+  `workbench.editor.autoLockGroups` for the integrated browser and the Markdown preview;
+  buttons Turn On, Not Now, Don't Ask Again). It no longer runs its own lock, which could
+  lock the main window. New setting `porthole.askToAutoLock` (default `true`).
+- **Fixed before release:** Turn On copied about 25 of VS Code's default auto-lock entries
+  into your user settings; it now writes only its two.
+- **New, tested only by automated tests so far:** *Pop Out to Floating Window* in a file
+  tab's right-click menu, and the command *Porthole: Review and Reset Settings…*, a
+  multi-select list of every user setting set by or for porthole; each change porthole makes
+  to settings is now announced with a button that opens it.
+- **New icon:** a teal double ring with eight bolts around a page, drawn as a vector with
+  heavier strokes so it stays legible in the extension list, and transparent so it reads on
+  light and dark themes.
+- Requirements and limits are as in 0.1.0 (VS Code 1.134.0 or later; macOS only so far).
 
 ## [0.1.0] - 2026-10-12
 
@@ -31,5 +55,6 @@ needed) and used on 1.134.0; Windows and Linux are untested.
   default size. Known limits: Cmd+V does not paste into a page in the window on macOS (right-click →
   Paste works); Ctrl+A and Ctrl+E do nothing in a page's text field.
 
-[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/jlumbroso/porthole/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jlumbroso/porthole/releases/tag/v0.1.0
