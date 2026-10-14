@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import type * as vscode from 'vscode';
 import { resetState } from '../../commands';
 import { activate } from '../../extension';
-import { getRegisteredCommand, resetVscodeMock } from './vscodeMock';
+import { getRegisteredCommand, resetVscodeMock, Uri } from './vscodeMock';
 
 export const MANIFEST = JSON.parse(readFileSync(resolve(__dirname, '../../../package.json'), 'utf8'));
 
@@ -11,7 +11,7 @@ export const MANIFEST = JSON.parse(readFileSync(resolve(__dirname, '../../../pac
 export function activateFresh(): void {
   resetVscodeMock();
   resetState();
-  const context = { subscriptions: [], extension: { packageJSON: MANIFEST } };
+  const context = { subscriptions: [], extension: { packageJSON: MANIFEST }, extensionUri: Uri.file('/ext') };
   activate(context as unknown as vscode.ExtensionContext);
 }
 

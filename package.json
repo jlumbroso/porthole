@@ -4,7 +4,7 @@
   "description": "Pop the HTML page or Markdown file you are looking at into a floating window: only the rendered page, pinned above your other windows.",
   "publisher": "jlumbroso",
   "icon": "media/icon.png",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -46,6 +46,9 @@
   "main": "./dist/extension.js",
   "activationEvents": [],
   "contributes": {
+    "markdown.previewStyles": [
+      "./media/markdown-color-scheme.css"
+    ],
     "commands": [
       {
         "command": "porthole.popOut",
@@ -192,6 +195,17 @@
           "type": "boolean",
           "default": true,
           "description": "Open the floating window pinned above other windows."
+        },
+        "porthole.markdown.colorScheme": {
+          "type": "string",
+          "enum": ["auto", "light", "dark"],
+          "enumDescriptions": [
+            "Follow VS Code's color theme, like any Markdown preview.",
+            "Show Markdown in Porthole's floating windows with light colors, whatever VS Code's theme.",
+            "Show Markdown in Porthole's floating windows with dark colors, whatever VS Code's theme."
+          ],
+          "default": "auto",
+          "markdownDescription": "Colors of Markdown files shown in Porthole's floating windows. Other Markdown previews keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."
         },
         "porthole.askToKeepCompact": {
           "type": "boolean",

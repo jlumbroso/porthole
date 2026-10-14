@@ -44,6 +44,8 @@ let defaultConfig: Record<string, Record<string, unknown>> = {};
 let updates: Array<{ section: string; key: string; value: unknown; target: unknown }> = [];
 let modalAnswers: Array<string | undefined> = [];
 let modals: Array<{ message: string; buttons: string[] }> = [];
+let writtenFiles = new Map<string, string>();
+let configListeners: Array<(event: { affectsConfiguration: (key: string) => boolean }) => void> = [];
 let quickPickAnswers: Array<(items: Array<{ label: string }>) => unknown> = [];
 let quickPicks: Array<{ labels: string[]; options: unknown }> = [];
 let logged: string[] = [];
@@ -66,6 +68,8 @@ export function resetVscodeMock(): void {
   modalAnswers = [];
   modals = [];
   quickPickAnswers = [];
+  writtenFiles = new Map();
+  configListeners = [];
   quickPicks = [];
   logged = [];
   settingsRead.clear();
@@ -104,6 +108,15 @@ export function setSectionDefaults(section: string, values: Record<string, unkno
 
 /** Settings the extension wrote, in order. */
 export const settingUpdates = () => updates;
+
+/** Files the extension wrote through `workspace.fs`, by path, latest content. */
+export const writtenFile = (path: string) => writtenFiles.get(path);
+
+/** What VS Code does when the person changes a setting: tells every listener. */
+export function changeSetting(key: string, value: unknown): void {
+  setConfig({ [key.replace(/^porthole\./, '')]: value });
+  configListeners.slice().forEach(listener => listener({ affectsConfiguration: (k: string) => key === k || key.startsWith(`${k}.`) }));
+}
 
 /** The quick picks the extension showed: their item labels and options. */
 export const quickPicksShown = () => quickPicks;
@@ -158,6 +171,7 @@ export const env = { appName: 'Visual Studio Code (mock)' };
 
 export const Uri = {
   file: (fsPath: string) => ({ scheme: 'file', fsPath, path: fsPath, toString: () => `file://${fsPath}` }),
+  joinPath: (base: { fsPath: string }, ...parts: string[]) => Uri.file([base.fsPath, ...parts].join('/')),
   parse: (value: string) => {
     const scheme = value.slice(0, value.indexOf(':'));
     const path = value.replace(/^[a-z-]+:(\/\/[^/]*)?/, '');
@@ -223,6 +237,15 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> =>
 export enum ConfigurationTarget { Global = 1, Workspace = 2, WorkspaceFolder = 3 }
 
 export const workspace = {
+  fs: {
+    async writeFile(uri: { fsPath: string }, content: Uint8Array) {
+      writtenFiles.set(uri.fsPath, new TextDecoder().decode(content));
+    },
+  },
+  onDidChangeConfiguration(listener: (event: { affectsConfiguration: (key: string) => boolean }) => void) {
+    configListeners.push(listener);
+    return { dispose: () => { configListeners = configListeners.filter(entry => entry !== listener); } };
+  },
   getConfiguration(section: string) {
     const values = section === 'porthole' ? config : otherConfig[section];
     if (!values) { throw new Error(`mock: unexpected configuration section "${section}"`); }

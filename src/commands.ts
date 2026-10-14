@@ -2,7 +2,8 @@ import * as vscode from 'vscode';
 import { sizes, useInternalCommand, type Size } from './config';
 import { log } from './log';
 import { offerAutoLock, resetAutoLockPrompt } from './autoLock';
-import { fallbackPopOut, openInMiniWindow, resetTextWarning, warnIfOpenedAsText } from './miniWindow';
+import { updateMarkdownColors } from './markdownColors';
+import { editorFor, fallbackPopOut, MARKDOWN_PREVIEW_EDITOR, openInMiniWindow, resetTextWarning, warnIfOpenedAsText } from './miniWindow';
 
 interface MiniWindow {
   file: vscode.Uri;
@@ -30,8 +31,19 @@ export function resetState(): void {
 /** Forgets each floating window as soon as VS Code closes its group. Call once, from `activate`. */
 export function trackWindows(): vscode.Disposable {
   return vscode.window.tabGroups.onDidChangeTabGroups(event => {
-    for (const group of event.closed) { windows.delete(group); }
+    let closedMarkdown = false;
+    for (const group of event.closed) {
+      const shown = windows.get(group);
+      if (shown && editorFor(shown.file) === MARKDOWN_PREVIEW_EDITOR) { closedMarkdown = true; }
+      windows.delete(group);
+    }
+    if (closedMarkdown) { void updateMarkdownColors(); }
   });
+}
+
+/** The Markdown files currently shown in Porthole's floating windows. */
+export function markdownFilesShown(): vscode.Uri[] {
+  return [...windows.values()].map(shown => shown.file).filter(file => editorFor(file) === MARKDOWN_PREVIEW_EDITOR);
 }
 
 /**
@@ -66,6 +78,8 @@ function asLocalPageFile(value: unknown): vscode.Uri | undefined {
 }
 
 async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
+  // The stylesheet must name this file before its preview renders (ADR-0022).
+  if (editorFor(file) === MARKDOWN_PREVIEW_EDITOR) { await updateMarkdownColors([file]); }
   let group = useInternalCommand() ? await openInMiniWindow(file, size) : undefined;
   if (!group) { group = await fallbackPopOut(file); }
   if (group) {
