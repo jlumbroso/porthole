@@ -7,7 +7,7 @@ import { BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR } from './miniWindow';
 // mistake. Whatever Porthole writes, the person can see it and undo it, one
 // entry at a time, from a single command.
 
-const PORTHOLE_KEYS = ['sizes', 'position', 'compact', 'alwaysOnTop', 'useInternalCommand', 'askToAutoLock'];
+const PORTHOLE_KEYS = ['sizes', 'position', 'compact', 'alwaysOnTop', 'useInternalCommand', 'askToKeepCompact'];
 const LOCKED_EDITORS = [BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR];
 
 interface Entry extends vscode.QuickPickItem {

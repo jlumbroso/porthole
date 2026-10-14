@@ -76,8 +76,8 @@ it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).
 land as an extra tab in a floating window. At your first pop-out of each session, porthole
 asks once whether VS Code may keep floating windows to one tab, by turning on its own
 `workbench.editor.autoLockGroups` setting for the integrated browser and the Markdown
-preview (buttons: **Turn On**, **Not Now**, **Don't Ask Again**; the last sets
-`porthole.askToAutoLock` to `false`). It writes only those two entries, never a copy of
+preview (buttons: **Keep Compact**, **Not Now**, **Don't Ask Again**; the last sets
+`porthole.askToKeepCompact` to `false`). It writes only those two entries, never a copy of
 VS Code's defaults, and tells you each time it changes a setting, with a button that opens
 it. **Porthole: Review and Reset Settings…** lists every user setting set by or for
 porthole, so you can remove the ones you pick.

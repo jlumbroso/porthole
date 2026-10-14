@@ -145,15 +145,22 @@ Keep Jérémie's `outsideLinks` group, and use one pattern for every switch, so 
 
 ## Decision
 
-### Chosen: pending the naming review
+### Chosen: the naming review's rulings, applied to 0.2.0
 
-0.2.0 is published once the first three questions have the review's ruling and any renames have landed with their tests.
+The review ruled on all four on 2026-10-14 (its recommendations are stacked under each question). Applied before publishing 0.2.0:
+
+- **The key** is `porthole.askToKeepCompact`: a key that controls a question reads as the question it controls.
+- **The command** stays "Review and Reset Settings…".
+- **The dialog**: the affirming button is **Keep Compact**, the title's own words, and its body says "Choosing Keep Compact sets the VS Code setting …" instead of an unanchored "this". The notice after removing already pluralizes ("removed 1 setting", "removed 3 settings").
+- **Not yet built, recorded for ADR-0013 and ADR-0014**: per-action keys `porthole.outsideLinks.actions.<verb>`, separate from the `allow…` keys, which say where links may point; `allowLocalhost` and `restrictLocalhostPorts` spelled with one word; the event file `porthole-events.jsonl`, with events named `<object>.<past-tense verb>` (`window.opened`, `request.received`, …).
+
+Jérémie's ANS slots are left for him; the review's ruling is the gate he set for publishing.
 
 ---
 
 ## Action Items
 
-- [ ] Rule on the four questions — Owner: the naming review
+- [x] Rule on the four questions — Owner: the naming review (2026-10-14)
 - [ ] Apply the rulings for part 1; publish 0.2.0; install it — Owner: Glazier
 
 ---

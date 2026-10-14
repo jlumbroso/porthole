@@ -18,24 +18,24 @@ beforeEach(() => {
 
 describe('reviewing and resetting the settings Porthole wrote', () => {
   it('lists Porthole\'s settings and its own auto-lock entries, and removes only the ones picked', async () => {
-    setConfig({ askToAutoLock: false, sizes: [{ width: 500, height: 700 }] });
+    setConfig({ askToKeepCompact: false, sizes: [{ width: 500, height: 700 }] });
     setSection('workbench.editor', {
       autoLockGroups: { terminalEditor: true, 'workbench.editor.browser': true, 'vscode.markdown.preview.editor': true },
     });
-    // The person ticks askToAutoLock and the browser entry.
-    answerNextQuickPick(items => items.filter(item => /askToAutoLock|editor\.browser/.test(item.label)));
+    // The person ticks askToKeepCompact and the browser entry.
+    answerNextQuickPick(items => items.filter(item => /askToKeepCompact|editor\.browser/.test(item.label)));
 
     await review();
 
     expect(quickPicksShown()[0].labels).toEqual([
       'porthole.sizes',
-      'porthole.askToAutoLock',
+      'porthole.askToKeepCompact',
       'workbench.editor.autoLockGroups › workbench.editor.browser',
       'workbench.editor.autoLockGroups › vscode.markdown.preview.editor',
     ]);
     expect(quickPicksShown()[0].options).toMatchObject({ canPickMany: true });
     expect(settingUpdates()).toEqual([
-      { section: 'porthole', key: 'askToAutoLock', value: undefined, target: ConfigurationTarget.Global },
+      { section: 'porthole', key: 'askToKeepCompact', value: undefined, target: ConfigurationTarget.Global },
       {
         section: 'workbench.editor',
         key: 'autoLockGroups',
@@ -69,7 +69,7 @@ describe('reviewing and resetting the settings Porthole wrote', () => {
   it('offers the way back right after Porthole turns auto-lock on', async () => {
     setCommandBehavior('_workbench.openWith', () => { openFloatingGroup(); });
     setSection('workbench.editor', { autoLockGroups: {} });
-    answerNextModal('Turn On');
+    answerNextModal('Keep Compact');
 
     await command('porthole.popOut')(Uri.file('/work/tasks.html'));
     await new Promise(resolve => setTimeout(resolve, 0)); // the notice is shown without waiting

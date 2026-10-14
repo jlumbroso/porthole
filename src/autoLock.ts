@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { askToAutoLock } from './config';
+import { askToKeepCompact } from './config';
 import { log } from './log';
 import { announceSettingChange } from './settingsReview';
 import { BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR } from './miniWindow';
@@ -20,7 +20,7 @@ import { BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR } from './miniWindow';
 // saved in user settings (Jérémie's answer to QST-LOCK-METHOD).
 
 const LOCKED_EDITORS = [BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR];
-const TURN_ON = 'Turn On';
+const KEEP_COMPACT = 'Keep Compact';
 const NOT_NOW = 'Not Now';
 const NEVER = "Don't Ask Again";
 
@@ -55,7 +55,7 @@ export function autoLockIsOn(): boolean {
 
 /** Asks, at most once per session, whether VS Code may lock porthole's floating windows to one tab. */
 export async function offerAutoLock(): Promise<void> {
-  if (autoLockIsOn() || !askToAutoLock() || askedThisSession) { return; }
+  if (autoLockIsOn() || !askToKeepCompact() || askedThisSession) { return; }
   askedThisSession = true;
   const choice = await vscode.window.showInformationMessage(
     "Keep Porthole's floating windows compact?",
@@ -64,13 +64,13 @@ export async function offerAutoLock(): Promise<void> {
       detail: 'Why: a floating window stays compact (just the page, no tabs or status bar) only while it holds a single tab. '
         + 'If another file ever opens into it, VS Code brings the tabs and status bar back. Locking the window to its page prevents that.\n\n'
         + 'It rarely affects anything else: VS Code locks a browser tab or Markdown preview only when it is the first tab '
-        + 'of a new editor group, which is how Porthole opens its windows (and also when you open one yourself in a new group). Turning this on sets the VS Code setting '
+        + 'of a new editor group, which is how Porthole opens its windows (and also when you open one yourself in a new group). Choosing Keep Compact sets the VS Code setting '
         + '"workbench.editor.autoLockGroups" for those two editors.\n\n'
         + 'Not Now changes nothing; a floating window loses compact mode only if a second file happens to open inside it. '
         + 'Porthole will ask again next session.',
     },
-    TURN_ON, NOT_NOW, NEVER);
-  if (choice === TURN_ON) {
+    KEEP_COMPACT, NOT_NOW, NEVER);
+  if (choice === KEEP_COMPACT) {
     const next = userAutoLock();
     for (const id of LOCKED_EDITORS) { next[id] = true; }
     await vscode.workspace.getConfiguration('workbench.editor')
@@ -79,9 +79,9 @@ export async function offerAutoLock(): Promise<void> {
     void announceSettingChange('workbench.editor.autoLockGroups now locks the integrated browser and the Markdown preview to one tab when they open in a new group.');
   } else if (choice === NEVER) {
     await vscode.workspace.getConfiguration('porthole')
-      .update('askToAutoLock', false, vscode.ConfigurationTarget.Global);
-    log('auto-lock: will not ask again (porthole.askToAutoLock is now false)');
-    void announceSettingChange('porthole.askToAutoLock is now false, so Porthole will not ask again.');
+      .update('askToKeepCompact', false, vscode.ConfigurationTarget.Global);
+    log('auto-lock: will not ask again (porthole.askToKeepCompact is now false)');
+    void announceSettingChange('porthole.askToKeepCompact is now false, so Porthole will not ask again.');
   } else {
     log('auto-lock: not now; will ask again next session');
   }

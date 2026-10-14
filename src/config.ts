@@ -56,4 +56,4 @@ export function position(): Position | undefined {
 export const compact = (): boolean => cfg().get<boolean>('compact', true);
 export const alwaysOnTop = (): boolean => cfg().get<boolean>('alwaysOnTop', true);
 export const useInternalCommand = (): boolean => cfg().get<boolean>('useInternalCommand', true);
-export const askToAutoLock = (): boolean => cfg().get<boolean>('askToAutoLock', true);
+export const askToKeepCompact = (): boolean => cfg().get<boolean>('askToKeepCompact', true);

@@ -193,7 +193,7 @@
           "default": true,
           "description": "Open the floating window pinned above other windows."
         },
-        "porthole.askToAutoLock": {
+        "porthole.askToKeepCompact": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Ask, at the first pop-out of each session, whether VS Code may lock Porthole's floating windows to one tab (by turning on `workbench.editor.autoLockGroups` for the integrated browser and the Markdown preview). Choosing **Don't Ask Again** sets this to `false`."

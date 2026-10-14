@@ -21,14 +21,14 @@ beforeEach(() => {
 });
 
 describe('asking to keep floating windows to one tab', () => {
-  it('asks once, and on "Turn On" adds porthole\'s editors to the user\'s auto-lock without dropping theirs', async () => {
-    answerNextModal('Turn On');
+  it('asks once, and on "Keep Compact" adds porthole\'s editors to the user\'s auto-lock without dropping theirs', async () => {
+    answerNextModal('Keep Compact');
 
     await popOut();
     await popOut();
 
     expect(modalsShown()).toHaveLength(1);
-    expect(modalsShown()[0].buttons).toEqual(['Turn On', 'Not Now', "Don't Ask Again"]);
+    expect(modalsShown()[0].buttons).toEqual(['Keep Compact', 'Not Now', "Don't Ask Again"]);
     expect(settingUpdates()).toEqual([{
       section: 'workbench.editor',
       key: 'autoLockGroups',
@@ -63,7 +63,7 @@ describe('asking to keep floating windows to one tab', () => {
 
     expect(modalsShown()).toHaveLength(1);
     expect(settingUpdates()).toEqual([{
-      section: 'porthole', key: 'askToAutoLock', value: false, target: ConfigurationTarget.Global,
+      section: 'porthole', key: 'askToKeepCompact', value: false, target: ConfigurationTarget.Global,
     }]);
   });
 
@@ -76,7 +76,7 @@ describe('asking to keep floating windows to one tab', () => {
       setSectionDefaults('workbench.editor', {
         autoLockGroups: { default: false, terminalEditor: true, 'workbench.editor.browser': false },
       });
-      answerNextModal('Turn On');
+      answerNextModal('Keep Compact');
 
       await popOut();
 

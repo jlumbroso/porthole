@@ -21,9 +21,9 @@ automated tests so far.
 - **One tab per floating window, with your consent.** At the first pop-out of each session
   porthole asks once whether VS Code may keep floating windows to one tab (it turns on
   `workbench.editor.autoLockGroups` for the integrated browser and the Markdown preview;
-  buttons Turn On, Not Now, Don't Ask Again). It no longer runs its own lock, which could
-  lock the main window. New setting `porthole.askToAutoLock` (default `true`).
-- **Fixed before release:** Turn On copied about 25 of VS Code's default auto-lock entries
+  buttons Keep Compact, Not Now, Don't Ask Again). It no longer runs its own lock, which could
+  lock the main window. New setting `porthole.askToKeepCompact` (default `true`).
+- **Fixed before release:** the affirming button (then "Turn On") copied about 25 of VS Code's default auto-lock entries
   into your user settings; it now writes only its two.
 - **New, tested only by automated tests so far:** *Pop Out to Floating Window* in a file
   tab's right-click menu, and the command *Porthole: Review and Reset Settings…*, a
