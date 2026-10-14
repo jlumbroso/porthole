@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Markdown colors in floating windows (0.2.1)
 
 - **Date**: 2026-10-14
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; the naming review (names); Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: 0.2.1 adds a setting that shows Markdown in Porthole's floating windows with light or dark colors whatever VS Code's theme; it is built and tested against a mocked VS Code, and is published once the naming review has ruled on its names and a three-minute hand check has shown it works.
@@ -120,16 +120,18 @@ This was also exceptionally described, I was able to follow, pace and remember t
 
 ## Decision
 
-### Chosen: pending the naming review and the hand check
+### Chosen: ship 0.2.1 as built
 
-0.2.1 is published by Glazier once QST-NAME-MD-COLORS has the review's ruling (renames applied with their tests) and QST-CHECK-MD-COLORS shows the colors change where they should.
+The names stand as the naming review ruled and Jérémie approved (QST-NAME-MD-COLORS, A): `porthole.markdown.colorScheme`, values `auto`, `light`, `dark`, default `auto`. The hand check passed in full on macOS with VS Code 1.141.0 (QST-CHECK-MD-COLORS, A): light and dark both apply, a docked preview of another file keeps VS Code's theme, and a change reaches an open floating window within about two seconds. That settles the two links never run before: VS Code reloads the rewritten stylesheet, and the rule matches the real preview page.
+
+**Observed, and now stated in the README and CHANGELOG**: a docked preview of the *same* file takes the same colors while that file is popped out (screenshot 11.51.26), because the rule selects by file. Step 3 of the check predicted it; the setting's description, approved word for word, says "Other Markdown previews", which still reads true of other files.
 
 ---
 
 ## Action Items
 
 - [x] Rule on the names — Owner: the naming review (2026-10-14: A confirmed, with per-value descriptions; `auto` reads "Follow VS Code's theme.", applied)
-- [ ] Run the check — Owner: Jérémie
+- [x] Run the check — Owner: Jérémie (2026-10-14: A, six screenshots)
 - [ ] Apply the ruling, update README and CHANGELOG, publish 0.2.1, install it — Owner: Glazier
 
 ---
@@ -141,6 +143,12 @@ This was also exceptionally described, I was able to follow, pace and remember t
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft, with the feature built
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-14)
+- Trigger: Jérémie answered both questions (A and A)
+- Contributors: Jérémie Lumbroso, the naming review, Glazier 5.5 (Claude Opus 5.5)
+- Changes: decision recorded; README and CHANGELOG state the same-file case
+- Outcome: `Accepted`
 
 ---
 

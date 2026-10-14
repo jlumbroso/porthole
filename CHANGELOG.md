@@ -12,8 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **Light or dark Markdown in floating windows.** New setting `porthole.markdown.colorScheme`:
   `auto` (follow VS Code's theme, the default), `light` or `dark`. It recolors only Markdown
-  shown in porthole's floating windows; every other Markdown preview keeps following VS Code's
-  theme. Code blocks keep VS Code's syntax colors. Named through the naming review (ADR-0022).
+  shown in porthole's floating windows; previews of other files keep following VS Code's theme
+  (a docked preview of the same file takes the same colors while it is popped out). Code blocks
+  keep VS Code's syntax colors. Named through the naming review (ADR-0022).
 
 ## [0.2.0] - 2026-10-14
 
