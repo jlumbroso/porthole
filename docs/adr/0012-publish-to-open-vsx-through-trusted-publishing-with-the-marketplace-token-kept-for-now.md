@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Publish to Open VSX through trusted publishing, with the Marketplace token kept for now
 
 - **Date**: 2026-10-13
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Partially Implemented
 - **Deciders**: Jérémie Lumbroso (asked for it); Purser 5.5 (Claude Sonnet 5.5) set it up
 
@@ -118,7 +118,9 @@ Jérémie answered A (research first). Nothing in Azure or on the Marketplace wa
 
 porthole's first release used a classic Open VSX token. Trusted publishing is available and replaces it for later releases.
 
-### Chosen: a separate publish workflow with an approval gate
+### Chosen on 2026-10-13: a separate publish workflow with an approval gate
+
+*(Superseded in part on 2026-10-14 by the decision below, which removes the approval and the double upload. The registration, the workflow file and the environment from this section stay.)*
 
 - `.github/workflows/publish-open-vsx.yml` publishes the **`.vsix` attached to a GitHub Release** (downloaded by tag), using `ovsx publish --trusted-publishing`. What is attached is what goes live; the earlier release notes had to say the two were separately built.
 - The job runs in a GitHub **environment named `open-vsx` that requires Jérémie's approval** (created 2026-10-13, required reviewer `jlumbroso`). The publish is therefore still his act: one click in GitHub, and no secret stored. *(Correction, 2026-10-14: "his act" echoed a rule from the release seat's founding brief, "publishing is Jérémie's act, by his hand", which Jérémie never held and which was made up when the brief was written. What the gate really does is stand a reviewer between the workflow and the registry, and stop a duplicate; whether it stays is QST-OVSX-GATE.)*
@@ -129,6 +131,47 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 **Rationale**: the registry says a registration is trust in "this workflow file, run by anyone who can run it", so the file is protected by the approval gate and by being a separate, single-purpose file that is easy to review.
 
 **Trade-offs accepted**: a second workflow to maintain; renaming it breaks publishing until the registration is redone; the Marketplace still needs its token.
+
+### Decided 2026-10-14 (QST-OVSX-GATE, Jérémie chose D): a tag releases, and every step can be re-run
+
+Jérémie: "Please, Option D", and he asked that the full process, and the idea behind it, be documented here. He also tied it to the naming review's rule in [ADR-0017](0017-words-for-the-model-facing-surface.md) that model-facing verbs *assert states, never deltas* (`pin`/`unpin`, not `toggle-pin`), because a destination is idempotent and auditable and a retried script cannot get it wrong.
+
+**What changes.**
+- A pushed `vX.Y.Z` tag makes CI build, test, create the GitHub Release with the `.vsix`, and publish **that same file** to Open VSX with the short-lived token. **No approval click.**
+- The guardrails that replace the click (each is a setting on the GitHub repository; all are listed to Jérémie before they are changed):
+  1. a **tag ruleset** so that only the repository owner can create `v*` tags, and so that nobody can **move or delete** one (this makes "never move a tag" a rule of the repository, not a habit);
+  2. the `open-vsx` environment **without reviewers** but restricted to **`v*` tags**;
+  3. the workflow refuses a tag whose commit is **not on `main`** or whose commit has **no green CI run**.
+- `just publish` becomes Marketplace-only, and the double upload (and the cancelled waiting run) ends. `just release X.Y.Z` runs the whole process and is **idempotent**. `OVSX_PAT` stays as a fallback until one real release has gone through this route, then QST-OVSX-PAT's conditional answer applies (revoke).
+- The Marketplace step still runs where the token is (any seat, `.env`) until Microsoft's trusted publishing works (see the research note above), then it moves into CI and a tag does everything.
+
+#### The release process
+
+**The principle: a verb that asserts a destination.** `just release 0.2.2` means "0.2.2 is released everywhere", not "do the next thing". Each step has an **observable post-condition read from the world** (GitHub, the two registries), never from a local file or memory. The command reads each post-condition *before* acting, skips the step if it already holds, acts if not, then reads it again. So a re-run after any failure resumes at the first step that is not done, and running it twice, or from two machines, does no harm. There are no toggles and no "undo" steps; a state is only ever moved forward.
+
+**Order.** Cheapest and most reversible first, the two registries (which cannot be undone) last, so a failure stops before the irreversible part wherever possible:
+
+| # | Step | Done when (read before and after) | Acts by | If it is already done | If it cannot be done |
+| --- | --- | --- | --- | --- | --- |
+| 0 | **Preconditions** (read-only; failing here **stops**, never "skips") | `package.json` says `X.Y.Z`; `CHANGELOG.md` has `## [X.Y.Z] - date` (hyphen); no uncommitted changes outside `docs/`; HEAD is on `main` and pushed; CI is green for HEAD; `scripts/scan-secrets.mjs` is clean | nothing | n/a | stop with the reason |
+| 1 | **Tag** | the remote has `vX.Y.Z` and it points at the commit being released | `git tag -a` and push | skip | **stop** if the tag exists on a *different* commit: a tag is never moved (0.1.0's tag was moved once, only because nobody had used it yet; the ruleset now forbids it) |
+| 2 | **CI builds the Release** | a GitHub Release `vX.Y.Z` exists **and** carries `porthole-X.Y.Z.vsix` | the tag push starts `release.yml`; the command waits for the run | skip | read the failed run's log, fix the workflow, re-run the failed run (`gh run rerun`); do not move the tag |
+| 3 | **Open VSX** | the Open VSX API shows version `X.Y.Z` | the workflow publishes the Release's `.vsix` with the OIDC token | skip | during the first real release only: publish that same `.vsix` with `OVSX_PAT` as the fallback, then keep the workflow's failure as the thing to fix |
+| 4 | **Marketplace** | `vsce show` shows version `X.Y.Z` | download the **Release's** `.vsix` and `vsce publish --packagePath` with `VSCE_PAT` | skip | stop; the usual causes are an invalid or expired token (`vsce verify-pat`) |
+| 5 | **Verify** | both registries show `X.Y.Z` | polls both for a few minutes | n/a | reports which is still missing; **lag is not failure** |
+
+**Rules that came out of what went wrong, so far:**
+1. **"The tag exists" does not mean "released."** At 0.1.0 the tag existed while the release job had failed on a clean checkout (`ENOTDIR` on `releases/`). Each step therefore checks its own result, not the previous step's.
+2. **Registry lag is real.** Both registries showed the old version for about 15 minutes after the 0.2.0 publish, and Open VSX validates a new upload before showing it. A re-run right after a successful publish may *read* "not live" and try again; the registry then answers "already published". **That answer counts as done**, after one more read of the registry, and not as a failure.
+3. **One file for both registries.** The `.vsix` attached to the Release (built by CI from the tag) is the file both registries receive, so "what is attached is what is live" is true byte for byte. At 0.1.0 the file published and the file attached were separately built.
+4. **Dry run.** `just release X.Y.Z --dry-run`, and the read-only `just release-status X.Y.Z`, print the table above for that version (each step's current state and what would be done) and change nothing. The irreversible steps are the only ones worth a look before running.
+5. **Same words for people and models.** `release` asserts a destination and `release-status` reports one, matching ADR-0017's rule for the model-facing surface. A seat, a script and Jérémie all run the same one line.
+
+**How the process itself is tested** (Fourth Directive, real scenarios only): the logic lives in a script with the state reader injected, so tests feed it recorded situations: a tag that points at another commit (must stop); the 0.1.0 case (tag present, Release missing: must wait for CI, not claim done); the registry-lag case (registry says "not live", then "already published": must end as done); everything already done (must act on nothing); and the Marketplace failing after Open VSX succeeded (a re-run must resume at the Marketplace only).
+
+**Not decided here.** What `just release` does about the version bump itself: it only *checks* that `package.json` and the changelog already agree, so the human or the seat that decides a release edits them, and the command never edits the changelog.
+
+---
 
 ### Rehearsal result (2026-10-13, run 38350586673, approved by Jérémie)
 
@@ -147,14 +190,22 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 - [x] Workflow `publish-open-vsx.yml`, dispatch from `release.yml`, environment `open-vsx` with Jérémie as required reviewer - Owner: Purser (done 2026-10-13)
 - [x] Register the trusted publisher at open-vsx.org (Settings, Trusted Publishers, namespace `jlumbroso`, GitHub Actions: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`) - Owner: Jérémie (done 2026-10-13)
 - [x] Rehearse with `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0`, approve it, and read the log - Owner: Purser starts it, Jérémie approves (done 2026-10-13, run 38350586673; result below)
-- [ ] The first real release through the workflow (the next version) proves the upload; then decide QST-OVSX-PAT's revocation - Owner: Purser and Jérémie
-- [ ] Update `just publish` to publish only to the Marketplace once the trusted publish has worked (QST-OVSX-PAT is answered A, conditional on it working flawlessly) - Owner: Purser
+- [ ] Build `scripts/release.mjs` (state reader injected; the five steps; `--dry-run`) with tests for the five scenarios above, and the recipes `just release X.Y.Z` and `just release-status X.Y.Z` (the `justfile` is shared: tell Glazier) - Owner: Purser
+- [ ] List, then make, the GitHub settings: the `v*` tag ruleset (create by owner only; no move or delete) and the `open-vsx` environment (no reviewers, `v*` tags only) - Owner: Purser, each change announced to Jérémie first
+- [ ] Change the workflows: `publish-open-vsx.yml` runs after the Release on the tag (no approval), refuses a commit not on `main` or without green CI; `release.yml` dispatches it or is merged with it; `just publish` becomes Marketplace-only and skips versions already live - Owner: Purser
+- [ ] The first real release through this route proves the upload, with `OVSX_PAT` kept as the fallback; then QST-OVSX-PAT's conditional answer applies (revoke) - Owner: Purser and Jérémie
 - [ ] Watch `microsoft/vscode-vsce#1275` and `microsoft/vsmarketplace#2121` for Marketplace trusted publishing; **decide by 2026-11-15** whether to try the Entra route; the PAT is retired on 2026-12-01 - Owner: Purser to watch, Jérémie to decide
 - [ ] Update `docs/release/RELEASE-PLAN.md` and the feedback for Lintel with what the rehearsal showed - Owner: Purser
 
 ---
 
 ## Iterations
+
+### Iteration 4 (2026-10-14)
+- Trigger: Jérémie answered QST-OVSX-GATE with D and asked that the idempotent release process be documented here.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5); Jérémie Lumbroso.
+- Changes: Decision section gains "Decided 2026-10-14" with the guardrails, the process table, the rules learned from 0.1.0 and 0.2.0, and the test plan; action items replanned; status of QST-OVSX-GATE answered.
+- Outcome: unchanged (Partially Implemented); the build is the next work.
 
 ### Iteration 3 (2026-10-14)
 - Trigger: Glazier's brief (the founding-brief rule left in the CI comments and in this ADR), at Jérémie's request.
@@ -178,6 +229,6 @@ porthole's first release used a classic Open VSX token. Trusted publishing is av
 
 ## Links
 
-- Related ADRs: [ADR-0011](0011-prepare-porthole-s-first-public-release-repo-hygiene-version-floor-terminology-listing.md) (the first release), [ADR-0009](0009-ship-as-a-personal-vsix.md) (the decision to publish)
+- Related ADRs: [ADR-0017](0017-words-for-the-model-facing-surface.md) (verbs assert states), [ADR-0011](0011-prepare-porthole-s-first-public-release-repo-hygiene-version-floor-terminology-listing.md) (the first release), [ADR-0009](0009-ship-as-a-personal-vsix.md) (the decision to publish)
 - Related code: `.github/workflows/publish-open-vsx.yml`, `.github/workflows/release.yml`
 - External: [Open VSX Trusted Publishing](https://github.com/eclipse-openvsx/openvsx/wiki/Trusted-Publishing)
