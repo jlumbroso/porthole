@@ -71,6 +71,8 @@ One tension to keep in view, mine: ADR-0013 opened porthole to *any* local agent
 
 The skill is still written only after the verbs it teaches have shipped.
 
+**Content already decided for the skill:** pages a model writes for porthole set their title to `[<project>] <name>`, for example `<title>[porthole] tasks</title>`. VS Code shows the page's title in the floating window's title bar, so you can tell at a glance which project opened it (ADR-0013, routing follow-up; Surveyor found no way for an extension to set a window's title, 2026-10-13). For HTML porthole did not write, the README can suggest the `window.title` template `[${rootName}] ${activeEditorShort}`.
+
 ---
 
 ## Action Items
