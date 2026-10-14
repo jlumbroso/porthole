@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { sizes, useInternalCommand, type Size } from './config';
 import { log } from './log';
-import { fallbackPopOut, keepToOneTab, openInMiniWindow, resetTextWarning, warnIfOpenedAsText } from './miniWindow';
+import { offerAutoLock, resetAutoLockPrompt } from './autoLock';
+import { fallbackPopOut, openInMiniWindow, resetTextWarning, warnIfOpenedAsText } from './miniWindow';
 
 interface MiniWindow {
   file: vscode.Uri;
@@ -23,6 +24,7 @@ const windows = new Map<vscode.TabGroup, MiniWindow>();
 export function resetState(): void {
   windows.clear();
   resetTextWarning();
+  resetAutoLockPrompt();
 }
 
 /** Forgets each floating window as soon as VS Code closes its group. Call once, from `activate`. */
@@ -35,13 +37,11 @@ export function trackWindows(): vscode.Disposable {
 /**
  * The porthole window that Cycle Size should act on.
  *
- * Normally that is VS Code's active tab group. But VS Code does not always mark
- * the floating window's group active when the window gains focus: on
- * 2026-10-13 Jérémie saw "pop a page out first" from inside an open porthole
- * window, now and then, with no reliable repro. (Likely cause, not yet
- * confirmed: a click that lands inside the page itself is not seen by the
- * workbench as focusing the group.) So when the active group is not one of
- * ours and exactly one porthole window is open, that one is meant.
+ * Normally that is VS Code's active tab group. But the extension API's active
+ * group follows the person only when a tab group opens or closes somewhere, so
+ * it can name the wrong window (confirmed by hand, ADR-0019; filed upstream as
+ * microsoft/vscode#341430). When the active group is not one of ours and
+ * exactly one porthole window is open, that one is meant.
  */
 function windowToResize(): MiniWindow | undefined {
   const active = vscode.window.tabGroups.activeTabGroup;
@@ -55,12 +55,12 @@ function windowToResize(): MiniWindow | undefined {
   return undefined;
 }
 
-const isHtmlPath = (path: string) => /\.html?$/i.test(path);
+const isPagePath = (path: string) => /\.(html?|md|markdown)$/i.test(path);
 
-function asLocalHtmlFile(value: unknown): vscode.Uri | undefined {
+function asLocalPageFile(value: unknown): vscode.Uri | undefined {
   if (!value || typeof value !== 'object') { return undefined; }
   const candidate = value as Partial<vscode.Uri>;
-  return candidate.scheme === 'file' && typeof candidate.fsPath === 'string' && isHtmlPath(candidate.fsPath)
+  return candidate.scheme === 'file' && typeof candidate.fsPath === 'string' && isPagePath(candidate.fsPath)
     ? (value as vscode.Uri)
     : undefined;
 }
@@ -71,20 +71,21 @@ async function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<vo
   if (group) {
     windows.set(group, { file, sizeIndex });
     await warnIfOpenedAsText(group, file);
-    await keepToOneTab(group);
   }
 }
 
 /**
- * Pops an HTML file out into a floating window. The file is the command's
+ * Pops an HTML file (shown in the integrated browser) or a Markdown file (shown
+ * as VS Code's Markdown preview) out into a floating window. The file is the command's
  * argument (Explorer, editor title) or, from the keyboard, the active editor.
  */
 export async function popOut(arg?: unknown): Promise<void> {
-  const file = asLocalHtmlFile(arg) ?? asLocalHtmlFile(vscode.window.activeTextEditor?.document.uri);
+  const file = asLocalPageFile(arg) ?? asLocalPageFile(vscode.window.activeTextEditor?.document.uri);
   if (!file) {
-    void vscode.window.showInformationMessage('Porthole: open or select a local HTML file first.');
+    void vscode.window.showInformationMessage('Porthole: open or select a local HTML or Markdown file first.');
     return;
   }
+  await offerAutoLock();
   await open(file, 0, sizes()[0]);
 }
 

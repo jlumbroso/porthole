@@ -6,6 +6,16 @@ import { describeError, log } from './log';
 // (ADR-0003, ADR-0005). Either can change in any update, which is why every
 // use of them sits behind the fallback below.
 export const BROWSER_EDITOR = 'workbench.editor.browser';
+// The built-in Markdown extension's preview, registered as an editor of its own
+// (read at 1.141.0; seen floating, compact and live in Spike 1, ADR-0018).
+export const MARKDOWN_PREVIEW_EDITOR = 'vscode.markdown.preview.editor';
+
+const isMarkdownPath = (path: string) => /\.(md|markdown)$/i.test(path);
+
+/** The editor porthole shows a file in: VS Code's Markdown preview for Markdown, its integrated browser otherwise. */
+export function editorFor(file: vscode.Uri): string {
+  return isMarkdownPath(file.fsPath) ? MARKDOWN_PREVIEW_EDITOR : BROWSER_EDITOR;
+}
 export const AUX_WINDOW_GROUP = -3;
 
 /** Spike 0 saw the new group within 142 ms in five runs; this leaves ten times that. */
@@ -55,7 +65,7 @@ export async function openInMiniWindow(file: vscode.Uri, size: Size): Promise<vs
   const started = Date.now();
   const watch = watchForOpenedGroup(NEW_GROUP_TIMEOUT_MS);
   try {
-    await vscode.commands.executeCommand('_workbench.openWith', file, BROWSER_EDITOR, [AUX_WINDOW_GROUP, auxOptions(size)]);
+    await vscode.commands.executeCommand('_workbench.openWith', file, editorFor(file), [AUX_WINDOW_GROUP, auxOptions(size)]);
   } catch (err) {
     watch.cancel();
     log(`internal open threw; falling back to public commands: ${describeError(err)}`);
@@ -77,7 +87,7 @@ export async function openInMiniWindow(file: vscode.Uri, size: Size): Promise<vs
 export async function fallbackPopOut(file: vscode.Uri): Promise<vscode.TabGroup | undefined> {
   const watch = watchForOpenedGroup(NEW_GROUP_TIMEOUT_MS);
   try {
-    await vscode.commands.executeCommand('vscode.openWith', file, BROWSER_EDITOR);
+    await vscode.commands.executeCommand('vscode.openWith', file, editorFor(file));
     await vscode.commands.executeCommand('workbench.action.moveEditorToNewWindow');
     // The next two commands act on whichever window is active, so the new one
     // must have focus first (source check, completion brief of 2026-10-12).
@@ -118,11 +128,14 @@ let warnedAboutText = false;
 export async function warnIfOpenedAsText(group: vscode.TabGroup, file: vscode.Uri): Promise<void> {
   const tab = await firstTab(group);
   if (!(tab?.input instanceof vscode.TabInputText)) { return; }
-  log(`the window opened ${file.toString()} as text, not in the integrated browser (VS Code ${vscode.version})`);
+  const markdown = editorFor(file) === MARKDOWN_PREVIEW_EDITOR;
+  const renderer = markdown ? 'its Markdown preview' : 'its integrated browser';
+  log(`the window opened ${file.toString()} as text, not in ${renderer} (VS Code ${vscode.version})`);
   if (warnedAboutText) { return; }
   warnedAboutText = true;
-  void vscode.window.showWarningMessage(
-    'Porthole: VS Code opened the file as text; its integrated browser did not take it. Porthole needs VS Code 1.134.0 or later with the integrated browser available.');
+  void vscode.window.showWarningMessage(markdown
+    ? 'Porthole: VS Code opened the file as text; its Markdown preview did not take it. Check that the built-in Markdown extension is enabled.'
+    : 'Porthole: VS Code opened the file as text; its integrated browser did not take it. Porthole needs VS Code 1.134.0 or later with the integrated browser available.');
 }
 
 /** For tests: warn again as if freshly activated. */
@@ -130,18 +143,3 @@ export function resetTextWarning(): void {
   warnedAboutText = false;
 }
 
-/**
- * Compact mode switches itself off when a second tab enters the window, so the
- * new group is locked to keep it to one. Only ever locks the group we were just
- * handed: locking some other group by mistake would be worse than not locking.
- */
-export async function keepToOneTab(group: vscode.TabGroup): Promise<void> {
-  if (!compact()) { return; }
-  // Tab-group objects keep a stable identity across model resyncs at 1.141.0
-  // (extHostEditorTabs.ts, $acceptEditorTabModel), so identity is a fair test.
-  if (vscode.window.tabGroups.activeTabGroup !== group) {
-    log('not locking: the new window is not the active tab group');
-    return;
-  }
-  await vscode.commands.executeCommand('workbench.action.lockEditorGroup');
-}

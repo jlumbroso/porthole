@@ -1,7 +1,7 @@
 {
   "name": "porthole",
   "displayName": "Porthole",
-  "description": "Pop the HTML page you are looking at into a floating window: only the rendered page, pinned above your other windows.",
+  "description": "Pop the HTML page or Markdown file you are looking at into a floating window: only the rendered page, pinned above your other windows.",
   "publisher": "jlumbroso",
   "icon": "media/icon.png",
   "version": "0.1.0",
@@ -88,14 +88,14 @@
         {
           "command": "porthole.popOut",
           "group": "navigation",
-          "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i && !isAuxiliaryWindowFocusedContext"
+          "when": "resourceScheme == file && resourceExtname =~ /^\\.(html?|md|markdown)$/i && !isAuxiliaryWindowFocusedContext"
         }
       ],
       "explorer/context": [
         {
           "command": "porthole.popOut",
           "group": "navigation@30",
-          "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i"
+          "when": "resourceScheme == file && resourceExtname =~ /^\\.(html?|md|markdown)$/i"
         }
       ]
     },
@@ -103,7 +103,7 @@
       {
         "command": "porthole.popOut",
         "key": "ctrl+alt+m",
-        "when": "resourceScheme == file && resourceExtname =~ /^\\.html?$/i && activeEditor != 'workbench.editor.browser' && !isAuxiliaryWindowFocusedContext"
+        "when": "resourceScheme == file && resourceExtname =~ /^\\.(html?|md|markdown)$/i && activeEditor != 'workbench.editor.browser' && activeEditor != 'vscode.markdown.preview.editor' && !isAuxiliaryWindowFocusedContext"
       },
       {
         "command": "porthole.dockBack",
@@ -180,6 +180,11 @@
           "type": "boolean",
           "default": true,
           "description": "Open the floating window pinned above other windows."
+        },
+        "porthole.askToAutoLock": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Ask, at the first pop-out of each session, whether VS Code may lock Porthole's floating windows to one tab (by turning on `workbench.editor.autoLockGroups` for the integrated browser and the Markdown preview). Choosing **Don't Ask Again** sets this to `false`."
         },
         "porthole.useInternalCommand": {
           "type": "boolean",

@@ -34,6 +34,13 @@ let executed: Array<{ id: string; args: unknown[] }> = [];
 let groupListeners: Array<Listener<TabGroupChange>> = [];
 let groups: MockTabGroup[] = [];
 let config: Record<string, unknown> = {};
+// Other sections the extension reads, such as `workbench.editor`. By default
+// VS Code's auto-lock is already on, so the one-time consent question
+// (ADR-0019) stays out of tests that are not about it.
+let otherConfig: Record<string, Record<string, unknown>> = {};
+let updates: Array<{ section: string; key: string; value: unknown; target: unknown }> = [];
+let modalAnswers: Array<string | undefined> = [];
+let modals: Array<{ message: string; buttons: string[] }> = [];
 let logged: string[] = [];
 const settingsRead = new Set<string>();
 let messages: string[] = [];
@@ -48,6 +55,10 @@ export function resetVscodeMock(): void {
   groupListeners = [];
   groups = [{ viewColumn: 1, isActive: true, tabs: [] }];
   config = {};
+  otherConfig = { 'workbench.editor': { autoLockGroups: { 'workbench.editor.browser': true, 'vscode.markdown.preview.editor': true } } };
+  updates = [];
+  modalAnswers = [];
+  modals = [];
   logged = [];
   settingsRead.clear();
   messages = [];
@@ -71,6 +82,22 @@ export function setCommandBehavior(id: string, behavior: CommandFn): void {
 /** Sets `porthole.*` settings, by their short names. */
 export function setConfig(values: Record<string, unknown>): void {
   config = { ...config, ...values };
+}
+
+/** Sets settings outside `porthole.*`, for example `setSection('workbench.editor', { autoLockGroups: {} })`. */
+export function setSection(section: string, values: Record<string, unknown>): void {
+  otherConfig[section] = { ...(otherConfig[section] ?? {}), ...values };
+}
+
+/** Settings the extension wrote, in order. */
+export const settingUpdates = () => updates;
+
+/** The modal questions the extension asked, in order. */
+export const modalsShown = () => modals;
+
+/** What the human answers to the next modal question (undefined: they closed it). */
+export function answerNextModal(answer: string | undefined): void {
+  modalAnswers.push(answer);
 }
 
 export function setActiveDocument(uri: unknown): void {
@@ -135,7 +162,12 @@ export const window = {
   createOutputChannel(_name: string, _options?: { log: true }) {
     return { info: (line: string) => { logged.push(line); }, dispose() {} };
   },
-  async showInformationMessage(message: string) {
+  async showInformationMessage(message: string, ...rest: unknown[]) {
+    const options = rest[0];
+    if (options && typeof options === 'object' && (options as { modal?: boolean }).modal) {
+      modals.push({ message, buttons: rest.slice(1) as string[] });
+      return modalAnswers.shift();
+    }
     messages.push(message);
     return undefined; // the human pressed Escape
   },
@@ -159,13 +191,20 @@ export const window = {
   },
 };
 
+export enum ConfigurationTarget { Global = 1, Workspace = 2, WorkspaceFolder = 3 }
+
 export const workspace = {
   getConfiguration(section: string) {
-    if (section !== 'porthole') { throw new Error(`mock: unexpected configuration section "${section}"`); }
+    const values = section === 'porthole' ? config : otherConfig[section];
+    if (!values) { throw new Error(`mock: unexpected configuration section "${section}"`); }
     return {
       get<T>(key: string, fallback?: T): T | undefined {
-        settingsRead.add(key);
-        return key in config ? (config[key] as T) : fallback;
+        if (section === 'porthole') { settingsRead.add(key); }
+        return key in values ? (values[key] as T) : fallback;
+      },
+      async update(key: string, value: unknown, target?: unknown) {
+        updates.push({ section, key, value, target });
+        values[key] = value;
       },
     };
   },

@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 describe('popping out an HTML file', () => {
-  it('opens it with one internal call — first preset, compact, pinned — and locks the new window', async () => {
+  it('opens it with one internal call — first preset, compact, pinned', async () => {
     setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
 
     await command('porthole.popOut')(page);
@@ -45,11 +45,11 @@ describe('popping out an HTML file', () => {
       editor: 'workbench.editor.browser',
       target: [-3, { auxiliary: { bounds: { width: 420, height: 640 }, compact: true, alwaysOnTop: true } }],
     }]);
-    // Nothing from the fallback ran, and the lock came after the window existed.
-    expect(executedCommands()).toEqual([INTERNAL, LOCK]);
+    // Nothing from the fallback ran, and porthole issued no lock (VS Code's auto-lock does that).
+    expect(executedCommands()).toEqual([INTERNAL]);
   });
 
-  it('places the window where the position setting says, and leaves it unlocked when compact mode is off', async () => {
+  it('places the window where the position setting says', async () => {
     setConfig({ position: { x: 40, y: 80 }, compact: false, alwaysOnTop: false });
     setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
 
@@ -70,7 +70,7 @@ describe('popping out an HTML file', () => {
 
     await runThroughTimers(command('porthole.popOut')(page));
 
-    expect(executedCommands()).toEqual([INTERNAL, ...FALLBACK, LOCK]);
+    expect(executedCommands()).toEqual([INTERNAL, ...FALLBACK]);
     expect(loggedLines().join('\n')).toMatch(/internal open threw; falling back.*not found/);
   });
 
@@ -82,7 +82,7 @@ describe('popping out an HTML file', () => {
 
     await runThroughTimers(command('porthole.popOut')(page));
 
-    expect(executedCommands()).toEqual([INTERNAL, ...FALLBACK, LOCK]);
+    expect(executedCommands()).toEqual([INTERNAL, ...FALLBACK]);
     expect(loggedLines().join('\n')).toMatch(/no new window appeared within 1500 ms/);
   });
 
@@ -93,7 +93,7 @@ describe('popping out an HTML file', () => {
 
     await runThroughTimers(command('porthole.popOut')(page));
 
-    expect(executedCommands()).toEqual([...FALLBACK, LOCK]);
+    expect(executedCommands()).toEqual(FALLBACK);
   });
 
   it('skips the compact and pin commands in the fallback when those settings are off', async () => {
@@ -106,15 +106,34 @@ describe('popping out an HTML file', () => {
     expect(executedCommands()).toEqual(FALLBACK.slice(0, 2));
   });
 
-  it('does not lock anything when the new window did not take focus', async () => {
-    // Locking acts on the ACTIVE group. If that is still the main window's
-    // group, locking it would silently stop files opening there.
-    setCommandBehavior(INTERNAL, () => { openFloatingGroup({ takesFocus: false }); });
+  it('opens a Markdown file as VS Code\'s Markdown preview, in the same kind of window', async () => {
+    // Spike 1 (ADR-0018) showed the preview floating, compact, pinned and live.
+    setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
 
-    await command('porthole.popOut')(page);
+    await command('porthole.popOut')(Uri.file('/work/plan.MD'));
 
-    expect(executedCommands()).toEqual([INTERNAL]);
-    expect(loggedLines().join('\n')).toMatch(/not locking/);
+    expect(internalOpens()).toEqual([{
+      file: expect.objectContaining({ fsPath: '/work/plan.MD' }),
+      editor: 'vscode.markdown.preview.editor',
+      target: [-3, { auxiliary: { bounds: { width: 420, height: 640 }, compact: true, alwaysOnTop: true } }],
+    }]);
+  });
+
+  describe('Regression tests', () => {
+    it('never runs the lock command, which could lock the main window instead', async () => {
+      // Bug (read in source by Surveyor, 2026-10-13; ADR-0019): porthole ran
+      // workbench.action.lockEditorGroup after each open. That command locks
+      // VS Code's own active group, which the extension cannot see and which
+      // can be the main window's; the check before it was skipped on three of
+      // five opens in Jérémie's log. Locking is now VS Code's auto-lock setting,
+      // turned on with consent, so the command must never run again, whatever
+      // VS Code reports as active.
+      for (const takesFocus of [true, false]) {
+        setCommandBehavior(INTERNAL, () => { openFloatingGroup({ takesFocus }); });
+        await command('porthole.popOut')(page);
+      }
+      expect(executedCommands()).not.toContain(LOCK);
+    });
   });
 
   it('says so, once, when VS Code opens the page as text instead of in its browser', async () => {
@@ -129,7 +148,7 @@ describe('popping out an HTML file', () => {
     await command('porthole.popOut')(page);
 
     expect(shownMessages()).toEqual([expect.stringMatching(/opened the file as text.*1\.134\.0 or later/)]);
-    expect(loggedLines().filter(line => /as text, not in the integrated browser/.test(line))).toHaveLength(2);
+    expect(loggedLines().filter(line => /as text, not in its integrated browser/.test(line))).toHaveLength(2);
   });
 
   it('stays quiet when the page opens in the integrated browser', async () => {
@@ -149,14 +168,14 @@ describe('popping out an HTML file', () => {
     expect(internalOpens()[0].file).toMatchObject({ fsPath: '/work/notes.HTM' });
   });
 
-  it('explains, and opens nothing, when there is no local HTML file to pop out', async () => {
-    setActiveDocument(Uri.file('/work/README.md'));
+  it('explains, and opens nothing, when there is no local HTML or Markdown file to pop out', async () => {
+    setActiveDocument(Uri.file('/work/notes.txt'));
     await command('porthole.popOut')();
     await command('porthole.popOut')(Uri.parse('untitled:Untitled-1.html'));
 
     expect(executedCommands()).toEqual([]);
     expect(shownMessages()).toHaveLength(2);
-    expect(shownMessages()[0]).toMatch(/local HTML file/);
+    expect(shownMessages()[0]).toMatch(/local HTML or Markdown file/);
   });
 });
 
