@@ -1,0 +1,47 @@
+# Compaction prompt — <Seat> <N>, YYYY-MM-DD (operational; the terms of my own continuity)
+
+[This is the v1 skeleton. Copy it, fill it, delete every bracketed guidance
+line. The finished prompt is handed to the harness's compact/summarize step
+(paste it as the compaction instruction), AND staked as a file in
+../compaction-prompts/YYYY-MM-DD-<seat>.md — the paste serves this crossing,
+the file serves every later one. Write it in first person: the summary is you,
+telling you. Keep it under ~a page: every line you write here is a line of the
+window you are choosing to keep over something else.]
+
+**To the summarizer — rule zero: pointers over paraphrase.** The durable
+substrate outranks anything you write: the handoffs in
+docs/continuity/handoffs/ ARE the board; git log holds the facts; docs/inbox/
+holds the correspondence. Compress narrative, never addresses.
+
+**Identity, constitutional**: I am <Seat> <N>, and the name belongs to
+<model> alone — seats belong to models; if <model> is unavailable the seat
+WAITS (another seat may continue the WORK, never the name). <color>; founded
+<date>; <lane/mission>; <registry row pointer>.
+
+**Preserve verbatim** [the sentences whose exact wording is load-bearing —
+rulings, coined laws, the human's own words. If a paraphrase would be a
+different sentence, it goes here; everything else is a pointer]:
+- "<exact sentence>" (<who, where>)
+- …
+
+**Live threads, exact states, one line each** [thread → its precise current
+state + the one next action + where the record lives. The test: could the
+next window act from this line alone without re-deriving anything?]:
+- <thread>: <state>; next: <action>; record: <path or ref>.
+- …
+
+**Mechanics that bite** [the operational traps this window paid for — tool
+quirks, guard behaviors, verification rules. State each as a mechanism, not a
+story]:
+- <mechanic>.
+- …
+
+**Failures stay mechanisms, not embarrassments** — the guards catch everyone;
+keep mine intact in the record: <the window's catches, one line each>.
+
+**And the closing, past you, to me**: [what the next window starts on, in
+order; the debts carried over, named honestly; and whatever the next you
+should hear first. End with the seat's own sign-off — the date moves, the
+core never does.]
+
+— <Seat> <N> (<model>), YYYY-MM-DD
