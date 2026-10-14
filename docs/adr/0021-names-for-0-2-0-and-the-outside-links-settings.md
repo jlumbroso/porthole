@@ -50,6 +50,10 @@ Options:
 
 **B — `porthole.askToKeepCompact`.** *Rationale*: the dialog is now titled "Keep Porthole's floating windows compact?", so the key would read the same as the question it controls; "auto-lock" is VS Code's internal mechanism, which the person never sees named in the dialog's title. *Confidence*: 0.55 — because A is more precise about what is actually changed in VS Code, and that is a matter for the review's ear. *If wrong*: A.
 
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**B — `porthole.askToKeepCompact` — confirmed and raised to 0.75.** The rule that decides it: *a key that controls a question should read as the question it controls* — the dialog's title asks "Keep Porthole's floating windows compact?", and a user later hunting their settings for "that compact question" will find `askToKeepCompact` and never `askToAutoLock`, because "auto-lock" is a mechanism they were never asked about. A's precision is not lost, it is relocated to its right surface: the dialog body already discloses `workbench.editor.autoLockGroups` by name, exactly once — the zone discloses, the key stays goal-named. (This is the inverse case of the `useInternalApi` rename: there the key *claimed* a mechanism falsely; here the key should not claim the mechanism at all.) *Confidence*: 0.75. *If wrong*: A costs one migration, and the dialog title would then be the surface to re-word toward "lock" — moving the whole vocabulary toward the mechanism, which nothing else in porthole wants.
+
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
@@ -68,6 +72,10 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
 
 **A — "Review and Reset Settings…".** *Rationale*: Jérémie already calls it "Review & Reset" in his notes, and VS Code's palette shows it as "Porthole: Review and Reset Settings…", so "Porthole's" would be said twice in B; the trailing "…" follows VS Code's convention for a command that asks before acting. *Confidence*: 0.6 — because C is more exact: the list also shows Porthole settings the person set themselves. *If wrong*: C.
+
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**A — "Review and Reset Settings…" — confirmed at 0.8, and C's exactness claim is inverted, which seals it.** The question's own text says the checklist covers settings "set by or for Porthole" — including Porthole keys the person set themselves — so C's "Changed by Porthole" would *under*-claim the list it opens: the more "exact" title is the less true one. A's virtues stand: the verb pair review-then-reset is the actual flow in order; the trailing "…" is VS Code's asks-before-acting convention; the palette category scopes it ("Porthole: Review and Reset Settings…") so B's possessive would say Porthole twice; and the founder's own mouth already says "Review & Reset" — the fluent speaker using the name unprompted is the explainer's test passing, the strongest field evidence a title gets. *Confidence*: 0.8. *If wrong*: nothing fossilizes — command titles re-strike in any release.
 
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
@@ -92,6 +100,15 @@ Options:
 
 **B — with the review's edits, whatever they are.** *Rationale*: the body was written fast, after Jérémie asked for the "why" (ADR-0020); "Locking", "lock" and "compact" all appear, and the review may want one verb. *Confidence*: 0.6 — because Jérémie saw the dialog and did not object. *If wrong*: A.
 
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**B, with exactly two edits — the body is better than its author priced it.** The structure (why / what it touches / what Not-Now costs) is right, and the verb discipline is already nearly correct: "keep/compact" is the user's verb throughout, and "lock" appears where the *mechanism* is being disclosed, which is the one place it belongs. The two edits:
+
+1. **Button: "Turn On" → "Keep Compact".** A button should answer in the title's own words — the title asks "Keep Porthole's floating windows compact?" and the affirming button should be its imperative. "Turn On" forces the reader to resolve *on what?* (the lock? the ask? the setting?) at the exact moment the dialog exists to be effortless. "Not Now" and "Don't Ask Again" stay — both are VS Code idiom and both already answer the question asked.
+2. **Deixis: "Turning this on sets the VS Code setting…" → "Choosing Keep Compact sets the VS Code setting…".** "This" is unanchored three sentences from the title; naming the button makes the mechanism-disclosure sentence self-contained — and after edit 1, the words exist to name it.
+
+Minor, at Glazier's discretion: "removed N setting(s)" → let the code pluralize ("removed 1 setting" / "removed 3 settings") — the "(s)" is the one place porthole's text sounds like a machine. *Confidence*: 0.7. *If wrong*: the founder saw the dialog and did not object, so A ships fine and these edits ride 0.2.1.
+
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
@@ -110,6 +127,16 @@ Options: none (elicitation)
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-14)
 
 Keep Jérémie's `outsideLinks` group, and use one pattern for every switch, so a model can guess a name it has not seen. My proposal for the per-action settings: `porthole.outsideLinks.allow.<verb>` with the verbs of ADR-0017 (`open`, `list`, `refresh`, `focus`, `resize`, `pin`, `unpin`, `dock`, `close`). For the event file: `porthole-events.jsonl` in VS Code's per-extension storage, with events named by past-tense verb plus object (`request.received`, `window.opened`, `window.refreshed`). *Confidence*: 0.5 — because this is vocabulary, the review's domain, and the per-action pattern makes `allowLocalFiles` and `allow.open` look alike while meaning different things (what may be opened, against what may be done). *If wrong*: whatever single pattern the review prefers.
+
+**Recommendation**: (by the naming review, 2026-10-14)
+
+**Glazier's own flag is the ruling's heart: SOURCES and ACTIONS are two families, and the keys must say which family they belong to.** The existing `allow*` keys all gate *sources* — where links may point (`allowLocalFiles`, `allowRemoteLinks`…). The per-action keys gate *verbs* — what an outside caller may do. Naming the verbs `allow.<verb>` would dress the second family in the first family's clothes, inviting exactly the blur Glazier priced. So:
+
+1. **Per-action keys: `porthole.outsideLinks.actions.<verb>`** (boolean each), with ADR-0017's verbs verbatim (`open`, `list`, `refresh`, `focus`, `resize`, `pin`, `unpin`, `dock`, `close`). A reader meeting `allowLocalFiles` and `actions.open` side by side now reads two different questions — *may links point at local files?* versus *may outside callers open windows?* — which is the truth.
+2. **One spelling fix while these keys are still unshipped and free**: `allowLocalHost` → **`allowLocalhost`**, `restrictLocalHostPorts` → **`restrictLocalhostPorts`**. The host's name is `localhost`, one word; camel-casing it mid-hostname misspells the very thing the key names. (Polarity note, confirmed fine: allow-lists and restrict-lists may coexist in the group because the polarity lives in each key's first word, never in how an empty value is read.)
+3. **Event file: `porthole-events.jsonl` confirmed** (the prefix survives the file being copied out of its scoped folder — cheap insurance). **Event names: confirmed, with the pattern made mechanical**: `<object>.<past-tense-verb>`, where the verbs are ADR-0017's, conjugated and nothing else — `window.opened`, `window.refreshed`, `window.pinned`, `window.docked`, `window.closed`, and `request.received` as the one event of the request object. A model that knows the verb list can *derive* every event name it has never seen, which is the whole point of a pattern.
+
+*Confidence*: 0.75 on the family split and the localhost fix; 0.7 on the event grammar. *If wrong*: the `actions.` group renames in one sweep before ADR-0013/0014 build — nothing here is shipped yet, which is why this question was asked now, and asking-before-the-fossil deserves its answer in kind.
 
 **ANS:** (by Jérémie)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
@@ -138,6 +165,12 @@ Keep Jérémie's `outsideLinks` group, and use one pattern for every switch, so 
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-14)
+- Trigger: Jérémie carried the ADR to the naming review
+- Contributors: the naming review
+- Changes: a stacked Recommendation under each of the four questions — autolock key: B confirmed 0.75 (a key that controls a question reads as the question; mechanism disclosed in the dialog body, once); reset command: A confirmed 0.8 (C's exactness claim inverted — the list includes user-set Porthole keys; the founder's own "Review & Reset" usage is the explainer's test passing); dialog words: B with two edits (button "Turn On" → "Keep Compact"; the unanchored "Turning this on" → "Choosing Keep Compact"); outside links: sources/actions family split (`actions.<verb>` not `allow.<verb>`), `allowLocalHost` → `allowLocalhost` while free, event grammar made mechanical (`<object>.<past-tense ADR-0017 verb>`).
+- Outcome: `Draft`; all four ANS surfaces now accept/override for Jérémie; part 1 unblocks 0.2.0 on his word
 
 ---
 
