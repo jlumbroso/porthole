@@ -10,9 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [0.2.0] - 2026-10-14
 
-Markdown, one tab per window, and a new icon. Markdown and the auto-lock question were
-checked by hand on macOS with VS Code 1.141.0; two small additions (marked below) have only
-automated tests so far.
+Markdown, one tab per window, and a new icon. Everything below was checked by hand on macOS
+with VS Code 1.141.0 (ADR-0018 and ADR-0020).
 
 - **Markdown files pop out too.** `.md` and `.markdown` files open as VS Code's own
   Markdown preview in the same compact, pinned floating window, and update as the file
@@ -25,8 +24,7 @@ automated tests so far.
   lock the main window. New setting `porthole.askToKeepCompact` (default `true`).
 - **Fixed before release:** the affirming button (then "Turn On") copied about 25 of VS Code's default auto-lock entries
   into your user settings; it now writes only its two.
-- **New, tested only by automated tests so far:** *Pop Out to Floating Window* in a file
-  tab's right-click menu, and the command *Porthole: Review and Reset Settings…*, a
+- **Also new:** *Pop Out to Floating Window* in a source tab's right-click menu, and the command *Porthole: Review and Reset Settings…*, a
   multi-select list of every user setting set by or for porthole; each change porthole makes
   to settings is now announced with a button that opens it.
 - **New icon:** a teal double ring with eight bolts around a page, drawn as a vector with
