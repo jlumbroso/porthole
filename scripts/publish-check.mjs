@@ -142,9 +142,13 @@ if (haveOvsx) {
 } else { skip('ovsx verify-pat', NO_TOKENS ? '--no-tokens' : 'no OVSX_PAT'); }
 
 // --- the tree is the thing that ships --------------------------------------------
-const dirty = run('git', ['status', '--porcelain', '--untracked-files=no']).stdout.trim();
-if (!dirty) { ok('working tree has no uncommitted changes to tracked files'); }
-else { bad('working tree has no uncommitted changes to tracked files', dirty.split('\n').slice(0, 4).join(' | ')); }
+// docs/adr/.working/ is excluded on purpose: the ADR Manager autosaves into those tracked files while anyone
+// is answering a question, so during a working session they are always modified, and they never ship in the
+// package (the allowlist check proves that). Met 2026-10-14, when the check blocked 0.2.0 and a seat worked
+// around it with `git update-index --assume-unchanged`; excluding the directory here is the honest version.
+const dirty = run('git', ['status', '--porcelain', '--untracked-files=no', '--', '.', ':(exclude)docs/adr/.working']).stdout.trim();
+if (!dirty) { ok('working tree has no uncommitted changes to tracked files (docs/adr/.working/ excluded)'); }
+else { bad('working tree has no uncommitted changes to tracked files (docs/adr/.working/ excluded)', dirty.split('\n').slice(0, 4).join(' | ')); }
 const tag = run('git', ['describe', '--exact-match', '--tags', 'HEAD']).stdout.trim();
 if (tag === `v${version}`) { ok(`HEAD is tagged v${version}`); }
 else { bad(`HEAD is tagged v${version}`, tag ? `HEAD is tagged ${tag}` : 'HEAD has no tag'); }

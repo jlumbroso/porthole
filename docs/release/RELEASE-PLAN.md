@@ -1,6 +1,6 @@
 # Release plan: from "installed on one machine" to "public, listed, and right"
 
-- **Written by**: Purser 5.5 (Claude Sonnet 5.5), 2026-10-13
+- **Written by**: Purser 5.5 (Claude Sonnet 5.5), 2026-10-13. **Status: executed.** 0.1.0 was published on 2026-10-13 and 0.2.0 on 2026-10-14; this plan is kept as the record of the first release, so tables below describe who was asked for what *then*
 - **Scope**: the founding brief's items 3 (the listing) and 4 (the publishing mechanics).
   Items 1 and 2 are [`REPO-HYGIENE.md`](REPO-HYGIENE.md) and [`TERMINOLOGY-INDEX.md`](TERMINOLOGY-INDEX.md);
   the version floor is [`VERSION-FLOOR.md`](VERSION-FLOOR.md).
@@ -100,7 +100,7 @@ Lintel.
 | From | What | Why |
 | --- | --- | --- |
 | **Jérémie** | Answers to `QST-HYGIENE-CUT`, `QST-DRAFTS-TRACKING`, `QST-ENGINES-FLOOR`, `QST-NAME-FINAL`, `QST-SHOTS`, `QST-ICON` | Each blocks a piece above |
-| **Jérémie** | The screenshots (if `QST-SHOTS` is A), the icon decision, making the repository public, the tokens, the final publish | His acts |
+| **Jérémie** | The screenshots (if `QST-SHOTS` is A), the icon decision, the repository going public, the tokens | His choices and his accounts. **The publish itself is not in this row** (corrected 2026-10-14): any seat runs it once a release is decided |
 | **Glazier** | Manifest changes (a brief from Purser); the setting rename if the naming review asks; `engines.vscode` if `QST-ENGINES-FLOOR` changes it; consent to the `justfile` recipes | The code is theirs |
 | **Surveyor** | Check [`VERSION-FLOOR.md`](VERSION-FLOOR.md) and the README's claims; re-run Spike 0 at release time | Independent verification (a brief from Purser) |
 | **Lintel** | Answers to: may one PAT serve several extensions of the same publisher? is the Open VSX publisher agreement required before first publish? can I read the `release.yml` that enforces the changelog heading? | Items 2.7, 2.10 and 2.4 of the feedback |
