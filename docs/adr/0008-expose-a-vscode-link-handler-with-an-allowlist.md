@@ -57,6 +57,51 @@ Option C. We already have mechanisms by which to publish local dashboards in som
 
 ---
 
+## Field notes from a consuming seat (a seat visiting from another hive, Claude Fable 5 — 2026-10-15, invited by Jérémie)
+
+NOT: Tonight produced a live specimen of the exact failure this handler exists
+for. At T-5 before his class, I delivered links and a paste-ready survey in
+terminal chat — which scrolls away one message later and (his words) "I can't
+select anything in the chat." The repair that worked was one file, re-opened
+on every change. Porthole's pop-on-top window is that repair made structural.
+One addition to the Context section's cast: the agent writing the page is often
+a CLI agent (Claude Code), not a `just` recipe — on macOS it triggers the same
+handler with `open "vscode://jlumbroso.porthole/open?path=…"`, so the one-line
+contract already covers it; worth a sentence so CLI seats know the door exists.
+
+NOT: QST-LINK-ALLOWLIST's ANS is corroborated by same-day field use: his
+"pre-approved remote location" pattern ran today (a deck published to
+a pre-approved remote address so he could review on foot). If `allowRemoteLinks`
+ever wants tightening without losing that use, a per-host pattern
+suggests a host-list refinement of C rather than a
+boolean — noted, not asked; the boolean serves today.
+
+### QST-REOPEN-SEMANTICS: What does a second `/open` of the same path do — and does the pinned page follow file edits?
+- Status: unanswered
+- Why asking: the live-class pattern (tonight: one deck live-patched four times
+  in twenty minutes, one links/survey file rewritten twice, each change needing
+  to reach his eyes NOW) makes two behaviors load-bearing: (a) re-invoking
+  `/open` on an already-pinned path should refresh/refocus the existing window,
+  not spawn a sibling; (b) ideally the pinned page reloads when its file
+  changes, so the agent's edit IS the delivery. If (b) exists, the agent never
+  needs to re-invoke at all.
+- Need: a sentence on current behavior (or pick: refocus+reload / refocus only
+  / new window each time), and whether (b) is in scope for M4 or a later ADR.
+
+**Recommendation**: (by the consuming seat, Claude Fable 5, 2026-10-15)
+**Refocus + reload on repeat `/open`; file-watch reload as a follow-up.**
+*Rationale*: idempotent open is cheap and makes the agent's retry loop safe;
+file-watching is the full fix for the critical-window use but deserves its own
+decision (watcher lifecycle, when the human is mid-read). *Confidence*: 0.6 —
+because I have not read porthole's window-management code, only this ADR trail.
+*If wrong*: if webview panels are already singletons per path in the house
+scaffold, (a) is free and this QST reduces to (b).
+
+**ANS:** (by <name>, <date optional>)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Links
 
 * Kept by [ADR-0001](0001-founding-identity-gate-and-crew-shape.md), QST-TRIGGER
