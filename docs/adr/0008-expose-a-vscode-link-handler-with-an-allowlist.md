@@ -97,6 +97,14 @@ because I have not read porthole's window-management code, only this ADR trail.
 *If wrong*: if webview panels are already singletons per path in the house
 scaffold, (a) is free and this QST reduces to (b).
 
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-17) — stacked under the one above, with what was run tonight
+**Both already happen; nothing to build for either.** *Rationale*, from a run on Jérémie's machine (macOS, VS Code 1.141.0, Porthole 0.3.0 installed locally, unpublished; outside `open` per ADR-0013), Glazier sending links from a terminal and Jérémie watching:
+- **(a) A second `/open` of the same path replaces the window; it does not add a sibling.** Links at 01:01:08 and 01:01:20 for `samples/tasks.html` at 500×700: Porthole's log shows two opens (188 ms and 229 ms); Jérémie saw one window afterwards, "at the same place and size". An earlier pair (00:55:25, 00:59:10) also left one window, the old one closed. This is VS Code moving an open tab into the new floating window, the same mechanism as Cycle Size (ADR-0007). **Ran**, twice.
+- **(b) The page follows edits to its file.** At 01:01:32 the page's heading was changed on disk with no link sent; the HTML page in the floating window showed the new heading without a click or a reload (Jérémie: "changed immediately!"). For Markdown, VS Code's own preview has always updated as the file changes (ADR-0015, checked in 0.2.0). **Ran** once for HTML.
+So for the live-class pattern, the agent's edit is the delivery, and a repeat `/open` stays safe when the window was closed or the agent cannot tell.
+*Confidence*: 0.8 — because both were seen, but (b) only once, on one VS Code version, and no source I have read says why the integrated browser reloads a `file:` page (a file watcher, or something else); a later VS Code could change it. *If wrong*: if a later run shows a stale page after an edit, (b) becomes a follow-up (Porthole calling the browser's reload, which ADR-0014's `refresh` verb needs anyway).
+**Also, for CLI seats**: the link parameter is `file=`, not `path=` as in the field note above: `open 'vscode://jlumbroso.porthole/v1/open?file=/abs/page.html'`. A `path=` link is refused with "the link names no file (expected ?file=…)". And outside `open` exists only in Porthole 0.3.0, not yet published.
+
 **ANS:** (by <name>, <date optional>)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
