@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # A small product website for Porthole
 
 - **Date**: 2026-10-14
-- **Iteration**: 2
+- **Iteration**: 3
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5); the site's seat once it accepts
 
@@ -64,6 +64,65 @@ Also, we are proud of any association with GitHub! A `github.io` subdomain is no
 
 ---
 
+### QST-SITE-SCREENSHOTS: Can we show a clean Markdown checklist beside the work, in light and dark?
+- Status: unanswered
+- Why asking: **Give the page a picture of the current product.** The draft uses the README's real HTML screenshot. A new, deliberately staged Markdown picture would show the checklist use case without real account instructions or another project's content. Markdown and its color setting already passed your check in ADR-0022; this asks for two usable pictures, not another feature test. Only your installed VS Code can supply them. If either picture fails, we keep the existing image and fix the staging before asking again.
+- Need: pick a letter (or override — any shape answers). About six minutes. Save the two PNGs named below on your Desktop; we will inspect and import them.
+
+**Where to do this.** Start in **your porthole workspace window**: the VS Code window with the repository folder `porthole` open. The first command opens a separate window titled **Porthole screenshot**; below, this is the **large sample window**, showing source text or Settings. Its **floating window** is the smaller window showing the rendered checklist. Both may have the same title, so distinguish them by their contents and size. Use your installed Porthole 0.2.1 or later, not a window titled `[Extension Development Host]`.
+
+**Before you start — what changes, and undo.** The prepared workspace at `samples/site-capture/porthole-screenshot.code-workspace` contains only sample files. It chooses VS Code's built-in **Default Dark Modern** theme, 16-pixel text, a 480 × 640 floating window, and light Markdown colors. Those settings belong to this sample workspace; your User settings stay as they are. It enables Porthole's internal-command path for this workspace so an existing User override does not bypass the size preset, and suppresses the compactness prompt without changing auto-lock settings. The dark shot changes only this workspace's `porthole.markdown.colorScheme`; restore **light** before closing it. If you have other Porthole Markdown floating windows open, close those first so they do not compete for the extension's shared color stylesheet. The capture replaces your clipboard, so save anything you need from it first. Closing the sample workspace and its floating window restores your normal working context. A Workspace Trust grant persists for the sample folder; to remove it later, open that workspace, run **Workspaces: Manage Workspace Trust** from **Shift+Cmd+P**, and remove the `site-capture` entry from **Trusted Folders & Workspaces**.
+
+**Steps.** A command or save is one action; its exact keys and text are given in place. Do not use macOS full-screen mode: the picture needs two overlapping windows.
+
+1. **Open the staged workspace.** In the integrated terminal of **your porthole workspace window**, run `code --new-window ~/Programming/porthole/samples/site-capture/porthole-screenshot.code-workspace`. A separate window titled **Porthole screenshot** should open. If the command is unavailable or that window does not appear, stop with C.
+2. **Trust the sample workspace if asked.** If VS Code displays its Workspace Trust dialog, choose **Yes, I trust the authors**. The sample folder contains only the two Markdown files and this settings file, with no tasks or executable code. If there is no dialog, skip this step.
+3. **Size the large sample window.** Drag its lower-right corner until it is roughly 1,100 pixels wide and 740 pixels tall, or as large as comfortably fits your screen. Exact pixels are unnecessary; leave room for the floating window to overlap its right-hand side.
+4. **Open the checklist source.** In the **large sample window**, press **Cmd+P**, type `checklist.md`, then press **Enter**. You should see source beginning `# A small page, kept in view`.
+5. **Pop out the checklist.** With that source tab focused, press **Ctrl+Alt+M**. The floating window should show **A small page, kept in view**, two checked boxes and three unchecked boxes, and the note underneath, on a light background. It should have no tabs or status bar.
+6. **Focus the large sample window.** Click the title bar of the **large sample window**. The floating checklist should remain above it.
+7. **Open the work notes.** In the **large sample window**, press **Cmd+P**, type `work-notes.md`, then press **Enter**. The large sample window should show `# Work notes` as source; the floating window should still show the rendered checklist.
+8. **Hide the sample file list if visible.** In the **large sample window**, run **View: Toggle Primary Side Bar Visibility** from **Shift+Cmd+P**. The editor should now have room for the work notes. If the file list is already hidden, skip this step.
+9. **Place the floating window.** Drag its title bar so it overlaps the right-hand third of the **large sample window**, with both title bars visible and the work notes readable to its left. Leave the checklist at its top; its full note should fit. If the note is cut off, stop with C and we will adjust the fixture's height.
+10. **Start the light capture.** Press **Ctrl+Shift+Cmd+4**. The pointer should become a crosshair; this copies a selected rectangle to the clipboard instead of choosing a save location.
+11. **Select the composition.** Drag a rectangle enclosing the work notes and the entire floating window, including its title bar. Keep the Desktop, macOS menu bar, other windows, personal paths and notifications outside the rectangle. After releasing the pointer, the image is on the clipboard.
+12. **Open Preview.** Press **Cmd+Space**, type `Preview`, then press **Enter**. macOS Preview should be frontmost.
+13. **Dismiss Preview's Open dialog if shown.** Press **Esc** if Preview is asking you to open a file. Otherwise skip this step.
+14. **Make the image document.** In **Preview**, press **Cmd+N** (**File → New from Clipboard**). You should see the composition you selected.
+15. **Save the light image.** In **Preview**, press **Cmd+S**. Use **Save As** `porthole-site-light.png`, **Where** Desktop, and **Format** PNG if shown; then click **Save**. If that name exists, use `porthole-site-light-2.png` and report that name rather than overwriting it.
+16. **Hide Preview.** In **Preview**, press **Cmd+H**. Its windows should disappear, leaving the sample composition accessible.
+17. **Return to the sample workspace.** Click the title bar of the **large sample window**. Its work notes should be visible beside the light floating window again.
+18. **Open Settings.** In the **large sample window**, press **Cmd+,**. Settings should open in the large sample window.
+19. **Choose the Workspace tab.** At the top of Settings, click **Workspace**, not **User**. This keeps the change in the sample workspace.
+20. **Find the color setting.** In the Settings search box, type `porthole.markdown.colorScheme`. **Porthole › Markdown: Color Scheme** should appear with **light** selected.
+21. **Choose dark.** In the drop-down, choose **dark**. Within about two seconds, the floating checklist should have a dark background and light text. The sample editor stays dark.
+22. **Return to the work notes.** In the **large sample window**, press **Cmd+P**, type `work-notes.md`, then press **Enter**. The arrangement should match the light capture, now with a dark checklist.
+23. **Start the dark capture.** Press **Ctrl+Shift+Cmd+4**. The pointer should become a crosshair again.
+24. **Select the composition.** Drag a rectangle enclosing the work notes and the entire floating window, with the same bounds as closely as practical. The clipboard now holds the dark version.
+25. **Return to Preview.** Press **Cmd+Space**, type `Preview`, then press **Enter**. Preview should come to the front.
+26. **Make the second image document.** In **Preview**, press **Cmd+N**. You should see the dark composition in a new document.
+27. **Save the dark image.** Press **Cmd+S**. Use **Save As** `porthole-site-dark.png`, **Where** Desktop, and **Format** PNG if shown; then click **Save**. If it exists, use `porthole-site-dark-2.png` and report that name.
+28. **Hide Preview.** In **Preview**, press **Cmd+H**. Its windows should disappear again.
+29. **Return to the sample workspace.** Click the title bar of the **large sample window**.
+30. **Reopen Settings.** Press **Cmd+,**. Settings should still show the workspace color setting. If it does not, choose **Workspace** and search `porthole.markdown.colorScheme` again.
+31. **Restore light.** In that setting's drop-down, choose **light**. The sample workspace should be back to its starting value. Your User setting has not changed.
+32. **Close the floating window.** Click its red close button. The large sample window should remain open.
+33. **Close the large sample window.** Click its red close button. Your original porthole workspace window is still available; the two PNG files remain on your Desktop.
+
+Options:
+- **A — both pictures ready**: the light and dark PNGs show the complete checklist floating over the work notes, with no unrelated content. We inspect them, replace the draft's HTML image with this pair, and let the website choose the image that matches its light or dark appearance.
+- **B — only one usable picture**: name light or dark and what prevented the other. We use the usable picture in both website appearances, if it is clear, and do not ask you to repeat the successful capture.
+- **C — staging did not work**: a command, window, color or save differed from the steps. Say which step and what appeared; we fix the instructions or fixture before scheduling another capture.
+- **D — something else**: say what you saw, or prefer the existing HTML picture. We keep the current image until your preference is clear.
+
+**Recommendation**: (by Sounder 6, gpt-6-astra, 2026-10-14)
+**A — both pictures ready** (a prediction). *Rationale*: your answer to ADR-0022's QST-CHECK-MD-COLORS confirms that the installed product shows light and dark Markdown and updates an open window within about two seconds. The sample files are short, contain no account information, and the workspace gives the picture a clean title and explicit size. *Confidence*: 0.75 — the color behavior has been run, but I cannot run your installed VS Code or verify the final framing here. *If wrong*: B changes the page to a single inspected picture; C withdraws this staging procedure for a corrected one rather than asking you to improvise; D follows your observed result or image preference. An incomplete checklist, unexpected extra tab, unreadable composition or unrelated content in either saved PNG falsifies A even if the color switch worked.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: one static page, offered to Sounder 6
@@ -77,8 +136,9 @@ As in the Explicitation: one page in `site/`, no framework, every claim from the
 ## Action Items
 
 - [x] Accept or decline the invitation — Owner: Sounder 6 (2026-10-14: accepted, with a four-section sketch and two screenshots; `docs/inbox/2026-10-14-1925-sounder-to-glazier-accept-product-page.md`)
-- [ ] Draft the page and the screenshot QST — Owner: the site's seat
+- [x] Draft the page and the screenshot QST — Owner: Sounder 6 (2026-10-14; `site/`, `samples/site-capture/`, QST-SITE-SCREENSHOTS)
 - [ ] Commit the site's seat's work if its sandbox cannot; add the Pages workflow (pinned action SHAs, as in `release.yml`) — Owner: Glazier
+- [ ] Inspect the rendered page at desktop and phone widths, in light and dark, before publishing — Owner: Glazier (Sounder's browser launch was sandbox-denied)
 - [ ] Check the page's claims against the README — Owner: Purser
 - [ ] Take the screenshots — Owner: Jérémie, through the QST
 
@@ -97,6 +157,12 @@ As in the Explicitation: one page in `site/`, no framework, every claim from the
 - Contributors: Jérémie Lumbroso, Sounder 6, Glazier 5.5 (Claude Opus 5.5)
 - Changes: address recorded
 - Outcome: `Accepted`
+
+### Iteration 3 (2026-10-14)
+- Trigger: the accepted website assignment is drafted.
+- Contributors: Sounder 6 (gpt-6-astra).
+- Changes: `site/index.html`, local CSS and unchanged copies of the icon and README's `porthole-beside-the-editor.png`; the README's four feature names, install destinations and compatibility limits; a separate sample workspace and QST-SITE-SCREENSHOTS for two Markdown captures. No framework, scripts, remote fonts or runtime services.
+- Outcome: the decision remains `Accepted`; the page is saved as a draft. Light/dark CSS and phone breakpoints are written, but rendering is unverified here: Chromium's process bootstrap was sandbox-denied. Human captures, Glazier's browser check and deployment, and Purser's independent claim check remain outstanding.
 
 ---
 
