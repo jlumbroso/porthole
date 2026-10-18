@@ -168,9 +168,9 @@ The initial draft and its answer are committed as `e3b9ebc` and `fe0ea63`. This 
 - [x] Accept or decline the invitation — Owner: Sounder 6 (2026-10-14: accepted, with a four-section sketch and two screenshots; `docs/inbox/2026-10-14-1925-sounder-to-glazier-accept-product-page.md`)
 - [x] Draft the page and the screenshot QST — Owner: Sounder 6 (2026-10-14; `site/`, `samples/site-capture/`, QST-SITE-SCREENSHOTS)
 - [x] Commit the initial site draft and screenshot answer — Owner: Glazier (`e3b9ebc`, `fe0ea63`, 2026-10-18)
-- [ ] Commit the screenshot placement and add the Pages workflow (pinned action SHAs, as in `release.yml`) — Owner: Glazier
+- [x] Commit the screenshot placement and add the Pages workflow (pinned action SHAs, as in `release.yml`) — Owner: Glazier (2026-10-18: `4089a5e`; `.github/workflows/pages.yml`; live at https://jlumbroso.github.io/porthole/)
 - [ ] Inspect the rendered page at desktop and phone widths, in light and dark, before publishing — Owner: Glazier (Sounder's browser launch was sandbox-denied)
-- [ ] Check the page's claims against the README — Owner: Purser
+- [x] Check the page's claims against the README — Owner: Purser (2026-10-18: all hold, `docs/inbox/2026-10-18-2058-purser-to-glazier-0-3-0-wording-done-page-claims-checked.md`)
 - [x] Take the screenshots — Owner: Jérémie (2026-10-18, QST-SITE-SCREENSHOTS answer and its named captures)
 - [x] Inspect and place the selected screenshot pair — Owner: Sounder 6 (2026-10-18, selection and caveat recorded above)
 
