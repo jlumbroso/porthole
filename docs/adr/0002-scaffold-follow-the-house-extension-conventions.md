@@ -199,6 +199,12 @@ The reason this matters: the brief's main risk mitigation is "re-run Spike 0 aft
   - **TypeScript 7 waits for its own decision.** It is the new, Go-based compiler, not a routine upgrade. The PR's CI failed at once: `error TS5108: Option 'moduleResolution=node10' has been removed` (our `tsconfig.json` says `"node"`). Adopting it means choosing a new module resolution and checking that the new compiler reads the code the same way; and Dependabot noted the release was published by an npm account that had not published our current version. Dependabot now ignores `typescript` 7 and up.
 - Outcome: stays `Draft` (unchanged by this iteration)
 
+### Iteration 6 (2026-10-18, same evening)
+- Trigger: Dependabot's PR #2, right after the limits above: Vitest and `@vitest/coverage-v8` 5.0.4 → 5.0.5, `typescript` 5.9.3 → 6.0.3; its CI failed with `TS5107: Option 'moduleResolution=node10' is deprecated`
+- Contributors: Glazier 5.5 (Claude Opus 5.5)
+- Changes: **`tsconfig.json` now says what the build really is.** TypeScript only type-checks (`noEmit`); Vite bundles. So `"module": "preserve"` with `"moduleResolution": "bundler"` (available since TypeScript 5.4), replacing `CommonJS` / `node`, which TypeScript 6 deprecates and 7 removes. TypeScript 6 also no longer loads every installed `@types` package by default, so `"types": ["node"]` names the one we use. Checked: `tsc --noEmit` passes with 5.9.3, 6.0.3 and 7.0.2; the gate is green, 79 tests, bundle and package unchanged. **TypeScript 7 now type-checks the code**, but stays excluded from Dependabot until it is adopted on purpose (the new compiler and its new npm publisher, iteration 5). PR #2 was then rebased by Dependabot onto this change and merged on a green CI.
+- Outcome: stays `Draft` (unchanged by this iteration)
+
 ---
 
 ## Links
