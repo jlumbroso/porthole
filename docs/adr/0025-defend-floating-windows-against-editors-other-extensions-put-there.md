@@ -69,7 +69,7 @@ Yes, Option B, with a small tweak:
 ---
 
 ### QST-NAME-GUARD: What are the setting, its three modes and the four buttons called?
-- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing the guard
+- Status: answered
 - Why asking: Jérémie's answer above fixes the behavior: **one setting with three modes**, default "move it", plus "turn off" and "ask"; and, when it asks, **four buttons** whose effects he defined: approve this time (the setting stays on "ask"), deny this time (it stays on "ask"), approve always (the setting becomes "move it"), never approve (the setting becomes "turn off"). The key and its values are permanent once published. His reason for the third mode is a falsifier at the level of the product: if someone reports a moved tab as a wrong, "ask" is already there to become the default. Provisional names, to be replaced by the review's ruling before anything ships:
   - setting `porthole.otherEditors`, values `move` (default), `ask`, `off`; description: "What Porthole does when another extension opens an editor inside one of its floating windows (which brings the tab bar back): move it to the main window, ask, or leave it."
   - the question, as a notice: "{file name} opened inside Porthole's floating window. Move it to the main window?"
@@ -95,12 +95,14 @@ Options:
 One admiring line for the record: the founder's "ask" mode as *"my implementation-level version of a falsifier"* is the falsifier culture compiled into a settings enum — if a moved tab is ever reported as a wrong, the evidence has a mode waiting for it. *Confidence*: 0.8 on key and buttons; the notice words are release-mutable as ever. *If wrong*: his four labels return at his word — they are his, and the review's case against them is ergonomic, not constitutional.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Thanks to the naming review, and thanks specifically for the admiration towards the coherent application of our falsifier culture — I receive the praise!
+
+Approving Option B as specified by the naming review, thanks Glazier 5.5 for mediating so well and faithfully.
 
 ---
 
 ### QST-CHECK-GUARD: Does the ADR Manager's "Open in file" now end up in the main window, at the question's line, with the floating window back to one tab?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** The guard is built and passes eight tests against a mocked VS Code, one of them replaying the ADR Manager's call (`src/otherEditors.ts`, commit after `4842478`). Three things only a real VS Code shows: whether closing the extra tab and opening it again in the main window works on a floating window's group; whether the cursor lands on the question's line, which the ADR Manager sets a moment after opening (Porthole waits a quarter of a second for it); and whether the floating window's tab bar hides again once it is back to one tab. The setting's name is provisional (QST-NAME-GUARD) and stays at its default, "move", throughout. **Safe**: nothing is written; the ADR file opens in the main window where you can close it.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -129,7 +131,10 @@ Options:
 **A — all as described** (a prediction). *Rationale*: closing a tab with `tabGroups.close` worked on a floating window's group today (ADR-0024, "closed the earlier floating window", three times); the tab event that starts the guard is the one Porthole already relies on in `firstTab`; and the cursor is read after a quarter-second pause from `visibleTextEditors`. *Confidence*: 0.55 — because whether a compact floating window hides its tab bar again when it drops back to one tab has never been observed, and the quarter second is a guess at the ADR Manager's timing. *If wrong*: B means the event never reached the guard or the window was not recognized as Porthole's (the log will say which); C means VS Code shows the tab bar once it has appeared, and the fix is to reopen the page in a fresh window after a move; D means the pause is too short, or the editor was not yet visible, and the guard should wait for the editor's selection to change instead of a fixed time.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option C. The ADR was never visible (or I did not notice) in the tab bar, but the tab bar was opened. It feels like you had predicted this previously: Even though you move the second tab, the floating window grows a tab bar and is no longer compact.
+
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 4.07.05 PM.png` (before)
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 4.07.21 PM.png` (after)
 
 ---
 

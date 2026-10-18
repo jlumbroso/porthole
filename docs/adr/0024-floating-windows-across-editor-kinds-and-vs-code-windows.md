@@ -111,7 +111,7 @@ Screenshots:
 NOT: **Reading of the answer** (Glazier 5.5, 2026-10-18). Steps 2 and 3 passed, and the log shows it in a real VS Code: "is already in a floating window; brought it forward" twice at 14:39:25 and 14:39:30, then "closed the earlier floating window" after each of three Cycle Size runs (14:39:46–53). So the column route reaches a floating window, and `tabGroups.close` closes one. **E is not a Porthole fault, and it leaves the cross-window fix untested.** The 2:40:45 screenshot shows the Settings editor on its **User** tab, set to `dark`, with VS Code's note "(Also modified in Workspace)" beside the title. The staging workspace sets `light` (`samples/site-capture/porthole-screenshot.code-workspace` line 13), and a workspace value overrides the User value, so light was the right color throughout. Step 5 said to click the **Workspace** tab; the trap is that the Settings editor opens on User, shows the same setting there, and only that small grey note says it is not the one in force. Reissued below as QST-CHECK-WORKSPACE-DARK, with the trap named. (The build tested also predates the ruled description: it still showed "Other Markdown previews…".)
 
 ### QST-CHECK-WORKSPACE-DARK: Does the floating window turn dark when the staging workspace's own setting changes, and stay dark when the other window reloads?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** The one part of QST-CHECK-TWO-WINDOWS that did not run: changing the setting that actually applies in the Porthole screenshot window, with your porthole workspace window also open and then reloading. Before the fix, that reload could wipe the floating window's colors. **The trap in the last run**: VS Code's Settings editor opens on the **User** tab, where this setting also appears, but the staging workspace sets its own value, which wins; "(Also modified in Workspace)" beside the setting's title is the only sign. **Safe**: only the staging workspace's setting changes, and step 5 puts it back to **light**.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -137,7 +137,22 @@ Options:
 **A** (a prediction). *Rationale*: the change in step 3 is the same mechanism ADR-0022's check ran in one window, and the reload in step 4 is the 2026-10-18 failure the regression test "keeps the rule another window wrote" replays; on reload, the porthole workspace window keeps the Porthole screenshot window's entry because that window's process is alive. *Confidence*: 0.75 — because the mechanism has run before and the new part is tested, but the cross-window part has never run. *If wrong*: B means the workspace-scoped setting change is not reaching Porthole in that window, which its log will show; C means the alive-process check failed (for instance, a process id that is not the extension host's), which the installed stylesheet's last line will show.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option A, but so many weird interactions to document:
+
+- Yes, when the floating window is initially launched, it will update a second after the workspace setting is toggled from "light" to "dark" or vice-versa;
+- But when I do "Reload Window" in the "Porthole screenshot" window, this is no longer the case: Not only will the floating window no longer update spontaneously, but even a refresh (or my attempt at one?) will not update the style.
+- In that case, triggering "Pop Out to Floating Window" on the same document opens a *second* floating window, with the correct styling, and, if different from what it previously displayed, the existing "orphan" floating window for the same document switches style.
+- After that, the two floating windows are like "entwined" — triggering the setting change for the actively open and controlled one, also updates the legacy one.
+- If I try to pop out another floating window for the same document, the second floating window focuses.
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.53.14 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.53.38 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.53.56 PM.png` tight shot of dark mode for Sounder or Purser
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.54.09 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.54.23 PM.png` tight shot of light mode for Sounder or Purser
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.57.38 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 3.58.04 PM.png`
 
 ---
 
