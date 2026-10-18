@@ -29,6 +29,9 @@ Checked by hand on macOS with VS Code 1.141.0 (ADR-0013, ADR-0024, ADR-0025).
 - **Pop Out twice no longer gives two windows.** A second Pop Out of a file that is already floating
   brings its window forward, where it is; Cycle Size on a Markdown file no longer leaves the old
   window behind (ADR-0024).
+- **Floating windows survive Reload Window.** After a reload, Porthole takes back the floating windows
+  VS Code restores, so a second Pop Out brings the restored window forward and its Markdown colors keep
+  following the setting (ADR-0024).
 - **Markdown colors follow the setting with several VS Code windows open**: one window no longer
   wipes another's colors (ADR-0024). The setting's description now reads "The colors follow the
   file" (ADR-0022).
