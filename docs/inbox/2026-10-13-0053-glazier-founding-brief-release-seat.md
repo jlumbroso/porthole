@@ -40,7 +40,7 @@ The release, end to end, except the code itself:
 2. **A terminology index**: every user-facing word (command titles, menu
    entries, setting descriptions, messages, README, listing). The menu says
    "Mini Window" while the product is "Porthole"; Jérémie wants all of it put
-   to Mint, the estate's naming authority, for a coherence pass (ADR-0010,
+   to the naming review, the estate's naming authority, for a coherence pass (ADR-0010,
    action items).
 3. **The listing**: copy, screenshots or a short recording, the icon, the
    README a stranger reads first, and the changelog. It must say plainly that

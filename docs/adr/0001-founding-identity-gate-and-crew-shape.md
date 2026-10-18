@@ -28,7 +28,7 @@ Jérémie's original prompt to Claude Opus 5.5 (Claude web), which produced the 
 >
 > So how can I build does VS Code have the API for us to build that? Could you do a comprehensive research so that I can then take this blue plan to cloud code and build it? Thank you.
 
-The provisional naming, from Mint's ledger (entry №89), verbatim:
+The provisional naming, from the naming review's ledger (entry №89), verbatim:
 
 > **`porthole` — QUICK STRIKE (repo-unblocking grade): the VS Code mini-browser pane; fuller consult open.** Docket: his founding prompt verbatim ("a tiny window that's just the HTML frame rendered… in a very tight window… pin it to the foreground" — task-instruction pages at hand while coding). STRUCK at quick-strike confidence (0.65): **`porthole`** — a porthole is exactly the object (a small, fixed, tight window you see THROUGH, never a place content lives — №83's lens physics rhyme); the pun is real and native (the pane renders pages served on localhost PORTS — the port's hole); nautical-craft register, dictation-proof, self-evident to any stranger; №8 clears whatever occupies the registries. Survivors logged for the fuller consult: **`vasistas`** (the French little window named after the question asked through it — "Was ist das?" — his tongue, and an epistemics estate's window; obscurity + ASR tax deferred it at quick grade, but it deserves the full race), `oriel` (the projecting bay window — gauntlet flag: oriel/oriole), `quarterlight` (the car-door vent window, always at hand while driving), `minibrowser` (killed: category-generic). Fuller consult re-runs with Opus 5.5's research doc in evidence; GitHub renames redirect, so the quick strike's downside is bounded by design.
 
@@ -41,7 +41,7 @@ The provisional naming, from Mint's ledger (entry №89), verbatim:
 **What I understand**:
 
 1. **The project has a name that may still change.** `porthole` was struck at 0.65 with a fuller consult open. Anything that bakes the name into places a rename cannot reach deserves care.
-2. **The brief was written before the name existed.** It calls the extension "Mini Browser" and uses `jlumbroso.mini-browser` and `miniBrowser.*` throughout — a name Mint's entry kills as category-generic.
+2. **The brief was written before the name existed.** It calls the extension "Mini Browser" and uses `jlumbroso.mini-browser` and `miniBrowser.*` throughout — a name the naming review's entry kills as category-generic.
 3. **The fifth acceptance test is not in the original prompt.** Triggering from outside VS Code was added by the brief's author, who marked it "drop it if unwanted".
 4. **Nothing has been run.** The brief traced its core call through VS Code's source at 1.141.0; the machine has 1.130.0. Jérémie agreed on 2026-10-12 to update VS Code.
 
@@ -49,7 +49,7 @@ The provisional naming, from Mint's ledger (entry №89), verbatim:
 
 | Decision | By | Where it lives |
 | --- | --- | --- |
-| Name: `porthole`, provisional | Mint (struck), Jérémie (acknowledged) | this ADR; `README.md` |
+| Name: `porthole`, provisional | the naming review (struck), Jérémie (acknowledged) | this ADR; `README.md` |
 | Founding seat: Glazier 5.5, cyan `#3FA7A3` | Glazier (chose), Jérémie (acknowledged) | `docs/inbox/agent-sessions.json` |
 | Window color: brass `#B5A642` | Glazier, at Jérémie's request | `.vscode/settings.json`; reasoning under Decision |
 | Verification gate: `just gate` | Glazier | `CLAUDE.md` Fifth Directive; `justfile` |
@@ -79,10 +79,10 @@ Options:
 
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-12)
 
-**A — porthole throughout.** *Rationale*: both of your existing extensions name their ids after the product (`jlumbroso.peacock-launcher` with `peacockLauncher.<verb>`; `jlumbroso.adrs4ai`), and Mint's entry №89 kills `minibrowser` as category-generic, so B would ship the one name the naming process rejected. Spike 0 is throwaway either way, so A and C differ only at M1. *Confidence*: 0.75 — because the house convention is read directly from both manifests, but the name itself sits at 0.65 with a consult open. *If wrong*: if the fuller consult is likely to land before M1 starts and may replace `porthole`, this flips to C.
+**A — porthole throughout.** *Rationale*: both of your existing extensions name their ids after the product (`jlumbroso.peacock-launcher` with `peacockLauncher.<verb>`; `jlumbroso.adrs4ai`), and the naming review's entry №89 kills `minibrowser` as category-generic, so B would ship the one name the naming process rejected. Spike 0 is throwaway either way, so A and C differ only at M1. *Confidence*: 0.75 — because the house convention is read directly from both manifests, but the name itself sits at 0.65 with a consult open. *If wrong*: if the fuller consult is likely to land before M1 starts and may replace `porthole`, this flips to C.
 
 **ANS:** (by Jérémie Lumbroso)
-Yes, Option A, `porthole` throughout per Mint's naming — all lowercase in slug, and capitalized in display name, at least until Mint has made a more comprehensive ruling (and we can rename existing practices when that happens, if needed).
+Yes, Option A, `porthole` throughout per the naming review's naming — all lowercase in slug, and capitalized in display name, at least until the naming review has made a more comprehensive ruling (and we can rename existing practices when that happens, if needed).
 
 ---
 
@@ -123,7 +123,7 @@ A freshly instantiated project needs an identity a human can recognize at a glan
 | Settings | `porthole.sizes`, `porthole.position`, `porthole.compact`, `porthole.alwaysOnTop`, `porthole.useInternalApi`, `porthole.closeSourceTab` |
 | Link | `vscode://jlumbroso.porthole/open` |
 
-This holds until Mint makes a fuller ruling; if the name changes then, existing ids are renamed with it.
+This holds until the naming review makes a fuller ruling; if the name changes then, existing ids are renamed with it.
 
 **External trigger — kept, built at M4** (QST-TRIGGER, answered A by Jérémie, 2026-10-12). The idea is not in the original prompt. It is the contribution of the brief's author, a Claude Opus 5.5 session, and is credited to them here and in `README.md`. Jérémie certifies the need is real, provided the pop-out itself works.
 

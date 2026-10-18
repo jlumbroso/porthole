@@ -26,7 +26,7 @@ What publishing commits us to, stated now so nobody discovers it at release time
 
 * **The listing says plainly that porthole relies on an internal VS Code command**, and what happens when VS Code changes it: the window still opens, compact and pinned, but at VS Code's default size.
 * **Every VS Code update is a release question.** Spike 0 (`spike/`, F5 → "Spike 0") is re-run on the new version before a release claims to support it.
-* **A seat owns the release** (founding brief: `docs/inbox/2026-10-13-0053-glazier-founding-brief-release-seat.md`) — listing copy, screenshots, the pre-publication privacy pass, the terminology pass for Mint, and the publishing mechanics — following the release skill and playbook Lintel is writing for `vscode-adrs-for-ai`.
+* **A seat owns the release** (founding brief: `docs/inbox/2026-10-13-0053-glazier-founding-brief-release-seat.md`) — listing copy, screenshots, the pre-publication privacy pass, the terminology pass for the naming review, and the publishing mechanics — following the release skill and playbook Lintel is writing for `vscode-adrs-for-ai`.
 * **The repo goes public with it**, under the MIT `LICENSE` already in place (ADR-0001, follow-ups).
 
 Until the first release, the local path stays as it is ([ADR-0002](0002-scaffold-follow-the-house-extension-conventions.md)):

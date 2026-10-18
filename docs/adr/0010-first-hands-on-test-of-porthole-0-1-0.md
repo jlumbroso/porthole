@@ -232,7 +232,7 @@ The extension's own log (VS Code's log folder, "Porthole" channel, seven windows
 
 - **A docked page cannot be popped back out with the chord.** After Dock Back the page is a browser tab, and the chord is deliberately inert there (fixed before this run, from Surveyor's review). The title-bar button should still work on such a tab, since it passes the file; that is milestone M2's first test.
 - **⌘P cannot open a file as text while that same file is showing in the mini window.** Jérémie had to add `other-file.html` to test the lock. I do not know yet whether this is VS Code's quick-open preferring the existing browser editor or something porthole causes. Recorded, not investigated.
-- **The user-facing words are not unified.** The menu says "Pop Out to **Mini Window**" while the project is porthole (QST-V1-PIN, Jérémie's note). He asked for an index of every user-facing term, to be put to Mint for a coherence pass. Action item below.
+- **The user-facing words are not unified.** The menu says "Pop Out to **Mini Window**" while the project is porthole (QST-V1-PIN, Jérémie's note). He asked for an index of every user-facing term, to be put to the naming review for a coherence pass. Action item below.
 
 ### Consequences
 
@@ -376,7 +376,7 @@ The other notes in that export (copy buttons, clickable addresses) are about the
 - [x] Run the test and answer the five questions — Owner: Jérémie (2026-10-12, all A, 17 screenshots)
 - [x] Read the log and record the result — Owner: Glazier (iteration 3)
 - [x] Review `src/` — Owner: Surveyor (done before the run; two fixes adopted)
-- [ ] Index every user-facing term (command titles, menu entries, settings descriptions, messages, README) for Mint's coherence pass — Owner: to be assigned (see the crew question in the founding seat's report of 2026-10-12)
+- [ ] Index every user-facing term (command titles, menu entries, settings descriptions, messages, README) for the naming review's coherence pass — Owner: to be assigned (see the crew question in the founding seat's report of 2026-10-12)
 - [ ] Find out why ⌘P will not open a file as text while it is showing in a mini window — Owner: Glazier, at M2
 
 ---
