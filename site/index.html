@@ -36,8 +36,8 @@
         </div>
         <figure class="product-shot" id="see-it">
           <div class="image-mat">
-            <!-- Existing, unedited README image. ADR-0023 stages a new Markdown
-                 pair. Replace only after the human captures and reviews it. -->
+            <!-- Existing, unedited README image; retained after the human's
+                 review. The staged Markdown pair appears below the features. -->
             <a href="assets/porthole-beside-the-editor.png" aria-label="See the full screenshot">
               <img src="assets/porthole-beside-the-editor.png" width="1280" height="600" fetchpriority="high" alt="VS Code with a decisions tree on the left and the floating window on the right, now on the step ‘Paste the value directly into .env’.">
             </a>
@@ -73,6 +73,24 @@
             <p>HTML reloads when its file changes. Markdown uses VS Code’s preview and updates as you edit. Its task-list boxes are read-only.</p>
           </article>
         </div>
+        <details class="markdown-example">
+          <summary>Light or dark Markdown</summary>
+          <div class="markdown-example-content">
+            <figure>
+              <!-- Unedited human captures, ADR-0023. These show two appearances;
+                   the dark capture followed reopening, not a live color change. -->
+              <picture>
+                <source media="(prefers-color-scheme: dark)" srcset="assets/porthole-markdown-dark.png" width="1123" height="845">
+                <img src="assets/porthole-markdown-light.png" width="1186" height="904" loading="lazy" alt="A floating window shows the rendered checklist ‘A small page, kept in view’ beside work-notes.md in a dark VS Code editor.">
+              </picture>
+              <figcaption>
+                <span class="caption-label">Markdown</span>
+                <span><a href="assets/porthole-markdown-light.png" aria-label="Full screenshot: light Markdown">Light</a> · <a href="assets/porthole-markdown-dark.png" aria-label="Full screenshot: dark Markdown">Dark</a></span>
+              </figcaption>
+            </figure>
+            <p>A Markdown checklist beside your work, in VS Code’s own read-only preview. Choose light or dark colors, or follow VS Code’s theme.</p>
+          </div>
+        </details>
       </section>
 
       <section class="install wrap" id="install" aria-labelledby="install-title">
