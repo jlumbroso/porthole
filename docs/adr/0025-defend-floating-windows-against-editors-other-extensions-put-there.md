@@ -44,7 +44,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-GUARD-ACTION: When another editor lands in one of Porthole's floating windows, what should Porthole do?
-- Status: unanswered
+- Status: answered
 - Why asking: This decides whether Porthole acts on its own each time it happens, asks you, or stays out of it. The case that prompted it: the ADR Manager's "Open in file ↗" put an ADR into your floating window as a second tab, which brought the tab bar back (ADR-0024, finding 3). Other extensions will do the same; the fix at each source helps only that source. Porthole can move the tab to the main window's first editor group (keeping a text file's cursor where the other extension put it), but it cannot tell such a tab from one you dragged in on purpose, and it leaves alone a tab with unsaved changes or one it cannot reopen (a webview, a terminal).
 - Need: pick a letter (or override — any shape answers)
 
@@ -58,7 +58,13 @@ Options:
 **B — move it, with a switch.** *Rationale*: the case Jérémie met is the common one (an extension that predates floating windows naming a column), and the move restores what auto-lock and Porthole's one-tab design promise; dragging a second tab into a compact floating window on purpose is rare, since it brings back the very tab bar compactness hides, but it is a real use, and a switch costs one setting where an unwanted move costs trust. C spends your attention each time on a decision that is almost always the same; D leaves the problem with you. *Confidence*: 0.65 — because the close-and-reopen route has never run, and I do not know how often you drag tabs between windows. *If wrong*: if the move proves flickery or loses the other extension's place in the file, C; if you never drag tabs into floating windows, A.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Yes, Option B, with a small tweak:
+- We should have one setting with three modes:
+   1. Default: "Move it"
+   2. Your suggested alternative: Turn off
+   3. Ask (with option to "Approve Now [i.e. which keeps the setting at Ask", "Deny Now [i.e. and keep setting]", "Approve Always [i.e. Move it setting]" and "Never Approve [i.e. Turn off]")
+- We should default as you suggest to "Move it" — but I think that the third mode is preserving options if somebody ever reports this as an issue, so we can rapidly show that: (a) this was a design choice, (b) contingent on someone not feeling wronged by it, which would be the proof our experiment needs to move the default from 1 to 3.
+- This is my implementation-level version of a falsifier. It's me expressing the epistemic humility that I'm not *sure* the right design choice is to make this override (moving a tab that appears, possibly from the user's intent, without asking), and setting a criterion on which to revert this decision.
 
 ---
 
