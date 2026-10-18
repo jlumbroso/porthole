@@ -108,6 +108,39 @@ Screenshots:
 
 ---
 
+NOT: **Reading of the answer** (Glazier 5.5, 2026-10-18). Steps 2 and 3 passed, and the log shows it in a real VS Code: "is already in a floating window; brought it forward" twice at 14:39:25 and 14:39:30, then "closed the earlier floating window" after each of three Cycle Size runs (14:39:46–53). So the column route reaches a floating window, and `tabGroups.close` closes one. **E is not a Porthole fault, and it leaves the cross-window fix untested.** The 2:40:45 screenshot shows the Settings editor on its **User** tab, set to `dark`, with VS Code's note "(Also modified in Workspace)" beside the title. The staging workspace sets `light` (`samples/site-capture/porthole-screenshot.code-workspace` line 13), and a workspace value overrides the User value, so light was the right color throughout. Step 5 said to click the **Workspace** tab; the trap is that the Settings editor opens on User, shows the same setting there, and only that small grey note says it is not the one in force. Reissued below as QST-CHECK-WORKSPACE-DARK, with the trap named. (The build tested also predates the ruled description: it still showed "Other Markdown previews…".)
+
+### QST-CHECK-WORKSPACE-DARK: Does the floating window turn dark when the staging workspace's own setting changes, and stay dark when the other window reloads?
+- Status: unanswered
+- Why asking: **What this finds out.** The one part of QST-CHECK-TWO-WINDOWS that did not run: changing the setting that actually applies in the Porthole screenshot window, with your porthole workspace window also open and then reloading. Before the fix, that reload could wipe the floating window's colors. **The trap in the last run**: VS Code's Settings editor opens on the **User** tab, where this setting also appears, but the staging workspace sets its own value, which wins; "(Also modified in Workspace)" beside the setting's title is the only sign. **Safe**: only the staging workspace's setting changes, and step 5 puts it back to **light**.
+- Need: pick a letter (or override — any shape answers). About two minutes.
+
+**Where to do this.** The **Porthole screenshot** window (title **Porthole screenshot**) and **your porthole workspace window** (title bar ending with `porthole`), both open. No debug window.
+
+**Before you start.** In the Porthole screenshot window, run **Developer: Reload Window** (press **Shift+Cmd+P**, type `Reload Window`, press **Enter**); the newest build is installed. Close any floating window.
+
+**Steps.** One action each.
+
+1. **Pop out the checklist.** In the Porthole screenshot window's Explorer (**Shift+Cmd+E**), right-click `checklist.md` and choose **Pop Out to Floating Window**. It shows with **light** colors.
+2. **Open the Workspace tab of Settings.** In the Porthole screenshot window, press **Cmd+,** and type `porthole.markdown.colorScheme` in the search box. Under the search box are three tabs: **User**, **Workspace** and **site-capture**. Click **Workspace**. Its drop-down should show **light**. (If it shows **dark**, you are on the User tab.)
+3. **Choose dark there.** In the Workspace tab's drop-down, choose **dark**. Within a second or two, the floating window should turn **dark**.
+4. **Reload the other window.** Click into your porthole workspace window and run **Developer: Reload Window**. The checklist's floating window should **stay dark**.
+5. **Put it back.** In the Porthole screenshot window's Settings, still on the **Workspace** tab, choose **light**. The floating window turns light. Close the Settings tab and the floating window.
+
+Options:
+- **A — dark in step 3, still dark after step 4, light in step 5.**
+- **B — step 3 did not turn it dark.**
+- **C — dark in step 3, but light again after step 4**: the other window's reload still wipes the rule.
+- **D — something else**: say what you saw.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**A** (a prediction). *Rationale*: the change in step 3 is the same mechanism ADR-0022's check ran in one window, and the reload in step 4 is the 2026-10-18 failure the regression test "keeps the rule another window wrote" replays; on reload, the porthole workspace window keeps the Porthole screenshot window's entry because that window's process is alive. *Confidence*: 0.75 — because the mechanism has run before and the new part is tested, but the cross-window part has never run. *If wrong*: B means the workspace-scoped setting change is not reaching Porthole in that window, which its log will show; C means the alive-process check failed (for instance, a process id that is not the extension host's), which the installed stylesheet's last line will show.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: Porthole decides what a second pop-out does; the shared stylesheet holds every window's entry
