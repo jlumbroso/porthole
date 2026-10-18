@@ -110,7 +110,7 @@
     },
     "sounder": {
       "uuid": "01a133d0-bdc6-7150-aa8e-463d4f0cb5c2",
-      "role": "Sounder — consultant from outside the Claude family on how terminal agents should open, list, refresh and orchestrate porthole windows. Gives attributed advice and challenges assumptions; does not implement.",
+      "role": "Sounder — consultant from outside the Claude family on how terminal agents should open, list, refresh and orchestrate porthole windows. Gives attributed advice and challenges assumptions; extension implementation stays outside this remit. Accepted a scoped addition on 2026-10-14: the static product page, local assets, screenshot staging and QST in ADR-0023; Glazier owns commits and deployment, and Purser reviews claims.",
       "display_name": "Sounder 6",
       "name_note": "A sounder measures depth before a route is trusted. The seat asks what an agent can actually observe and establish when it acts through porthole. Chosen by the occupant at founding.",
       "color": "blue",
