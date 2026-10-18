@@ -1,0 +1,21 @@
+{
+  "folders": [{ "path": "." }],
+  "settings": {
+    "window.title": "Porthole screenshot",
+    "workbench.colorTheme": "Dark Modern",
+    "workbench.startupEditor": "none",
+    "workbench.editor.showTabs": "single",
+    "breadcrumbs.enabled": false,
+    "editor.minimap.enabled": false,
+    "editor.fontSize": 16,
+    "editor.wordWrap": "on",
+    "markdown.preview.fontSize": 16,
+    "porthole.markdown.colorScheme": "light",
+    "porthole.sizes": [{ "name": "Screenshot", "width": 480, "height": 640 }],
+    "porthole.position": null,
+    "porthole.compact": true,
+    "porthole.alwaysOnTop": true,
+    "porthole.useInternalCommand": true,
+    "porthole.askToKeepCompact": false
+  }
+}

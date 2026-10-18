@@ -65,7 +65,7 @@ Also, we are proud of any association with GitHub! A `github.io` subdomain is no
 ---
 
 ### QST-SITE-SCREENSHOTS: Can we show a clean Markdown checklist beside the work, in light and dark?
-- Status: unanswered
+- Status: answered
 - Why asking: **Give the page a picture of the current product.** The draft uses the README's real HTML screenshot. A new, deliberately staged Markdown picture would show the checklist use case without real account instructions or another project's content. Markdown and its color setting already passed your check in ADR-0022; this asks for two usable pictures, not another feature test. Only your installed VS Code can supply them. If either picture fails, we keep the existing image and fix the staging before asking again.
 - Need: pick a letter (or override — any shape answers). About six minutes. Save the two PNGs named below on your Desktop; we will inspect and import them.
 
@@ -119,7 +119,22 @@ Options:
 **A — both pictures ready** (a prediction). *Rationale*: your answer to ADR-0022's QST-CHECK-MD-COLORS confirms that the installed product shows light and dark Markdown and updates an open window within about two seconds. The sample files are short, contain no account information, and the workspace gives the picture a clean title and explicit size. *Confidence*: 0.75 — the color behavior has been run, but I cannot run your installed VS Code or verify the final framing here. *If wrong*: B changes the page to a single inspected picture; C withdraws this staging procedure for a corrected one rather than asking you to improvise; D follows your observed result or image preference. An incomplete checklist, unexpected extra tab, unreadable composition or unrelated content in either saved PNG falsifies A even if the color switch worked.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Mostly Option A, but with some caveats:
+- In my understanding of the instructions, `checklist.md` is what is in the floating window.
+- The instructions are about having VSCode in dark mode, while the floating window is first in light mode, then dark mode, with the same document.
+- When I changed the setting from dark to light, I tried to refresh the floating window, because it did not spontaneously change (as I thought we had ascertained). I could not refresh, or refreshing did not change the color mode from light to dark on the existing floating window.
+- I then called "Pop Out to Floating Window" on `checklist.md` again, from the treeview, and this opened a second floating window of the same document, this new one in dark mode.
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.14.23 PM.png` porthole workspace and staging workspace side-by-side
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.16.38 PM.png` about to select "Pop Out to Floating Window" on `checklist.md`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.17.09 PM.png` floating window of the checklist in light mode
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.18.42 PM.png` same, with wider staging workspace
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.19.10 PM.png` same, cropped around the staging workspace (for as deliverable 1a)
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.19.20 PM.png` same, tightly cropped (for as deliverable 1b)
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.21.10 PM.png` opening in dark mode, expecting to replace the floating window, but opening a second one
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.21.40 PM.png` cropped around staging workspace in dark mode (deliberable 2a)
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.21.46 PM.png` same, tightly cropped (deliverable 2b)
 
 ---
 
