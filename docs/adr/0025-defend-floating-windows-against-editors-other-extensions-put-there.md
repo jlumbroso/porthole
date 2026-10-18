@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Defend floating windows against editors other extensions put there
 
 - **Date**: 2026-10-18
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: When another extension opens a file into one of Porthole's floating windows by its column number, Porthole should notice the extra tab and move it to the main window, so the floating window keeps its one page; one question decides whether that happens automatically, by asking, or not at all.
@@ -68,9 +68,31 @@ Yes, Option B, with a small tweak:
 
 ---
 
+### QST-NAME-GUARD: What are the setting, its three modes and the four buttons called?
+- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing the guard
+- Why asking: Jérémie's answer above fixes the behavior: **one setting with three modes**, default "move it", plus "turn off" and "ask"; and, when it asks, **four buttons** whose effects he defined: approve this time (the setting stays on "ask"), deny this time (it stays on "ask"), approve always (the setting becomes "move it"), never approve (the setting becomes "turn off"). The key and its values are permanent once published. His reason for the third mode is a falsifier at the level of the product: if someone reports a moved tab as a wrong, "ask" is already there to become the default. Provisional names, to be replaced by the review's ruling before anything ships:
+  - setting `porthole.otherEditors`, values `move` (default), `ask`, `off`; description: "What Porthole does when another extension opens an editor inside one of its floating windows (which brings the tab bar back): move it to the main window, ask, or leave it."
+  - the question, as a notice: "{file name} opened inside Porthole's floating window. Move it to the main window?"
+  - buttons, in Jérémie's words: **Approve Now**, **Deny Now**, **Approve Always**, **Never Approve**
+- Need: pick a letter (or override — any shape answers), or rule each name
+
+Options:
+- **A — as provisional**: the names above ship as they are.
+- **B — the review's names**: the review rules the key, the three values, the notice and the four buttons, line by line.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**B — the review's names.** *Rationale*: by the house rule that a button repeats what it does ("Keep Compact", ADR-0021), "Approve" says less than "Move": the person is asked whether to *move* a tab, and "Approve Now" makes them translate. And `otherEditors` names the thing, not the question the setting controls ("a key that controls a question should read as the question it controls", ADR-0021). *Confidence*: 0.7 — because these are words. *If wrong*: if the review finds Jérémie's four labels clearest as they are, A for the buttons.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
-### Chosen: pending QST-GUARD-ACTION
+### Chosen: B with Jérémie's three modes; build now with provisional names
+
+From Jérémie's answer to QST-GUARD-ACTION (2026-10-18): one setting with three modes, default **move it**, plus **turn off** and **ask**; when asking, four answers, two for this time and two that change the setting. In his words, the third mode is *"my implementation-level version of a falsifier"*: the evidence that would move the default from "move it" to "ask" is someone reporting a moved tab as a wrong. Built with the provisional names of QST-NAME-GUARD; nothing ships before the review's ruling.
 
 Settled regardless: the fix at the source is still worth sending to each extension that does this (as for the ADR Manager); a tab with unsaved changes is never closed by Porthole.
 
@@ -91,6 +113,12 @@ Settled regardless: the fix at the source is still worth sending to each extensi
 - Contributors: Glazier 5.5 (Claude Opus 5.5)
 - Changes: initial draft
 - Outcome: `Draft`
+
+### Iteration 2 (2026-10-18)
+- Trigger: Jérémie answered QST-GUARD-ACTION (B, with three modes)
+- Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
+- Changes: decision recorded; QST-NAME-GUARD added for the naming review
+- Outcome: `Accepted`
 
 ---
 
