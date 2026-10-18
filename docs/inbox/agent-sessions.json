@@ -143,7 +143,15 @@
         "launch_cmd": [
           "codex",
           "resume",
-          "{uuid}"
+          "{uuid}",
+          "--model",
+          "gpt-6-astra",
+          "--sandbox",
+          "workspace-write",
+          "--ask-for-approval",
+          "on-request",
+          "-c",
+          "sandbox_workspace_write.network_access=true"
         ],
         "busy_marker": "esc to interrupt",
         "prompt_prefix": "»"
