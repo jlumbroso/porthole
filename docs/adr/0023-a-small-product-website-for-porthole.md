@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # A small product website for Porthole
 
 - **Date**: 2026-10-14
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5); the site's seat once it accepts
 
@@ -146,16 +146,33 @@ As in the Explicitation: one page in `site/`, no framework, every claim from the
 
 **Address (QST-SITE-ADDRESS, A)**: `https://jlumbroso.github.io/porthole/`, "for now". Jérémie's note for later: the project may move to the Lumbroso Commons GitHub organization once its publisher verification is approved, which would move the address with it. And a correction to my framing: "independent of GitHub" is not a virtue in itself; being associated with the place where things get built is a good thing.
 
+**Screenshot placement — Sounder 6 (gpt-6-astra), 2026-10-18.** Jérémie reviewed the rendered draft and praised its existing lead image, information selection and layout; his record is `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 4.28.51 PM.png`. I have inspected that screenshot. It shows the desktop light appearance of the opening section, not the phone or dark layout. His direct feedback also approves the four highlights, installation links, internal-command caveat and footer.
+
+Following that feedback, the original HTML image stays in the lead. The new Markdown pair is placed under the four highlights in an expandable **Light or dark Markdown** example, using the README's existing wording. This revises my earlier plan to replace the lead image: the added example is closed initially to preserve the short path from the four highlights to installation. It uses native HTML disclosure, with no JavaScript; its picture follows the website's light/dark appearance, and **Light** and **Dark** links open both full-size captures.
+
+I inspected all six captures offered in Glazier's 2026-10-18 handoff and copied the following without editing their pixels:
+
+| Source under `docs/adr/attachments/screenshots/2026-10-18-testing/` | Site asset |
+| --- | --- |
+| `Screenshot 2026-10-18 at 1.19.20 PM.png` (deliverable 1b) | `site/assets/porthole-markdown-light.png` |
+| `Screenshot 2026-10-18 at 1.21.46 PM.png` (deliverable 2b) | `site/assets/porthole-markdown-dark.png` |
+
+These tight captures show the checklist beside the work notes. The dark capture followed the accidental second window described in Jérémie's answer; it establishes a dark appearance, not live switching or repeat-open correctness. The later 3:53:56 and 3:54:23 captures include the Settings editor and unpublished outside-link controls, so they stay in the test record. New page copy covers only the released Markdown preview, read-only behavior and choice of colors; the README remains its authority. The website's image selection is not a demonstration of the extension changing a live window's colors.
+
+The initial draft and its answer are committed as `e3b9ebc` and `fe0ea63`. This screenshot placement is a subsequent saved change for Glazier's path-specific commit. A fresh browser attempt here again failed at Chromium's sandbox-denied process bootstrap, before page load; the revised disclosure, phone layout and theme selection still need browser inspection. This does not reopen the completed screenshot request.
+
 ---
 
 ## Action Items
 
 - [x] Accept or decline the invitation — Owner: Sounder 6 (2026-10-14: accepted, with a four-section sketch and two screenshots; `docs/inbox/2026-10-14-1925-sounder-to-glazier-accept-product-page.md`)
 - [x] Draft the page and the screenshot QST — Owner: Sounder 6 (2026-10-14; `site/`, `samples/site-capture/`, QST-SITE-SCREENSHOTS)
-- [ ] Commit the site's seat's work if its sandbox cannot; add the Pages workflow (pinned action SHAs, as in `release.yml`) — Owner: Glazier
+- [x] Commit the initial site draft and screenshot answer — Owner: Glazier (`e3b9ebc`, `fe0ea63`, 2026-10-18)
+- [ ] Commit the screenshot placement and add the Pages workflow (pinned action SHAs, as in `release.yml`) — Owner: Glazier
 - [ ] Inspect the rendered page at desktop and phone widths, in light and dark, before publishing — Owner: Glazier (Sounder's browser launch was sandbox-denied)
 - [ ] Check the page's claims against the README — Owner: Purser
-- [ ] Take the screenshots — Owner: Jérémie, through the QST
+- [x] Take the screenshots — Owner: Jérémie (2026-10-18, QST-SITE-SCREENSHOTS answer and its named captures)
+- [x] Inspect and place the selected screenshot pair — Owner: Sounder 6 (2026-10-18, selection and caveat recorded above)
 
 ---
 
@@ -178,6 +195,12 @@ As in the Explicitation: one page in `site/`, no framework, every claim from the
 - Contributors: Sounder 6 (gpt-6-astra).
 - Changes: `site/index.html`, local CSS and unchanged copies of the icon and README's `porthole-beside-the-editor.png`; the README's four feature names, install destinations and compatibility limits; a separate sample workspace and QST-SITE-SCREENSHOTS for two Markdown captures. No framework, scripts, remote fonts or runtime services.
 - Outcome: the decision remains `Accepted`; the page is saved as a draft. Light/dark CSS and phone breakpoints are written, but rendering is unverified here: Chromium's process bootstrap was sandbox-denied. Human captures, Glazier's browser check and deployment, and Purser's independent claim check remain outstanding.
+
+### Iteration 4 (2026-10-18)
+- Trigger: Jérémie supplies the screenshot set and endorses the rendered draft; Glazier commits the initial work and hands the captures back for placement.
+- Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5); Sounder 6 (gpt-6-astra).
+- Changes: preserved the endorsed lead image; added the unedited light/dark Markdown pair in a native disclosure beneath the highlights; recorded source filenames and the dark capture's duplicate-window caveat; completed the screenshot action items.
+- Outcome: `Accepted`; placement saved for commit. The original desktop light opening has been seen by the human and in his screenshot; the revised page's browser check, Purser's claims review and deployment remain outstanding.
 
 ---
 

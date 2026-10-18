@@ -159,7 +159,7 @@ Screenshots:
 NOT: **Reading of the answer, and finding 4** (Glazier 5.5, 2026-10-18). What the question asked passed: the workspace setting reached the floating window within a second, both ways, with the other window open. What Jérémie found beyond it is a fourth finding, and it explains every "weird interaction" he listed. **Reload Window on the window that owns a floating window leaves Porthole without its windows.** VS Code restores the floating window, but (1) Porthole was not running after the reload, because it started only when a command or a link needed it, so nothing listened to the setting; and (2) once Pop Out woke it, it started with an empty list, so it opened a second window of the same file and, at its first stylesheet write, dropped the previous process's entry (that process had ended). The two windows then looked "entwined" because the rule selects previews by file: both show the same file, so both take the rule. Fixed in `2ff1ada`: Porthole now starts with VS Code (`onStartupFinished`), keeps its list of windows in the workspace's state, and takes restored windows back (a Markdown preview by the file its tab names; a browser tab by its title and place, ADR-0014's rule for restored windows). Checked by hand in QST-CHECK-RELOAD below.
 
 ### QST-CHECK-RELOAD: After Reload Window, does Porthole take its floating window back?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** The fix for finding 4 passes against a mocked VS Code, with four tests, but whether VS Code has restored the floating window by the time Porthole starts, and whether the restored tab still names its file, only a real reload shows. If either fails, Porthole will open a second window again, as before. **Safe**: only the staging workspace's setting changes, and the last step puts it back to **light**.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -185,7 +185,11 @@ Options:
 **A** (a prediction). *Rationale*: `onStartupFinished` starts Porthole "some time after VS Code starts up" (VS Code's documentation; its order against the restore of floating windows is not read in source); the restored Markdown preview's tab names its file, as every Markdown tab has since 2026-10-14 (`matched: file` in the logs); and Porthole looks for restored windows again each time it needs its list, so a window restored late is still found. *Confidence*: 0.6 — because the order of VS Code's restore and Porthole's start has never been observed, and a restored preview might name its file differently. *If wrong*: B or C with a log line "took back the floating window" missing means Porthole started before the window was restored, or the tab named its file differently, and the log of what the tab named will say which; C with that line present means the reveal route fails on a restored window.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option A. Everything worked perfectly, and expliciting that in particular:
+- After reloading the window, changing the workspace settings for the color scheme immediately updated the floating window that had been reopened following the reloading of the window.
+- After reloading the window, calling "Pop Out to Floating Window" on the same file only caused the existing floating window to be refocused, not any additional floating window to be opened.
+
+Both were perfect polished behavior, exactly what we would want and likely what the user expect to happen. This is outstanding work!! Plaudits!
 
 ---
 

@@ -143,7 +143,7 @@ NOT: **Reading of the answer** (Glazier 5.5, 2026-10-18). C, and the cause is no
 NOT: **The naming ruling, applied, with one deviation to report** (QST-NAME-GUARD, B, approved). `porthole.keepToOneTab` (`move`, `ask`, `off`), buttons **Move It**, **Leave It**, **Always Move**, **Never Move**, the description re-keyed, all in `0bc8c52`. The ruling put the disclosure ("Always Move and Never Move set porthole.keepToOneTab …") in a **detail line**, but only a modal dialog has one; the "ask" question is an ordinary notice, which does not stop your work, so the disclosure is its **second sentence** instead. Making it a modal would block VS Code each time a tab lands, which "ask" was not meant to do.
 
 ### QST-CHECK-GUARD-COMPACT: After the move, is the floating window compact again, with the ADR in the main window at its question?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** Whether VS Code's "Turn On Compact Mode" works when Porthole runs it on a floating window right after the extra tab leaves, whether focus ends in the main window on the ADR, and whether the brief change of focus is acceptable to watch. The rest of the guard passed in QST-CHECK-GUARD. **Safe**: nothing is written.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -170,7 +170,11 @@ Options:
 **A** (a prediction). *Rationale*: the fallback path has run the same "Turn On Compact Mode" command after the same 200 ms pause since 0.1.0 and it made floating windows compact (Spike 0, ADR-0003); bringing a floating window forward by its column ran in ADR-0024; and the moved file is opened last, with focus. *Confidence*: 0.6 — because the command acts on whichever window is focused, and macOS may not have moved focus to the floating window within 200 ms. *If wrong*: B with the floating window focused means the command did nothing to a window that already left compact mode (then a fresh window is the fallback, my original falsifier); B with the main window focused means the pause is too short; C means the final open did not take focus, which `preserveFocus: false` should give; D means the quarter-second wait for the ADR Manager's cursor is still too short.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option A. It was brilliant! Yes, it worked: The floating window remained compact (it was briefly not, but it was barely less than a flicker). Well done! Plaudits here as well, it feels very satisfactory to be able to polish off another dysfunctional/unoptimal edge case.
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 4.47.04 PM.png` (before)
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 4.47.10 PM.png` (after = almost exactly the same as before, sic)
 
 ---
 
