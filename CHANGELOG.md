@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640` opens the page in a
   floating window. Files in the window's workspace folders and in `porthole.outsideLinks.allowedFolders`
   open without asking; anything else asks first. Not yet released; wording to come (ADR-0013).
+- **Pop Out twice no longer gives two windows.** A second Pop Out of a file that is already floating
+  brings its window forward, where it is; Cycle Size on a Markdown file no longer leaves the old
+  window behind (ADR-0024).
+- **Markdown colors follow the setting with several VS Code windows open**: one window no longer
+  wipes another's colors (ADR-0024). The setting's description now reads "The colors follow the
+  file" (the naming review, ADR-0022).
 - **Each pop-out is credited to its own window**, even when another tab group opens at the same moment
   or two pop-outs overlap (ADR-0014).
 

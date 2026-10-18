@@ -207,7 +207,7 @@
             "Show Markdown in Porthole's floating windows with dark colors, whatever VS Code's theme."
           ],
           "default": "auto",
-          "markdownDescription": "Colors of Markdown files shown in Porthole's floating windows. Other Markdown previews keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."
+          "markdownDescription": "Colors of Markdown files shown in Porthole's floating windows. The colors follow the file: while a file is popped out, every preview of it shows these colors; previews of other files keep following VS Code's theme. Code-block syntax colors still follow VS Code's theme."
         },
         "porthole.outsideLinks.enabled": {
           "type": "boolean",

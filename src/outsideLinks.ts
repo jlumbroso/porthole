@@ -163,8 +163,9 @@ export const ALLOW_FOLDER = 'Allow This Folder';
 async function askToOpen(path: string): Promise<boolean> {
   const folder = nodePath.dirname(path);
   const answer = await vscode.window.showWarningMessage(
-    `A link from outside VS Code asks Porthole to open ${path}. None of Porthole's outside-link settings (porthole.outsideLinks) allows this file yet.`,
-    { modal: true, detail: `${ALLOW_FOLDER} adds ${folder} to porthole.outsideLinks.allowedFolders, so links can open files there without asking.` },
+    `A link from outside VS Code asks Porthole to open ${path}. Open it?`,
+    // Words ruled by the naming review (ADR-0013, QST-NAME-OPEN-WORDS, B).
+    { modal: true, detail: `Your settings don't yet cover this file. ${OPEN_ONCE} opens it this time only. ${ALLOW_FOLDER} adds ${folder} to porthole.outsideLinks.allowedFolders, so links can open files there without asking.` },
     OPEN_ONCE, ALLOW_FOLDER,
   );
   if (answer === ALLOW_FOLDER) {

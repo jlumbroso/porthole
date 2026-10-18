@@ -68,9 +68,9 @@ it opens compact and always on top (`porthole.compact`, `porthole.alwaysOnTop`).
 
 **Light or dark Markdown.** `porthole.markdown.colorScheme` shows Markdown in porthole's
 floating windows with `light` or `dark` colors whatever VS Code's theme, or `auto` to follow
-it (the default). Previews of other files keep following VS Code's theme; a docked preview
-of the same file takes the same colors while it is popped out. Code blocks keep VS Code's
-syntax colors.
+it (the default). The colors follow the file: while a file is popped out, every preview of
+it shows these colors; previews of other files keep following VS Code's theme. Code blocks
+keep VS Code's syntax colors.
 
 **One tab per floating window, with your consent.** Left alone, VS Code lets a second file
 land as an extra tab in a floating window. At your first pop-out of each session, porthole
