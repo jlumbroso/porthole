@@ -61,7 +61,7 @@ and, from the ADR-0023 answer: "When I changed the setting from dark to light, I
 ## Questions
 
 ### QST-CHECK-TWO-WINDOWS: With two VS Code windows open, does a second Pop Out bring the window forward, and do the colors follow the setting?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** Both fixes pass against a mocked VS Code, but three links have never run: that Porthole can bring an existing floating window forward by aiming VS Code's public open command at that window's group; that Cycle Size on Markdown now leaves one window, not two; and that the colors follow the setting in one VS Code window while another VS Code window is open and reloads. Only two real VS Code windows can show these. Each outcome below names what it would change. **Safe**: step 5 changes the staging workspace's own color setting and step 7 puts it back to **light**, as QST-SITE-SCREENSHOTS asked; your User settings are not touched. Porthole 0.3.0, with both fixes, is installed in your VS Code but not published.
 - Need: pick a letter (or override — any shape answers). About five minutes.
 
@@ -97,7 +97,14 @@ Options:
 **A — all as described** (a prediction). *Rationale*: the column a tab group reports and the column `vscode.openWith` resolves are computed from the same list of groups in grid order (`mainThreadEditorTabs.ts` L522; `editorGroupColumn.ts` L18–23), so aiming at a floating window's column reaches that window; VS Code's own `tabGroups.close` closes a group in any window; and the stylesheet logic is covered by three tests, one of them replaying the 2026-10-18 failure. *Confidence*: 0.55 — because the column-to-window route has never run, and whether macOS brings that window in front of the main one is a separate fact. *If wrong*: B means the column does not reach a floating window, and the route must change (an internal command naming the group, read in source first); C means focus moved inside VS Code but the operating system did not raise the window, which may be the same limit as Spike 1's focus findings (ADR-0018); D means `tabGroups.close` failed on a floating window's group, which the log will say; E means the stylesheet logic still loses an entry, and the log and the installed file will show which window wrote last.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option E. I accidentally realized at step 5 that the setting was already in `"dark"` throughout and yet the floating window had always displayed as light mode. Despite toggling the setting, the mode never showed anything but light mode in the floating window (despite refreshing, closing/reopening, etc.). Everything else was as described.
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 2.39.08 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 2.39.33 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 2.39.45 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 2.40.18 PM.png`
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 2.40.45 PM.png`
 
 ---
 
