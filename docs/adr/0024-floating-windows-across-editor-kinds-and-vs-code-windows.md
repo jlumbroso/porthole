@@ -52,6 +52,8 @@ and, from the ADR-0023 answer: "When I changed the setting from dark to light, I
 
 **Known limit**: if two windows show the *same* Markdown file with different schemes, the later rule in the file wins in both.
 
+**Finding 3 — another extension can put its file into a floating window by its column number** (Jérémie, 2026-10-18, while answering the check below). With a Porthole window open, the ADR Manager's "Open in file ↗" link opened the ADR's Markdown file as a second tab in that floating window, and the tab bar came back (one tab per window is what keeps it hidden). Cause, read in that extension's source: `vscode.window.showTextDocument(doc, vscode.ViewColumn.Two, true)` (`vscode-adrs-for-ai`, `src/webview/openQuestionsPanel.ts` L1497). Column numbers count editor groups across *all* windows in grid order, floating windows included (`editorGroupColumn.ts` L18–23), so with one group in the main window, column two *is* the floating window; and an explicitly targeted group receives the editor even when auto-lock has locked it. Without a floating window, column two does not exist and VS Code creates a group beside the panel, which is what that link intends. Two consequences: Porthole cannot prevent an extension's explicit choice of column (the fix belongs to that extension: `ViewColumn.Beside`, or the panel's own column plus one); and it is the first observation that a floating window's group is reachable by its column number, the route this ADR's reveal relies on (read, until now not run).
+
 **Confirm**: Jérémie, through the check below.
 
 ---
