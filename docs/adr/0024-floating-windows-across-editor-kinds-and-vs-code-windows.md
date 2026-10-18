@@ -127,5 +127,5 @@ As built (Explicitation, "What was built"). The behavior follows Jérémie's ans
 
 ## Links
 
-- Related: [ADR-0007](0007-resize-by-re-opening-the-page-at-a-new-size.md) (resize by re-opening), [ADR-0008](0008-expose-a-vscode-link-handler-with-an-allowlist.md) (QST-REOPEN-SEMANTICS), [ADR-0015](0015-markdown-in-a-floating-window.md), [ADR-0022](0022-markdown-colors-in-floating-windows-0-2-1.md) (the stylesheet), [ADR-0023](0023-a-small-product-website-for-porthole.md) (QST-SITE-SCREENSHOTS)
+- Related: [ADR-0007](0007-resize-means-re-open-with-new-bounds.md) (resize by re-opening), [ADR-0008](0008-expose-a-vscode-link-handler-with-an-allowlist.md) (QST-REOPEN-SEMANTICS), [ADR-0015](0015-markdown-in-a-floating-window.md), [ADR-0022](0022-markdown-colors-in-floating-windows-0-2-1.md) (the stylesheet), [ADR-0023](0023-a-small-product-website-for-porthole.md) (QST-SITE-SCREENSHOTS)
 - Code: `src/commands.ts` (`openNow`, `windowsShowing`), `src/markdownColors.ts` (`updateMarkdownColors`)
