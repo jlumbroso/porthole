@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { sizes, useInternalCommand, type Size } from './config';
-import { log } from './log';
+import { describeError, log } from './log';
 import { offerAutoLock, resetAutoLockPrompt } from './autoLock';
 import { updateMarkdownColors } from './markdownColors';
 import { editorFor, fallbackPopOut, MARKDOWN_PREVIEW_EDITOR, openInMiniWindow, resetTextWarning, warnIfOpenedAsText } from './miniWindow';
@@ -83,19 +83,60 @@ function asLocalPageFile(value: unknown): vscode.Uri | undefined {
 // ADR-0014). Requests from outside VS Code make overlapping opens ordinary.
 let openQueue: Promise<void> = Promise.resolve();
 
-function open(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
-  const run = openQueue.then(() => openNow(file, sizeIndex, size));
+/**
+ * What a pop-out does when the file is already in one of Porthole's floating
+ * windows. `reveal`: bring that window forward, where it is and at its size
+ * (Pop Out, or a link with no size). `replace`: open a new window at the asked
+ * size and close the old one (Cycle Size, or a link with a size).
+ */
+type IfAlreadyOpen = 'reveal' | 'replace';
+
+function open(file: vscode.Uri, sizeIndex: number, size: Size, ifAlreadyOpen: IfAlreadyOpen): Promise<void> {
+  const run = openQueue.then(() => openNow(file, sizeIndex, size, ifAlreadyOpen));
   openQueue = run.catch(() => undefined);
   return run;
 }
 
-async function openNow(file: vscode.Uri, sizeIndex: number, size: Size): Promise<void> {
+/** Porthole's floating windows still open that show `file`, other than `except`. */
+function windowsShowing(file: vscode.Uri, except?: vscode.TabGroup): vscode.TabGroup[] {
+  const open = new Set(vscode.window.tabGroups.all);
+  return [...windows.entries()]
+    .filter(([group, shown]) => group !== except && open.has(group) && shown.file.toString() === file.toString())
+    .map(([group]) => group);
+}
+
+// Pop Out twice must not leave two windows (Jérémie, 2026-10-18). VS Code
+// reveals an integrated-browser tab wherever it is already open (its input is
+// "ForceReveal"), but a Markdown preview is not marked so: opened again into a
+// new floating window, it gives a second window (read at 1.141.0,
+// browserEditorInput.ts and customEditorInput.ts). So Porthole decides itself.
+async function openNow(file: vscode.Uri, sizeIndex: number, size: Size, ifAlreadyOpen: IfAlreadyOpen): Promise<void> {
+  const [existing] = windowsShowing(file);
+  if (existing && ifAlreadyOpen === 'reveal') {
+    try {
+      // The public command, aimed at the group the window holds: the page is already there, so VS Code shows it and focuses that window.
+      await vscode.commands.executeCommand('vscode.openWith', file, editorFor(file), existing.viewColumn);
+      log(`${file.toString()} is already in a floating window; brought it forward`);
+      return;
+    } catch (err) {
+      log(`could not bring the floating window forward, opening a new one instead: ${describeError(err)}`);
+    }
+  }
   // The stylesheet must name this file before its preview renders (ADR-0022).
   if (editorFor(file) === MARKDOWN_PREVIEW_EDITOR) { await updateMarkdownColors([file]); }
   let opened = useInternalCommand() ? await openInMiniWindow(file, size) : undefined;
   if (!opened) { opened = await fallbackPopOut(file); }
   if (opened) {
     windows.set(opened.group, { file, sizeIndex });
+    // An HTML page was moved out of its old window, which VS Code then closed; a Markdown preview was copied, so its old window is closed here.
+    for (const old of windowsShowing(file, opened.group)) {
+      try {
+        await vscode.window.tabGroups.close(old);
+        log(`closed the earlier floating window of ${file.toString()}`);
+      } catch (err) {
+        log(`could not close the earlier floating window of ${file.toString()}: ${describeError(err)}`);
+      }
+    }
     await warnIfOpenedAsText(opened.group, file);
   }
 }
@@ -112,7 +153,7 @@ export async function popOut(arg?: unknown): Promise<void> {
     return;
   }
   await offerAutoLock();
-  await open(file, 0, sizes()[0]);
+  await open(file, 0, sizes()[0], 'reveal');
 }
 
 /**
@@ -122,7 +163,7 @@ export async function popOut(arg?: unknown): Promise<void> {
 export async function openRequested(file: vscode.Uri, size?: Size): Promise<void> {
   await offerAutoLock();
   // A size from the link is not a preset; Cycle Size then starts from the first.
-  await open(file, size ? -1 : 0, size ?? sizes()[0]);
+  await open(file, size ? -1 : 0, size ?? sizes()[0], size ? 'replace' : 'reveal');
 }
 
 /**
@@ -144,7 +185,7 @@ export async function cycleSize(): Promise<void> {
   const presets = sizes();
   const next = (current.sizeIndex + 1) % presets.length;
   log(`cycle size: ${presets[next].name} (${presets[next].width}×${presets[next].height})`);
-  await open(current.file, next, presets[next]);
+  await open(current.file, next, presets[next], 'replace');
 }
 
 /** Merges the focused floating window back into the main window. */

@@ -59,19 +59,70 @@ export function stylesheetFor(files: vscode.Uri[], scheme: Scheme): string {
   return `${header}/* colorScheme is "${scheme}", for ${files.length} file(s) in Porthole windows. */\n${rules.join('\n\n')}\n`;
 }
 
-/** Rewrites the stylesheet for the Markdown files Porthole shows, plus `extra`, then refreshes previews. */
+// One stylesheet, many windows. The file lives in the extension's folder, and
+// every VS Code window runs its own copy of Porthole, which knows only its own
+// floating windows. Rewritten by each from its own list, a window with no
+// Markdown windows wiped the rules another window had just written (Jérémie,
+// 2026-10-18: the colors did not follow the setting in his second window; the
+// installed file read "nothing to override"). So the file records, in a comment,
+// which files each window shows, keyed by its extension host's process id; a
+// window rewrites only its own entry, drops entries whose process has ended,
+// and writes rules for every file listed. All windows then write the same rules
+// for the same setting, so two writing at once cannot lose a window's files.
+const OWNERS_LINE = /^\/\* porthole-windows: (.*) \*\/$/m;
+type Owners = Record<string, string[]>;
+
+function isAlive(pid: string): boolean {
+  try {
+    process.kill(Number(pid), 0); // signal 0: a check, sends nothing
+    return true;
+  } catch (err) {
+    return (err as { code?: string }).code === 'EPERM'; // exists, owned by someone else
+  }
+}
+
+async function readOwners(uri: vscode.Uri): Promise<{ text: string | undefined; owners: Owners }> {
+  let text: string | undefined;
+  try { text = new TextDecoder().decode(await vscode.workspace.fs.readFile(uri)); } catch { return { text: undefined, owners: {} }; }
+  const match = OWNERS_LINE.exec(text);
+  if (!match) { return { text, owners: {} }; }
+  try {
+    const parsed: unknown = JSON.parse(match[1]);
+    const owners: Owners = {};
+    if (parsed && typeof parsed === 'object') {
+      for (const [pid, files] of Object.entries(parsed)) {
+        if (/^\d+$/.test(pid) && Array.isArray(files)) { owners[pid] = files.filter((file): file is string => typeof file === 'string'); }
+      }
+    }
+    return { text, owners };
+  } catch {
+    return { text, owners: {} };
+  }
+}
+
+/**
+ * Rewrites the stylesheet so this window's entry lists the Markdown files it
+ * shows, plus `extra`, then refreshes this window's previews if their colors
+ * change. Other windows' entries are kept while their process lives.
+ */
 export async function updateMarkdownColors(extra: vscode.Uri[] = []): Promise<void> {
   if (!styleUri) { return; }
-  const seen = new Map<string, vscode.Uri>();
-  for (const file of [...shownFiles(), ...extra]) { seen.set(file.toString(), file); }
-  const css = stylesheetFor([...seen.values()], colorScheme());
-  if (css === lastWritten) { return; } // nothing changed: no rewrite, no refresh of every preview
-  const hadRules = lastWritten?.includes('html:has(') ?? false;
-  lastWritten = css;
+  const mine = new Set<string>();
+  for (const file of [...shownFiles(), ...extra]) { mine.add(file.toString()); }
   try {
-    await vscode.workspace.fs.writeFile(styleUri, new TextEncoder().encode(css));
-    // Refresh open previews only when colors actually change for some of them.
-    if (hadRules || css.includes('html:has(')) { await vscode.commands.executeCommand('markdown.preview.refresh'); }
+    const { text, owners } = await readOwners(styleUri);
+    const self = String(process.pid);
+    for (const pid of Object.keys(owners)) { if (pid !== self && !isAlive(pid)) { delete owners[pid]; } }
+    if (mine.size > 0) { owners[self] = [...mine]; } else { delete owners[self]; }
+    const all = [...new Set(Object.values(owners).flat())].sort();
+    const css = `${stylesheetFor(all.map(file => vscode.Uri.parse(file)), colorScheme())}/* porthole-windows: ${JSON.stringify(owners)} */\n`;
+    if (css !== text) { await vscode.workspace.fs.writeFile(styleUri, new TextEncoder().encode(css)); }
+    // Refresh this window's previews only when the rules they render change.
+    const rules = css.replace(OWNERS_LINE, '');
+    const changed = rules !== lastWritten;
+    const hadRules = lastWritten?.includes('html:has(') ?? false;
+    lastWritten = rules;
+    if (changed && (hadRules || rules.includes('html:has('))) { await vscode.commands.executeCommand('markdown.preview.refresh'); }
   } catch (err) {
     log(`markdown colors: could not update the stylesheet: ${describeError(err)}`);
   }

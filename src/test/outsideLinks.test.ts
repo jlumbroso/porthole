@@ -4,8 +4,8 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { activateFresh } from './helpers/activate';
 import {
-  answerNextModal, executedCalls, followLink, modalsShown, openFloatingGroup, setCommandBehavior, setConfig,
-  settingUpdates, setWorkspaceFolders, shownMessages,
+  answerNextModal, closeFloatingGroup, executedCalls, followLink, modalsShown, openFloatingGroup, setCommandBehavior, setConfig,
+  settingUpdates, setWorkspaceFolders, shownMessages, type MockTabGroup,
 } from './helpers/vscodeMock';
 
 // Outside `open` (ADR-0013). The links here are written the way a careless or
@@ -18,6 +18,7 @@ const INTERNAL = '_workbench.openWith';
 let root: string;
 let work: string;
 let elsewhere: string;
+let windows: MockTabGroup[];
 
 const page = (dir: string, name: string) => { const path = join(dir, name); writeFileSync(path, '<title>t</title>'); return path; };
 const link = (file: string, extra = '') => `file=${encodeURIComponent(file)}${extra}`;
@@ -26,7 +27,8 @@ const sizeOfLastOpen = () => (executedCalls().filter(call => call.id === INTERNA
 
 beforeEach(() => {
   activateFresh();
-  setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
+  windows = [];
+  setCommandBehavior(INTERNAL, () => { windows.push(openFloatingGroup()); });
   root = realpathSync(mkdtempSync(join(tmpdir(), 'porthole-links-')));
   work = join(root, 'work');
   elsewhere = join(root, 'elsewhere');
@@ -124,6 +126,7 @@ describe('files no setting allows', () => {
     answerNextModal('Open Once');
     await followLink('/v1/open', link(outside));
     expect(settingUpdates()).toEqual([]);
+    closeFloatingGroup(windows[0]); // closed before the next link
 
     answerNextModal('Allow This Folder');
     await followLink('/v1/open', link(outside));

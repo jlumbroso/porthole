@@ -113,6 +113,11 @@ export function setSectionDefaults(section: string, values: Record<string, unkno
 /** Settings the extension wrote, in order. */
 export const settingUpdates = () => updates;
 
+/** A file already on disk before the extension reads it (for instance, written by another VS Code window). */
+export function seedFile(path: string, content: string): void {
+  writtenFiles.set(path, content);
+}
+
 /** Files the extension wrote through `workspace.fs`, by path, latest content. */
 export const writtenFile = (path: string) => writtenFiles.get(path);
 
@@ -247,6 +252,14 @@ export const window = {
       groupListeners.push(listener);
       return { dispose: () => { groupListeners = groupListeners.filter(entry => entry !== listener); } };
     },
+    /** VS Code closes the group's tabs, and with them a floating window's group. */
+    async close(target: MockTabGroup | MockTabGroup[]) {
+      for (const group of Array.isArray(target) ? target : [target]) {
+        if (!groups.includes(group)) { throw new Error('mock: that tab group is already closed'); }
+        closeFloatingGroup(group);
+      }
+      return true;
+    },
     onDidChangeTabs(_listener: Listener<unknown>) {
       return { dispose() {} }; // the mock creates tabs together with their group
     },
@@ -261,6 +274,11 @@ export enum ConfigurationTarget { Global = 1, Workspace = 2, WorkspaceFolder = 3
 export const workspace = {
   get workspaceFolders() { return workspaceFolders; },
   fs: {
+    async readFile(uri: { fsPath: string }) {
+      const text = writtenFiles.get(uri.fsPath);
+      if (text === undefined) { throw new Error(`mock: no such file ${uri.fsPath}`); }
+      return new TextEncoder().encode(text);
+    },
     async writeFile(uri: { fsPath: string }, content: Uint8Array) {
       writtenFiles.set(uri.fsPath, new TextDecoder().decode(content));
     },

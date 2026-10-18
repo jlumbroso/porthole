@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { activateFresh, command } from './helpers/activate';
 import {
   closeFloatingGroup, executedCalls, executedCommands, focusGroup, loggedLines, mainGroup, openFloatingGroup,
-  setActiveDocument, setCommandBehavior, setConfig, shownMessages, Uri, type MockTabGroup,
+  setActiveDocument, setCommandBehavior, setConfig, shownMessages, Uri, type MockTabGroup, window as vscodeWindow,
 } from './helpers/vscodeMock';
 
 const INTERNAL = '_workbench.openWith';
@@ -15,6 +15,7 @@ const FALLBACK = [
 ];
 
 const page = Uri.file('/work/tasks.html');
+const vscodeTabGroups = () => vscodeWindow.tabGroups.all;
 
 /** The `[column, options]` pair of every internal open, in order. */
 const internalOpens = () => executedCalls()
@@ -142,9 +143,11 @@ describe('popping out an HTML file', () => {
     // with the page's SOURCE in it, and looks like a success. Surveyor traced
     // this in source (2026-10-13); nobody can hit it today because of the
     // engines floor, which is exactly why it must not be silent when it comes.
-    setCommandBehavior(INTERNAL, () => { openFloatingGroup({ asTextOf: page }); });
+    const opened: MockTabGroup[] = [];
+    setCommandBehavior(INTERNAL, () => { opened.push(openFloatingGroup({ asTextOf: page })); });
 
     await command('porthole.popOut')(page);
+    closeFloatingGroup(opened[0]); // closed, then popped out again
     await command('porthole.popOut')(page);
 
     expect(shownMessages()).toEqual([expect.stringMatching(/opened the file as text.*1\.134\.0 or later/)]);
@@ -266,10 +269,12 @@ describe('size presets', () => {
   });
 
   it('ignores unusable entries in the sizes setting, and uses the defaults when none is usable', async () => {
-    setCommandBehavior(INTERNAL, () => { openFloatingGroup(); });
+    const opened: MockTabGroup[] = [];
+    setCommandBehavior(INTERNAL, () => { opened.push(openFloatingGroup()); });
 
     setConfig({ sizes: [{ width: 'wide', height: 500 }, null, { name: 'Tall', width: 400, height: 900 }] });
     await command('porthole.popOut')(page);
+    closeFloatingGroup(opened[0]);
     setConfig({ sizes: [] });
     await command('porthole.popOut')(page);
 
@@ -324,6 +329,43 @@ describe('which window an open is credited to', () => {
 
       expect(internalOpens()).toHaveLength(3);
       expect(internalOpens().at(-1)!.file).toBe(other);
+    });
+  });
+});
+
+describe('popping out a file that is already in a floating window', () => {
+  const notes = Uri.file('/work/notes.md');
+  const openWiths = () => executedCalls().filter(call => call.id === 'vscode.openWith');
+
+  describe('Regression tests', () => {
+    it('brings the existing window forward instead of opening a second one', async () => {
+      // Bug (Jérémie, 2026-10-18, staging a screenshot): Pop Out on checklist.md
+      // while it was already floating opened a second floating window of the
+      // same document. VS Code reveals an integrated-browser tab wherever it is
+      // open ("ForceReveal"), so HTML hid this; a Markdown preview has no such
+      // mark and is opened afresh. Porthole now finds its own window and shows
+      // the page there, at its place and size.
+      const opened: MockTabGroup[] = [];
+      setCommandBehavior(INTERNAL, () => { opened.push(openFloatingGroup()); });
+
+      await command('porthole.popOut')(notes);
+      await command('porthole.popOut')(notes);
+
+      expect(internalOpens()).toHaveLength(1);
+      expect(openWiths().map(call => call.args)).toEqual([[notes, 'vscode.markdown.preview.editor', opened[0].viewColumn]]);
+    });
+
+    it('closes the old window when Cycle Size re-opens a Markdown file that VS Code copied rather than moved', async () => {
+      // Same cause: re-opening at the next size leaves the Markdown preview's
+      // old window behind. Cycle Size then left two windows, one per size.
+      const opened: MockTabGroup[] = [];
+      setCommandBehavior(INTERNAL, () => { opened.push(openFloatingGroup()); }); // the old group stays, as for Markdown
+      await command('porthole.popOut')(notes);
+
+      await command('porthole.cycleSize')();
+
+      expect(internalOpens()).toHaveLength(2);
+      expect(vscodeTabGroups()).toEqual([mainGroup(), opened[1]]);
     });
   });
 });

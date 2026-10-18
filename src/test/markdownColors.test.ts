@@ -4,7 +4,7 @@ import { stylesheetFor } from '../markdownColors';
 import { activateFresh, command } from './helpers/activate';
 import {
   changeSetting, closeFloatingGroup, executedCommands, openFloatingGroup, setCommandBehavior, setConfig,
-  Uri, writtenFile, type MockTabGroup,
+  seedFile, Uri, writtenFile, type MockTabGroup,
 } from './helpers/vscodeMock';
 
 // 0.2.1 (ADR-0022): light or dark Markdown in Porthole's floating windows,
@@ -82,5 +82,38 @@ describe('keeping the stylesheet in step with Porthole\'s windows', () => {
     await command('porthole.popOut')(plan);
 
     expect(executedCommands()).not.toContain('markdown.preview.refresh');
+  });
+});
+
+describe('several VS Code windows sharing the one stylesheet', () => {
+  // Each VS Code window runs its own copy of Porthole, and all of them write the
+  // same file in the extension's folder. The file says which window shows which
+  // files, keyed by the window's extension-host process.
+  const othersPlan = 'file:///other/plan.md';
+  const writtenBy = (owners: Record<string, string[]>) =>
+    `/* an earlier stylesheet */\n/* porthole-windows: ${JSON.stringify(owners)} */\n`;
+
+  describe('Regression tests', () => {
+    it('keeps the rule another window wrote, when this window shows no Markdown of its own', async () => {
+      // Bug (Jérémie, 2026-10-18, second VS Code window): changing the setting
+      // did not recolor checklist.md's floating window. Every window rewrote
+      // the shared file from its own list, and one with no Markdown windows
+      // wrote "nothing to override" over the other's rule.
+      seedFile(STYLE, writtenBy({ [String(process.ppid)]: [othersPlan] })); // a live process: the test runner's parent
+
+      changeSetting('porthole.markdown.colorScheme', 'dark');
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(writtenFile(STYLE)).toContain('"source":"file:///other/plan.md"');
+    });
+  });
+
+  it('drops the files of a window whose VS Code has closed', async () => {
+    seedFile(STYLE, writtenBy({ '2147483646': [othersPlan] })); // no such process
+
+    changeSetting('porthole.markdown.colorScheme', 'dark');
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(writtenFile(STYLE)).not.toContain('other/plan.md');
   });
 });
