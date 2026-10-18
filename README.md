@@ -82,6 +82,70 @@ VS Code's defaults, and tells you each time it changes a setting, with a button 
 it. **Porthole: Review and Reset Settings…** lists every user setting set by or for
 porthole, so you can remove the ones you pick.
 
+**Other extensions' tabs.** Some extensions open a file by column number (for instance "column
+two"), which can land in a floating window and bring its tab bar back. By default porthole
+moves such a tab to the main window, keeping its cursor; `porthole.keepToOneTab` can instead
+`ask` or leave it (`off`). A tab with unsaved changes is always left where it is.
+
+**Pop Out twice.** Popping out a file that is already in a floating window brings that window
+forward, where it is; it does not open a second one.
+
+## Control from outside VS Code (experimental)
+
+A terminal, a script or a coding agent can open a page in a floating window with one link, so
+you do not have to find the file and press the shortcut yourself. **This is experimental**: it
+has been run on macOS in VS Code only, `open` is the only verb, and the link's shape may still
+change. The changelog says when it does.
+
+```
+vscode://jlumbroso.porthole/v1/open?file=/abs/path/tasks.html&width=420&height=640
+```
+
+| Parameter | Meaning |
+| --- | --- |
+| `file` (required) | An absolute path, or one relative to a workspace folder of the VS Code window that receives the link. |
+| `width`, `height` | Both or neither, in pixels. Without them the window opens at your first size preset. |
+| `repo` | A workspace folder's name, only to say which one a relative path belongs to. |
+
+On macOS, `open '<link>'` in a terminal sends it (quote it, so the shell leaves `&` alone). The
+window that receives it is the VS Code window you used last. Porthole's code opens no network port or
+server: the link goes through VS Code's own link handling. The page must be a local `.html`, `.htm`, `.md` or
+`.markdown` file; web addresses are not supported.
+
+**What opens without asking is yours to decide**, with five settings:
+
+| Setting | Default | Effect |
+| --- | --- | --- |
+| `porthole.outsideLinks.enabled` | on | Links are accepted at all. |
+| `porthole.outsideLinks.actions.open` | on | Links may open pages. |
+| `porthole.outsideLinks.allowWorkspaceFolders` | on | Files inside the receiving window's workspace folders open without asking. |
+| `porthole.outsideLinks.allowedFolders` | none | More folders, by absolute path, whose files open without asking. |
+| `porthole.outsideLinks.allowLocalFiles` | off | Any other local file opens without asking. |
+
+Paths are compared after resolving `..`, symbolic links and letter case, so a path that only
+looks inside an allowed folder does not pass. For a file no setting covers, porthole asks:
+
+![Porthole's question: "A link from outside VS Code asks Porthole to open a file. None of Porthole's outside-link settings allows this file yet", with the buttons Cancel, Allow This Folder and Open Once.](docs/images/porthole-outside-link-question.png)
+
+**Open Once** opens that page this time only. **Allow This Folder** adds the folder to
+`porthole.outsideLinks.allowedFolders`. **Cancel** opens nothing.
+
+**VS Code asks too, once.** The first time a link addresses an extension, VS Code shows its own
+dialog, "Allow 'Porthole' extension to open this URI?", with a box "Do not ask me again for this
+extension" (read in VS Code's source; it shows the address cut to its first 30 and last 5
+characters). If you tick the box, porthole's settings above are the only check left, so set them
+as you want before you do.
+
+**What a link does to your screen.** A new floating window takes the keyboard (on macOS), so a
+link sent while you type elsewhere sends your keystrokes into the page. Sending the same link
+again brings the existing window forward; with a size, it reopens the page at that size. Editing
+the file is how an agent updates a page: the window follows the file.
+
+When a link is refused (a setting is off, the file does not exist, a relative path matches two
+folders), porthole says why in a message and in the "Porthole" output channel. Turning
+`porthole.outsideLinks.enabled` off turns all of this off. A [skill for models](.claude/skills/porthole/SKILL.md)
+describes the same link in the terms an agent needs.
+
 ## Install
 
 **From the Marketplace**: search for "Porthole" in VS Code's Extensions view, or run
@@ -162,8 +226,8 @@ toolbar. "Only the rendered page" means no tabs, breadcrumbs or status bar.
 ## Not here yet
 
 - Popping out a page that is already open in a browser tab (today it starts from the file).
-- A trigger from outside VS Code, for example a coding agent opening the task page it has
-  just written.
+- More from outside VS Code than `open`: listing, refreshing, resizing, pinning, docking and
+  closing windows (designed, not built), and web addresses.
 
 ## Try the idea today, with no extension
 

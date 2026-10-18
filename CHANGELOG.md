@@ -8,22 +8,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-18
+
+Open a page from outside VS Code, a guard for other extensions' tabs, and fixes to pop-out.
+Checked by hand on macOS with VS Code 1.141.0 (ADR-0013, ADR-0024, ADR-0025).
+
 - **Experimental: open a page from outside VS Code.** A link such as
-  `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640` opens the page in a
-  floating window. Files in the window's workspace folders and in `porthole.outsideLinks.allowedFolders`
-  open without asking; anything else asks first. Not yet released; wording to come (ADR-0013).
+  `vscode://jlumbroso.porthole/v1/open?file=/abs/tasks.html&width=420&height=640` opens a page in a
+  floating window, so a terminal, a script or a coding agent can show you one without you finding the
+  file. `open` is the only verb. Files in the receiving window's workspace folders and in
+  `porthole.outsideLinks.allowedFolders` open without asking; any other file asks first (**Open
+  Once**, **Allow This Folder**, **Cancel**). Five new settings under `porthole.outsideLinks.*`
+  (`enabled`, `actions.open`, `allowWorkspaceFolders`, `allowedFolders`, `allowLocalFiles`) decide how
+  far a link may go. It has run on macOS only, and the link's shape may still change.
 - **Editors other extensions open inside a floating window move to the main window.** An extension
   that opens a file by column number (for instance "column two") can reach a floating window and
   bring its tab bar back; Porthole now moves such a tab to the main window, keeping its cursor, or
-  asks, or leaves it: `porthole.keepToOneTab` (`move`, `ask`, `off`; ADR-0025, named by the naming review).
+  asks, or leaves it: new setting `porthole.keepToOneTab` (`move` by default, `ask`, `off`). A tab with
+  unsaved changes is always left where it is (ADR-0025).
 - **Pop Out twice no longer gives two windows.** A second Pop Out of a file that is already floating
   brings its window forward, where it is; Cycle Size on a Markdown file no longer leaves the old
   window behind (ADR-0024).
 - **Markdown colors follow the setting with several VS Code windows open**: one window no longer
   wipes another's colors (ADR-0024). The setting's description now reads "The colors follow the
-  file" (the naming review, ADR-0022).
-- **Each pop-out is credited to its own window**, even when another tab group opens at the same moment
-  or two pop-outs overlap (ADR-0014).
+  file" (ADR-0022).
+- **Each pop-out is credited to its own window**, even when another tab group opens at the same
+  moment or two pop-outs overlap (ADR-0014).
 
 ## [0.2.1] - 2026-10-14
 
@@ -78,7 +88,8 @@ needed) and used on 1.134.0; Windows and Linux are untested.
   default size. Known limits: Cmd+V does not paste into a page in the window on macOS (right-click →
   Paste works); Ctrl+A and Ctrl+E do nothing in a page's text field.
 
-[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/jlumbroso/porthole/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/jlumbroso/porthole/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/jlumbroso/porthole/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/jlumbroso/porthole/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jlumbroso/porthole/releases/tag/v0.1.0
