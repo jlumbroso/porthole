@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Editors other extensions open inside a floating window move to the main window.** An extension
   that opens a file by column number (for instance "column two") can reach a floating window and
   bring its tab bar back; Porthole now moves such a tab to the main window, keeping its cursor, or
-  asks, or leaves it, by one setting (ADR-0025; names pending the naming review).
+  asks, or leaves it: `porthole.keepToOneTab` (`move`, `ask`, `off`; ADR-0025, named by the naming review).
 - **Pop Out twice no longer gives two windows.** A second Pop Out of a file that is already floating
   brings its window forward, where it is; Cycle Size on a Markdown file no longer leaves the old
   window behind (ADR-0024).

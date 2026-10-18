@@ -235,7 +235,7 @@
           "default": false,
           "markdownDescription": "Let outside links open any other local HTML or Markdown file. When off, Porthole asks before opening a file no setting allows."
         },
-        "porthole.otherEditors": {
+        "porthole.keepToOneTab": {
           "type": "string",
           "enum": ["move", "ask", "off"],
           "enumDescriptions": [

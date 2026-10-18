@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { cycleSize, dockBack, markdownFilesShown, openRequested, pageShownIn, popOut, togglePin, trackWindows } from './commands';
-import { guardFloatingWindows } from './otherEditors';
+import { guardFloatingWindows } from './keepToOneTab';
 import { handleLink } from './outsideLinks';
 import { initMarkdownColors } from './markdownColors';
 import { reviewSettings } from './settingsReview';

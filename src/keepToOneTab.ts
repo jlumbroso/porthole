@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
+import { compact } from './config';
 import { describeError, log } from './log';
+import { editorFor, FALLBACK_FOCUS_PAUSE_MS } from './miniWindow';
 
 // Editors other extensions put into Porthole's floating windows (ADR-0025).
 //
@@ -12,14 +14,14 @@ import { describeError, log } from './log';
 // one setting turns that off or makes Porthole ask (Jérémie's three modes: "ask"
 // is ready to become the default if anyone reports a moved tab as a wrong).
 //
-// Names are provisional until the naming review rules (QST-NAME-GUARD).
+// Names ruled by the naming review (QST-NAME-GUARD, B, approved 2026-10-18).
 
 export type GuardMode = 'move' | 'ask' | 'off';
 
-export const MOVE_NOW = 'Approve Now';
-export const KEEP_NOW = 'Deny Now';
-export const MOVE_ALWAYS = 'Approve Always';
-export const MOVE_NEVER = 'Never Approve';
+export const MOVE_NOW = 'Move It';
+export const KEEP_NOW = 'Leave It';
+export const MOVE_ALWAYS = 'Always Move';
+export const MOVE_NEVER = 'Never Move';
 
 /**
  * How long to wait after the tab appears before reading where its cursor is.
@@ -29,7 +31,7 @@ export const MOVE_NEVER = 'Never Approve';
 export const SETTLE_MS = 250;
 
 export function guardMode(): GuardMode {
-  const value = vscode.workspace.getConfiguration('porthole').get<string>('otherEditors', 'move');
+  const value = vscode.workspace.getConfiguration('porthole').get<string>('keepToOneTab', 'move');
   return value === 'ask' || value === 'off' ? value : 'move';
 }
 
@@ -55,7 +57,7 @@ function reopenable(tab: vscode.Tab): Reopenable | undefined {
   }
   const editor = vscode.window.visibleTextEditors.find(shown => shown.document.uri.toString() === uri.toString() && shown.viewColumn === tab.group.viewColumn);
   const selection = editor?.selection;
-  return { uri, reopen: column => vscode.window.showTextDocument(uri, { viewColumn: column, selection, preserveFocus: true }) };
+  return { uri, reopen: column => vscode.window.showTextDocument(uri, { viewColumn: column, selection, preserveFocus: false }) };
 }
 
 const nameOf = (uri: vscode.Uri) => uri.path.split('/').filter(Boolean).at(-1) ?? uri.toString();
@@ -63,13 +65,14 @@ const nameOf = (uri: vscode.Uri) => uri.path.split('/').filter(Boolean).at(-1) ?
 /** Asks, in "ask" mode; true when the tab should move. The two "always/never" answers change the setting. */
 async function askToMove(uri: vscode.Uri): Promise<boolean> {
   const answer = await vscode.window.showInformationMessage(
-    `${nameOf(uri)} opened inside Porthole's floating window. Move it to the main window?`,
+    // The ruling discloses the setting in a detail line; a notice that does not block VS Code has none, so it is the second sentence.
+    `${nameOf(uri)} opened inside Porthole's floating window. Move it to the main window? ${MOVE_ALWAYS} and ${MOVE_NEVER} set porthole.keepToOneTab (to move / off), so Porthole won't ask again.`,
     MOVE_NOW, KEEP_NOW, MOVE_ALWAYS, MOVE_NEVER,
   );
   if (answer === MOVE_ALWAYS || answer === MOVE_NEVER) {
     const mode: GuardMode = answer === MOVE_ALWAYS ? 'move' : 'off';
-    await vscode.workspace.getConfiguration('porthole').update('otherEditors', mode, vscode.ConfigurationTarget.Global);
-    log(`other editors: porthole.otherEditors set to ${mode}`);
+    await vscode.workspace.getConfiguration('porthole').update('keepToOneTab', mode, vscode.ConfigurationTarget.Global);
+    log(`other editors: porthole.keepToOneTab set to ${mode}`);
   }
   return answer === MOVE_NOW || answer === MOVE_ALWAYS;
 }
@@ -99,6 +102,17 @@ export function guardFloatingWindows(pageShownIn: (group: vscode.TabGroup) => vs
     if (!main) { log('other editors: no editor group outside Porthole\'s windows to move it to'); return; }
     try {
       await vscode.window.tabGroups.close(tab, true);
+      // VS Code leaves a floating window's compact mode for good once it holds
+      // two editors ("leave compact mode when more than 1 editor is active",
+      // auxiliaryEditorPart.ts L309-323 at 1.141.0), so one tab again is not
+      // enough: the tab bar stayed (Jérémie, QST-CHECK-GUARD, C). The command
+      // that turns it back on acts on the focused window, so focus the floating
+      // window first, then hand focus to the moved file in the main window.
+      if (compact()) {
+        await vscode.commands.executeCommand('vscode.openWith', page, editorFor(page), tab.group.viewColumn);
+        await sleep(FALLBACK_FOCUS_PAUSE_MS);
+        await vscode.commands.executeCommand('workbench.action.enableCompactAuxiliaryWindow');
+      }
       await target.reopen(main.viewColumn);
       log(`other editors: moved ${target.uri.toString()} out of a floating window, into column ${main.viewColumn}`);
     } catch (err) {

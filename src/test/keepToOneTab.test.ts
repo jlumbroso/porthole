@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { activateFresh, command } from './helpers/activate';
 import {
-  mainGroup, openFloatingGroup, openTabIn, setCommandBehavior, setConfig, settingUpdates, showEditor,
+  executedCalls, mainGroup, openFloatingGroup, openTabIn, setCommandBehavior, setConfig, settingUpdates, showEditor,
   shownMessages, shownTextDocuments, TabInputText, Uri, window as vscodeWindow, type MockTabGroup,
 } from './helpers/vscodeMock';
 
@@ -43,7 +43,26 @@ describe('Regression tests', () => {
     const tab = await anotherExtensionOpensTheAdr();
 
     expect(floating.tabs).not.toContain(tab);
-    expect(shownTextDocuments()).toEqual([{ uri: adr, options: { viewColumn: mainGroup().viewColumn, selection: questionLine, preserveFocus: true } }]);
+    expect(shownTextDocuments()).toEqual([{ uri: adr, options: { viewColumn: mainGroup().viewColumn, selection: questionLine, preserveFocus: false } }]);
+  });
+
+  it('turns the floating window\'s compact mode back on after the move, then returns focus to the moved file', async () => {
+    // Bug (Jérémie, ADR-0025 QST-CHECK-GUARD, C): after the move the window was
+    // back to one tab, but its tab bar stayed. VS Code leaves compact mode for
+    // good when a second editor arrives, and does not return to it.
+    await anotherExtensionOpensTheAdr();
+
+    const order = executedCalls().map(call => call.id).filter(id => ['vscode.openWith', 'workbench.action.enableCompactAuxiliaryWindow'].includes(id));
+    expect(order).toEqual(['vscode.openWith', 'workbench.action.enableCompactAuxiliaryWindow']);
+    expect(executedCalls().find(call => call.id === 'vscode.openWith')!.args).toEqual([page, 'workbench.editor.browser', floating.viewColumn]);
+    expect(shownTextDocuments()).toHaveLength(1); // the moved file, focused, after compact mode
+  });
+
+  it('leaves compact mode alone when the compact setting is off', async () => {
+    setConfig({ compact: false });
+    await anotherExtensionOpensTheAdr();
+
+    expect(executedCalls().map(call => call.id)).not.toContain('workbench.action.enableCompactAuxiliaryWindow');
   });
 });
 
@@ -62,7 +81,7 @@ describe('what Porthole leaves alone', () => {
   });
 
   it('everything, when the setting is off', async () => {
-    setConfig({ otherEditors: 'off' });
+    setConfig({ keepToOneTab: 'off' });
     const tab = await anotherExtensionOpensTheAdr();
 
     expect(floating.tabs).toContain(tab);
@@ -86,36 +105,36 @@ describe('asking first, when the setting is ask', () => {
     });
   };
 
-  beforeEach(() => { setConfig({ otherEditors: 'ask' }); });
+  beforeEach(() => { setConfig({ keepToOneTab: 'ask' }); });
 
-  it('moves it on "Approve Now" and keeps asking next time', async () => {
-    answerNotice('Approve Now');
+  it('moves it on "Move It" and keeps asking next time', async () => {
+    answerNotice('Move It');
     const tab = await anotherExtensionOpensTheAdr();
 
-    expect(shownMessages()).toEqual(['0024-floating-windows.md opened inside Porthole\'s floating window. Move it to the main window?']);
+    expect(shownMessages()).toEqual(['0024-floating-windows.md opened inside Porthole\'s floating window. Move it to the main window? Always Move and Never Move set porthole.keepToOneTab (to move / off), so Porthole won\'t ask again.']);
     expect(floating.tabs).not.toContain(tab);
     expect(settingUpdates()).toEqual([]);
   });
 
-  it('leaves it on "Deny Now", or when the notice is closed', async () => {
-    answerNotice('Deny Now');
+  it('leaves it on "Leave It", or when the notice is closed', async () => {
+    answerNotice('Leave It');
     const tab = await anotherExtensionOpensTheAdr();
 
     expect(floating.tabs).toContain(tab);
     expect(settingUpdates()).toEqual([]);
   });
 
-  it('"Approve Always" moves it and sets the setting to move; "Never Approve" leaves it and sets off', async () => {
-    answerNotice('Approve Always');
+  it('"Always Move" moves it and sets the setting to move; "Never Move" leaves it and sets off', async () => {
+    answerNotice('Always Move');
     const moved = await anotherExtensionOpensTheAdr();
     expect(floating.tabs).not.toContain(moved);
 
-    setConfig({ otherEditors: 'ask' });
-    answerNotice('Never Approve');
+    setConfig({ keepToOneTab: 'ask' });
+    answerNotice('Never Move');
     const kept = openTabIn(floating, new TabInputText(Uri.file('/work/other.md')));
     await vi.runAllTimersAsync();
 
     expect(floating.tabs).toContain(kept);
-    expect(settingUpdates().map(update => [update.key, update.value])).toEqual([['otherEditors', 'move'], ['otherEditors', 'off']]);
+    expect(settingUpdates().map(update => [update.key, update.value])).toEqual([['keepToOneTab', 'move'], ['keepToOneTab', 'off']]);
   });
 });
