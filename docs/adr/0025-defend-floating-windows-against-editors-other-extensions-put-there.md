@@ -138,6 +138,42 @@ Option C. The ADR was never visible (or I did not notice) in the tab bar, but th
 
 ---
 
+NOT: **Reading of the answer** (Glazier 5.5, 2026-10-18). C, and the cause is now read in VS Code's source: a floating window leaves compact mode for good once it holds two editors ("leave compact mode when more than 1 editor is active", `src/vs/workbench/browser/parts/editor/auxiliaryEditorPart.ts` L309–323 at 1.141.0), and nothing returns it to compact mode when it drops back to one. So the move worked, and the window kept its tab bar. **A walk-back, stated:** my falsifier said C would mean reopening the page in a fresh window after a move. I chose instead to turn compact mode back on in the same window (VS Code's own "Turn On Compact Mode", which acts on the focused window): it keeps the window where the person put it and at its size, which a fresh window would not. The cost is a brief change of focus: Porthole focuses the floating window, turns compact mode on, then gives focus to the moved file in the main window. Built in `0bc8c52`, with a regression test that fails without it; checked by hand in QST-CHECK-GUARD-COMPACT below.
+
+NOT: **The naming ruling, applied, with one deviation to report** (QST-NAME-GUARD, B, approved). `porthole.keepToOneTab` (`move`, `ask`, `off`), buttons **Move It**, **Leave It**, **Always Move**, **Never Move**, the description re-keyed, all in `0bc8c52`. The ruling put the disclosure ("Always Move and Never Move set porthole.keepToOneTab …") in a **detail line**, but only a modal dialog has one; the "ask" question is an ordinary notice, which does not stop your work, so the disclosure is its **second sentence** instead. Making it a modal would block VS Code each time a tab lands, which "ask" was not meant to do.
+
+### QST-CHECK-GUARD-COMPACT: After the move, is the floating window compact again, with the ADR in the main window at its question?
+- Status: unanswered
+- Why asking: **What this finds out.** Whether VS Code's "Turn On Compact Mode" works when Porthole runs it on a floating window right after the extra tab leaves, whether focus ends in the main window on the ADR, and whether the brief change of focus is acceptable to watch. The rest of the guard passed in QST-CHECK-GUARD. **Safe**: nothing is written.
+- Need: pick a letter (or override — any shape answers). About two minutes.
+
+**Where to do this.** In **your porthole workspace window** (title bar ending with `porthole`), with **one** editor group in it (no side-by-side split). No debug window.
+
+**Before you start.** Close any floating window. Run **Developer: Reload Window** (press **Shift+Cmd+P**, type `Reload Window`, press **Enter**); the newest build is installed.
+
+**Steps.** One action each.
+
+1. **Pop out a page.** In the Explorer (**Shift+Cmd+E**), click `samples/tasks.html`, then press **Ctrl+Alt+M**. The floating window opens with no tab bar.
+2. **Open the ADR Manager's questions.** Click back into the main window. Press **Shift+Cmd+P**, type `ADR Manager: Answer Open Questions`, press **Enter**.
+3. **Click "Open in file ↗"** on the question it shows.
+4. **Watch for a second.** The floating window may take focus briefly. It should end with **no tab bar** (compact, as in step 1), and the **ADR should be open in the main window, with the cursor on the question's line and the keyboard there**: type nothing, but note where the cursor blinks.
+5. **Tidy up.** Close the ADR's tab and the floating window.
+
+Options:
+- **A — all as described**: compact again, ADR in the main window at its question, keyboard in the main window.
+- **B — the floating window kept its tab bar.**
+- **C — compact again, but the keyboard stayed in the floating window.**
+- **D — compact again, but the cursor was not at the question.**
+- **E — something else**: say what you saw, including whether the change of focus was distracting.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**A** (a prediction). *Rationale*: the fallback path has run the same "Turn On Compact Mode" command after the same 200 ms pause since 0.1.0 and it made floating windows compact (Spike 0, ADR-0003); bringing a floating window forward by its column ran in ADR-0024; and the moved file is opened last, with focus. *Confidence*: 0.6 — because the command acts on whichever window is focused, and macOS may not have moved focus to the floating window within 200 ms. *If wrong*: B with the floating window focused means the command did nothing to a window that already left compact mode (then a fresh window is the fallback, my original falsifier); B with the main window focused means the pause is too short; C means the final open did not take focus, which `preserveFocus: false` should give; D means the quarter-second wait for the ADR Manager's cursor is still too short.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: B with Jérémie's three modes; build now with provisional names
