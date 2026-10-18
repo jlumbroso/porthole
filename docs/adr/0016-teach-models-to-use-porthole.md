@@ -78,7 +78,7 @@ The skill is still written only after the verbs it teaches have shipped.
 ## Action Items
 
 - [x] Answer QST-SKILL-HOME — Owner: Jérémie (2026-10-13)
-- [ ] Write the skill after the verbs ship, and run the stranger test — Owner: to be assigned
+- [ ] Write the skill after the verbs ship, and run the stranger test — Owner: Glazier (2026-10-18: written for `open`, the one verb built, `.claude/skills/porthole/SKILL.md`, at Jérémie's request ahead of the release; stranger test not yet run; shipping it inside the extension needs a command, whose title goes to the naming review first)
 
 ---
 
