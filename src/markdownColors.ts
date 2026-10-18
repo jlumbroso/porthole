@@ -65,12 +65,14 @@ export function stylesheetFor(files: vscode.Uri[], scheme: Scheme): string {
 // Markdown windows wiped the rules another window had just written (Jérémie,
 // 2026-10-18: the colors did not follow the setting in his second window; the
 // installed file read "nothing to override"). So the file records, in a comment,
-// which files each window shows, keyed by its extension host's process id; a
-// window rewrites only its own entry, drops entries whose process has ended,
-// and writes rules for every file listed. All windows then write the same rules
-// for the same setting, so two writing at once cannot lose a window's files.
+// which files each window shows and with which scheme (the setting can differ
+// per workspace), keyed by its extension host's process id. A window rewrites
+// only its own entry, drops entries whose process has ended, and writes the
+// rules of every entry. Two windows writing at once write the same rules, so
+// neither loses the other's files.
 const OWNERS_LINE = /^\/\* porthole-windows: (.*) \*\/$/m;
-type Owners = Record<string, string[]>;
+interface Entry { scheme: Scheme; files: string[] }
+type Owners = Record<string, Entry>;
 
 function isAlive(pid: string): boolean {
   try {
@@ -90,8 +92,11 @@ async function readOwners(uri: vscode.Uri): Promise<{ text: string | undefined; 
     const parsed: unknown = JSON.parse(match[1]);
     const owners: Owners = {};
     if (parsed && typeof parsed === 'object') {
-      for (const [pid, files] of Object.entries(parsed)) {
-        if (/^\d+$/.test(pid) && Array.isArray(files)) { owners[pid] = files.filter((file): file is string => typeof file === 'string'); }
+      for (const [pid, entry] of Object.entries(parsed as Record<string, unknown>)) {
+        const { scheme, files } = (entry ?? {}) as { scheme?: unknown; files?: unknown };
+        if (/^\d+$/.test(pid) && (scheme === 'light' || scheme === 'dark') && Array.isArray(files)) {
+          owners[pid] = { scheme, files: files.filter((file): file is string => typeof file === 'string') };
+        }
       }
     }
     return { text, owners };
@@ -113,9 +118,11 @@ export async function updateMarkdownColors(extra: vscode.Uri[] = []): Promise<vo
     const { text, owners } = await readOwners(styleUri);
     const self = String(process.pid);
     for (const pid of Object.keys(owners)) { if (pid !== self && !isAlive(pid)) { delete owners[pid]; } }
-    if (mine.size > 0) { owners[self] = [...mine]; } else { delete owners[self]; }
-    const all = [...new Set(Object.values(owners).flat())].sort();
-    const css = `${stylesheetFor(all.map(file => vscode.Uri.parse(file)), colorScheme())}/* porthole-windows: ${JSON.stringify(owners)} */\n`;
+    const scheme = colorScheme();
+    // A window whose setting is auto overrides nothing, so it needs no entry.
+    if (mine.size > 0 && scheme !== 'auto') { owners[self] = { scheme, files: [...mine].sort() }; } else { delete owners[self]; }
+    const sections = Object.keys(owners).sort().map(pid => stylesheetFor(owners[pid].files.map(file => vscode.Uri.parse(file)), owners[pid].scheme));
+    const css = `${sections.length > 0 ? sections.join('\n') : stylesheetFor([], scheme)}/* porthole-windows: ${JSON.stringify(owners)} */\n`;
     if (css !== text) { await vscode.workspace.fs.writeFile(styleUri, new TextEncoder().encode(css)); }
     // Refresh this window's previews only when the rules they render change.
     const rules = css.replace(OWNERS_LINE, '');
