@@ -273,7 +273,7 @@
     "vscode:prepublish": "npm run build"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.19.2",
     "@types/vscode": "~1.134.0",
     "@vitest/coverage-v8": "5.0.4",
     "@vscode/vsce": "^4.0.0",

@@ -191,6 +191,14 @@ The reason this matters: the brief's main risk mitigation is "re-run Spike 0 aft
 - Changes: `engines.vscode` lowered to `^1.134.0`, the floor Surveyor found in source, and `@types/vscode` pinned to `~1.134.0` so the compiler allows only what 1.134 offers. Jérémie then ran the rebuilt extension on 1.134.0: "Flawless." The floor is now run, not only read. Not recorded: whether Spike 0 itself was re-run there, or which steps of ADR-0010 were repeated.
 - Outcome: stays `Draft` until Jérémie has read the Decision
 
+### Iteration 5 (2026-10-18)
+- Trigger: Dependabot's PR #1 (opened 2026-10-13): `@types/node` 22 → 26 and `typescript` 5.9.3 → 7.0.2; Jérémie asked Glazier to process and close it
+- Contributors: Glazier 5.5 (Claude Opus 5.5)
+- Changes, and why the PR was closed rather than merged:
+  - **`@types/node` follows the Node.js of VS Code at the engines floor, as `@types/vscode` follows its API.** VS Code 1.134.0 runs Node 24 (read in its source: `remote/.npmrc` targets 24.18.1; `.npmrc` targets Electron 42.8.1). Types for Node 26 would let the code call Node APIs that users at the floor do not have, and nothing would fail until it ran. Moved from 22 (safe but behind) to `^24.19.2`; gate green, 79 tests. Dependabot now ignores `@types/node` 25 and up; raise that limit when the floor rises.
+  - **TypeScript 7 waits for its own decision.** It is the new, Go-based compiler, not a routine upgrade. The PR's CI failed at once: `error TS5108: Option 'moduleResolution=node10' has been removed` (our `tsconfig.json` says `"node"`). Adopting it means choosing a new module resolution and checking that the new compiler reads the code the same way; and Dependabot noted the release was published by an npm account that had not published our current version. Dependabot now ignores `typescript` 7 and up.
+- Outcome: stays `Draft` (unchanged by this iteration)
+
 ---
 
 ## Links

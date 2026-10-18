@@ -12,6 +12,16 @@ updates:
       # package when @types/vscode is newer than engines.vscode, and a newer type would let
       # the code call an API older VS Code versions do not have.
       - dependency-name: "@types/vscode"
+      # Matched to the Node.js inside VS Code at the engines floor, for the same reason: VS Code
+      # 1.134.0 runs Node 24 (its remote/.npmrc targets 24.18.1, Electron 42), and types for a
+      # newer Node would let the code call APIs users do not have. Raise with the floor (ADR-0002).
+      - dependency-name: "@types/node"
+        versions: [">=25"]
+      # TypeScript 7 is the new, Go-based compiler: it rejects this tsconfig (moduleResolution
+      # "node" was removed) and was published by a new npm account. Adopted by decision, not by
+      # bot (ADR-0002, PR #1 closed 2026-10-18).
+      - dependency-name: "typescript"
+        versions: [">=7"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
