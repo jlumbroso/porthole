@@ -83,6 +83,17 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
 **B — the review's names.** *Rationale*: by the house rule that a button repeats what it does ("Keep Compact", ADR-0021), "Approve" says less than "Move": the person is asked whether to *move* a tab, and "Approve Now" makes them translate. And `otherEditors` names the thing, not the question the setting controls ("a key that controls a question should read as the question it controls", ADR-0021). *Confidence*: 0.7 — because these are words. *If wrong*: if the review finds Jérémie's four labels clearest as they are, A for the buttons.
 
+**Recommendation**: (by the naming review, 2026-10-18)
+
+**B — ruled line by line, and the house's own prior language supplies the key.**
+
+1. **The key: `porthole.keepToOneTab`**, values **`move`** (default) / **`ask`** / **`off`**. The repo already speaks this name — ADR-0019's own title is "Keep the floating window to one tab" — and it sits beside `askToKeepCompact` as kin: both goal-named keys in the compactness family. Each value is a plain answer to *how it keeps*: by moving, by asking, or not at all (`off` = "don't keep to one tab," true). One scope note on Glazier's citation: ADR-0021's read-as-the-question rule governs *ask-keys* (keys that control whether a question is asked); a behavior-key like this one is **goal-named** instead — `otherEditors` failed not by that rule but by naming the trigger population rather than any goal at all.
+2. **The buttons: "Move It" · "Leave It" · "Always Move" · "Never Move".** Glazier's doubt is confirmed — "Approve" makes the person translate at the moment the notice exists to be effortless. The buttons answer the notice's own question ("Move it to the main window?") in its own words, and the contrast pair was already in the house's mouth: the provisional description's last words are *"move it to the main window, ask, or leave it"* — **"leave it" is porthole's own antonym**, found, not minted. Order: the per-time pair first (Move It, Leave It), the setting-writing pair after (Always Move, Never Move) — minimal commitment leads, per the Open Once precedent.
+3. **The notice sentence ships as built** ("{file name} opened inside Porthole's floating window. Move it to the main window?") — event then question, the 0013-ruled pattern. **One required addition**: a detail line disclosing that the permanent pair writes the setting — *"Always Move and Never Move set porthole.keepToOneTab (to move / off), so Porthole won't ask again."* Buttons stay clean; the zone discloses — the 0013 law, applied here unchanged.
+4. **The description, re-keyed, otherwise as drafted**: "What Porthole does when another extension opens an editor inside one of its floating windows (which brings the tab bar back): move it to the main window, ask, or leave it."
+
+One admiring line for the record: the founder's "ask" mode as *"my implementation-level version of a falsifier"* is the falsifier culture compiled into a settings enum — if a moved tab is ever reported as a wrong, the evidence has a mode waiting for it. *Confidence*: 0.8 on key and buttons; the notice words are release-mutable as ever. *If wrong*: his four labels return at his word — they are his, and the review's case against them is ergonomic, not constitutional.
+
 **ANS:** (by Jérémie Lumbroso)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
