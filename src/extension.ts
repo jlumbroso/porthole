@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { cycleSize, dockBack, markdownFilesShown, openRequested, popOut, togglePin, trackWindows } from './commands';
+import { cycleSize, dockBack, markdownFilesShown, openRequested, pageShownIn, popOut, togglePin, trackWindows } from './commands';
+import { guardFloatingWindows } from './otherEditors';
 import { handleLink } from './outsideLinks';
 import { initMarkdownColors } from './markdownColors';
 import { reviewSettings } from './settingsReview';
@@ -24,7 +25,7 @@ function register(context: vscode.ExtensionContext, id: string, handler: Handler
 }
 
 export function activate(context: vscode.ExtensionContext): void {
-  context.subscriptions.push(initLog(), trackWindows(), initMarkdownColors(context.extensionUri, markdownFilesShown));
+  context.subscriptions.push(initLog(), trackWindows(), initMarkdownColors(context.extensionUri, markdownFilesShown), guardFloatingWindows(pageShownIn));
   // A stale install and a changed VS Code are the two things worth seeing first.
   log(`Porthole ${context.extension.packageJSON.version} activated on ${vscode.env.appName} ${vscode.version}`);
 

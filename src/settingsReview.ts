@@ -8,7 +8,7 @@ import { BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR } from './miniWindow';
 // entry at a time, from a single command.
 
 const PORTHOLE_KEYS = ['sizes', 'position', 'compact', 'alwaysOnTop', 'useInternalCommand', 'askToKeepCompact', 'markdown.colorScheme',
-  'outsideLinks.enabled', 'outsideLinks.allowWorkspaceFolders', 'outsideLinks.allowedFolders', 'outsideLinks.allowLocalFiles', 'outsideLinks.actions.open'];
+  'outsideLinks.enabled', 'outsideLinks.allowWorkspaceFolders', 'outsideLinks.allowedFolders', 'outsideLinks.allowLocalFiles', 'outsideLinks.actions.open', 'otherEditors'];
 const LOCKED_EDITORS = [BROWSER_EDITOR, MARKDOWN_PREVIEW_EDITOR];
 
 interface Entry extends vscode.QuickPickItem {

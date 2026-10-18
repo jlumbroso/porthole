@@ -52,6 +52,9 @@ let logged: string[] = [];
 const settingsRead = new Set<string>();
 let messages: string[] = [];
 let activeDocumentUri: unknown;
+let tabListeners: Array<Listener<{ opened: unknown[]; closed: unknown[]; changed: unknown[] }>> = [];
+let visibleEditors: Array<{ document: { uri: unknown }; viewColumn: number; selection: unknown }> = [];
+let shownDocuments: Array<{ uri: unknown; options: unknown }> = [];
 let uriHandler: { handleUri: (uri: unknown) => unknown } | undefined;
 let workspaceFolders: Array<{ name: string; uri: unknown; index: number }> | undefined;
 
@@ -79,6 +82,9 @@ export function resetVscodeMock(): void {
   activeDocumentUri = undefined;
   uriHandler = undefined;
   workspaceFolders = undefined;
+  tabListeners = [];
+  visibleEditors = [];
+  shownDocuments = [];
 }
 
 export const getRegisteredCommand = (id: string) => registered.get(id);
@@ -167,12 +173,34 @@ export function openFloatingGroup(options: { takesFocus?: boolean; asTextOf?: un
   const takesFocus = options.takesFocus ?? true;
   if (takesFocus) { groups.forEach(group => { group.isActive = false; }); }
   // A browser tab's input is opaque to extensions (undefined); a text tab's is a TabInputText.
-  const tab = { label: 'tasks.html', input: options.asTextOf ? new TabInputText(options.asTextOf) : undefined };
+  const tab: Record<string, unknown> = { label: 'tasks.html', input: options.asTextOf ? new TabInputText(options.asTextOf) : undefined, isDirty: false };
   const group: MockTabGroup = { viewColumn: groups.length + 1, isActive: takesFocus, tabs: [tab], activeTab: tab };
+  tab.group = group;
   groups.push(group);
   groupListeners.slice().forEach(listener => listener({ opened: [group], closed: [], changed: [] }));
   return group;
 }
+
+/**
+ * What VS Code does when another extension opens an editor into an existing
+ * group (for instance by its column number): a new tab, reported to listeners.
+ * `input` is what the extension API shows, such as `{ uri }` for a text file.
+ */
+export function openTabIn(group: MockTabGroup, input: unknown, options: { isDirty?: boolean; label?: string } = {}): Record<string, unknown> {
+  const tab: Record<string, unknown> = { label: options.label ?? 'tab', input, isDirty: options.isDirty ?? false, group };
+  group.tabs.push(tab);
+  group.activeTab = tab;
+  tabListeners.slice().forEach(listener => listener({ opened: [tab], closed: [], changed: [] }));
+  return tab;
+}
+
+/** A text editor VS Code shows, with the selection the other extension set. */
+export function showEditor(uri: unknown, viewColumn: number, selection: unknown): void {
+  visibleEditors.push({ document: { uri }, viewColumn, selection });
+}
+
+/** Every `window.showTextDocument` call: the document and its options. */
+export const shownTextDocuments = () => shownDocuments;
 
 /** What VS Code does when a floating window goes away: its group closes and the main window is active again. */
 export function closeFloatingGroup(target: MockTabGroup): void {
@@ -242,6 +270,11 @@ export const window = {
     uriHandler = handler;
     return { dispose: () => { uriHandler = undefined; } };
   },
+  get visibleTextEditors() { return visibleEditors; },
+  async showTextDocument(uri: unknown, options?: unknown) {
+    shownDocuments.push({ uri, options });
+    return { document: { uri } };
+  },
   get activeTextEditor() {
     return activeDocumentUri ? { document: { uri: activeDocumentUri } } : undefined;
   },
@@ -253,15 +286,20 @@ export const window = {
       return { dispose: () => { groupListeners = groupListeners.filter(entry => entry !== listener); } };
     },
     /** VS Code closes the group's tabs, and with them a floating window's group. */
-    async close(target: MockTabGroup | MockTabGroup[]) {
-      for (const group of Array.isArray(target) ? target : [target]) {
-        if (!groups.includes(group)) { throw new Error('mock: that tab group is already closed'); }
-        closeFloatingGroup(group);
+    async close(target: unknown, _preserveFocus?: boolean) {
+      for (const item of Array.isArray(target) ? target : [target]) {
+        if (groups.includes(item as MockTabGroup)) { closeFloatingGroup(item as MockTabGroup); continue; }
+        const owner = groups.find(group => group.tabs.includes(item));
+        if (!owner) { throw new Error('mock: that tab or tab group is already closed'); }
+        owner.tabs = owner.tabs.filter(tab => tab !== item);
+        owner.activeTab = owner.tabs.at(-1);
+        tabListeners.slice().forEach(listener => listener({ opened: [], closed: [item], changed: [] }));
       }
       return true;
     },
-    onDidChangeTabs(_listener: Listener<unknown>) {
-      return { dispose() {} }; // the mock creates tabs together with their group
+    onDidChangeTabs(listener: Listener<{ opened: unknown[]; closed: unknown[]; changed: unknown[] }>) {
+      tabListeners.push(listener);
+      return { dispose: () => { tabListeners = tabListeners.filter(entry => entry !== listener); } };
     },
   },
 };

@@ -99,6 +99,40 @@ One admiring line for the record: the founder's "ask" mode as *"my implementatio
 
 ---
 
+### QST-CHECK-GUARD: Does the ADR Manager's "Open in file" now end up in the main window, at the question's line, with the floating window back to one tab?
+- Status: unanswered
+- Why asking: **What this finds out.** The guard is built and passes eight tests against a mocked VS Code, one of them replaying the ADR Manager's call (`src/otherEditors.ts`, commit after `4842478`). Three things only a real VS Code shows: whether closing the extra tab and opening it again in the main window works on a floating window's group; whether the cursor lands on the question's line, which the ADR Manager sets a moment after opening (Porthole waits a quarter of a second for it); and whether the floating window's tab bar hides again once it is back to one tab. The setting's name is provisional (QST-NAME-GUARD) and stays at its default, "move", throughout. **Safe**: nothing is written; the ADR file opens in the main window where you can close it.
+- Need: pick a letter (or override — any shape answers). About two minutes.
+
+**Where to do this.** In **your porthole workspace window** (title bar ending with `porthole`). No debug window.
+
+**Before you start.** Run **Developer: Reload Window** (press **Shift+Cmd+P**, type `Reload Window`, press **Enter**); the build with the guard is installed. Close any floating window. Make sure the main window shows **one** editor group (no side-by-side split), as it did when this happened.
+
+**Steps.** One action each.
+
+1. **Pop out a page.** In the Explorer (**Shift+Cmd+E**), click `samples/tasks.html`, then press **Ctrl+Alt+M**. The sample task page opens in a floating window with no tab bar.
+2. **Open the ADR Manager's questions.** Click back into the main window. Press **Shift+Cmd+P**, type `ADR Manager: Answer Open Questions`, press **Enter**. The **Open Questions** panel opens in the main window.
+3. **Click "Open in file ↗"** on the question it shows (the small link near the question's text).
+4. **Watch both windows for a second.** The ADR may appear for a moment as a second tab in the floating window. It should then **leave the floating window**, which goes back to **no tab bar**, and **open in the main window**, with the cursor on the question's line.
+5. **Tidy up.** Close the ADR's tab in the main window and the floating window.
+
+I read Porthole's log afterwards (a line beginning "other editors: moved").
+
+Options:
+- **A — all as described**: the ADR leaves the floating window, which has no tab bar again; it opens in the main window at the question's line.
+- **B — the ADR stayed in the floating window**, with its tab bar.
+- **C — it moved, but the floating window kept its tab bar**, with one tab.
+- **D — it moved, but the cursor was at the top of the file**, not at the question.
+- **E — something else**: say what you saw, for instance where the ADR opened.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**A — all as described** (a prediction). *Rationale*: closing a tab with `tabGroups.close` worked on a floating window's group today (ADR-0024, "closed the earlier floating window", three times); the tab event that starts the guard is the one Porthole already relies on in `firstTab`; and the cursor is read after a quarter-second pause from `visibleTextEditors`. *Confidence*: 0.55 — because whether a compact floating window hides its tab bar again when it drops back to one tab has never been observed, and the quarter second is a guess at the ADR Manager's timing. *If wrong*: B means the event never reached the guard or the window was not recognized as Porthole's (the log will say which); C means VS Code shows the tab bar once it has appeared, and the fix is to reopen the page in a fresh window after a move; D means the pause is too short, or the editor was not yet visible, and the guard should wait for the editor's selection to change instead of a fixed time.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: B with Jérémie's three modes; build now with provisional names
@@ -112,7 +146,7 @@ Settled regardless: the fix at the source is still worth sending to each extensi
 ## Action Items
 
 - [ ] Answer QST-GUARD-ACTION — Owner: Jérémie
-- [ ] If A or B: build it with regression tests (the ADR Manager's call, replayed against the mock), name any setting through the naming review, and write a hand check that also answers whether the tab bar hides again once the extra tab leaves — Owner: Glazier
+- [x] If A or B: build it with regression tests (the ADR Manager's call, replayed against the mock), name any setting through the naming review, and write a hand check that also answers whether the tab bar hides again once the extra tab leaves — Owner: Glazier (2026-10-18: built, eight tests; QST-CHECK-GUARD; names in QST-NAME-GUARD)
 - [ ] README known limit: extensions that open by a fixed column number — Owner: Purser, once the behavior is decided
 
 ---

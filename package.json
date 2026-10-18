@@ -235,6 +235,17 @@
           "default": false,
           "markdownDescription": "Let outside links open any other local HTML or Markdown file. When off, Porthole asks before opening a file no setting allows."
         },
+        "porthole.otherEditors": {
+          "type": "string",
+          "enum": ["move", "ask", "off"],
+          "enumDescriptions": [
+            "Move it to the main window.",
+            "Ask each time.",
+            "Leave it in the floating window."
+          ],
+          "default": "move",
+          "markdownDescription": "What Porthole does when another extension opens an editor inside one of its floating windows (which brings the tab bar back): move it to the main window, ask, or leave it. A tab with unsaved changes is always left where it is."
+        },
         "porthole.askToKeepCompact": {
           "type": "boolean",
           "default": true,

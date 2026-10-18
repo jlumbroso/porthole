@@ -41,6 +41,11 @@ export function trackWindows(): vscode.Disposable {
   });
 }
 
+/** The file a Porthole floating window shows, or `undefined` when the group is not one of Porthole's windows. */
+export function pageShownIn(group: vscode.TabGroup): vscode.Uri | undefined {
+  return windows.get(group)?.file;
+}
+
 /** The Markdown files currently shown in Porthole's floating windows. */
 export function markdownFilesShown(): vscode.Uri[] {
   return [...windows.values()].map(shown => shown.file).filter(file => editorFor(file) === MARKDOWN_PREVIEW_EDITOR);
