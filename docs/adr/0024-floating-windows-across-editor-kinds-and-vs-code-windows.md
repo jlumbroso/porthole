@@ -156,6 +156,39 @@ Screenshots:
 
 ---
 
+NOT: **Reading of the answer, and finding 4** (Glazier 5.5, 2026-10-18). What the question asked passed: the workspace setting reached the floating window within a second, both ways, with the other window open. What Jérémie found beyond it is a fourth finding, and it explains every "weird interaction" he listed. **Reload Window on the window that owns a floating window leaves Porthole without its windows.** VS Code restores the floating window, but (1) Porthole was not running after the reload, because it started only when a command or a link needed it, so nothing listened to the setting; and (2) once Pop Out woke it, it started with an empty list, so it opened a second window of the same file and, at its first stylesheet write, dropped the previous process's entry (that process had ended). The two windows then looked "entwined" because the rule selects previews by file: both show the same file, so both take the rule. Fixed in `2ff1ada`: Porthole now starts with VS Code (`onStartupFinished`), keeps its list of windows in the workspace's state, and takes restored windows back (a Markdown preview by the file its tab names; a browser tab by its title and place, ADR-0014's rule for restored windows). Checked by hand in QST-CHECK-RELOAD below.
+
+### QST-CHECK-RELOAD: After Reload Window, does Porthole take its floating window back?
+- Status: unanswered
+- Why asking: **What this finds out.** The fix for finding 4 passes against a mocked VS Code, with four tests, but whether VS Code has restored the floating window by the time Porthole starts, and whether the restored tab still names its file, only a real reload shows. If either fails, Porthole will open a second window again, as before. **Safe**: only the staging workspace's setting changes, and the last step puts it back to **light**.
+- Need: pick a letter (or override — any shape answers). About two minutes.
+
+**Where to do this.** The **Porthole screenshot** window (title **Porthole screenshot**). No debug window.
+
+**Before you start.** Close every floating window, then run **Developer: Reload Window** there (press **Shift+Cmd+P**, type `Reload Window`, press **Enter**); the newest build is installed.
+
+**Steps.** One action each.
+
+1. **Pop out the checklist.** In the Explorer (**Shift+Cmd+E**), right-click `checklist.md` and choose **Pop Out to Floating Window**. It shows with **light** colors.
+2. **Reload this window.** Click back into the Porthole screenshot window and run **Developer: Reload Window**. VS Code reopens the floating window.
+3. **Change the workspace setting.** Press **Cmd+,**, type `porthole.markdown.colorScheme`, click the **Workspace** tab (its drop-down reads **light**), and choose **dark**. The restored floating window should turn **dark** within a second or two.
+4. **Pop it out again.** Right-click `checklist.md` in the Explorer and choose **Pop Out to Floating Window**. The **same** floating window should come forward; no second one.
+5. **Put it back.** In the Workspace tab, choose **light**; the window turns light. Close the Settings tab and the floating window.
+
+Options:
+- **A — all as described**: dark in step 3 without reopening anything; one window in step 4.
+- **B — step 3 did not change the restored window's colors.**
+- **C — step 4 opened a second floating window.**
+- **D — something else**: say what you saw.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**A** (a prediction). *Rationale*: `onStartupFinished` starts Porthole "some time after VS Code starts up" (VS Code's documentation; its order against the restore of floating windows is not read in source); the restored Markdown preview's tab names its file, as every Markdown tab has since 2026-10-14 (`matched: file` in the logs); and Porthole looks for restored windows again each time it needs its list, so a window restored late is still found. *Confidence*: 0.6 — because the order of VS Code's restore and Porthole's start has never been observed, and a restored preview might name its file differently. *If wrong*: B or C with a log line "took back the floating window" missing means Porthole started before the window was restored, or the tab named its file differently, and the log of what the tab named will say which; C with that line present means the reveal route fails on a restored window.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: Porthole decides what a second pop-out does; the shared stylesheet holds every window's entry
