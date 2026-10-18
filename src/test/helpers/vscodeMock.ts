@@ -169,11 +169,12 @@ export async function followLink(path: string, encodedQuery: string): Promise<vo
 }
 
 /** What VS Code does when a floating window appears: a new, active tab group. */
-export function openFloatingGroup(options: { takesFocus?: boolean; asTextOf?: unknown } = {}): MockTabGroup {
+export function openFloatingGroup(options: { takesFocus?: boolean; asTextOf?: unknown; input?: unknown; label?: string } = {}): MockTabGroup {
   const takesFocus = options.takesFocus ?? true;
   if (takesFocus) { groups.forEach(group => { group.isActive = false; }); }
   // A browser tab's input is opaque to extensions (undefined); a text tab's is a TabInputText.
-  const tab: Record<string, unknown> = { label: 'tasks.html', input: options.asTextOf ? new TabInputText(options.asTextOf) : undefined, isDirty: false };
+  const input = options.input ?? (options.asTextOf ? new TabInputText(options.asTextOf) : undefined);
+  const tab: Record<string, unknown> = { label: options.label ?? 'tasks.html', input, isDirty: false };
   const group: MockTabGroup = { viewColumn: groups.length + 1, isActive: takesFocus, tabs: [tab], activeTab: tab };
   tab.group = group;
   groups.push(group);

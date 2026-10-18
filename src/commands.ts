@@ -24,8 +24,59 @@ const windows = new Map<vscode.TabGroup, MiniWindow>();
 /** For tests: forget every window opened so far. */
 export function resetState(): void {
   windows.clear();
+  memory = undefined;
   resetTextWarning();
   resetAutoLockPrompt();
+}
+
+// Remembered across Reload Window. VS Code restores floating windows after a
+// reload, but Porthole starts with an empty list: it then opened a second
+// window of a page already floating, and the restored window lost its colors
+// (Jérémie, ADR-0024 QST-CHECK-WORKSPACE-DARK, 2026-10-18). So the list is kept
+// in the workspace's state, and restored windows are taken back: a Markdown
+// preview by the file its tab names; a browser tab, which names no file, by its
+// title and its place, as ADR-0014 rules for restored windows.
+interface Remembered { file: string; viewColumn: number; label?: string; sizeIndex: number }
+const REMEMBERED = 'porthole.windows';
+let memory: vscode.Memento | undefined;
+
+function remember(): void {
+  if (!memory) { return; }
+  const list: Remembered[] = [...windows.entries()].map(([group, shown]) => (
+    { file: shown.file.toString(), viewColumn: group.viewColumn, label: group.activeTab?.label, sizeIndex: shown.sizeIndex }));
+  void memory.update(REMEMBERED, list);
+}
+
+function isRestoredWindowOf(group: vscode.TabGroup, entry: Remembered): boolean {
+  // The main window's first group is never a floating window; one tab, at the remembered place.
+  if (group.viewColumn === 1 || group.tabs.length !== 1 || group.viewColumn !== entry.viewColumn) { return false; }
+  const tab = group.tabs[0];
+  const shown = (tab.input as { uri?: unknown } | undefined)?.uri;
+  if (shown !== undefined) { return String(shown) === entry.file; }
+  return editorFor(vscode.Uri.parse(entry.file)) !== MARKDOWN_PREVIEW_EDITOR && tab.label === entry.label;
+}
+
+/** Takes back floating windows VS Code restored after a reload; harmless to call often. */
+function adoptRestoredWindows(): void {
+  if (!memory) { return; }
+  const saved = memory.get<unknown>(REMEMBERED, []);
+  let adopted = false;
+  for (const entry of Array.isArray(saved) ? saved as Remembered[] : []) {
+    if (typeof entry?.file !== 'string' || [...windows.values()].some(shown => shown.file.toString() === entry.file)) { continue; }
+    const group = vscode.window.tabGroups.all.find(candidate => !windows.has(candidate) && isRestoredWindowOf(candidate, entry));
+    if (group) {
+      windows.set(group, { file: vscode.Uri.parse(entry.file), sizeIndex: typeof entry.sizeIndex === 'number' ? entry.sizeIndex : 0 });
+      log(`took back the floating window of ${entry.file}, restored by VS Code`);
+      adopted = true;
+    }
+  }
+  if (adopted) { remember(); }
+}
+
+/** Where Porthole keeps its list of windows across reloads. Call once, from `activate`, before anything reads the list. */
+export function initWindowMemory(state: vscode.Memento): void {
+  memory = state;
+  adoptRestoredWindows();
 }
 
 /** Forgets each floating window as soon as VS Code closes its group. Call once, from `activate`. */
@@ -37,6 +88,7 @@ export function trackWindows(): vscode.Disposable {
       if (shown && editorFor(shown.file) === MARKDOWN_PREVIEW_EDITOR) { closedMarkdown = true; }
       windows.delete(group);
     }
+    if (event.closed.length > 0) { remember(); }
     if (closedMarkdown) { void updateMarkdownColors(); }
   });
 }
@@ -48,6 +100,7 @@ export function pageShownIn(group: vscode.TabGroup): vscode.Uri | undefined {
 
 /** The Markdown files currently shown in Porthole's floating windows. */
 export function markdownFilesShown(): vscode.Uri[] {
+  adoptRestoredWindows();
   return [...windows.values()].map(shown => shown.file).filter(file => editorFor(file) === MARKDOWN_PREVIEW_EDITOR);
 }
 
@@ -104,6 +157,7 @@ function open(file: vscode.Uri, sizeIndex: number, size: Size, ifAlreadyOpen: If
 
 /** Porthole's floating windows still open that show `file`, other than `except`. */
 function windowsShowing(file: vscode.Uri, except?: vscode.TabGroup): vscode.TabGroup[] {
+  adoptRestoredWindows();
   const open = new Set(vscode.window.tabGroups.all);
   return [...windows.entries()]
     .filter(([group, shown]) => group !== except && open.has(group) && shown.file.toString() === file.toString())
@@ -133,6 +187,7 @@ async function openNow(file: vscode.Uri, sizeIndex: number, size: Size, ifAlread
   if (!opened) { opened = await fallbackPopOut(file); }
   if (opened) {
     windows.set(opened.group, { file, sizeIndex });
+    remember();
     // An HTML page was moved out of its old window, which VS Code then closed; a Markdown preview was copied, so its old window is closed here.
     for (const old of windowsShowing(file, opened.group)) {
       try {
@@ -143,6 +198,7 @@ async function openNow(file: vscode.Uri, sizeIndex: number, size: Size, ifAlread
       }
     }
     await warnIfOpenedAsText(opened.group, file);
+    remember(); // again, now that the tab, and so the page's title, is known
   }
 }
 

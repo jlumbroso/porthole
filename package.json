@@ -45,7 +45,8 @@
   },
   "main": "./dist/extension.js",
   "activationEvents": [
-    "onUri"
+    "onUri",
+    "onStartupFinished"
   ],
   "contributes": {
     "markdown.previewStyles": [
