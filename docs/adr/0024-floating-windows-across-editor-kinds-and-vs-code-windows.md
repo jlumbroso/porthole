@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Floating windows across editor kinds and VS Code windows
 
 - **Date**: 2026-10-18
-- **Iteration**: 1
-- **Status**: Partially Implemented
+- **Iteration**: 2
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: Two bugs Jérémie found while staging the product page's screenshots taught us that VS Code treats a browser tab and a Markdown preview differently when one is opened again, and that every VS Code window runs its own copy of Porthole sharing one stylesheet; Porthole now decides itself what a second pop-out does, and the stylesheet records each window's files, both built and tested, waiting on a hand check.
@@ -204,7 +204,7 @@ As built (Explicitation, "What was built"). The behavior follows Jérémie's ans
 ## Action Items
 
 - [x] Fix both, with regression tests — Owner: Glazier (2026-10-18, `755cd77`, `5d2f0e9`)
-- [ ] Run the check — Owner: Jérémie
+- [x] Run the check — Owner: Jérémie (2026-10-18: QST-CHECK-TWO-WINDOWS steps 2–3 A, step 5 reissued and A; finding 4 fixed and QST-CHECK-RELOAD A: "Both were perfect polished behavior")
 - [ ] Teach models the repeat-open contract in the skill for outside `open` — Owner: Glazier
 
 ---
@@ -216,6 +216,12 @@ As built (Explicitation, "What was built"). The behavior follows Jérémie's ans
 - Contributors: Jérémie Lumbroso (found and described both), Sounder 6 (foresaw the stylesheet clash in QST-SITE-SCREENSHOTS), Glazier 5.5 (Claude Opus 5.5)
 - Changes: both fixed; this record
 - Outcome: `Partially Implemented` (built and installed locally; not run, not published)
+
+### Iteration 2 (2026-10-18)
+- Trigger: Jérémie's three checks (QST-CHECK-TWO-WINDOWS, QST-CHECK-WORKSPACE-DARK, QST-CHECK-RELOAD)
+- Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
+- Changes: finding 4 (Reload Window) found and fixed, `2ff1ada`; all checks passed
+- Outcome: `Implemented` (in 0.3.0, installed locally, not yet published)
 
 ---
 

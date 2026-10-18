@@ -8,8 +8,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Defend floating windows against editors other extensions put there
 
 - **Date**: 2026-10-18
-- **Iteration**: 2
-- **Status**: Accepted
+- **Iteration**: 3
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5)
 
 **TL;DR**: When another extension opens a file into one of Porthole's floating windows by its column number, Porthole should notice the extra tab and move it to the main window, so the floating window keeps its one page; one question decides whether that happens automatically, by asking, or not at all.
@@ -209,6 +209,12 @@ Settled regardless: the fix at the source is still worth sending to each extensi
 - Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
 - Changes: decision recorded; QST-NAME-GUARD added for the naming review
 - Outcome: `Accepted`
+
+### Iteration 3 (2026-10-18)
+- Trigger: QST-CHECK-GUARD (C: the tab bar stayed) and QST-CHECK-GUARD-COMPACT (A); the naming ruling (B)
+- Contributors: Jérémie Lumbroso, the naming review, Glazier 5.5 (Claude Opus 5.5)
+- Changes: compact mode turned back on after a move (`0bc8c52`); ruled names applied
+- Outcome: `Implemented` (in 0.3.0, installed locally, not yet published)
 
 ---
 
