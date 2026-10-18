@@ -1,0 +1,40 @@
+# Publishes Porthole's product page, the folder `site/` and nothing else, to
+# GitHub Pages at https://jlumbroso.github.io/porthole/ (ADR-0023: one static
+# page, hand-written HTML and CSS, Jérémie's choice of address).
+#
+# Runs when a push to main changes `site/`, or by hand:
+#   gh workflow run pages.yml
+# Action versions are pinned to commits, as in release.yml.
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false   # never cut a deployment off halfway
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write      # to deploy to Pages
+      id-token: write   # to prove the deployment comes from this workflow
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
