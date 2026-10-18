@@ -183,7 +183,7 @@ This is to facilitate communication between model and human — not to introduce
 ---
 
 ### QST-CHECK-OUTSIDE-OPEN: Does a link typed in a terminal open a page in a floating window, and ask only when it should?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** Outside `open` is built and passes 60 tests against a mocked VS Code (commit `950faa5`), but four links in the chain have never run: that VS Code wakes Porthole for a `vscode://jlumbroso.porthole/…` link at all (the `onUri` activation event); that VS Code hands over the link's query decoded exactly once, as its source says (`src/vs/base/common/uri.ts` at 1.141.0), so a file name with a space and a plus sign arrives intact; that a relative path is found in this window's workspace folder; and that a file outside the workspace brings up Porthole's question instead of opening silently. Only a real VS Code receiving a real link can show these. Each outcome below names what it would change. **Safe**: nothing here changes a setting (step 4 says which button not to press); Porthole 0.3.0 is installed in your VS Code but not published.
 - Need: pick a letter (or override — any shape answers). About four minutes. A screenshot of Porthole's question in step 4 would help.
 
@@ -218,12 +218,23 @@ Options:
 **A — all as described** (a prediction). *Rationale*: `registerUriHandler` and the `onUri` activation event are VS Code's public, documented route for exactly this, and `onUri` is declared (`package.json`; read in `implicitActivationEvents.ts` at 1.141.0 that it is not implied). The single decode is read in `uri.ts` (`percentDecode` of the query in `URI.parse`), and Porthole no longer decodes a second time. Every refusal and the question are covered by tests, including the four hostile paths. *Confidence*: 0.55 — because none of the chain from macOS's `open` to Porthole has ever run, and I have never seen what string `open` passes on for `%20` and `%2B`. *If wrong*: B means activation or registration is wrong, to be found in VS Code's extension host log; C means the handler ran and refused, and its words say which check; D means the link's query is decoded twice or not at all on the way in, and the reader must change; E means the allowlist misreads the temporary folder's real path, which would be a safety bug, with a regression test before anything else.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Excellent walk through. **Option A**, with just one exception: I had already accepted "Do not ask me again for this extension" during a previous round of testing, so it never appeared (but I am sure it would have otherwise). Everything else happened as described.
+
+Screenshots:
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 12.59.52 PM.png` Alacritty opened in front of the ADR question
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.00.20 PM.png` Entering the first test
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.00.30 PM.png` The `sample.html` window with the local storage from previous tests
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.01.05 PM.png` The new Markdown test file opened with the second test
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.01.35 PM.png` The "A link from outside" warning and confirmation dialog
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.01.44 PM.png` A close-up of the dialog (possibly for documentation or `README.md` cc: Purser 5.5)
+- See: `docs/adr/attachments/screenshots/2026-10-18-testing/Screenshot 2026-10-18 at 1.01.51 PM.png` The third test window successfully opened
+
+Thanks for the extremely smooth instructions and question. I hope the feedback and screenshots are useful.
 
 ---
 
 ### QST-NAME-OPEN-WORDS: Are the new words of outside `open` right?
-- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing outside `open`
+- Status: answered
 - Why asking: The setting keys were ruled in ADR-0021, but building `open` added words a person reads that nobody has reviewed. The two buttons and the settings' descriptions are the permanent-feeling ones; messages can change in any release. As built (`src/outsideLinks.ts`, `package.json`):
   - **Porthole's question** (a modal dialog, shown when a link asks for a file no setting allows): "A link from outside VS Code asks Porthole to open {path}. None of Porthole's outside-link settings (porthole.outsideLinks) allows this file yet." Detail line: "Allow This Folder adds {folder} to porthole.outsideLinks.allowedFolders, so links can open files there without asking." Buttons: **Open Once**, **Allow This Folder** (and VS Code's own **Cancel**).
   - **A refusal**, as a notice: "Porthole did not open a link from outside VS Code: {reason}." Reasons include "outside links are turned off (porthole.outsideLinks.enabled)", "{file} exists in more than one workspace folder; add repo=<folder name> to the link", "this link is for a newer version of Porthole (/v2/open)".
@@ -252,7 +263,9 @@ Options:
 *Confidence*: 0.8 on the dialog edit and the blessings; 0.65 on `repo`. *If wrong*: the dialog's words are release-mutable — only the settings keys were ever fossils, and those were ruled in ADR-0021.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Approving Option B, with the naming review's edits — thank you to the naming review for the edits!
+
+The goal of `repo` is to introduce a string that is **semantically useful** and should be resolvable to a repository (by default on GitHub, but would be nice to be extensible to other providers like GitLabs, go maybe "porthole" -> defaults to "[user/]porthole" and either the user has a provider configured by default, or it defaults to "[[gh/]user/]porthole" and we can add other providers besides "gh" — this is thinking in terms of producing open and decoupled ecosystems, not in the sense that I anticipate using anything but GitHub myself in the foreseeable future.
 
 ---
 

@@ -77,7 +77,7 @@ suggests a host-list refinement of C rather than a
 boolean — noted, not asked; the boolean serves today.
 
 ### QST-REOPEN-SEMANTICS: What does a second `/open` of the same path do — and does the pinned page follow file edits?
-- Status: unanswered
+- Status: answered
 - Why asking: the live-class pattern (tonight: one deck live-patched four times
   in twenty minutes, one links/survey file rewritten twice, each change needing
   to reach his eyes NOW) makes two behaviors load-bearing: (a) re-invoking
@@ -105,8 +105,8 @@ So for the live-class pattern, the agent's edit is the delivery, and a repeat `/
 *Confidence*: 0.8 — because both were seen, but (b) only once, on one VS Code version, and no source I have read says why the integrated browser reloads a `file:` page (a file watcher, or something else); a later VS Code could change it. *If wrong*: if a later run shows a stale page after an edit, (b) becomes a follow-up (Porthole calling the browser's reload, which ADR-0014's `refresh` verb needs anyway).
 **Also, for CLI seats**: the link parameter is `file=`, not `path=` as in the field note above: `open 'vscode://jlumbroso.porthole/v1/open?file=/abs/page.html'`. A `path=` link is refused with "the link names no file (expected ?file=…)". And outside `open` exists only in Porthole 0.3.0, not yet published.
 
-**ANS:** (by <name>, <date optional>)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+**ANS:** (by Jérémie Lumbroso)
+Yes, confirmed: Both should happen, and as of right now, on my computer and with this version of VSCode, both seem to happen — which is excellent!
 
 ---
 
