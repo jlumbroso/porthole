@@ -173,7 +173,7 @@ Jérémie: "Please, Option D", and he asked that the full process, and the idea 
 
 ---
 
-#### The GitHub settings, as commands (not yet applied; each is listed here before it is changed)
+#### The GitHub settings, as commands (applied 2026-10-19; listed here before they were changed)
 
 Two rulesets and one environment change. They are repository settings, so they are proposed to Jérémie with their exact commands; each can be undone in Settings, Rules and Environments.
 
@@ -202,8 +202,8 @@ One consequence to know: the rehearsal command in this ADR (`--ref main`) stops 
 - [x] Register the trusted publisher at open-vsx.org (Settings, Trusted Publishers, namespace `jlumbroso`, GitHub Actions: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`) - Owner: Jérémie (done 2026-10-13)
 - [x] Rehearse with `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0`, approve it, and read the log - Owner: Purser starts it, Jérémie approves (done 2026-10-13, run 38350586673; result below)
 - [x] Build `scripts/release.mjs` (state reader injected; the five steps; `--dry-run`) with tests, and the recipes `just release X.Y.Z` and `just release-status X.Y.Z` (`just publish` is now an alias) - Owner: Purser (done 2026-10-19, commit `2c43214`; 12 tests; `just release-status 0.4.0` reads that real release as fully done)
-- [ ] Apply the GitHub settings listed under "The GitHub settings, as commands" below (two tag rulesets; the `open-vsx` environment without reviewers and restricted to `v*` tags) - Owner: Purser, **waiting for Jérémie's go**, since they change the repository's protections
-- [x] Change the workflows: `publish-open-vsx.yml` refuses a commit not on `main` or without green tests, treats a live version as done, and no longer depends on an approval; `release.yml` still dispatches it - Owner: Purser (done 2026-10-19, same commit). **Until the GitHub settings below are applied, the `open-vsx` environment still requires a reviewer, so a dispatched run waits.**
+- [x] Apply the GitHub settings listed under "The GitHub settings, as commands" (two tag rulesets; the `open-vsx` environment without reviewers and restricted to `v*` tags) - Owner: Purser (done 2026-10-19, rulesets 25416493 and 25416494, each read back). *(I had written "waiting for Jérémie's go". That was my interpretation, not his ruling: he had answered "Option D", which is these guardrails, and the ADR had listed them; Glazier pointed out it was the same invented human-only step as the founding brief's. Not yet tested: that an admin's `v*` tag push passes the creation bypass; the first real tag will show it.)*
+- [x] Change the workflows: `publish-open-vsx.yml` refuses a commit not on `main` or without green tests, treats a live version as done, and no longer depends on an approval; `release.yml` still dispatches it - Owner: Purser (done 2026-10-19, same commit). *(The settings were applied the same day, so a dispatched run no longer waits.)*
 - [ ] The first real release through this route proves the upload, with `OVSX_PAT` kept as the fallback; then QST-OVSX-PAT's conditional answer applies (revoke) - Owner: Purser and Jérémie
 - [ ] Watch `microsoft/vscode-vsce#1275` and `microsoft/vsmarketplace#2121` for Marketplace trusted publishing; **decide by 2026-11-15** whether to try the Entra route; the PAT is retired on 2026-12-01 - Owner: Purser to watch, Jérémie to decide
 - [ ] Update `docs/release/RELEASE-PLAN.md` and the feedback for Lintel with what the rehearsal showed - Owner: Purser
@@ -215,8 +215,8 @@ One consequence to know: the rehearsal command in this ADR (`--ref main`) stops 
 ### Iteration 5 (2026-10-19)
 - Trigger: Glazier asked for option D before 0.4.1.
 - Contributors: Purser 5.5 (Claude Sonnet 5.5).
-- Changes: `scripts/release.mjs`, its tests, `just release` and `just release-status`, and the workflow changes built; the GitHub settings written out as commands and left for Jérémie's go.
-- Outcome: unchanged (Partially Implemented); the settings and the first real release are what remain.
+- Changes: `scripts/release.mjs`, its tests, `just release` and `just release-status`, and the workflow changes built; the GitHub settings written out as commands, then applied the same day on Glazier's reminder that D is the go.
+- Outcome: unchanged (Partially Implemented); the first real release through this route is what remains.
 
 ### Iteration 4 (2026-10-14)
 - Trigger: Jérémie answered QST-OVSX-GATE with D and asked that the idempotent release process be documented here.
