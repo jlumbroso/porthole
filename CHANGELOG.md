@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-19
+
+Documentation only; the extension itself is unchanged from 0.4.0.
+
+- **A manual**, at https://jlumbroso.github.io/porthole-docs/, linked from the README, the listing and
+  the product page. Its source is public in `docs/manual/`, and each chapter links to its editor and
+  to an issue form, so corrections can come as pull requests.
+- **The README is more exact** about five things the manual's review found: opening through the
+  fallback is an attempt, not a guarantee; the skill link's first-time question is asked once per
+  VS Code workspace, covering its other folders; a disabled link or action is refused before any file
+  question; an HTML page updates when its file is saved; letter case is folded on macOS and Windows.
+
 ## [0.4.0] - 2026-10-19
 
 The skill that teaches models to use Porthole, installed from Porthole itself.
