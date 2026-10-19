@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Install the skill for models in a project**: a command, **Porthole: Install the Skill for Models in
   This Project**, and a link, `vscode://jlumbroso.porthole/v1/install-skill`, write the skill that teaches
   models to use Porthole to `.claude/skills/porthole/SKILL.md`; the first link in a project asks
-  first, and a copy someone edited is replaced only if you say so. Porthole's log names both at startup (ADR-0016;
+  first, and an edited copy is replaced only if you say so. Porthole's log names both at startup (ADR-0016;
   named by the naming review). The website on the listing is now the product page.
 
 ## [0.3.0] - 2026-10-18

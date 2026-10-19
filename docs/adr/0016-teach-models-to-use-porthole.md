@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Teach models to use porthole
 
 - **Date**: 2026-10-13
-- **Iteration**: 4
+- **Iteration**: 5
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5 and Sounder 6 in the seed's thread
 
@@ -185,6 +185,8 @@ Approving the naming review's recommendation exactly as stated, with thanks and 
 
 **Names (QST-NAME-SKILL, B) and the link's question (QST-SKILL-LINK-ASK, A), both answered 2026-10-19 and applied**: the verb is `install-skill` (an idempotent converge, not an add), the command **Porthole: Install the Skill for Models in This Project** (`porthole.installSkill`), the setting `porthole.outsideLinks.actions.installSkill`, the button **Install It**; the first link in each project asks, and after a yes links there go ahead. The provisional names quoted below are history.
 
+**And the words for an edited copy (QST-NAME-REPLACE, B, approved 2026-10-19, applied)**: the question "{folder}'s copy of Porthole's skill has local edits. Replace it with the skill from Porthole {version}?", the detail line "Replacing discards the edits. Cancel keeps the copy exactly as it is.", the button **Replace It**, and the setting's description "…an edited copy is replaced only if you say so." The review's rule, kept for every guard of this kind: *never name an actor for a change you are about to destroy; name the change as property.*
+
 Jérémie, 2026-10-18: *"Couldn't the extension install it in the local project as an action, action triggerable by the user through the command palette, or an LLM through a CLI calling?"* — and, to the plan below, *"Yes, exactly."* This replaces "copies it or writes it into a folder the person chooses" with one action reached three ways:
 
 1. **The command palette**, for a person: the command writes the skill bundled in the extension to `.claude/skills/porthole/SKILL.md` in the window's workspace folder (asking which, when there are several). Every Claude Code session started in that folder then has it.
@@ -248,6 +250,12 @@ The skill is still written only after the verbs it teaches have shipped.
 - Contributors: Jérémie Lumbroso, the naming review, Glazier 5.5 (Claude Opus 5.5)
 - Changes: names applied in code, tests, manifest, skill and changelog; ADR-0017's verb list gains `install-skill`
 - Outcome: stays `Accepted`; no question open
+
+### Iteration 5 (2026-10-19)
+- Trigger: Jérémie's answer to QST-CHECK-SKILL-INSTALL (A, with the finding that a link took another path), then the naming review's ruling on QST-NAME-REPLACE (B), approved
+- Contributors: Jérémie Lumbroso, the naming review, Glazier 5.5 (Claude Opus 5.5)
+- Changes: both routes ask the same question for an edited copy (`bef61ba`, regression test); the ruled words applied
+- Outcome: stays `Accepted`; no question open; ready for 0.4.0
 
 ---
 

@@ -74,7 +74,7 @@ describe('from the command palette', () => {
 
     await command('porthole.installSkill')();
 
-    expect(modalsShown()[0].message).toMatch(/was edited since Porthole wrote it/);
+    expect(modalsShown()[0].message).toMatch(/has local edits\. Replace it with the skill from Porthole/);
     expect(writtenFile(target('/work'))).toBe(edited);
   });
 });
@@ -127,7 +127,7 @@ describe('from a link', () => {
 
       expect(modalsShown().map(modal => modal.message)).toEqual([
         expect.stringMatching(/asks Porthole to install its skill for models in work/),
-        expect.stringMatching(/was edited since Porthole wrote it\. Replace it/),
+        expect.stringMatching(/has local edits\. Replace it/),
       ]);
       expect(writtenFile(target('/work'))).toBe(stamped(BUNDLED, version));
     });

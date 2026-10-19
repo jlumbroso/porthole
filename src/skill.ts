@@ -83,8 +83,10 @@ export async function installSkillTo(folder: vscode.WorkspaceFolder, from: 'pale
     // edits, never the route (Jérémie, ADR-0016 QST-CHECK-SKILL-INSTALL: a link
     // used to give up here where the palette asked).
     const answer = await vscode.window.showWarningMessage(
-      `${placeIn(folder)} was edited since Porthole wrote it. Replace it with the skill from Porthole ${version}?`,
-      { modal: true }, REPLACE_IT,
+      // Words ruled by the naming review (QST-NAME-REPLACE, B): the change is named as the
+      // file's property, never as someone's act, and the detail line states the stake.
+      `${folder.name}'s copy of Porthole's skill has local edits. Replace it with the skill from Porthole ${version}?`,
+      { modal: true, detail: 'Replacing discards the edits. Cancel keeps the copy exactly as it is.' }, REPLACE_IT,
     );
     if (answer !== REPLACE_IT) {
       log(`skill: ${placeIn(folder)} was edited; left as it is`);
