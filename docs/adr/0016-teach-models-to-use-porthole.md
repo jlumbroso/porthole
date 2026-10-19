@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Teach models to use porthole
 
 - **Date**: 2026-10-13
-- **Iteration**: 2
+- **Iteration**: 3
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5 and Sounder 6 in the seed's thread
 
@@ -57,9 +57,65 @@ I doubt people who install this will visit the repo, I think we are better off d
 
 ---
 
+### QST-SKILL-LINK-ASK: When a link from outside VS Code asks Porthole to add the skill to a project, should Porthole ask you first?
+- Status: unanswered
+- Why asking: **Iteration 3 lets a model install the skill itself**, by sending a link from a terminal, the same way it opens a page. Unlike opening a page, this writes a file into your project: always the same file (the skill bundled in the extension), always at the same place (`.claude/skills/porthole/SKILL.md` in the receiving window's workspace folder), never overwriting a copy someone edited. You would then commit it or ignore it. The question is how much a link may do without you.
+- Need: pick a letter (or override — any shape answers)
+
+Options:
+- **A — ask the first time in each project**: the first link in a project shows a question (add it, or not); after a yes, links in that project update the file without asking. A per-action setting can turn links off for this entirely.
+- **B — never ask**: links add or update the file whenever the setting allows (on by default), like `open` for workspace files. The log and a notice say what was written.
+- **C — always ask**: every link that would write the file asks first.
+- **D — links may not do it**: only the command palette adds the skill; a link is refused, and its notice names the command.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**A — ask the first time in each project.** *Rationale*: a file appearing in a repository is a change a person should see once, especially in a public one, where it will be committed; after that, a model keeping its own copy current is exactly the convenience the link exists for. B is the `open` rule, but `open` writes nothing; C asks the same question again after it has been answered; D brings back the step this iteration removes, a model asking you to run a command for it. *Confidence*: 0.7 — because how often you want to be asked is your call, and it is cheap to change before release. *If wrong*: if you are content to see the file in the next commit's diff, B.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
+### QST-NAME-SKILL: What are the command, the link verb, the setting and the log line called?
+- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing the install action
+- Why asking: All are new user-facing words, and the verb and the setting's key are permanent once published. ADR-0017's verb list (`open`, `list`, `refresh`, …) asserts states, never deltas, and has no verb for this. Provisional, as built:
+  - command: **Porthole: Add the Skill for Models to This Project** (`porthole.addSkill`)
+  - link verb: `vscode://jlumbroso.porthole/v1/add-skill` (optional `repo=` to pick the workspace folder, as for `open`)
+  - setting: `porthole.outsideLinks.actions.addSkill` (boolean, on), beside `actions.open`
+  - the question (if QST-SKILL-LINK-ASK is A or C): "A link from outside VS Code asks Porthole to add its skill for models to {folder} (.claude/skills/porthole/SKILL.md). Add it?", buttons **Add It** and VS Code's **Cancel**
+  - the notice when a copy someone edited is found: "{folder} already has an edited copy of Porthole's skill; Porthole left it as it is."
+  - the log line at startup: "Models can learn to use Porthole from its skill: run 'Porthole: Add the Skill for Models to This Project', or send vscode://jlumbroso.porthole/v1/add-skill."
+- Need: pick a letter (or override — any shape answers), or rule each name
+
+Options:
+- **A — as provisional**: every word above ships as it is.
+- **B — the review's names**: the review rules each line.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
+**B — the review's names.** *Rationale*: ADR-0017's rule (verbs assert states) argues against "add", which names a delta; a state-shaped verb might read better beside `open`. And "Skill for Models" may be the wrong noun for a person reading the palette: the file is a Claude skill, but people may know it as instructions. *Confidence*: 0.65 — because these are words. *If wrong*: if the review finds them right, A.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
-### Chosen: a Claude skill in the repository, also shipped inside the extension, and its released address printed in porthole's log
+### Revised in iteration 3 (2026-10-18): the extension adds the skill to the project, from the palette or from a link
+
+Jérémie, 2026-10-18: *"Couldn't the extension install it in the local project as an action, action triggerable by the user through the command palette, or an LLM through a CLI calling?"* — and, to the plan below, *"Yes, exactly."* This replaces "copies it or writes it into a folder the person chooses" with one action reached three ways:
+
+1. **The command palette**, for a person: the command writes the skill bundled in the extension to `.claude/skills/porthole/SKILL.md` in the window's workspace folder (asking which, when there are several). Every Claude Code session started in that folder then has it.
+2. **A link from a terminal**, for a model: a new verb beside `open`, through the same handler, allowlist, per-action setting and log. VS Code has no command-line flag that runs an extension's command, so the link is the route from outside. Whether it asks first is QST-SKILL-LINK-ASK.
+3. **Porthole's log**, for discovery: one line at startup names both routes, so a model that has never seen the skill, but can read Porthole's log, learns how to get it.
+
+**Settled regardless:**
+- **An existing copy**: identical to the bundled one, nothing happens; written by an older Porthole and not edited since, it is replaced and logged; **edited by anyone, it is never overwritten** without asking (from the palette) or at all (from a link). Porthole tells these apart by a comment it writes after the skill's front matter, naming the Porthole version and a checksum of the text below it.
+- **Committing is the person's**: Porthole writes the file and does not touch git.
+- **Other agents**: the file is plain Markdown; agents that do not read `.claude/skills` can be pointed to it, but no second format is written now.
+- The package gains an eighth file, the skill, which the package check names.
+
+### Chosen (iteration 2): a Claude skill in the repository, also shipped inside the extension, and its released address printed in porthole's log
 
 From Jérémie's answer (QST-SKILL-HOME, B and C, 2026-10-13): *"I doubt people who install this will visit the repo."* So:
 
@@ -79,6 +135,9 @@ The skill is still written only after the verbs it teaches have shipped.
 
 - [x] Answer QST-SKILL-HOME — Owner: Jérémie (2026-10-13)
 - [ ] Write the skill after the verbs ship, and run the stranger test — Owner: Glazier (2026-10-18: written for `open`, the one verb built, `.claude/skills/porthole/SKILL.md`, at Jérémie's request ahead of the release; stranger test not yet run; shipping it inside the extension needs a command, whose title goes to the naming review first)
+- [ ] Build the install action (command, link verb, log line, version comment, eighth package file) with tests, using the provisional names — Owner: Glazier
+- [ ] Rule on QST-NAME-SKILL — Owner: the naming review, then Jérémie
+- [ ] Answer QST-SKILL-LINK-ASK — Owner: Jérémie
 
 ---
 
@@ -95,6 +154,12 @@ The skill is still written only after the verbs it teaches have shipped.
 - Contributors: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5) — this record
 - Changes: Decision filled
 - Outcome: `Draft → Accepted`
+
+### Iteration 3 (2026-10-18)
+- Trigger: Jérémie asked whether the extension could install the skill in the project, from the palette or from a model's CLI call, and approved the plan
+- Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
+- Changes: Decision revised (three routes, one action); QST-SKILL-LINK-ASK and QST-NAME-SKILL added
+- Outcome: stays `Accepted`; two questions open
 
 ---
 
