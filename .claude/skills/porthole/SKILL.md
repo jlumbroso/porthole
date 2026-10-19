@@ -20,11 +20,11 @@ off, because it scrolls away.
 - **The page must be a local file**: `.html`, `.htm`, `.md` or `.markdown`.
   Web addresses and `localhost` are not supported yet.
 - **To keep this skill in a project**, so every session there has it: send
-  `open 'vscode://jlumbroso.porthole/v1/add-skill'` (add `?repo=<folder>` when the
+  `open 'vscode://jlumbroso.porthole/v1/install-skill'` (add `?repo=<folder>` when the
   window has several workspace folders), or ask the human to run **Porthole: Add the
   Skill for Models to This Project**. Porthole writes `.claude/skills/porthole/SKILL.md`,
   asks the human the first time in each project, and never overwrites a copy someone
-  edited. (Coming in the release after 0.3.0; names may still change.)
+  edited. (Coming in the release after 0.3.0.)
 
 ## 2. The link
 

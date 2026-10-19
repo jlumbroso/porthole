@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Teach models to use porthole
 
 - **Date**: 2026-10-13
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5 and Sounder 6 in the seed's thread
 
@@ -115,6 +115,8 @@ Excellent, thank you naming review, approved as recommended.
 
 ### Revised in iteration 3 (2026-10-18): the extension adds the skill to the project, from the palette or from a link
 
+**Names (QST-NAME-SKILL, B) and the link's question (QST-SKILL-LINK-ASK, A), both answered 2026-10-19 and applied**: the verb is `install-skill` (an idempotent converge, not an add), the command **Porthole: Install the Skill for Models in This Project** (`porthole.installSkill`), the setting `porthole.outsideLinks.actions.installSkill`, the button **Install It**; the first link in each project asks, and after a yes links there go ahead. The provisional names quoted below are history.
+
 Jérémie, 2026-10-18: *"Couldn't the extension install it in the local project as an action, action triggerable by the user through the command palette, or an LLM through a CLI calling?"* — and, to the plan below, *"Yes, exactly."* This replaces "copies it or writes it into a folder the person chooses" with one action reached three ways:
 
 1. **The command palette**, for a person: the command writes the skill bundled in the extension to `.claude/skills/porthole/SKILL.md` in the window's workspace folder (asking which, when there are several). Every Claude Code session started in that folder then has it.
@@ -147,9 +149,9 @@ The skill is still written only after the verbs it teaches have shipped.
 
 - [x] Answer QST-SKILL-HOME — Owner: Jérémie (2026-10-13)
 - [ ] Write the skill after the verbs ship, and run the stranger test — Owner: Glazier (2026-10-18: written for `open`, the one verb built, `.claude/skills/porthole/SKILL.md`, at Jérémie's request ahead of the release; stranger test not yet run; shipping it inside the extension needs a command, whose title goes to the naming review first)
-- [ ] Build the install action (command, link verb, log line, version comment, eighth package file) with tests, using the provisional names — Owner: Glazier
-- [ ] Rule on QST-NAME-SKILL — Owner: the naming review, then Jérémie
-- [ ] Answer QST-SKILL-LINK-ASK — Owner: Jérémie
+- [x] Build the install action (command, link verb, log line, version comment, eighth package file) with tests — Owner: Glazier (`6370252`, renamed to the ruled names after; eleven tests; not yet released)
+- [x] Rule on QST-NAME-SKILL — Owner: the naming review, then Jérémie (2026-10-19: B, `install-skill`; applied)
+- [x] Answer QST-SKILL-LINK-ASK — Owner: Jérémie (2026-10-19: A, as built)
 
 ---
 
@@ -172,6 +174,12 @@ The skill is still written only after the verbs it teaches have shipped.
 - Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
 - Changes: Decision revised (three routes, one action); QST-SKILL-LINK-ASK and QST-NAME-SKILL added
 - Outcome: stays `Accepted`; two questions open
+
+### Iteration 4 (2026-10-19)
+- Trigger: the naming review ruled QST-NAME-SKILL (B: `install-skill`), and Jérémie answered both questions
+- Contributors: Jérémie Lumbroso, the naming review, Glazier 5.5 (Claude Opus 5.5)
+- Changes: names applied in code, tests, manifest, skill and changelog; ADR-0017's verb list gains `install-skill`
+- Outcome: stays `Accepted`; no question open
 
 ---
 

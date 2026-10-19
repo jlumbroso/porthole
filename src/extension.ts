@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { cycleSize, dockBack, initWindowMemory, markdownFilesShown, openRequested, pageShownIn, popOut, togglePin, trackWindows } from './commands';
 import { guardFloatingWindows } from './keepToOneTab';
-import { addSkill, initSkill } from './skill';
+import { initSkill, installSkill } from './skill';
 import { handleLink } from './outsideLinks';
 import { initMarkdownColors } from './markdownColors';
 import { reviewSettings } from './settingsReview';
@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext): void {
   register(context, 'porthole.dockBack', dockBack);
   register(context, 'porthole.togglePin', togglePin);
   register(context, 'porthole.reviewSettings', reviewSettings);
-  register(context, 'porthole.addSkill', addSkill);
+  register(context, 'porthole.installSkill', installSkill);
 
   // vscode://jlumbroso.porthole/v1/open?file=… (ADR-0013). Failures are logged, as for commands.
   context.subscriptions.push(vscode.window.registerUriHandler({

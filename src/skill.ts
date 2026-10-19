@@ -10,10 +10,10 @@ import { log } from './log';
 // One action, reached from the command palette (a person) or from a link
 // (a model in a terminal); Porthole's log names both at startup.
 //
-// Names are provisional until the naming review rules (QST-NAME-SKILL).
+// Names ruled by the naming review (QST-NAME-SKILL, B, approved 2026-10-19).
 
 export const SKILL_PATH = ['.claude', 'skills', 'porthole', 'SKILL.md'];
-export const ADD_IT = 'Add It';
+export const INSTALL_IT = 'Install It';
 export const REPLACE_IT = 'Replace It';
 
 // Written right after the skill's front matter (which must stay first). It says
@@ -52,7 +52,7 @@ export function initSkill(context: vscode.ExtensionContext): void {
   extensionUri = context.extensionUri;
   version = String(context.extension.packageJSON.version ?? '0.0.0');
   memory = context.workspaceState;
-  log('Models can learn to use Porthole from its skill: run \'Porthole: Add the Skill for Models to This Project\', or send vscode://jlumbroso.porthole/v1/add-skill.');
+  log('Models can learn to use Porthole from its skill: run \'Porthole: Install the Skill for Models in This Project\', or send vscode://jlumbroso.porthole/v1/install-skill.');
 }
 
 async function readText(uri: vscode.Uri): Promise<string | undefined> {
@@ -66,7 +66,7 @@ const placeIn = (folder: vscode.WorkspaceFolder) => `${folder.name}/${SKILL_PATH
  * Writes the skill into `folder`, unless an edited copy is there: from the
  * palette Porthole then asks before replacing it; from a link it never does.
  */
-export async function addSkillTo(folder: vscode.WorkspaceFolder, from: 'palette' | 'link'): Promise<void> {
+export async function installSkillTo(folder: vscode.WorkspaceFolder, from: 'palette' | 'link'): Promise<void> {
   if (!extensionUri) { return; }
   const bundled = await readText(vscode.Uri.joinPath(extensionUri, ...SKILL_PATH));
   if (bundled === undefined) { log('skill: the copy inside the extension is missing'); return; }
@@ -92,38 +92,38 @@ export async function addSkillTo(folder: vscode.WorkspaceFolder, from: 'palette'
   }
   await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(folder.uri, ...SKILL_PATH.slice(0, -1)));
   await vscode.workspace.fs.writeFile(target, new TextEncoder().encode(wanted));
-  const what = state === 'absent' ? 'added' : 'updated';
+  const what = state === 'absent' ? 'installed' : 'updated';
   log(`skill: ${what} ${placeIn(folder)} (Porthole ${version}, from the ${from === 'link' ? 'link' : 'command palette'})`);
   void vscode.window.showInformationMessage(`Porthole ${what} its skill for models: ${placeIn(folder)}.`);
 }
 
 /** The command: adds the skill to this window's workspace folder, asking which when there are several. */
-export async function addSkill(): Promise<void> {
+export async function installSkill(): Promise<void> {
   const folders = (vscode.workspace.workspaceFolders ?? []).filter(folder => folder.uri.scheme === 'file');
   if (folders.length === 0) {
-    void vscode.window.showInformationMessage('Porthole: open a folder first; the skill is added to a workspace folder.');
+    void vscode.window.showInformationMessage('Porthole: open a folder first; the skill is installed in a workspace folder.');
     return;
   }
   let folder = folders[0];
   if (folders.length > 1) {
-    const picked = await vscode.window.showQuickPick(folders.map(item => ({ label: item.name, folder: item })), { placeHolder: 'Add Porthole\'s skill for models to which folder?' });
+    const picked = await vscode.window.showQuickPick(folders.map(item => ({ label: item.name, folder: item })), { placeHolder: 'Install Porthole\'s skill for models in which folder?' });
     if (!picked) { return; }
     folder = picked.folder;
   }
-  await addSkillTo(folder, 'palette');
+  await installSkillTo(folder, 'palette');
 }
 
 /**
  * The first link in a project asks before writing (QST-SKILL-LINK-ASK, A as
  * built); after a yes, links there go ahead. Returns true to proceed.
  */
-export async function linkMayAddSkill(folder: vscode.WorkspaceFolder): Promise<boolean> {
+export async function linkMayInstallSkill(folder: vscode.WorkspaceFolder): Promise<boolean> {
   if (memory?.get<boolean>(CONSENT)) { return true; }
   const answer = await vscode.window.showWarningMessage(
-    `A link from outside VS Code asks Porthole to add its skill for models to ${folder.name} (${SKILL_PATH.join('/')}). Add it?`,
-    { modal: true }, ADD_IT,
+    `A link from outside VS Code asks Porthole to install its skill for models in ${folder.name} (${SKILL_PATH.join('/')}). Install it?`,
+    { modal: true }, INSTALL_IT,
   );
-  if (answer !== ADD_IT) { return false; }
+  if (answer !== INSTALL_IT) { return false; }
   await memory?.update(CONSENT, true);
   return true;
 }

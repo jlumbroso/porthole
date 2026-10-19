@@ -42,17 +42,17 @@ describe('the copy Porthole writes', () => {
 
 describe('from the command palette', () => {
   it('adds the skill to the workspace folder', async () => {
-    await command('porthole.addSkill')();
+    await command('porthole.installSkill')();
 
     expect(writtenFile(target('/work'))).toBe(stamped(BUNDLED, version));
-    expect(shownMessages().at(-1)).toMatch(/added its skill for models: work\/\.claude\/skills\/porthole\/SKILL\.md/);
+    expect(shownMessages().at(-1)).toMatch(/installed its skill for models: work\/\.claude\/skills\/porthole\/SKILL\.md/);
   });
 
   it('asks which folder when the window has several', async () => {
     setWorkspaceFolders(['/work', '/notes']);
     answerNextQuickPick(items => items.find(item => item.label === 'notes'));
 
-    await command('porthole.addSkill')();
+    await command('porthole.installSkill')();
 
     expect(writtenFile(target('/notes'))).toBeDefined();
     expect(writtenFile(target('/work'))).toBeUndefined();
@@ -61,7 +61,7 @@ describe('from the command palette', () => {
   it('replaces an untouched copy from an older Porthole, and says it updated it', async () => {
     seedFile(target('/work'), stamped(`${BUNDLED}\nAn older paragraph.\n`, '0.3.9'));
 
-    await command('porthole.addSkill')();
+    await command('porthole.installSkill')();
 
     expect(writtenFile(target('/work'))).toBe(stamped(BUNDLED, version));
     expect(shownMessages().at(-1)).toMatch(/updated its skill/);
@@ -72,7 +72,7 @@ describe('from the command palette', () => {
     seedFile(target('/work'), edited);
     answerNextModal(undefined);
 
-    await command('porthole.addSkill')();
+    await command('porthole.installSkill')();
 
     expect(modalsShown()[0].message).toMatch(/was edited since Porthole wrote it/);
     expect(writtenFile(target('/work'))).toBe(edited);
@@ -81,13 +81,13 @@ describe('from the command palette', () => {
 
 describe('from a link', () => {
   it('asks the first time in a project, then adds it without asking', async () => {
-    answerNextModal('Add It');
-    await followLink('/v1/add-skill', '');
+    answerNextModal('Install It');
+    await followLink('/v1/install-skill', '');
     expect(modalsShown()).toHaveLength(1);
     expect(writtenFile(target('/work'))).toBe(stamped(BUNDLED, version));
 
     seedFile(target('/work'), stamped(`${BUNDLED}\nAn older paragraph.\n`, '0.3.9'));
-    await followLink('/v1/add-skill', '');
+    await followLink('/v1/install-skill', '');
 
     expect(modalsShown()).toHaveLength(1); // not asked again
     expect(writtenFile(target('/work'))).toBe(stamped(BUNDLED, version));
@@ -95,7 +95,7 @@ describe('from a link', () => {
 
   it('writes nothing when the person declines', async () => {
     answerNextModal(undefined);
-    await followLink('/v1/add-skill', '');
+    await followLink('/v1/install-skill', '');
 
     expect(writtenFile(target('/work'))).toBeUndefined();
   });
@@ -103,9 +103,9 @@ describe('from a link', () => {
   it('never overwrites an edited copy, and says so', async () => {
     const edited = `${stamped(BUNDLED, '0.3.9')}\nOur project's own note.\n`;
     seedFile(target('/work'), edited);
-    answerNextModal('Add It');
+    answerNextModal('Install It');
 
-    await followLink('/v1/add-skill', '');
+    await followLink('/v1/install-skill', '');
 
     expect(writtenFile(target('/work'))).toBe(edited);
     expect(shownMessages().at(-1)).toMatch(/already has an edited copy of Porthole's skill; Porthole left it as it is/);
@@ -113,18 +113,18 @@ describe('from a link', () => {
 
   it('needs repo= when the window has several folders, and refuses when its setting is off', async () => {
     setWorkspaceFolders(['/work', '/notes']);
-    await followLink('/v1/add-skill', '');
+    await followLink('/v1/install-skill', '');
     expect(shownMessages().at(-1)).toMatch(/several workspace folders; add repo=<folder name>/);
 
-    setConfig({ 'outsideLinks.actions.addSkill': false });
-    await followLink('/v1/add-skill', 'repo=notes');
-    expect(shownMessages().at(-1)).toMatch(/porthole\.outsideLinks\.actions\.addSkill/);
+    setConfig({ 'outsideLinks.actions.installSkill': false });
+    await followLink('/v1/install-skill', 'repo=notes');
+    expect(shownMessages().at(-1)).toMatch(/porthole\.outsideLinks\.actions\.installSkill/);
     expect(writtenFile(target('/notes'))).toBeUndefined();
   });
 });
 
 describe('how a model finds out', () => {
   it('names both routes in Porthole\'s log at startup', () => {
-    expect(loggedLines().join('\n')).toMatch(/Porthole: Add the Skill for Models to This Project.*vscode:\/\/jlumbroso\.porthole\/v1\/add-skill/);
+    expect(loggedLines().join('\n')).toMatch(/Porthole: Install the Skill for Models in This Project.*vscode:\/\/jlumbroso\.porthole\/v1\/install-skill/);
   });
 });

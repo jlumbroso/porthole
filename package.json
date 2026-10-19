@@ -80,8 +80,8 @@
         "category": "Porthole"
       },
       {
-        "command": "porthole.addSkill",
-        "title": "Add the Skill for Models to This Project",
+        "command": "porthole.installSkill",
+        "title": "Install the Skill for Models in This Project",
         "category": "Porthole"
       }
     ],
@@ -225,10 +225,10 @@
           "default": true,
           "markdownDescription": "Let outside links open a page in a floating window."
         },
-        "porthole.outsideLinks.actions.addSkill": {
+        "porthole.outsideLinks.actions.installSkill": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Let outside links add Porthole's skill for models to a workspace folder (`.claude/skills/porthole/SKILL.md`). The first link in each project asks first; an edited copy is never overwritten."
+          "markdownDescription": "Let outside links install Porthole's skill for models in a workspace folder (`.claude/skills/porthole/SKILL.md`). The first link in each project asks first; an edited copy is never overwritten."
         },
         "porthole.outsideLinks.allowWorkspaceFolders": {
           "type": "boolean",

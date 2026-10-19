@@ -3,7 +3,7 @@ import { realpath } from 'node:fs/promises';
 import * as nodePath from 'node:path';
 import { log } from './log';
 import type { Size } from './config';
-import { addSkillTo, linkMayAddSkill } from './skill';
+import { installSkillTo, linkMayInstallSkill } from './skill';
 
 // Outside `open` (ADR-0013): a terminal, a script or a model asks for a page
 // with a link such as
@@ -12,7 +12,7 @@ import { addSkillTo, linkMayAddSkill } from './skill';
 // explicitly allowed is refused, and every refusal says why.
 
 export const OPEN_PATHS = ['/v1/open', '/open']; // an unversioned link is read as version 1 (ADR-0017)
-export const ADD_SKILL_PATHS = ['/v1/add-skill', '/add-skill']; // ADR-0016, iteration 3; name provisional (QST-NAME-SKILL)
+export const INSTALL_SKILL_PATHS = ['/v1/install-skill', '/install-skill']; // ADR-0016, iteration 3; named by the naming review (QST-NAME-SKILL)
 
 export interface OpenRequest {
   file: string;
@@ -20,7 +20,7 @@ export interface OpenRequest {
   repo?: string;
 }
 
-export type Parsed = { request: OpenRequest } | { addSkill: { repo?: string } } | { refused: string };
+export type Parsed = { request: OpenRequest } | { installSkill: { repo?: string } } | { refused: string };
 
 const isPage = (path: string) => /\.(html?|md|markdown)$/i.test(path);
 
@@ -53,15 +53,15 @@ export function readQuery(query: string): Map<string, string> | { refused: strin
 
 /** Reads a link VS Code handed to Porthole. */
 export function parseLink(uri: vscode.Uri): Parsed {
-  const known = OPEN_PATHS.includes(uri.path) || ADD_SKILL_PATHS.includes(uri.path);
+  const known = OPEN_PATHS.includes(uri.path) || INSTALL_SKILL_PATHS.includes(uri.path);
   if (!known) {
     return { refused: /^\/v\d+\//.test(uri.path) && !uri.path.startsWith('/v1/')
       ? `this link is for a newer version of Porthole (${uri.path})`
-      : `Porthole does not understand ${uri.path} yet; it can open a page, or add its skill for models to a project` };
+      : `Porthole does not understand ${uri.path} yet; it can open a page, or install its skill for models in a project` };
   }
   const query = readQuery(uri.query);
   if (!(query instanceof Map)) { return query; }
-  if (ADD_SKILL_PATHS.includes(uri.path)) { return { addSkill: { repo: query.get('repo') } }; }
+  if (INSTALL_SKILL_PATHS.includes(uri.path)) { return { installSkill: { repo: query.get('repo') } }; }
   const unknown = [...query.keys()].filter(key => !['file', 'width', 'height', 'repo'].includes(key));
   if (unknown.length > 0) { log(`outside link: ignoring ${unknown.join(', ')}`); }
   const file = query.get('file');
@@ -196,7 +196,7 @@ export async function handleLink(uri: vscode.Uri, open: (file: vscode.Uri, size?
   if (!outsideLinksEnabled()) { refuse('outside links are turned off (porthole.outsideLinks.enabled)'); return; }
   const parsed = parseLink(uri);
   if ('refused' in parsed) { refuse(parsed.refused); return; }
-  if ('addSkill' in parsed) { await addSkillFromLink(parsed.addSkill.repo); return; }
+  if ('installSkill' in parsed) { await installSkillFromLink(parsed.installSkill.repo); return; }
   if (!actionAllowed('open')) { refuse('outside links may not open pages (porthole.outsideLinks.actions.open)'); return; }
   const resolved = await resolveTarget(parsed.request);
   if ('refused' in resolved) { refuse(resolved.refused); return; }
@@ -215,17 +215,17 @@ export async function handleLink(uri: vscode.Uri, open: (file: vscode.Uri, size?
 }
 
 /**
- * `/v1/add-skill[?repo=<folder>]`: writes Porthole's skill for models into a
+ * `/v1/install-skill[?repo=<folder>]`: writes Porthole's skill for models into a
  * workspace folder of the receiving window (ADR-0016, iteration 3).
  */
-async function addSkillFromLink(repo: string | undefined): Promise<void> {
-  if (!actionAllowed('addSkill')) { refuse('outside links may not add Porthole\'s skill to a project (porthole.outsideLinks.actions.addSkill)'); return; }
+async function installSkillFromLink(repo: string | undefined): Promise<void> {
+  if (!actionAllowed('installSkill')) { refuse('outside links may not install Porthole\'s skill in a project (porthole.outsideLinks.actions.installSkill)'); return; }
   const folders = repo ? localFolders().filter(folder => folder.name === repo) : localFolders();
   if (folders.length === 0) {
-    refuse(repo ? `no workspace folder named ${repo} is open in this window` : 'this window has no workspace folder to add the skill to');
+    refuse(repo ? `no workspace folder named ${repo} is open in this window` : 'this window has no workspace folder to install the skill in');
     return;
   }
   if (folders.length > 1) { refuse('this window has several workspace folders; add repo=<folder name> to the link'); return; }
-  if (!(await linkMayAddSkill(folders[0]))) { log(`outside link: the skill was not added to ${folders[0].name}; the person declined`); return; }
-  await addSkillTo(folders[0], 'link');
+  if (!(await linkMayInstallSkill(folders[0]))) { log(`outside link: the skill was not installed in ${folders[0].name}; the person declined`); return; }
+  await installSkillTo(folders[0], 'link');
 }
