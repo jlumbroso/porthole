@@ -31,5 +31,16 @@
     "history": [],
     "totalOccurrences": 1,
     "source": "panel"
+  },
+  {
+    "key": "jlumbroso-porthole:16::fd7043104dba::0",
+    "adrPath": "docs/adr/0016-teach-models-to-use-porthole.md",
+    "adrNumber": 16,
+    "questionText": "Does the command install the skill in a project, and does a link do it after asking once?",
+    "draftText": "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest version; the second, the external link, only has a question for whether to allow the external link to trigger the event, but then there isn't the other question. When the file is edited then it just fails. It feels like it is not following the same pathway as the command palette, and it should.",
+    "updatedAt": "2026-10-19T03:59:00.897Z",
+    "history": [],
+    "totalOccurrences": 1,
+    "source": "panel"
   }
 ]

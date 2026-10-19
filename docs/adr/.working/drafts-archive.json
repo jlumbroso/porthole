@@ -1527,5 +1527,54 @@
     "source": "panel",
     "archivedAt": "2026-10-18T20:53:14.854Z",
     "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:16::75cd537fec7a::0",
+    "adrPath": "docs/adr/0016-teach-models-to-use-porthole.md",
+    "adrNumber": 16,
+    "questionText": "When a link from outside VS Code asks Porthole to add the skill to a project, should Porthole ask you first?",
+    "draftText": "Yes, agreed with Option A as recommended.",
+    "updatedAt": "2026-10-19T01:32:59.794Z",
+    "history": [],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-19T01:32:59.818Z",
+    "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:16::2243b7797dec::0",
+    "adrPath": "docs/adr/0016-teach-models-to-use-porthole.md",
+    "adrNumber": 16,
+    "questionText": "What are the command, the link verb, the setting and the log line called?",
+    "draftText": "Excellent, thank you naming review, approved as recommended.",
+    "updatedAt": "2026-10-19T01:35:16.789Z",
+    "history": [
+      "Excellent, thank you naming review, approved as recommended!"
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-19T01:35:18.779Z",
+    "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:16::fd7043104dba::0",
+    "adrPath": "docs/adr/0016-teach-models-to-use-porthole.md",
+    "adrNumber": 16,
+    "questionText": "Does the command install the skill in a project, and does a link do it after asking once?",
+    "draftText": "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest version; the second, the external link, only has a question for whether to allow the external link to trigger the event, but then there isn't the other question. When the file is edited then it just fails. It feels like it is not following the same pathway as the ",
+    "updatedAt": "2026-10-19T03:58:55.902Z",
+    "history": [
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the ",
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the ",
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to recer",
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest ersion;",
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest version; the second, the external link, only has a question for whether to allow the external link to trigger the event, but then there isn't the other question.",
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest version; the second, the external link, only has a question for whether to allow the external link to trigger the event, but then there isn't the other question. When the file is edited then it just fails.",
+      "Option A, all as described, it's excellent.\n\nOne thing:\n- There's a difference between the palette action and the external link action.\n- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest version; the second, the external link, only has a question for whether to allow the external link to trigger the event, but then there isn't the other question. When the file is edited then it just fails. It feels like it is not following the same p"
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-19T03:59:00.795Z",
+    "reason": "promoted"
   }
 ]

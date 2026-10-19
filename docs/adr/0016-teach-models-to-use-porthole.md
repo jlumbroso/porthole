@@ -112,7 +112,7 @@ Excellent, thank you naming review, approved as recommended.
 ---
 
 ### QST-CHECK-SKILL-INSTALL: Does the command install the skill in a project, and does a link do it after asking once?
-- Status: unanswered
+- Status: answered
 - Why asking: **What this finds out.** The install action passes eleven tests against a mocked VS Code, and the skill is confirmed inside the installed 0.4.0 package (identical to the repository's copy). What only a real VS Code shows: that the command finds the bundled skill in the installed extension and writes it into a workspace folder; that its notices read right; and that a link from a terminal asks once, then goes ahead. **Safe**: it writes one file, `samples/site-capture/.claude/skills/porthole/SKILL.md`, which is not tracked; I delete it afterwards. Porthole 0.4.0 is installed in your VS Code, not published.
 - Need: pick a letter (or override — any shape answers). About two minutes.
 
@@ -139,7 +139,11 @@ Options:
 **A — all as described** (a prediction). *Rationale*: the installed package was inspected (the skill is at `.claude/skills/porthole/SKILL.md` inside it, identical to the repository's); the link handler is the one `open` has used since 0.3.0; and the edited-copy rule is tested, with a mutation of it caught by three tests. *Confidence*: 0.7 — because `workspace.fs` writing a new folder and file in a real workspace, and the order of the link's question and the edited-copy notice, have only run against the mock. *If wrong*: B means the extension's own folder is read differently in a real install, which the log line "the copy inside the extension is missing" will confirm; C would be a safety bug, fixed with a regression test before anything ships; D means the link went to the other VS Code window (send it with the Porthole screenshot window used last) or its setting is off.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Option A, all as described, it's excellent.
+
+One thing:
+- There's a difference between the palette action and the external link action.
+- When the skill as been modified, the first will ask you if you want to revert to whatever is the latest version; the second, the external link, only has a question for whether to allow the external link to trigger the event, but then there isn't the other question. When the file is edited then it just fails. It feels like it is not following the same pathway as the command palette, and it should.
 
 ---
 
