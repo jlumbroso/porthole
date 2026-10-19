@@ -22,6 +22,7 @@ fs.mkdirSync(output, { recursive: true });
     page.on('pageerror', error => errors.push(error.message));
     page.on('request', request => { if (/^https?:/.test(request.url())) remoteRequests.push(request.url()); });
     await page.goto(url);
+    assert.equal(await page.locator('html').getAttribute('data-heading'), 'mono', 'The selected direction is the default');
     const fonts = fs.readdirSync(fontDir).filter(name => /^BerkeleyMono-.*\.woff2$/.test(name));
     assert.equal(fonts.length, 6, 'Expect the six purchased faces for this comparison');
     // A convenient PRIVATE copy for the font purchaser; never stage this output.
@@ -41,6 +42,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('#font-status').filter({ hasText: '6 faces loaded locally' }).waitFor();
     assert(await page.evaluate(() => document.fonts.check('14px "Berkeley Study"')));
     assert(await page.evaluate(() => [...document.images].every(img => img.complete && img.naturalWidth > 0)));
+    await page.locator('[data-heading-choice="serif"]').click();
     await page.screenshot({ path: path.join(output, '01-paper-serif.png'), fullPage: true });
     await page.locator('[data-heading-choice="mono"]').click();
     await page.screenshot({ path: path.join(output, '02-paper-mono.png'), fullPage: true });
@@ -73,7 +75,7 @@ fs.mkdirSync(output, { recursive: true });
     }
     await page.setViewportSize({ width: 420, height: 920 });
     await page.locator('[data-theme-choice="light"]').click();
-    await page.locator('[data-heading-choice="serif"]').click();
+    await page.locator('[data-heading-choice="mono"]').click();
     await page.evaluate(() => { location.hash = 'first-window'; });
     await page.waitForFunction(() => !document.getElementById('first-window').hidden);
     await page.evaluate(() => scrollTo(0, 0));
@@ -87,6 +89,7 @@ fs.mkdirSync(output, { recursive: true });
     assert.deepEqual(remoteRequests, [], 'The study must make no HTTP requests');
     await page.goto(pathToFileURL(path.join(output, 'preview-with-berkeley.html')).href);
     await page.evaluate(() => document.fonts.ready);
+    assert.equal(await page.locator('html').getAttribute('data-heading'), 'mono');
     assert(await page.evaluate(() => document.fonts.check('14px "Berkeley Study"')));
     assert(await page.evaluate(() => [...document.images].every(img => img.complete && img.naturalWidth > 0)));
     console.log(JSON.stringify({ faces: fonts.length, layoutCases: checked.length, imagesLoaded: true, noJavaScriptChaptersReadable: true, remoteRequests: remoteRequests.length, pageErrors: errors.length, output }, null, 2));
@@ -94,6 +97,8 @@ fs.mkdirSync(output, { recursive: true });
 })().catch(error => { console.error(error); process.exitCode = 1; });
 
 // Outcome, 2026-10-19: six purchased faces loaded locally; 16 chapter/heading/width
+// Re-run after ADR-0026 answers: mono headings are the default in source and the
+// private preview; the narrow capture uses that selected direction. Checks pass.
 // combinations passed overflow checks; both chapters readable without JavaScript;
 // images loaded, no page errors, no automatic HTTP requests under file://.
 // Sounder inspected the five captures. An early navigation assertion raced the
