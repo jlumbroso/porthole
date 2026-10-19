@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-heading="serif">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Porthole manual — a design study</title>
+  <style>
+    :root { color-scheme: light; --paper:#f5f2eb; --surface:#fbf9f4; --ink:#252b2a; --muted:#5d6560; --line:#d1d4cb; --accent:#315d50; --brass:#866a34; --wash:#e8ebe3; --code:#eeece5; --mono:'Berkeley Study',ui-monospace,'SFMono-Regular',Consolas,monospace; --heading:Georgia,'Times New Roman',serif; font:16px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--paper); color:var(--ink); }
+    :root[data-theme="dark"] { color-scheme:dark; --paper:#1d2523; --surface:#222d29; --ink:#eeede5; --muted:#b4beb6; --line:#415049; --accent:#b1cdba; --brass:#c6ac73; --wash:#293730; --code:#26312b; }
+    :root[data-heading="mono"] { --heading:var(--mono); }
+    * { box-sizing:border-box; }
+    body { margin:0; }
+    a { color:var(--accent); text-underline-offset:.2em; }
+    a:hover { text-decoration-thickness:2px; }
+    button,input { font:inherit; }
+    button { cursor:pointer; }
+    button,a,input,summary { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:2px solid var(--accent); outline-offset:5px; }
+    [hidden] { display:none!important; }
+    p,h1,h2,h3,figure { margin:0; }
+    p+p { margin-top:1rem; }
+    code,kbd,.label,.folio,.version { font-family:var(--mono); font-variant-ligatures:none; }
+    code { font-size:.85em; overflow-wrap:anywhere; }
+    p code,li code,td code { background:var(--code); padding:.1em .3em; border-radius:3px; }
+    .study { padding:12px max(24px,calc((100vw - 1360px)/2)); background:var(--ink); color:var(--paper); font-size:12px; line-height:1.6; }
+    .study strong { letter-spacing:.025em; }
+    .study details { margin-top:6px; }
+    .study summary { cursor:pointer; width:fit-content; }
+    .study p { max-width:85ch; margin-top:8px; }
+    .study a { color:inherit; }
+    .controls { display:flex; align-items:center; flex-wrap:wrap; gap:12px 25px; padding:14px max(24px,calc((100vw - 1360px)/2)); border-bottom:1px solid var(--line); font-size:12px; }
+    .control-group { display:flex; align-items:center; gap:10px; }
+    .control-group>span { color:var(--muted); }
+    .switch { display:flex; gap:2px; }
+    .switch button { border:1px solid transparent; background:transparent; color:var(--muted); padding:5px 9px; border-radius:3px; font-size:12px; }
+    .switch button[aria-pressed="true"] { border-color:var(--line); background:var(--surface); color:var(--ink); }
+    .font-input { max-width:230px; font-size:11px; }
+    .font-status { color:var(--muted); font-size:11px; }
+    .masthead { max-width:1360px; margin:auto; padding:26px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { display:flex; align-items:center; gap:11px; color:var(--ink); text-decoration:none; font-size:19px; font-weight:600; }
+    .brand img { width:37px; height:37px; }
+    .brand .divider { width:1px; height:21px; background:var(--line); margin:0 4px; }
+    .brand .manual { font-size:15px; font-weight:400; color:var(--muted); }
+    .masthead-links { display:flex; gap:24px; font-size:12px; }
+    .masthead-links a { color:var(--muted); }
+    .book { display:grid; grid-template-columns:210px minmax(0,1fr); max-width:1312px; margin:0 auto; border-top:1px solid var(--line); }
+    .contents { padding:35px 26px 40px 0; border-right:1px solid var(--line); }
+    .contents-inner { position:sticky; top:25px; }
+    .label { color:var(--brass); font-size:10px; line-height:1.6; letter-spacing:.09em; text-transform:uppercase; }
+    .contents nav { display:grid; gap:8px; margin-top:20px; }
+    .contents nav a { color:var(--muted); text-decoration:none; padding:8px 10px; font-size:13px; border-left:2px solid transparent; }
+    .contents nav a[aria-current="page"] { color:var(--ink); border-left-color:var(--brass); background:var(--wash); }
+    .contents .version { color:var(--muted); font-size:10px; margin-top:38px; line-height:1.8; }
+    .contents .index-note { color:var(--muted); font-size:12px; margin-top:30px; line-height:1.65; }
+    .reading { min-width:0; padding:45px 48px 35px; }
+    .chapter { max-width:910px; }
+    .chapter-head { max-width:740px; margin-bottom:34px; }
+    h1 { font:400 clamp(34px,3.8vw,56px)/1.12 var(--heading); letter-spacing:-.035em; margin:18px 0 21px; text-wrap:balance; }
+    :root[data-heading="mono"] h1 { font-size:clamp(29px,3.1vw,45px); line-height:1.2; letter-spacing:-.045em; }
+    .dek { color:var(--muted); font-size:17px; line-height:1.75; max-width:61ch; }
+    .chapter-grid { display:grid; grid-template-columns:minmax(0,650px) minmax(130px,1fr); gap:34px; }
+    .prose { min-width:0; }
+    .prose section { margin-top:34px; scroll-margin-top:22px; }
+    .prose section:first-child { margin-top:0; }
+    h2 { font:400 27px/1.3 var(--heading); letter-spacing:-.025em; margin-bottom:14px; }
+    :root[data-heading="mono"] h2 { font-size:22px; line-height:1.4; }
+    h3 { font-size:15px; margin-bottom:9px; }
+    .step { display:flex; align-items:baseline; gap:13px; }
+    .step .folio { color:var(--brass); font-size:12px; }
+    .steps { padding-left:21px; margin:13px 0 0; }
+    .steps li { padding-left:4px; margin-top:10px; }
+    kbd { display:inline-block; border:1px solid var(--line); border-bottom-width:2px; border-radius:4px; padding:1px 6px; font-size:12px; background:var(--surface); }
+    .shot { margin:23px 0 0; }
+    .shot a { display:block; }
+    .shot img { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:4px; }
+    figcaption { display:flex; align-items:baseline; gap:13px; margin-top:10px; font-size:11px; color:var(--muted); line-height:1.7; }
+    figcaption .folio { color:var(--brass); white-space:nowrap; }
+    .margin { color:var(--muted); font-size:12px; line-height:1.75; padding-top:5px; }
+    .margin div { border-top:1px solid var(--line); padding-top:13px; margin-bottom:30px; }
+    .margin strong { color:var(--ink); font-weight:600; display:block; margin-bottom:7px; }
+    .note { background:var(--wash); padding:17px 20px; border-left:2px solid var(--brass); margin-top:24px; font-size:13px; line-height:1.7; }
+    .note strong { display:block; margin-bottom:5px; }
+    pre { margin:16px 0; padding:19px 21px; border:1px solid var(--line); border-left:2px solid var(--brass); background:var(--code); border-radius:3px; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.9; }
+    pre code { font-size:13px; }
+    .code-caption { display:flex; align-items:center; justify-content:space-between; gap:15px; color:var(--muted); font-size:11px; margin-bottom:-9px; }
+    .copy { border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:3px; padding:3px 9px; font-size:11px; }
+    table { border-collapse:collapse; width:100%; margin-top:15px; font-size:13px; }
+    caption { text-align:left; font-weight:600; margin-bottom:10px; }
+    th,td { text-align:left; border-bottom:1px solid var(--line); vertical-align:top; padding:11px 8px 11px 0; }
+    th { font-size:11px; color:var(--muted); font-weight:500; }
+    td:first-child { width:30%; }
+    .next { margin-top:36px; border-top:1px solid var(--line); padding-top:20px; display:flex; justify-content:space-between; align-items:center; gap:15px; font-size:13px; }
+    .next span { color:var(--muted); font-size:11px; }
+    .colophon { font-size:11px; line-height:1.8; color:var(--muted); margin-top:34px; padding-top:18px; border-top:1px dashed var(--line); }
+    .specimen { margin-top:32px; border-top:1px solid var(--line); padding-top:24px; }
+    .specimen summary { cursor:pointer; font-size:13px; }
+    .specimen p { font-family:var(--mono); font-size:14px; overflow-wrap:anywhere; margin-top:15px; }
+    .specimen .thin { font-weight:100; font-size:26px; }
+    .specimen .bold { font-weight:700; }
+    .specimen .oblique { font-style:oblique; }
+    .specimen .small { font-size:12px; }
+    .vision { max-width:1264px; margin:36px auto 60px; padding-top:25px; border-top:1px solid var(--line); }
+    .vision summary { cursor:pointer; font-size:13px; }
+    .vision-body { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:35px; padding-top:25px; font-size:14px; color:var(--muted); }
+    .vision h2 { font-size:23px; color:var(--ink); }
+    .vision ul { padding-left:18px; }
+    .skip { position:absolute; top:-100px; left:15px; z-index:2; padding:8px; background:var(--surface); }
+    .skip:focus { top:15px; }
+    @media(max-width:1370px) { .book { margin-inline:24px; } .vision { margin-inline:48px; } }
+    @media(max-width:1100px) { .book { grid-template-columns:175px minmax(0,1fr); } .reading { padding:35px 30px; } .chapter-grid { grid-template-columns:1fr; gap:0; } .margin { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:30px; } }
+    @media(max-width:740px) { .masthead { padding:23px 22px; } .masthead-links { gap:15px; } .masthead-links a:last-child { display:none; } .book { display:block; margin-inline:22px; } .contents { border-right:0; border-bottom:1px solid var(--line); padding:15px 0; } .contents-inner { position:static; } .contents .label,.contents .version,.index-note { display:none; } .contents nav { display:flex; flex-wrap:wrap; margin:0; gap:5px; } .contents nav a { padding:5px 10px; } .reading { padding:32px 0; } h1 { font-size:39px; } .dek { font-size:16px; } .vision { margin:12px 22px 40px; } .vision-body { grid-template-columns:1fr; } .study { padding:11px 22px; } .controls { padding:12px 22px; gap:9px 20px; } .brand { gap:7px; } .brand .divider { margin:0 2px; } .brand .manual { font-size:13px; } .margin { grid-template-columns:1fr; gap:0; } }
+    @media print { .study,.controls,.contents,.masthead-links,.copy,.vision,.specimen,.next { display:none!important; } :root,:root[data-theme="dark"] { --paper:#fff; --surface:#fff; --ink:#222; --muted:#555; --line:#bbb; --accent:#244f45; --brass:#705422; --wash:#f4f4f4; --code:#f4f4f4; } .book { display:block; margin:0; } .reading { padding:20px 0; } .chapter[hidden] { display:block!important; break-before:page; } .chapter-grid { display:block; } .shot,pre,.note { break-inside:avoid; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#reading">Skip to the chapter</a>
+  <div class="study">
+    <strong>DESIGN STUDY · 19 OCTOBER 2026 · SOUNDER 6</strong> — A proposal for the Porthole manual.
+    <details><summary>About this study and the purchased font</summary><p>Two sample chapters, shown at reading size. Load your Berkeley Mono WOFF2 files with the control below to compare serif and mono headings. The browser reads them locally; this page uploads nothing and includes no font binaries. Without them, monospace uses your system font. The proposed contents and repository arrangement are at the foot of the page.</p></details>
+  </div>
+  <div class="controls" aria-label="Study controls">
+    <div class="control-group"><span>Surface</span><div class="switch" role="group" aria-label="Color theme"><button type="button" data-theme-choice="light" aria-pressed="true">Paper</button><button type="button" data-theme-choice="dark" aria-pressed="false">After dark</button></div></div>
+    <div class="control-group"><span>Titles</span><div class="switch" role="group" aria-label="Heading typography"><button type="button" data-heading-choice="serif" aria-pressed="true">Serif + mono</button><button type="button" data-heading-choice="mono" aria-pressed="false">All mono titles</button></div></div>
+    <div class="control-group"><label for="fonts">Local fonts</label><input class="font-input" type="file" id="fonts" accept=".woff2" multiple></div>
+    <span class="font-status" id="font-status" role="status">System mono until loaded</span>
+  </div>
+  <header class="masthead">
+    <a class="brand" href="#first-window"><img src="../../site/assets/icon.png" alt="" width="37" height="37"><span>Porthole</span><span class="divider" aria-hidden="true"></span><span class="manual">The manual</span></a>
+    <nav class="masthead-links" aria-label="Project"><a href="../../site/index.html">Product page ↗</a><a href="https://github.com/jlumbroso/porthole">GitHub ↗</a></nav>
+  </header>
+  <div class="book">
+    <aside class="contents" aria-label="Chapter navigation"><div class="contents-inner">
+      <p class="label">Keep it in view</p>
+      <nav><a href="#first-window" data-chapter-link="first-window" aria-current="page">Your first window</a><a href="#outside-open" data-chapter-link="outside-open">Open from a terminal</a></nav>
+      <p class="index-note">Two complete specimens from a proposed, compact manual.</p>
+      <p class="version">Copy basis: Porthole 0.4.0<br>Local design study</p>
+    </div></aside>
+    <main class="reading" id="reading">
+      <article class="chapter" id="first-window" data-chapter>
+        <header class="chapter-head"><p class="label">01 / Getting started</p><h1>Your first floating window.</h1><p class="dek">Keep a checklist, a set of instructions, or a local report beside the work. Start with a file you already have.</p></header>
+        <div class="chapter-grid"><div class="prose">
+          <section><h2 class="step"><span class="folio">01</span> Open a local file.</h2><p>In VS Code, open an HTML or Markdown file. Porthole shows its rendered contents in a separate window.</p><p>If you haven’t installed Porthole, search for <strong>Porthole</strong> in the Extensions view, or run:</p><pre><code>code --install-extension jlumbroso.porthole</code></pre></section>
+          <section><h2 class="step"><span class="folio">02</span> Pop it out.</h2><p>With the file open, press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd> (<kbd>⌃⌥M</kbd> on macOS). You can also right-click the file in the Explorer and choose <strong>Pop Out to Floating Window</strong>.</p><p>The rendered page opens in a compact, pinned window. Tabs, breadcrumbs, and the status bar disappear; the window’s title bar remains.</p><figure class="shot"><a href="../../site/assets/porthole-markdown-light.png"><img src="../../site/assets/porthole-markdown-light.png" width="1186" height="904" alt="A rendered checklist in a light floating window beside work notes in a dark VS Code editor."></a><figcaption><span class="folio">FIG. 01</span> The checklist stays beside the work notes. This is a real Porthole capture.</figcaption></figure></section>
+          <section><h2 class="step"><span class="folio">03</span> Keep working.</h2><p>Switch to the editor or another application. With always-on-top enabled, the page stays in view. Edit the source file and its rendered view updates.</p><div class="note"><strong>A Markdown checkbox is a preview.</strong>Markdown task-list boxes are shown, but you cannot click them to change the file. For an interactive checklist, use an HTML page.</div></section>
+          <section><h2 class="step"><span class="folio">04</span> Put it back.</h2><p>Focus the floating window and press the same shortcut, or run <strong>Porthole: Dock Back into Main Window</strong>.</p><p>To adjust the window while it floats, use <strong>Porthole: Cycle Window Size</strong> or <strong>Porthole: Toggle Always on Top</strong>.</p></section>
+          <div class="next"><span>Another way to open a page</span><a href="#outside-open">From a terminal or agent →</a></div>
+        </div><aside class="margin" aria-label="Before you begin"><div><strong>What you need</strong>VS Code desktop 1.134.0 or later, Porthole, and a local HTML or Markdown file. Porthole has been run on macOS; other systems remain untested.</div><div><strong>A first-use question</strong>Porthole asks whether VS Code may keep floating windows to one tab. <b>Keep Compact</b>, <b>Not Now</b>, and <b>Don’t Ask Again</b> let you choose.</div><div><strong>One visible limit</strong>HTML uses VS Code’s integrated browser, including its toolbar. Porthole relies on an internal VS Code command; updates can affect it.</div></aside></div>
+        <footer class="colophon">Specimen copy follows the repository README, inspected 19 October 2026. The sample screenshot documents appearance, not a fresh runtime test. <a href="../../README.md">Read the current README</a>.</footer>
+      </article>
+      <article class="chapter" id="outside-open" data-chapter>
+        <header class="chapter-head"><p class="label">02 / Terminal &amp; agent reference · Experimental</p><h1>Open a page from a terminal.</h1><p class="dek">Write the page to disk. Send its local path to VS Code. Let the person working see the result.</p></header>
+        <div class="chapter-grid"><div class="prose">
+          <section><h2>The smallest useful example.</h2><p>On macOS, replace the example path with the absolute path to an existing local HTML file, then run:</p><div class="code-caption"><span>macOS shell · replace the path</span><button class="copy" type="button" data-copy="open-example">Copy</button></div><pre><code id="open-example">open 'vscode://jlumbroso.porthole/v1/open?file=/absolute/path/tasks.html&amp;width=420&amp;height=640'</code></pre><p>Keep the quotes: the shell must leave the <code>&amp;</code> characters alone. Encode each path segment, preserving the separating slashes; in JavaScript, use <code>path.split('/').map(encodeURIComponent).join('/')</code>.</p><p>One current limit: a filename containing <code>&amp;</code> followed by letters and <code>=</code> cannot be sent through this link, even encoded. Rename that file before using the interface.</p></section>
+          <section><h2>What the link means.</h2><table><caption>Parameters for <code>/v1/open</code></caption><thead><tr><th scope="col">Parameter</th><th scope="col">Meaning</th></tr></thead><tbody><tr><td><code>file</code></td><td>Required. A local path, absolute or relative to a workspace folder in the receiving VS Code window.</td></tr><tr><td><code>width</code><br><code>height</code></td><td>Both or neither, in pixels. Omit both to use the first size preset.</td></tr><tr><td><code>repo</code></td><td>A workspace folder’s name, used to disambiguate a relative path. It is not a repository URL.</td></tr></tbody></table></section>
+          <section><h2>What the person sees.</h2><p>The VS Code window used most recently receives the link. An allowed file opens in a floating window; a file outside the allowed folders prompts for <strong>Open Once</strong>, <strong>Allow This Folder</strong>, or <strong>Cancel</strong>. VS Code may also ask permission to route the first link to Porthole.</p><div class="note"><strong>Opening a window takes the keyboard.</strong>On macOS, a new floating window takes focus. An agent should account for the person typing elsewhere before sending a link.</div></section>
+          <section><h2>Check the result.</h2><p>Sending a link does not prove that a page became visible. If it is refused, Porthole explains why in a message and the <strong>Porthole</strong> output channel. When reporting what happened, distinguish sending the link from observing the window.</p><p>Update the page by editing its file. Send the link again to bring the existing window forward; supplying a size reopens the page at that size.</p></section>
+          <section><h2>Teach an agent the same interface.</h2><p>Run <strong>Porthole: Install the Skill for Models in This Project</strong>. It writes the skill into <code>.claude/skills/porthole/SKILL.md</code> in a workspace folder, where Claude Code can find it. Other agents can read the same file explicitly.</p></section>
+          <div class="next"><a href="#first-window">← Open a window by hand</a><span>Start with the visible action</span></div>
+        </div><aside class="margin" aria-label="Reference notes"><div><strong>Scope</strong>Local <code>.html</code>, <code>.htm</code>, <code>.md</code>, and <code>.markdown</code> files. Web addresses and remote workspaces are outside this interface.</div><div><strong>You control access</strong><code>porthole.outsideLinks.enabled</code> switches outside links off. Workspace files and explicitly allowed folders follow their corresponding settings.</div><div><strong>Experimental</strong>This interface has been run on macOS in VS Code. The link shape may change; check the changelog when upgrading.</div></aside></div>
+        <footer class="colophon">Specimen based on README and skill instructions for the local 0.4.0 source. A full manual would publish the same substantive instructions as plain Markdown, with the documented version visible on each page.</footer>
+      </article>
+      <details class="specimen"><summary>Inspect Berkeley Mono: weights, obliques, and small text</summary><p class="thin">A small page, kept in view.</p><p class="thin oblique">Beside the work.</p><p>Your first floating window.</p><p class="bold">Keep the instructions beside the work.</p><p class="oblique">A note for the person at the keyboard.</p><p class="bold oblique">Open. Observe. Continue.</p><p class="small">01 / REFERENCE · Porthole 0.4.0 · width=420&amp;height=640</p><p>0O 1Il {} [] () &lt;&gt; / \ : ; . , _ - + = != =&gt; &amp;&amp;</p></details>
+    </main>
+  </div>
+  <details class="vision"><summary>The larger proposal: a little manual for a well-made instrument</summary><div class="vision-body">
+    <section><h2>A small, useful book.</h2><p>The product page makes the introduction. The manual stays beside someone learning or working. Begin with the first successful action, then grow where real use creates questions.</p><ul><li>Your first window</li><li>Working with HTML and Markdown</li><li>Size, position, pinning, and docking</li><li>Opening from a terminal or agent</li><li>Settings, permissions, and troubleshooting</li></ul></section>
+    <section><h2>Paper, glass, and type.</h2><p>Keep Porthole’s existing warm paper, muted green, brass accents, and logo. Pair calm serif titles with Berkeley Mono for commands, small labels, and occasional emphatic headings. The controls above test a stronger all-mono alternative.</p><p>Give screenshots room to explain. Let the ordinary chapter page carry the identity. A narrow reading column should remain useful at the size of a Porthole window.</p></section>
+    <section><h2>One source of truth.</h2><p>A possible <code>porthole-docs</code> repo would contain Markdown chapters and a static presentation. Keep commands and setting definitions tied to an extension release; explain behavior in shared source text so HTML and model-readable output agree.</p><p>No Meta tooling. This study is handwritten HTML, CSS, and browser-native JavaScript. Generator choice, font web-use rights, repository creation, and publication remain open.</p></section>
+  </div></details>
+  <script>
+    const root=document.documentElement;
+    for(const kind of ['theme','heading']) for(const button of document.querySelectorAll(`[data-${kind}-choice]`)) button.addEventListener('click',()=>{
+      root.dataset[kind]=button.dataset[`${kind}Choice`];
+      for(const item of document.querySelectorAll(`[data-${kind}-choice]`)) item.setAttribute('aria-pressed',String(item===button));
+    });
+    let activeChapter='first-window';
+    function showChapter(){
+      const id=location.hash.slice(1);
+      if(id==='first-window'||id==='outside-open') activeChapter=id;
+      const selected=document.getElementById(activeChapter);
+      for(const chapter of document.querySelectorAll('[data-chapter]')) chapter.hidden=chapter!==selected;
+      for(const link of document.querySelectorAll('[data-chapter-link]')) {
+        if(link.dataset.chapterLink===selected.id) link.setAttribute('aria-current','page'); else link.removeAttribute('aria-current');
+      }
+    }
+    addEventListener('hashchange',showChapter);showChapter();
+    const loadedFaces=new Map();
+    document.getElementById('fonts').addEventListener('change',async event=>{
+      const status=document.getElementById('font-status');let count=0;
+      for(const file of event.target.files){
+        if(!/^BerkeleyMono-(Thin|Regular|Bold|Oblique|Thin-Oblique|Bold-Oblique)\.woff2$/i.test(file.name)) continue;
+        try {
+          const weight=/Thin/i.test(file.name)?'100':/Bold/i.test(file.name)?'700':'400';
+          const style=/Oblique/i.test(file.name)?'oblique':'normal';
+          const face=new FontFace('Berkeley Study',await file.arrayBuffer(),{weight,style});
+          await face.load();
+          const key=weight+'-'+style;if(loadedFaces.has(key)) document.fonts.delete(loadedFaces.get(key));
+          loadedFaces.set(key,face);document.fonts.add(face);count++;
+        } catch { status.textContent='A font could not be read. Choose the original WOFF2 files.';return; }
+      }
+      await document.fonts.ready;
+      status.textContent=count?`Berkeley Mono · ${loadedFaces.size} faces loaded locally`:'Choose the BerkeleyMono WOFF2 files.';
+    });
+    for(const button of document.querySelectorAll('[data-copy]')) button.addEventListener('click',async()=>{
+      const content=document.getElementById(button.dataset.copy);
+      try { await navigator.clipboard.writeText(content.textContent);button.textContent='Copied'; }
+      catch { const range=document.createRange();range.selectNodeContents(content);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='Selected — copy with your keyboard'; }
+    });
+  </script>
+</body>
+</html>
