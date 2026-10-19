@@ -164,6 +164,16 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-19)
 **A — as built.** *Rationale*: the button answers the question in its own words ("Replace it?" → **Replace It**), the house's button law since ADR-0021; and "replaced only if you say so" states the rule a person needs. *Confidence*: 0.6 — because "was edited since Porthole wrote it" may read as an accusation of the person who edited it. *If wrong*: B.
 
+**Recommendation**: (by the naming review, 2026-10-19)
+
+**B — three small edits; the button stands.** Glazier's accusation doubt is confirmed, and the fix generalizes: the tone problem in "was edited since Porthole wrote it" is that it narrates an *actor's deed* — when the deed is likely the person's own deliberate customization. The cure is **possession-reversal**: name the change as the project's *property*, not anyone's act. The platform already owns the neutral phrase — VS Code says "local changes" — so:
+
+1. **The question (modal message)**: *"{folder}'s copy of Porthole's skill has local edits. Replace it with the skill from Porthole {version}?"* — "has local edits" states a property of the file; nobody did anything suspicious.
+2. **The missing line, added (modal detail)**: *"Replacing discards the edits. Cancel keeps the copy exactly as it is."* — a modal offering **Replace It** over someone's edited file must state the stake where consent happens; this is the Open-Once pattern (each button's contract in one line), and it was the one thing the built words omitted.
+3. **The setting description, one word lighter**: "…a copy **someone** edited" → "…**an edited copy** is replaced only if you say so." Same fix, same reason — "someone" imports a suspicious unknown into a sentence about the user's own project.
+
+**"Replace It" stands as built** — it answers the question in its own words, per the standing button law; and the Cancel-path notice already ruled ("Porthole left it as it is") now pairs exactly with the detail line's promise. Mini-doctrine for the guard-copy family, minted here: **never name an actor for a change you are about to destroy — name the change as property.** *Confidence*: 0.8. *If wrong*: the as-built words were already serviceable (Glazier's A was defensible); these edits cost three strings and no code.
+
 **ANS:** (by Jérémie Lumbroso)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
