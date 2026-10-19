@@ -77,7 +77,7 @@ Yes, agreed with Option A as recommended.
 ---
 
 ### QST-NAME-SKILL: What are the command, the link verb, the setting and the log line called?
-- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing the install action
+- Status: answered
 - Why asking: All are new user-facing words, and the verb and the setting's key are permanent once published. ADR-0017's verb list (`open`, `list`, `refresh`, …) asserts states, never deltas, and has no verb for this. Provisional, as built:
   - command: **Porthole: Add the Skill for Models to This Project** (`porthole.addSkill`)
   - link verb: `vscode://jlumbroso.porthole/v1/add-skill` (optional `repo=` to pick the workspace folder, as for `open`)
@@ -107,7 +107,7 @@ Options:
 And retroactive blessing for the ADR-0025 deviation Glazier reported: moving the setting-write disclosure from a detail line to the notice's second sentence, because non-blocking notices have no detail line, is a correct field-adaptation — the law's intent (the zone discloses, the button stays clean) was preserved against the surface's real mechanics, and deviations carried with their reasons are exactly how rulings should travel. *Confidence*: 0.8. *If wrong*: `add-skill` is one rename inside a pre-release window — but `install`'s no-op-on-repeat semantics is the one the contract already implements.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Excellent, thank you naming review, approved as recommended.
 
 ---
 
