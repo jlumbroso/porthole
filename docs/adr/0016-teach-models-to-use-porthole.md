@@ -58,7 +58,7 @@ I doubt people who install this will visit the repo, I think we are better off d
 ---
 
 ### QST-SKILL-LINK-ASK: When a link from outside VS Code asks Porthole to add the skill to a project, should Porthole ask you first?
-- Status: unanswered
+- Status: answered
 - Why asking: **Iteration 3 lets a model install the skill itself**, by sending a link from a terminal, the same way it opens a page. Unlike opening a page, this writes a file into your project: always the same file (the skill bundled in the extension), always at the same place (`.claude/skills/porthole/SKILL.md` in the receiving window's workspace folder), never overwriting a copy someone edited. You would then commit it or ignore it. The question is how much a link may do without you.
 - Need: pick a letter (or override — any shape answers)
 
@@ -72,7 +72,7 @@ Options:
 **A — ask the first time in each project.** *Rationale*: a file appearing in a repository is a change a person should see once, especially in a public one, where it will be committed; after that, a model keeping its own copy current is exactly the convenience the link exists for. B is the `open` rule, but `open` writes nothing; C asks the same question again after it has been answered; D brings back the step this iteration removes, a model asking you to run a command for it. *Confidence*: 0.7 — because how often you want to be asked is your call, and it is cheap to change before release. *If wrong*: if you are content to see the file in the next commit's diff, B.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Yes, agreed with Option A as recommended.
 
 ---
 
