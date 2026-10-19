@@ -94,6 +94,18 @@ Options:
 **Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-18)
 **B — the review's names.** *Rationale*: ADR-0017's rule (verbs assert states) argues against "add", which names a delta; a state-shaped verb might read better beside `open`. And "Skill for Models" may be the wrong noun for a person reading the palette: the file is a Claude skill, but people may know it as instructions. *Confidence*: 0.65 — because these are words. *If wrong*: if the review finds them right, A.
 
+**Recommendation**: (by the naming review, 2026-10-19)
+
+**B — with the verb corrected to `install-skill`, the noun kept, and everything else blessed modulo the verb.**
+
+1. **The verb: `install-skill`** (command id `porthole.installSkill`, link `/v1/install-skill`, setting `actions.installSkill`). Glazier's instinct about "add" is right, but the diagnosis sharpens: the operation's own contract (identical copy → nothing; unedited old → replaced; edited → never touched) is not an *add* — it is an **idempotent converge**: ensure the skill is present and current, respecting edits. The register already owns the word for that: **`install`**, which in tooling means exactly converge-idempotently (`npm install` is the precedent every model and person carries), and whose never-clobber-edited-files guard is installer convention, not a surprise. "Add" implies append-and-maybe-duplicate — a second add reads as an error; a second install reads as a no-op, which is the truth. The ADR-0017 verb list grows by one, with this contract documented beside it.
+2. **The noun stands: "the Skill for Models."** Glazier's doubt resolves *for* the provisional: a stranger in the palette reads "the thing models use" with zero jargon tax, while bare "Skill" taxes non-Claude-Code users and "instructions" underclaims (a skill is load-on-demand instructions with a name). Command title: **"Porthole: Install the Skill for Models in This Project"** — the scoping tail stays because the command writes into the project and asks which folder when there are several.
+3. **The question and button, verb-swapped**: "…asks Porthole to install its skill for models in {folder} (.claude/skills/porthole/SKILL.md). Install it?" — button **Install It** (answering in the question's words, per the standing button law), plus Cancel.
+4. **The edited-copy notice ships as built** — "{folder} already has an edited copy of Porthole's skill; Porthole left it as it is." is plain, warm, and states the guard exactly.
+5. **The startup log line, verb-swapped, is blessed by name**: a model that has never met the skill learns both routes from the output channel — that is the built≠known rung of teaching debt paid at activation, and it is the cheapest such payment this review has seen.
+
+And retroactive blessing for the ADR-0025 deviation Glazier reported: moving the setting-write disclosure from a detail line to the notice's second sentence, because non-blocking notices have no detail line, is a correct field-adaptation — the law's intent (the zone discloses, the button stays clean) was preserved against the surface's real mechanics, and deviations carried with their reasons are exactly how rulings should travel. *Confidence*: 0.8. *If wrong*: `add-skill` is one rename inside a pre-release window — but `install`'s no-op-on-repeat semantics is the one the contract already implements.
+
 **ANS:** (by Jérémie Lumbroso)
 [Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
 
