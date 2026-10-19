@@ -9,7 +9,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 
 - **Date**: 2026-10-13
 - **Iteration**: 5
-- **Status**: Accepted
+- **Status**: Implemented
 - **Deciders**: Jérémie Lumbroso (human); Glazier 5.5 (Claude Opus 5.5), with Purser 5.5 and Sounder 6 in the seed's thread
 
 **TL;DR**: Once the outside verbs work, write a skill that teaches any model to use porthole; one question decides where it lives and how it reaches a model that has never seen this repository.
