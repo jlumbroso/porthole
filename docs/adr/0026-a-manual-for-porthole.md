@@ -2,11 +2,11 @@
 # A manual for Porthole
 
 - **Date**: 2026-10-19
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; Sounder 6 (gpt-6-astra)
 
-**TL;DR**: Explore a compact Porthole manual with warm reading typography, Berkeley Mono for precise instructions, and chapters useful beside the work; the visual study is local and the repository, build system, and publication remain proposals.
+**TL;DR**: Develop the manual with Berkeley Mono headings and details, sans-serif paragraphs, and its own private `porthole-docs` repository generated from Template A; the production build and publication remain future work.
 
 ## Originating Context
 
@@ -17,6 +17,8 @@ His explicit technology constraint: **“Never Meta/React/anything they've touch
 During the exploration he supplied a purchased Berkeley Mono font package and asked whether it could serve titles, highlights, or monospace text. The local package contains six WOFF2 faces: Thin, Regular, Bold, and their obliques. The package labels its license LT-02 Developer. Purchase identifiers and font binaries do not belong in this public record.
 
 **Agency Grant**: inspect the references and propose a vision. The local study makes that proposal reviewable. This does not decide a new repository, a production framework, publication, or a redesign of the accepted product page in ADR-0023.
+
+**Grant extended, 2026-10-19**: Jérémie answered both questions below, selecting Berkeley titles and a separate repository, and explicitly authorized creation as a private repository from Template A v3.12 or latest HEAD. His follow-up required GitHub's actual “created from template” relationship. This authorizes the private initialization recorded in the decision below; the original exploration grant above remains the history of iteration 1.
 
 ## Explicitation
 
@@ -40,9 +42,11 @@ A short persistent contents list, a readable central column, and occasional marg
 - **Workshop studies:** compare actual content at a useful scale. The v3–v4 correction restores readable specimens and full content. The Porthole study therefore contains a first-use chapter and a reference entry, not only a cover.
 - **Emerald studies:** Paper's margins and fine rules, and Night glass's restrained dark treatment, inform the reading experience. The palette comes from Porthole's existing site: warm paper, muted green, and brass. These studies are references for judgment, not adopted branding.
 
-### Typography proposal
+### Initial typography proposal
 
 Use Berkeley Mono Regular for literal commands, identifiers, chapter numbers, and short labels; Bold for selective emphasis. Start with a quiet serif for chapter titles and a system sans-serif for continuous instructions. Test Berkeley titles as an alternative on exactly the same pages. Thin and oblique deserve large, occasional uses rather than small operational instructions.
+
+Iteration 2 selects the alternative: Berkeley Mono also carries chapter and section headings. The original proposal and attributed recommendation are retained to make Jérémie's choice visible. The study now opens with “All mono titles” selected; paragraphs remain sans-serif, as in Option B.
 
 The [local study](../design/2026-10-19-manual-study.html) supplies light/dark and serif/mono-title controls. A local file input loads the user's purchased WOFF2 files into browser memory without a network request or upload. The committed study embeds no purchased binary. Without the files, it explicitly identifies the system-monospace fallback. A private generated copy can include the fonts for convenient local viewing; that copy stays outside the repository.
 
@@ -99,13 +103,25 @@ Yes, Option A. Authorization to create it, first as a private repo, from the Hum
 - Sounder rendered and inspected the serif and Berkeley-title chapters, the dark reference page, the six-face font specimen, and the narrow chapter. Local browser checks passed for both chapters and title choices at 320, 420, 900, and 1440 pixels (16 layout cases): no horizontal page overflow, images loaded, no page-script errors, and no automatic HTTP requests when opened as a local file. Both chapters remain readable with JavaScript disabled. The skip-link check preserves the selected chapter. This is a bounded Chromium check, not a complete accessibility or cross-browser audit.
 - A source review caught and corrected the skip-link behavior, the filename-encoding caveat, an omitted Thin Oblique specimen, and overbroad network wording.
 - `just gate` passed: 92 tests across 9 files, typecheck, build, package allowlist, registry, and tracked-file secret scan. The font binaries and private preview remain outside the repository.
+- Iteration 2: the browser checks passed again with mono titles as the initial state, including the private font preview and all 16 layout cases. The new repository's `just gate` passes its template-instantiation and registry checks; that gate does not yet build a production manual.
+- GitHub's API reports the new repository as private with `template_repository.full_name = ADRs4AI/human-ai-collaboration-template-A`. Its initial commit tree exactly matches the canonical HEAD used at creation.
+
+## Decision — 2026-10-19
+
+Jérémie chose **B — Berkeley titles and details** and **A — `porthole-docs`**, with private creation authorized. The repository is [jlumbroso/porthole-docs](https://github.com/jlumbroso/porthole-docs), generated using `gh repo create --private --template ADRs4AI/human-ai-collaboration-template-A`. The selected direction, local study, project instructions, and this decision's provenance are carried into its founding ADR-0001. The serif control remains available as the original comparison.
+
+The authorized latest HEAD was `3d19e2f380c30c29d7a501fd2eef9f8029f077dc`; no v3.12 tag existed at creation. Its tree `0e3d7edeb18e36785bf709aea99287982f581c6c` equals the generated initial commit's tree. The new repository records these identities in `TEMPLATE-ORIGIN.json`. Kintsugi's adoption lock is preserved as generated; its pre-release tracking limitation and an update hold are documented separately, without relabeling HEAD as a released version.
+
+The no-Meta constraint continues. Purchased fonts remain outside Git. A production generator, full manual, release handoff, and public deployment have not been implemented by this initialization.
 
 ## Action Items
 
 - Owner: Sounder — local study and visual inspection completed; the rendering script is kept under `scripts/ephemeral/2026-10-19-preview-manual.cjs`.
+- Owner: Sounder — apply the selected mono-title default and initialize the authorized private template repository; both are now in place.
 - Owner: Sounder, before any production implementation — confirm purchased web-font rights and inspect any proposed build dependencies against the no-Meta constraint.
-- Owner: the eventual manual maintainer — define the release-to-documentation handoff if a separate repository is chosen.
+- Owner: the eventual manual maintainer — define the release-to-documentation handoff for the separate manual repository.
 
 ## Iterations
 
 - **1 — 2026-10-19.** Trigger: Jérémie's manual-site invitation and subsequent font package. Contributor: Sounder 6. Changes: proposed editorial direction, two local specimens, a private font-loading comparison, and explicit repository/type choices. Outcome: Draft; no production site or repository created.
+- **2 — 2026-10-19.** Trigger: Jérémie's answers to QST-MANUAL-TYPE and QST-MANUAL-HOME, plus the explicit template-generation instruction. Contributors: Jérémie (decisions), Sounder 6 (implementation). Changes: made mono titles the study default, refreshed the private preview, and founded the private `porthole-docs` repository from canonical Template A HEAD with GitHub lineage verified. Outcome: Accepted; private editorial home created, production site and publication remain future work.

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light" data-heading="serif">
+<html lang="en" data-theme="light" data-heading="mono">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -115,12 +115,12 @@
 <body>
   <a class="skip" href="#reading">Skip to the chapter</a>
   <div class="study">
-    <strong>DESIGN STUDY · 19 OCTOBER 2026 · SOUNDER 6</strong> — A proposal for the Porthole manual.
+    <strong>DESIGN STUDY · 19 OCTOBER 2026 · SOUNDER 6</strong> — Berkeley Mono titles selected for the Porthole manual.
     <details><summary>About this study and the purchased font</summary><p>Two sample chapters, shown at reading size. Load your Berkeley Mono WOFF2 files with the control below to compare serif and mono headings. The browser reads them locally; this page uploads nothing and includes no font binaries. Without them, monospace uses your system font. The proposed contents and repository arrangement are at the foot of the page.</p></details>
   </div>
   <div class="controls" aria-label="Study controls">
     <div class="control-group"><span>Surface</span><div class="switch" role="group" aria-label="Color theme"><button type="button" data-theme-choice="light" aria-pressed="true">Paper</button><button type="button" data-theme-choice="dark" aria-pressed="false">After dark</button></div></div>
-    <div class="control-group"><span>Titles</span><div class="switch" role="group" aria-label="Heading typography"><button type="button" data-heading-choice="serif" aria-pressed="true">Serif + mono</button><button type="button" data-heading-choice="mono" aria-pressed="false">All mono titles</button></div></div>
+    <div class="control-group"><span>Titles</span><div class="switch" role="group" aria-label="Heading typography"><button type="button" data-heading-choice="serif" aria-pressed="false">Serif + mono</button><button type="button" data-heading-choice="mono" aria-pressed="true">All mono titles</button></div></div>
     <div class="control-group"><label for="fonts">Local fonts</label><input class="font-input" type="file" id="fonts" accept=".woff2" multiple></div>
     <span class="font-status" id="font-status" role="status">System mono until loaded</span>
   </div>
@@ -164,8 +164,8 @@
   </div>
   <details class="vision"><summary>The larger proposal: a little manual for a well-made instrument</summary><div class="vision-body">
     <section><h2>A small, useful book.</h2><p>The product page makes the introduction. The manual stays beside someone learning or working. Begin with the first successful action, then grow where real use creates questions.</p><ul><li>Your first window</li><li>Working with HTML and Markdown</li><li>Size, position, pinning, and docking</li><li>Opening from a terminal or agent</li><li>Settings, permissions, and troubleshooting</li></ul></section>
-    <section><h2>Paper, glass, and type.</h2><p>Keep Porthole’s existing warm paper, muted green, brass accents, and logo. Pair calm serif titles with Berkeley Mono for commands, small labels, and occasional emphatic headings. The controls above test a stronger all-mono alternative.</p><p>Give screenshots room to explain. Let the ordinary chapter page carry the identity. A narrow reading column should remain useful at the size of a Porthole window.</p></section>
-    <section><h2>One source of truth.</h2><p>A possible <code>porthole-docs</code> repo would contain Markdown chapters and a static presentation. Keep commands and setting definitions tied to an extension release; explain behavior in shared source text so HTML and model-readable output agree.</p><p>No Meta tooling. This study is handwritten HTML, CSS, and browser-native JavaScript. Generator choice, font web-use rights, repository creation, and publication remain open.</p></section>
+    <section><h2>Paper, glass, and type.</h2><p>Keep Porthole’s existing warm paper, muted green, brass accents, and logo. Jérémie chose Berkeley Mono for chapter and section titles as well as commands and small labels, with sans-serif paragraphs. The serif comparison remains available above.</p><p>Give screenshots room to explain. Let the ordinary chapter page carry the identity. A narrow reading column should remain useful at the size of a Porthole window.</p></section>
+    <section><h2>One source of truth.</h2><p>Jérémie chose a separate <code>porthole-docs</code> repo, initially private and founded from Human-SI Collaboration Template A. Keep commands and setting definitions tied to an extension release; explain behavior in shared source text so HTML and model-readable output agree.</p><p>No Meta tooling. This study is handwritten HTML, CSS, and browser-native JavaScript. Generator choice, font web-use rights, and publication remain open.</p></section>
   </div></details>
   <script>
     const root=document.documentElement;
