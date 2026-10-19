@@ -59,7 +59,7 @@ The study uses handwritten HTML/CSS and browser-native JavaScript, with system f
 ## Questions
 
 ### QST-MANUAL-TYPE: Which typographic direction should the manual develop?
-- Status: unanswered
+- Status: answered
 - Why asking: The purchased face gives Porthole a distinctive technical voice, but the balance should be judged on real instructions and reference material.
 - Need: pick a letter (or override — any shape answers)
 
@@ -71,12 +71,12 @@ Options:
 **A — Serif titles, Berkeley details.** *Rationale*: the existing product page already uses serif display type and quiet green/brass accents; the two specimens make commands visually distinct without making long instructions feel like a terminal. *Confidence*: 0.75 — because this is continuous with the human-reviewed product page, while the purchased font deserves an actual comparison. *If wrong*: if B feels more recognizably Porthole to Jérémie and remains comfortable in the narrow reference view, choose B.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in] <!-- literal placeholder — parser-significant, do not paraphrase -->
+I think I'd rather go with Option B, I was much more convinced by that aesthetic in the étude.
 
 ---
 
 ### QST-MANUAL-HOME: Should the manual have its own repository?
-- Status: unanswered
+- Status: answered
 - Why asking: A separate editorial home is plausible, but release-specific commands and settings still need to stay synchronized with the extension.
 - Need: pick a letter (or override — any shape answers)
 
@@ -88,7 +88,7 @@ Options:
 **A — `porthole-docs`, if the manual becomes an ongoing editorial project.** *Rationale*: Jérémie proposed a manual with its own considered identity, and the Handbook provides a small example of that editorial separation. The current prototype deliberately needs neither a new repo nor a framework. *Confidence*: 0.65 — because the anticipated ownership and publishing cadence are not settled. *If wrong*: if the manual stays a handful of pages maintained with extension changes, choose B to reduce coordination overhead.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in] <!-- literal placeholder — parser-significant, do not paraphrase -->
+Yes, Option A. Authorization to create it, first as a private repo, from the Human-SI Collaboration Template A v3.12 (or latest `HEAD`).
 
 ---
 
