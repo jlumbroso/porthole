@@ -1,0 +1,33 @@
+<h2 id="html-and-markdown-choose">A reference or an interactive page.</h2>
+<p>Porthole renders neither format itself. It brings VS Code’s existing renderer into a floating window.</p>
+<table>
+  <caption>Two formats, two kinds of page</caption>
+  <thead><tr><th scope="col">HTML</th><th scope="col">Markdown</th></tr></thead>
+  <tbody>
+    <tr><td>Rendered by VS Code’s integrated browser.</td><td>Rendered by VS Code’s Markdown preview.</td></tr>
+    <tr><td>Use buttons, text fields, and interactive checklists.</td><td>Use readable notes, instructions, and reference material.</td></tr>
+    <tr><td>The page’s scripts provide its behavior.</td><td>The preview is read-only. Task-list boxes cannot edit the file.</td></tr>
+    <tr><td>Save the file to update the rendered page.</td><td>The preview updates as you edit the file.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="html-and-markdown-html">Write an HTML page for a small window.</h2>
+<p>Give it a useful title, such as:</p>
+<pre><code>&lt;title&gt;[my-project] Release checklist&lt;/title&gt;</code></pre>
+<p>VS Code shows the page’s title in the floating window. A project name helps distinguish several pages at a glance.</p>
+<p>Keep the page readable at about 420–640 pixels wide. Let paragraphs wrap, keep buttons large enough to use, and make long commands scroll within their own block.</p>
+<p>A page can use its own <code>localStorage</code> to remember checklist state when the same file is reopened. The page supplies that behavior; Porthole does not add it.</p>
+
+<h2 id="html-and-markdown-markdown">Choose Markdown colors.</h2>
+<p><code>porthole.markdown.colorScheme</code> accepts three values:</p>
+<ul>
+  <li><code>auto</code> follows VS Code’s theme. This is the default.</li>
+  <li><code>light</code> gives the Markdown page light colors.</li>
+  <li><code>dark</code> gives it dark colors.</li>
+</ul>
+<p>The colors follow the file. While it is popped out, every preview of that file uses the chosen scheme, including a preview docked in the main window. Previews of other files keep following VS Code’s theme. Code blocks retain VS Code’s syntax colors.</p>
+<div class="note"><p><strong>Need a checklist you can tick?</strong> Markdown task-list boxes are read-only in the preview. Use HTML when the person following the steps needs to click, type, or press a button.</p></div>
+
+<h2 id="html-and-markdown-local">Start from the local file.</h2>
+<p>Porthole opens local HTML and Markdown files. It does not yet pop out a page already open in a browser tab, a web address, or a localhost URL. Remote and virtual workspaces are outside the supported scope.</p>
+<p>To bring a page forward again, pop out the same file. Porthole finds its existing floating window instead of opening another.</p>

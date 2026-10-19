@@ -1,0 +1,38 @@
+<h2 id="terminal-and-agents-example">Open a local file.</h2>
+<p>Keep VS Code running with your project open. On macOS, replace the example path with an existing local HTML file, then run:</p>
+<pre><code>open 'vscode://jlumbroso.porthole/v1/open?file=/absolute/path/tasks.html&amp;width=420&amp;height=640'</code></pre>
+<p>Keep the quotes: the shell must leave the <code>&amp;</code> characters alone. The page must be a local HTML or Markdown file. Web addresses and localhost URLs are not supported.</p>
+
+<h2 id="terminal-and-agents-parameters">What the link means.</h2>
+<table>
+  <caption>Parameters for <code>/v1/open</code></caption>
+  <thead><tr><th scope="col">Parameter</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>file</code></td><td>Required. An absolute local path, or a path relative to a workspace folder in the receiving VS Code window.</td></tr>
+    <tr><td><code>width</code>, <code>height</code></td><td>Both or neither; positive whole pixels. Without them, the window uses the first size preset. VS Code raises dimensions below 400 × 270.</td></tr>
+    <tr><td><code>repo</code></td><td>A workspace folder’s name, used to disambiguate a relative path. It is not a repository URL.</td></tr>
+  </tbody>
+</table>
+<p>The VS Code window used most recently receives the link. Relative paths are looked up only in its workspace folders. Use an absolute path if the person may be working in another project. An ambiguous relative path is refused.</p>
+
+<h2 id="terminal-and-agents-encoding">Encode the path once.</h2>
+<p>Preserve the separating slashes. In JavaScript:</p>
+<pre><code>path.split('/').map(encodeURIComponent).join('/')</code></pre>
+<p>Spaces become <code>%20</code>, <code>+</code> becomes <code>%2B</code>, and <code>#</code> becomes <code>%23</code>. Do not use <code>encodeURI</code>, which leaves some query-significant characters alone.</p>
+<p>One current limit: a filename containing <code>&amp;</code> followed by letters and <code>=</code> cannot be sent through this interface, even encoded. Rename that file before using the link.</p>
+
+<h2 id="terminal-and-agents-consent">What the person sees.</h2>
+<p>Disabled outside links or page-opening actions are refused. When both are enabled, files in permitted locations open without another Porthole prompt. For other files, Porthole offers <strong>Open Once</strong>, <strong>Allow This Folder</strong>, and <strong>Cancel</strong>. VS Code also has its own first-use permission prompt.</p>
+<div class="note"><p><strong>Opening a window moves keyboard focus.</strong> On macOS, a new floating window takes focus. Avoid opening a page while the person is typing in another application: their keystrokes can go into the page.</p></div>
+<p>Do not change these permission settings without the person’s approval. See <a href="settings-and-troubleshooting.html#settings-and-troubleshooting-outside-links">outside-link settings</a> for the individual controls.</p>
+
+<h2 id="terminal-and-agents-updates">Update the page, then check the result.</h2>
+<p>Save changes to HTML files; Markdown previews update as you edit. Sending the same link again without dimensions brings the existing window forward, where the person put it. Sending it with dimensions requests reopening at that size.</p>
+<p>Sending a link does not prove that a page became visible. Read the <strong>Porthole</strong> output channel for receipt, opening, or refusal messages. When reporting the result, distinguish those messages from observing the rendered window.</p>
+
+<h2 id="terminal-and-agents-skill">Install the Porthole skill.</h2>
+<p>Run <strong>Porthole: Install the Skill for Models in This Project</strong>, or send:</p>
+<pre><code>open 'vscode://jlumbroso.porthole/v1/install-skill'</code></pre>
+<p>Porthole writes <code>.claude/skills/porthole/SKILL.md</code> in a workspace folder. If the receiving window has several folders, add <code>?repo=&lt;folder name&gt;</code>. The first installation link asks permission for that VS Code workspace; approval also covers its other folders. Replacing an edited copy asks again.</p>
+<p>Claude Code discovers the installed skill. Other agents can read the same file explicitly.</p>
+<p>Outside links currently open pages and install the skill. Listing, closing, docking, pinning, and independently resizing windows through this interface are not implemented.</p>

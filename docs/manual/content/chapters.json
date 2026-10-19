@@ -1,0 +1,67 @@
+[
+  {
+    "slug": "first-window",
+    "title": "Your first floating window.",
+    "nav": "Your first window",
+    "dek": "Keep a checklist, a set of instructions, or a local report beside the work. Start with a file you already have.",
+    "label": "01 / Getting started",
+    "margin": [
+      { "title": "What you need", "text": "VS Code desktop 1.134.0 or later, Porthole, and a local HTML or Markdown file. The latest VS Code release is officially supported." },
+      { "title": "Tested on macOS", "text": "Porthole has been run on macOS. Windows and Linux have not yet been tested." },
+      { "title": "A first-use question", "text": "Porthole may ask whether VS Code should keep floating windows to one tab. Keep Compact, Not Now, and Don’t Ask Again let you choose." }
+    ],
+    "source": "https://github.com/jlumbroso/porthole/blob/v0.4.0/README.md"
+  },
+  {
+    "slug": "html-and-markdown",
+    "title": "Choose the page for the job.",
+    "nav": "HTML and Markdown",
+    "dek": "Use Markdown for notes and reference material. Use HTML when the page needs buttons, fields, or checkboxes you can click.",
+    "label": "02 / Working with pages",
+    "margin": [
+      { "title": "Local files", "text": "Supported extensions are .html, .htm, .md, and .markdown. Web addresses, localhost URLs, remote workspaces, and virtual workspaces are outside the supported scope." },
+      { "title": "Markdown verification", "text": "Markdown was tested on VS Code 1.141.0. The necessary preview editor appears in the source for 1.134.0, but Markdown was not tested on that version." },
+      { "title": "A small canvas", "text": "An HTML page about 420–640 pixels wide is a useful starting point. Keep instructions readable without scrolling sideways." }
+    ],
+    "source": "https://github.com/jlumbroso/porthole/blob/v0.4.0/README.md"
+  },
+  {
+    "slug": "window-controls",
+    "title": "Shape the window.",
+    "nav": "Window controls",
+    "dek": "Choose a size, keep the page above your other windows, and return it to the main VS Code window.",
+    "label": "03 / Size, position, and focus",
+    "margin": [
+      { "title": "Focus first", "text": "Click the floating window before using its size, pin, or dock command. With several windows open, make the intended window active." },
+      { "title": "Minimum size", "text": "VS Code will not make the window smaller than 400 × 270 pixels. The default presets are 420 × 640, 480 × 720, and 640 × 900." },
+      { "title": "Exact sizes", "text": "Preset sizing relies on an internal VS Code command. If it fails, Porthole tries another way to open the window, without applying the requested size." }
+    ],
+    "source": "https://github.com/jlumbroso/porthole/blob/v0.4.0/package.json"
+  },
+  {
+    "slug": "terminal-and-agents",
+    "title": "Open a page from a terminal.",
+    "nav": "Terminal and agents",
+    "dek": "Write the page to disk. Send its local path to VS Code with a vscode:// link.",
+    "label": "04 / Outside links · Experimental",
+    "margin": [
+      { "title": "Experimental", "text": "Outside links have been run on macOS in VS Code. Their shape may change; check the changelog when upgrading." },
+      { "title": "Version requirements", "text": "Opening from an outside link requires Porthole 0.3.0 or later. Installing the model skill through the extension requires 0.4.0 or later." },
+      { "title": "One receiving window", "text": "The VS Code window used most recently receives the link. A repo parameter selects a workspace folder within that window; it does not route the link to another window." }
+    ],
+    "source": "https://github.com/jlumbroso/porthole/blob/v0.4.0/.claude/skills/porthole/SKILL.md"
+  },
+  {
+    "slug": "settings-and-troubleshooting",
+    "title": "Settings and troubleshooting.",
+    "nav": "Settings and help",
+    "dek": "Change window settings and outside-link permissions. Check the Porthole output channel when a command or link does not work.",
+    "label": "05 / Settings and troubleshooting",
+    "margin": [
+      { "title": "Find the settings", "text": "Open VS Code Settings and search for porthole. The tables show the defaults shipped in Porthole 0.4.0." },
+      { "title": "Read Porthole’s logs", "text": "Open VS Code’s Output panel and select Porthole. Refused links and internal-command fallbacks are reported there." },
+      { "title": "When reporting a problem", "text": "Include your VS Code version and the Porthole output. If you use an older VS Code release, first try the latest version." }
+    ],
+    "source": "https://github.com/jlumbroso/porthole/blob/v0.4.0/package.json"
+  }
+]

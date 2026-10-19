@@ -1,0 +1,61 @@
+<h2 id="settings-and-troubleshooting-windows">Window settings.</h2>
+<p>Open VS Code Settings and search for <code>porthole</code>. Every setting in this table begins with <code>porthole.</code></p>
+<table>
+  <caption>Window and preview defaults in Porthole 0.4.0</caption>
+  <thead><tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>sizes</code></td><td>420×640, 480×720, 640×900</td><td>Opening size and cycle sequence.</td></tr>
+    <tr><td><code>position</code></td><td><code>null</code></td><td>Opening coordinates; otherwise center on the current window.</td></tr>
+    <tr><td><code>compact</code></td><td><code>true</code></td><td>Hide tabs, breadcrumbs, and the status bar.</td></tr>
+    <tr><td><code>alwaysOnTop</code></td><td><code>true</code></td><td>Open pinned above other windows.</td></tr>
+    <tr><td><code>markdown.colorScheme</code></td><td><code>auto</code></td><td>Follow VS Code’s theme, or choose <code>light</code> or <code>dark</code>.</td></tr>
+    <tr><td><code>keepToOneTab</code></td><td><code>move</code></td><td>Handle editors opened by other extensions; also accepts <code>ask</code> or <code>off</code>.</td></tr>
+    <tr><td><code>askToKeepCompact</code></td><td><code>true</code></td><td>Offer VS Code’s one-tab configuration at first pop-out in a session.</td></tr>
+    <tr><td><code>useInternalCommand</code></td><td><code>true</code></td><td>Use the internal command for exact preset sizing.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="settings-and-troubleshooting-outside-links">Outside-link permissions.</h2>
+<p>These names begin with <code>porthole.outsideLinks.</code> They control links sent from a terminal, a script, or an agent.</p>
+<table>
+  <caption>Outside-link defaults</caption>
+  <thead><tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">Effect</th></tr></thead>
+  <tbody>
+    <tr><td><code>enabled</code></td><td><code>true</code></td><td>Accept outside links at all.</td></tr>
+    <tr><td><code>actions.open</code></td><td><code>true</code></td><td>Allow links to open pages.</td></tr>
+    <tr><td><code>actions.installSkill</code></td><td><code>true</code></td><td>Allow skill-installation links, with permission remembered for the receiving VS Code workspace.</td></tr>
+    <tr><td><code>allowWorkspaceFolders</code></td><td><code>true</code></td><td>Allow files in the receiving window’s workspace folders without asking.</td></tr>
+    <tr><td><code>allowedFolders</code></td><td><code>[]</code></td><td>Additional folders, by absolute path, whose files may open without asking.</td></tr>
+    <tr><td><code>allowLocalFiles</code></td><td><code>false</code></td><td>Allow other local files without asking.</td></tr>
+  </tbody>
+</table>
+<p>Folder checks resolve <code>..</code> and symbolic links before comparing paths. Comparisons ignore letter case on macOS and Windows.</p>
+<p>Turn <code>porthole.outsideLinks.enabled</code> off to disable the whole interface. The action settings let you control page opening and skill installation separately.</p>
+
+<h2 id="settings-and-troubleshooting-reset">Review what changed.</h2>
+<p><strong>Porthole: Review and Reset Settings…</strong> lists user settings set by or for Porthole. Select the entries you want to remove. Porthole also announces each change it makes to a setting, with a button to open it.</p>
+
+<h2 id="settings-and-troubleshooting-size">The size is wrong, or cycling does nothing.</h2>
+<p>Exact sizing relies on <code>_workbench.openWith</code>, an internal VS Code command rather than a documented API. VS Code can change or remove it without notice.</p>
+<p>If the call fails or Porthole detects no new window, it tries opening the page through separate commands. This fallback does not apply your requested size. Check the <strong>Porthole</strong> output channel if no window appears.</p>
+<p>Set <code>porthole.useInternalCommand</code> to <code>false</code> to skip <code>_workbench.openWith</code> and use this fallback for new windows. Size presets then do not apply.</p>
+
+<h2 id="settings-and-troubleshooting-link">An outside link does nothing.</h2>
+<ol>
+  <li>Keep VS Code running and check that Porthole is installed. Outside links require 0.3.0 or later; skill installation requires 0.4.0.</li>
+  <li>Check that the local file exists and that its extension is supported.</li>
+  <li>Check the receiving VS Code window. A relative path is resolved only inside that window’s workspace folders.</li>
+  <li>Read the <strong>Porthole</strong> output channel. Refusals explain disabled settings, missing files, and ambiguous relative paths.</li>
+</ol>
+<p>If a permission question is waiting, answer it before sending the link again. <a href="terminal-and-agents.html">Terminal and agents</a> covers parameters, encoding, and repeat opens.</p>
+
+<h2 id="settings-and-troubleshooting-checkbox">A Markdown checkbox will not tick.</h2>
+<p>This is VS Code’s read-only Markdown preview. Use an HTML checklist when the page needs to respond to clicks or other input.</p>
+
+<h2 id="settings-and-troubleshooting-paste">Paste or text shortcuts do not work.</h2>
+<p>On macOS, <strong>Cmd+V</strong> does not paste into a page while the floating window has focus. Use <strong>right-click → Paste</strong>.</p>
+<p><strong>Ctrl+A</strong> and <strong>Ctrl+E</strong> also do not move to the start and end of a line in integrated-browser text fields. These limits were traced to VS Code.</p>
+
+<h2 id="settings-and-troubleshooting-report">Report a problem.</h2>
+<p>Include your VS Code version and the <strong>Porthole</strong> output in a <a href="https://github.com/jlumbroso/porthole/issues/new/choose">bug report</a>. If you use an older VS Code release, first try the latest version.</p>
+<p>Porthole has been run on macOS, with VS Code 1.134.0 and 1.141.0. Windows and Linux remain untested. The <a href="https://github.com/jlumbroso/porthole/blob/v0.4.0/docs/release/VERSION-FLOOR.md">version-floor record</a> distinguishes source inspection from hands-on checks.</p>

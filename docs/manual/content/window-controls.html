@@ -1,0 +1,40 @@
+<h2 id="window-controls-commands">Focus the window first.</h2>
+<p>Click the floating window, then choose the action from the Command Palette.</p>
+<table>
+  <caption>Commands for the focused floating window</caption>
+  <thead><tr><th scope="col">To do this</th><th scope="col">Use</th></tr></thead>
+  <tbody>
+    <tr><td>Step through size presets</td><td><strong>Porthole: Cycle Window Size</strong></td></tr>
+    <tr><td>Unpin or re-pin</td><td><strong>Porthole: Toggle Always on Top</strong></td></tr>
+    <tr><td>Return to the main window</td><td><strong>Porthole: Dock Back into Main Window</strong>, or <strong>Ctrl+Alt+M</strong> (<strong>⌃⌥M</strong> on macOS)</td></tr>
+  </tbody>
+</table>
+
+<h2 id="window-controls-sizes">Pick your sizes.</h2>
+<p><code>porthole.sizes</code> defines the cycle. A new window opens at the first preset. These are the defaults:</p>
+<pre><code>"porthole.sizes": [
+  { "name": "S", "width": 420, "height": 640 },
+  { "name": "M", "width": 480, "height": 720 },
+  { "name": "L", "width": 640, "height": 900 }
+]</code></pre>
+<p>Dimensions are pixels. VS Code will not make a window smaller than <strong>400 × 270</strong>. Cycling size reopens the page at the next preset.</p>
+<p>If a page was opened through an outside link with an explicit size, the next cycle starts at your first preset.</p>
+
+<h2 id="window-controls-position">Choose where it opens.</h2>
+<p><code>porthole.position</code> defaults to <code>null</code>, which lets VS Code center the window on the current window. To choose screen coordinates:</p>
+<pre><code>"porthole.position": { "x": 40, "y": 80 }</code></pre>
+<p><code>porthole.compact</code> and <code>porthole.alwaysOnTop</code> both default to <code>true</code>. They choose how a window opens. The pin command changes the focused window.</p>
+
+<h2 id="window-controls-one-tab">Keep one tab in view.</h2>
+<p>Choosing <strong>Keep Compact</strong> at the first-use prompt lets Porthole configure VS Code’s <code>workbench.editor.autoLockGroups</code> setting. It writes only the integrated-browser and Markdown-preview entries, and tells you when it changes a setting.</p>
+<p>Some extensions open editors by column number, which can still place a second tab in a floating window. <code>porthole.keepToOneTab</code> decides what happens:</p>
+<ul>
+  <li><code>move</code> — move the editor to the main window, keeping its cursor. The default.</li>
+  <li><code>ask</code> — ask each time.</li>
+  <li><code>off</code> — leave it in the floating window.</li>
+</ul>
+<p>An editor with unsaved changes is always left where it is.</p>
+
+<h2 id="window-controls-limits">If the preset does not apply.</h2>
+<p>Exact sizing relies on an internal VS Code command. If that call fails or Porthole detects no new window, it tries opening the page through separate commands, without applying your requested size. Check the <strong>Porthole</strong> output channel if no window appears.</p>
+<p>Set <code>porthole.useInternalCommand</code> to <code>false</code> to skip the internal sizing command and use this fallback for new windows. Size presets then do not apply. See <a href="settings-and-troubleshooting.html">Settings and troubleshooting</a> for the available controls and known limits.</p>

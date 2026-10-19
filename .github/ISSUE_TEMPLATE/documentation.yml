@@ -1,0 +1,31 @@
+name: Documentation correction or suggestion
+description: Suggest a change to the manual, product page, or README.
+title: "[Docs] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve the documentation. Small corrections and missing explanations are welcome.
+        You can also [edit the manual source and propose a pull request](https://github.com/jlumbroso/porthole/tree/main/docs/manual).
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: Link to the manual chapter, product page, or README.
+      placeholder: https://jlumbroso.github.io/porthole-docs/
+    validations:
+      required: true
+  - type: textarea
+    id: passage
+    attributes:
+      label: Passage or missing topic
+      description: Quote the wording, or describe what you could not find.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested correction
+      description: Replacement wording, an example, or a description of what would help. It is fine to report a problem without having the answer.
+    validations:
+      required: false

@@ -1,0 +1,20 @@
+name: manual
+
+on:
+  push:
+    branches: [main]
+    paths: ['docs/manual/**', '.github/workflows/manual.yml']
+  pull_request:
+    paths: ['docs/manual/**', '.github/workflows/manual.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 docs/manual/scripts/build.py

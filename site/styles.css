@@ -44,7 +44,8 @@ h1 > span { color: var(--brass); }
 .intro strong { font-weight: 500; color: var(--ink); }
 .button { display: inline-flex; gap: 1.5rem; align-items: center; justify-content: space-between; padding: .8rem 1.2rem; border: 1px solid transparent; border-radius: 4px; background: var(--button); color: var(--button-ink); font-size: .9rem; font-weight: 600; text-decoration: none; }
 .button:hover { text-decoration: underline; box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--button); }
-.hero-copy > .button { margin-top: 1.7rem; min-width: 9rem; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 1.7rem; }
+.hero-actions .button { min-width: 9rem; }
 .shortcut { font-size: .72rem; color: var(--muted); margin-top: 1.2rem; }
 kbd { font-family: inherit; }
 .mac-shortcut { white-space: nowrap; }
@@ -122,7 +123,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-si
   .hero { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; padding-block: 2.8rem 2.5rem; }
   .hero h1 { font-size: clamp(4rem, 15vw, 5.5rem); }
   .intro { max-width: 32rem; font-size: 1.05rem; }
-  .hero-copy > .button { margin-top: 1.3rem; }
+  .hero-actions { margin-top: 1.3rem; }
   .shortcut { margin-top: .9rem; }
   .section-heading { display: block; margin-bottom: 2rem; }
   .section-heading > p { margin-top: 1rem; }
