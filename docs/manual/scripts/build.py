@@ -199,7 +199,7 @@ def check_site(chapters):
     expected |= {'assets/' + name for name in ASSETS}
     actual = {str(p.relative_to(SITE)) for p in SITE.rglob('*') if p.is_file()}
     assert actual == expected, f'Publication boundary changed: {actual ^ expected}'
-    documents = {p.name: Document(p.read_text()).root for p in SITE.glob('*.html')}
+    documents = {p.name: Document(p.read_text(encoding='utf-8')).root for p in SITE.glob('*.html')}
     ids = {}
     for name, document in documents.items():
         found = [n.attrs['id'] for n in elements(document) if 'id' in n.attrs]
@@ -224,8 +224,8 @@ def check_site(chapters):
                 if url.fragment and target in ids:
                     assert unquote(url.fragment) in ids[target], f'Missing anchor: {name}: {value}'
     for chapter in chapters:
-        source = Document((ROOT / 'content' / (chapter['slug'] + '.html')).read_text()).root
-        exported = (SITE / (chapter['slug'] + '.md')).read_text()
+        source = Document((ROOT / 'content' / (chapter['slug'] + '.html')).read_text(encoding='utf-8')).root
+        exported = (SITE / (chapter['slug'] + '.md')).read_text(encoding='utf-8')
         page = documents[filename(chapter)]
         embedded = [n for n in elements(page) if n.attrs.get('id') == 'chapter-markdown']
         assert len(embedded) == 1 and embedded[0].attrs.get('type') == 'application/json', 'Missing chapter copy data'
@@ -233,7 +233,7 @@ def check_site(chapters):
         assert json.loads(text_content(embedded[0])) == exported, 'Copied chapter differs from Markdown export'
         alternate = [n for n in elements(page) if n.tag == 'link' and n.attrs.get('rel') == 'alternate']
         assert len(alternate) == 1 and alternate[0].attrs.get('type') == 'text/markdown', 'Missing Markdown alternate'
-        assert (SITE / alternate[0].attrs['href']).read_text() == exported, 'Markdown alternate differs from chapter'
+        assert (SITE / alternate[0].attrs['href']).read_text(encoding='utf-8') == exported, 'Markdown alternate differs from chapter'
         assert any(n.tag == 'link' and n.attrs.get('rel') == 'describedby' and n.attrs.get('href') == 'llms.txt' for n in elements(page)), 'Missing llms.txt discovery link'
         for node in elements(source):
             if node.tag == 'code':
@@ -245,7 +245,7 @@ def check_site(chapters):
         assert f'[Online chapter]({BASE + filename(chapter)})' in exported, 'Missing chapter URL'
         assert not re.search(r'</?(?:h[1-6]|p|table|div|script)(?:\s|>)', exported), 'Unconverted markup'
     assert (SITE / 'index.md').read_bytes() == (SITE / (chapters[0]['slug'] + '.md')).read_bytes(), 'Homepage Markdown alias differs'
-    llms = (SITE / 'llms.txt').read_text()
+    llms = (SITE / 'llms.txt').read_text(encoding='utf-8')
     assert llms.startswith('# Porthole manual\n\n> '), 'Missing llms.txt title or summary'
     links = re.findall(r'^- \[[^\]]+\]\(([^)]+)\)', llms, flags=re.MULTILINE)
     assert len(links) == len(chapters) + 1, 'Incomplete llms.txt file list'
@@ -257,7 +257,7 @@ def check_site(chapters):
 
 
 def build():
-    chapters = json.loads((ROOT / 'content/chapters.json').read_text())
+    chapters = json.loads((ROOT / 'content/chapters.json').read_text(encoding='utf-8'))
     assert len(chapters) == 5 and len({c['slug'] for c in chapters}) == len(chapters)
     SITE.mkdir(exist_ok=True)
     # Delete only old generated regular files beneath this fixed output folder.
@@ -270,18 +270,18 @@ def build():
         shutil.copyfile(ROOT / 'assets' / name, SITE / 'assets' / name)
     exports = []
     for chapter in chapters:
-        source = (ROOT / 'content' / (chapter['slug'] + '.html')).read_text()
+        source = (ROOT / 'content' / (chapter['slug'] + '.html')).read_text(encoding='utf-8')
         tree = Document(source).root
         assert not any(n.tag in {'script', 'style', 'h1', 'iframe'} for n in elements(tree))
         exported = '# ' + chapter['title'] + '\n\n' + chapter['dek'] + '\n\n' + markdown(tree, BASE + filename(chapter)).strip()
         exported += '\n\n## Chapter notes\n\n' + '\n\n'.join('**' + m['title'] + '**\n\n' + m['text'] for m in chapter['margin'])
         exported += f'\n\nFor Porthole {VERSION}. Updated {DATE}. [Online chapter]({BASE + filename(chapter)}). [Source reference]({chapter["source"]}).\n'
         exported = re.sub(r'\n[ \t]*\n(?:[ \t]*\n)+', '\n\n', exported)
-        (SITE / (chapter['slug'] + '.md')).write_text(exported)
-        (SITE / filename(chapter)).write_text(render(chapter, chapters, source, exported))
+        (SITE / (chapter['slug'] + '.md')).write_text(exported, encoding='utf-8')
+        (SITE / filename(chapter)).write_text(render(chapter, chapters, source, exported), encoding='utf-8')
         exports.append(exported)
-    (SITE / 'index.md').write_text(exports[0])
-    (SITE / 'manual.md').write_text('# Porthole manual\n\n' + '\n\n---\n\n'.join(exports))
+    (SITE / 'index.md').write_text(exports[0], encoding='utf-8')
+    (SITE / 'manual.md').write_text('# Porthole manual\n\n' + '\n\n---\n\n'.join(exports), encoding='utf-8')
     llms = f'''# Porthole manual
 
 > Instructions and reference for Porthole {VERSION}, a VS Code extension that opens local HTML and Markdown files in floating windows.
@@ -297,11 +297,11 @@ Each chapter includes its notes, version, and source reference. The complete man
 '''
     llms += '\n'.join(f'- [{c["nav"]}]({BASE}{c["slug"]}.md): {c["dek"]}' for c in chapters)
     llms += f'\n\n## Complete manual\n\n- [Full manual]({BASE}manual.md): All five chapters in one Markdown file.\n'
-    (SITE / 'llms.txt').write_text(llms)
-    (SITE / '.nojekyll').write_text('')
-    (SITE / 'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: ' + BASE + 'sitemap.xml\n')
-    (SITE / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>' + BASE + filename(c) + '</loc></url>' for c in chapters) + '</urlset>\n')
-    (SITE / '404.html').write_text('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found · Porthole manual</title></head><body><main><h1>This page is not here.</h1><p><a href="' + BASE + '">Return to the Porthole manual.</a></p></main></body></html>')
+    (SITE / 'llms.txt').write_text(llms, encoding='utf-8')
+    (SITE / '.nojekyll').write_text('', encoding='utf-8')
+    (SITE / 'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: ' + BASE + 'sitemap.xml\n', encoding='utf-8')
+    (SITE / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>' + BASE + filename(c) + '</loc></url>' for c in chapters) + '</urlset>\n', encoding='utf-8')
+    (SITE / '404.html').write_text('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found · Porthole manual</title></head><body><main><h1>This page is not here.</h1><p><a href="' + BASE + '">Return to the Porthole manual.</a></p></main></body></html>', encoding='utf-8')
     check_site(chapters)
 
 
@@ -310,6 +310,6 @@ if __name__ == '__main__':
     parser.add_argument('--check', action='store_true', help='Check the existing generated site without rebuilding')
     args = parser.parse_args()
     if args.check:
-        check_site(json.loads((ROOT / 'content/chapters.json').read_text()))
+        check_site(json.loads((ROOT / 'content/chapters.json').read_text(encoding='utf-8')))
     else:
         build()
