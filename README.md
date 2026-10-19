@@ -14,6 +14,8 @@ page of task instructions, a checklist, a design mock-up or a local report), por
 it in a window of its own instead of an editor tab that disappears behind whatever you
 open next.
 
+**[Product page](https://jlumbroso.github.io/porthole/)** · **[Manual](https://jlumbroso.github.io/porthole-docs/)** (a guide to each window, the settings and troubleshooting; its source is [`docs/manual/`](docs/manual/)).
+
 ## See it
 
 The first real use, on 2026-10-12: a page of step-by-step instructions (for replacing the
@@ -123,7 +125,7 @@ server: the link goes through VS Code's own link handling. The page must be a lo
 | `porthole.outsideLinks.allowedFolders` | none | More folders, by absolute path, whose files open without asking. |
 | `porthole.outsideLinks.allowLocalFiles` | off | Any other local file opens without asking. |
 
-Paths are compared after resolving `..`, symbolic links and letter case, so a path that only
+Paths are compared after resolving `..`, symbolic links and (on macOS and Windows) letter case, so a path that only
 looks inside an allowed folder does not pass. For a file no setting covers, porthole asks:
 
 ![Porthole's question: "A link from outside VS Code asks Porthole to open a file. None of Porthole's outside-link settings allows this file yet", with the buttons Cancel, Allow This Folder and Open Once.](docs/images/porthole-outside-link-question.png)
@@ -140,15 +142,17 @@ as you want before you do.
 **What a link does to your screen.** A new floating window takes the keyboard (on macOS), so a
 link sent while you type elsewhere sends your keystrokes into the page. Sending the same link
 again brings the existing window forward; with a size, it reopens the page at that size. Editing
-the file is how an agent updates a page: the window follows the file.
+the file is how an agent updates a page: an HTML page reloads when its file is saved, and a Markdown
+preview follows the file.
 
 When a link is refused (a setting is off, the file does not exist, a relative path matches two
-folders), porthole says why in a message and in the "Porthole" output channel. Turning
+folders), porthole says why in a message and in the "Porthole" output channel. A link or action
+that is turned off is refused before porthole asks about any file. Turning
 `porthole.outsideLinks.enabled` off turns all of this off. A [skill for models](.claude/skills/porthole/SKILL.md)
 describes the same link in the terms an agent needs. **Porthole: Install the Skill for Models in This
 Project** writes it into your workspace folder (`.claude/skills/porthole/SKILL.md`), where Claude Code
 sessions find it; an agent can do the same with `open 'vscode://jlumbroso.porthole/v1/install-skill'`, which
-asks you the first time in each project. An edited copy is replaced only if you say so.
+asks you the first time in each VS Code workspace; a yes covers that workspace's other folders too. An edited copy is replaced only if you say so.
 
 ## Install
 
@@ -200,9 +204,9 @@ is a single gesture that combines them at a chosen size.
 window, already sized, compact and pinned. VS Code can change or remove it in any update,
 without notice.
 
-If that call throws or opens no window, porthole falls back to public commands that do
-the same thing: the window still opens, compact and pinned, but at VS Code's own default
-size rather than your first preset. The output channel "Porthole" says when the fallback
+If that call throws or opens no window, porthole falls back to public commands that try to do
+the same thing: the window should still open, compact and pinned, but at VS Code's own default
+size rather than your first preset. The fallback is an attempt, not a guarantee. The output channel "Porthole" says when the fallback
 ran. The setting `porthole.useInternalCommand` turns the internal call off if you would
 rather never use it.
 

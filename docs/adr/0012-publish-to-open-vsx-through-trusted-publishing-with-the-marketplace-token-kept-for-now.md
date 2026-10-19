@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Publish to Open VSX through trusted publishing, with the Marketplace token kept for now
 
 - **Date**: 2026-10-13
-- **Iteration**: 4
+- **Iteration**: 5
 - **Status**: Partially Implemented
 - **Deciders**: Jérémie Lumbroso (asked for it); Purser 5.5 (Claude Sonnet 5.5) set it up
 
@@ -173,6 +173,17 @@ Jérémie: "Please, Option D", and he asked that the full process, and the idea 
 
 ---
 
+#### The GitHub settings, as commands (not yet applied; each is listed here before it is changed)
+
+Two rulesets and one environment change. They are repository settings, so they are proposed to Jérémie with their exact commands; each can be undone in Settings, Rules and Environments.
+
+1. **Only the owner can create a `v*` tag** (a ruleset that restricts creation, with the repository admin role allowed to bypass, so Jérémie's login and the seats using it can still tag):
+   `gh api -X POST repos/jlumbroso/porthole/rulesets` with `{"name":"release tags: only an admin creates","target":"tag","enforcement":"active","conditions":{"ref_name":{"include":["refs/tags/v*"],"exclude":[]}},"bypass_actors":[{"actor_id":5,"actor_type":"RepositoryRole","bypass_mode":"always"}],"rules":[{"type":"creation"}]}`
+2. **Nobody can move or delete a `v*` tag, administrators included** (a second ruleset, because a bypass list applies to every rule in a ruleset, and one ruleset could not forbid moves for admins while allowing creation): `{"name":"release tags: never moved or deleted","target":"tag","enforcement":"active","conditions":{"ref_name":{"include":["refs/tags/v*"],"exclude":[]}},"bypass_actors":[],"rules":[{"type":"update"},{"type":"deletion"}]}`. The way out is deliberate: remove or disable this ruleset in Settings, Rules (an admin act on purpose, not an accident).
+3. **The `open-vsx` environment: no reviewers, `v*` tags only.** `gh api -X PUT repos/jlumbroso/porthole/environments/open-vsx` with `{"reviewers":[],"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}`, then `gh api -X POST repos/jlumbroso/porthole/environments/open-vsx/deployment-branch-policies` with `{"name":"v*","type":"tag"}`. A run dispatched on `main` is then refused by the environment, so the registry can only be reached from a tag.
+
+One consequence to know: the rehearsal command in this ADR (`--ref main`) stops working after step 3; a rehearsal is `--ref vX.Y.Z` from then on, against a tag that exists.
+
 ### Rehearsal result (2026-10-13, run 38350586673, approved by Jérémie)
 
 **Ran.** The job passed every step up to the publish, where `ovsx publish --trusted-publishing` printed `Trusted publishing token issued for jlumbroso.porthole, expires at <five minutes later>` and then `Extension jlumbroso.porthole 0.1.0 is already published`. That is the outcome the rehearsal predicted: the registration matched, the OIDC claims (repository, workflow file and the `open-vsx` environment) were accepted, and the registry issued a five-minute token scoped to this extension. **What it did not test**: the upload itself with that token, because the version already existed. That is proven by the first real release.
@@ -190,9 +201,9 @@ Jérémie: "Please, Option D", and he asked that the full process, and the idea 
 - [x] Workflow `publish-open-vsx.yml`, dispatch from `release.yml`, environment `open-vsx` with Jérémie as required reviewer - Owner: Purser (done 2026-10-13)
 - [x] Register the trusted publisher at open-vsx.org (Settings, Trusted Publishers, namespace `jlumbroso`, GitHub Actions: owner `jlumbroso`, repository `porthole`, workflow `publish-open-vsx.yml`, environment `open-vsx`) - Owner: Jérémie (done 2026-10-13)
 - [x] Rehearse with `gh workflow run publish-open-vsx.yml --ref main -f tag=v0.1.0`, approve it, and read the log - Owner: Purser starts it, Jérémie approves (done 2026-10-13, run 38350586673; result below)
-- [ ] Build `scripts/release.mjs` (state reader injected; the five steps; `--dry-run`) with tests for the five scenarios above, and the recipes `just release X.Y.Z` and `just release-status X.Y.Z` (the `justfile` is shared: tell Glazier) - Owner: Purser
-- [ ] List, then make, the GitHub settings: the `v*` tag ruleset (create by owner only; no move or delete) and the `open-vsx` environment (no reviewers, `v*` tags only) - Owner: Purser, each change announced to Jérémie first
-- [ ] Change the workflows: `publish-open-vsx.yml` runs after the Release on the tag (no approval), refuses a commit not on `main` or without green CI; `release.yml` dispatches it or is merged with it; `just publish` becomes Marketplace-only and skips versions already live - Owner: Purser
+- [x] Build `scripts/release.mjs` (state reader injected; the five steps; `--dry-run`) with tests, and the recipes `just release X.Y.Z` and `just release-status X.Y.Z` (`just publish` is now an alias) - Owner: Purser (done 2026-10-19, commit `2c43214`; 12 tests; `just release-status 0.4.0` reads that real release as fully done)
+- [ ] Apply the GitHub settings listed under "The GitHub settings, as commands" below (two tag rulesets; the `open-vsx` environment without reviewers and restricted to `v*` tags) - Owner: Purser, **waiting for Jérémie's go**, since they change the repository's protections
+- [x] Change the workflows: `publish-open-vsx.yml` refuses a commit not on `main` or without green tests, treats a live version as done, and no longer depends on an approval; `release.yml` still dispatches it - Owner: Purser (done 2026-10-19, same commit). **Until the GitHub settings below are applied, the `open-vsx` environment still requires a reviewer, so a dispatched run waits.**
 - [ ] The first real release through this route proves the upload, with `OVSX_PAT` kept as the fallback; then QST-OVSX-PAT's conditional answer applies (revoke) - Owner: Purser and Jérémie
 - [ ] Watch `microsoft/vscode-vsce#1275` and `microsoft/vsmarketplace#2121` for Marketplace trusted publishing; **decide by 2026-11-15** whether to try the Entra route; the PAT is retired on 2026-12-01 - Owner: Purser to watch, Jérémie to decide
 - [ ] Update `docs/release/RELEASE-PLAN.md` and the feedback for Lintel with what the rehearsal showed - Owner: Purser
@@ -200,6 +211,12 @@ Jérémie: "Please, Option D", and he asked that the full process, and the idea 
 ---
 
 ## Iterations
+
+### Iteration 5 (2026-10-19)
+- Trigger: Glazier asked for option D before 0.4.1.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5).
+- Changes: `scripts/release.mjs`, its tests, `just release` and `just release-status`, and the workflow changes built; the GitHub settings written out as commands and left for Jérémie's go.
+- Outcome: unchanged (Partially Implemented); the settings and the first real release are what remain.
 
 ### Iteration 4 (2026-10-14)
 - Trigger: Jérémie answered QST-OVSX-GATE with D and asked that the idempotent release process be documented here.
