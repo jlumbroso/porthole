@@ -11,7 +11,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const ALLOWED = new Set(['package.json', 'README.md', 'CHANGELOG.md', 'LICENSE', 'LICENSE.txt', 'dist/extension.js', 'media/icon.png', 'media/markdown-color-scheme.css']);
+const ALLOWED = new Set(['package.json', 'README.md', 'CHANGELOG.md', 'LICENSE', 'LICENSE.txt', 'dist/extension.js', 'media/icon.png', 'media/markdown-color-scheme.css', '.claude/skills/porthole/SKILL.md']);
 const REQUIRED = ['package.json', 'dist/extension.js', 'media/icon.png', 'media/markdown-color-scheme.css'];
 
 const vsce = resolve(root, 'node_modules', '.bin', 'vsce');

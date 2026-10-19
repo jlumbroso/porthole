@@ -318,6 +318,8 @@ export const workspace = {
       if (text === undefined) { throw new Error(`mock: no such file ${uri.fsPath}`); }
       return new TextEncoder().encode(text);
     },
+    async createDirectory(_uri: { fsPath: string }) { // files are kept by path; folders need no record
+    },
     async writeFile(uri: { fsPath: string }, content: Uint8Array) {
       writtenFiles.set(uri.fsPath, new TextDecoder().decode(content));
     },
