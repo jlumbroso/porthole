@@ -85,20 +85,30 @@ export async function release(world, { version, dryRun = false, ovsxFallback = f
   if ((await world.openVsxVersion()) === version) { note('open vsx', 'done', `shows ${version}`); }
   else if (dryRun) { note('open vsx', 'would', `wait for publish-open-vsx.yml${ovsxFallback ? ', then fall back to OVSX_PAT if it failed' : ''}`); }
   else {
-    let live = false; let workflowFailed = false; let workflowOk = false;
-    for (let i = 0; i < polls && !live && !workflowFailed; i++) {
+    // Wait for the workflow to COMPLETE before deciding anything. A queued or running workflow may still publish, so the
+    // token fallback is only for a workflow that failed (or never started). A queued run gets a longer bound (met at
+    // 0.4.1: a GitHub Actions incident held the run about ten minutes, and the fallback fired while it was queued).
+    let live = false; let run = null; let checks = 0;
+    const limit = () => (run && run.status !== 'completed' ? polls * 3 : polls);
+    while (checks < limit()) {
       if ((await world.openVsxVersion()) === version) { live = true; break; }
-      const run = await world.openVsxRun(tag);
-      if (run?.status === 'completed') { if (run.conclusion === 'success') { workflowOk = true; } else { workflowFailed = true; break; } }
+      run = await world.openVsxRun(tag);
+      if (run?.status === 'completed' && run.conclusion !== 'success') { break; }
       await world.sleep(pollMs);
+      checks++;
     }
-    if (live) { note('open vsx', 'acted', 'published by publish-open-vsx.yml'); }
-    else if (workflowOk && !workflowFailed) { note('open vsx', 'pending', 'the workflow succeeded; the registry validates a new upload before showing it (lag, not failure)'); }
-    else if (!ovsxFallback) { return stop('open vsx', `the workflow ${workflowFailed ? 'failed' : 'did not publish in time'}. Re-run with --ovsx-fallback to publish the Release's file with OVSX_PAT, or fix the workflow.`); }
+    const failedRun = run?.status === 'completed' && run.conclusion !== 'success';
+    const stillRunning = run && run.status !== 'completed';
+    if (live) { note('open vsx', 'acted', 'published by publish-open-vsx.yml (trusted publishing)'); }
+    else if (run?.status === 'completed' && run.conclusion === 'success') { note('open vsx', 'pending', 'the workflow succeeded; the registry validates a new upload before showing it (lag, not failure)'); }
+    else if (stillRunning) { return stop('open vsx', `publish-open-vsx.yml is still ${run.status} after ${checks} checks. It may yet publish, so the token fallback was not used; run the same command again later.`); }
+    else if (!failedRun && !ovsxFallback) { return stop('open vsx', 'the workflow never started or did not publish in time. Re-run with --ovsx-fallback to publish the Release\'s file with OVSX_PAT, or look at the workflow.'); }
+    else if (failedRun && !ovsxFallback) { return stop('open vsx', 'the workflow failed. Re-run with --ovsx-fallback to publish the Release\'s file with OVSX_PAT, or fix the workflow.'); }
     else {
       const file = await world.downloadVsix(tag);
       const r = await world.publishOpenVsxWithToken(file);
-      if (r.alreadyPublished || r.ok) { note('open vsx', 'acted', `published with OVSX_PAT as the fallback${r.alreadyPublished ? ' (the registry said already published: done)' : ''}`); }
+      if (r.alreadyPublished) { note('open vsx', 'done', 'the registry says it is already published (by the workflow or an earlier run): done'); }
+      else if (r.ok) { note('open vsx', 'acted', 'published with OVSX_PAT as the fallback (the workflow had failed or never started)'); }
       else { return stop('open vsx', `fallback publish failed: ${r.error}`); }
     }
   }

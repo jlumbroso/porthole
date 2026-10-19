@@ -8,7 +8,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # Publish to Open VSX through trusted publishing, with the Marketplace token kept for now
 
 - **Date**: 2026-10-13
-- **Iteration**: 5
+- **Iteration**: 6
 - **Status**: Partially Implemented
 - **Deciders**: Jérémie Lumbroso (asked for it); Purser 5.5 (Claude Sonnet 5.5) set it up
 
@@ -205,12 +205,20 @@ One consequence to know: the rehearsal command in this ADR (`--ref main`) stops 
 - [x] Apply the GitHub settings listed under "The GitHub settings, as commands" (two tag rulesets; the `open-vsx` environment without reviewers and restricted to `v*` tags) - Owner: Purser (done 2026-10-19, rulesets 25416493 and 25416494, each read back). *(I had written "waiting for Jérémie's go". That was my interpretation, not his ruling: he had answered "Option D", which is these guardrails, and the ADR had listed them; Glazier pointed out it was the same invented human-only step as the founding brief's. Not yet tested: that an admin's `v*` tag push passes the creation bypass; the first real tag will show it.)*
 - [x] Change the workflows: `publish-open-vsx.yml` refuses a commit not on `main` or without green tests, treats a live version as done, and no longer depends on an approval; `release.yml` still dispatches it - Owner: Purser (done 2026-10-19, same commit). *(The settings were applied the same day, so a dispatched run no longer waits.)*
 - [x] The first real release through this route proves the upload, with `OVSX_PAT` kept as the fallback; then QST-OVSX-PAT's conditional answer applies (revoke) - Owner: Purser and Jérémie (2026-10-19: **proven by 0.4.1**. `publish-open-vsx.yml` run 39286130677, dispatched on `v0.4.1`, passed every guard (version tag, on `main`, green tests) and logged "Trusted publishing token issued for jlumbroso.porthole" and "Published jlumbroso.porthole v0.4.1" at 16:41:56 UTC, with no approval. The local `just release` also ran its `OVSX_PAT` fallback, because GitHub's Actions incident of that day left the workflow queued about ten minutes, and the registry answered "already published": nothing was uploaded twice. Revoking `OVSX_PAT` is now due, per QST-OVSX-PAT; it is an act on Jérémie's Open VSX account.)
+- [ ] Revoke the classic Open VSX token at open-vsx.org (Settings, Access Tokens): QST-OVSX-PAT's condition ("if trusted publishing works flawlessly") is met by 0.4.1, with one flaw found and fixed in my script (the fallback fired while the workflow was queued; fixed with 3 tests that fail on the old script) - Owner: Jérémie, on his Open VSX account
+- [ ] After the revocation: delete `OVSX_PAT` from `.env`, drop `--ovsx-fallback` from `just release` and the fallback code and its tests from `scripts/release.mjs` - Owner: Purser
 - [ ] Watch `microsoft/vscode-vsce#1275` and `microsoft/vsmarketplace#2121` for Marketplace trusted publishing; **decide by 2026-11-15** whether to try the Entra route; the PAT is retired on 2026-12-01 - Owner: Purser to watch, Jérémie to decide
 - [ ] Update `docs/release/RELEASE-PLAN.md` and the feedback for Lintel with what the rehearsal showed - Owner: Purser
 
 ---
 
 ## Iterations
+
+### Iteration 6 (2026-10-19)
+- Trigger: Glazier's report that 0.4.1 went through option D.
+- Contributors: Purser 5.5 (Claude Sonnet 5.5); Glazier 5.5 (Claude Opus 5.5), who ran the release and found the flaw.
+- Changes: `release.mjs` now waits for the workflow to complete (longer when queued) before any token fallback and reports "already published" accurately; three tests that fail on the old script; revocation and cleanup action items added.
+- Outcome: unchanged (Partially Implemented); what remains is revoking the old token and removing the fallback.
 
 ### Iteration 5 (2026-10-19)
 - Trigger: Glazier asked for option D before 0.4.1.

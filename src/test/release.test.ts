@@ -159,4 +159,33 @@ describe('release: one command that asserts a destination', () => {
     expect(s.calls).toEqual([]);   // a duplicate upload would only fail; validation takes a few minutes
     expect(states(r)['open vsx']).toBe('pending');
   });
+
+  it('does not use the token while the workflow is still queued or running (0.4.1: an Actions incident held it ten minutes)', async () => {
+    // the fallback once fired while the run was queued and printed a misleading "published with OVSX_PAT"
+    const s = fresh({ tagSha: 'aaaaaaa1', releaseAssets: ['porthole-0.5.0.vsix'], ovsxRun: { status: 'queued' }, marketplace: '0.5.0' });
+    const r = await release(worldOf(s), { ...opts, ovsxFallback: true });
+    expect(r.ok).toBe(false);
+    expect(s.calls).toEqual([]);
+    expect(r.steps.at(-1)?.detail).toMatch(/still queued/);
+  });
+
+  it('waits longer for a queued run, and takes its result when it comes', async () => {
+    const s = fresh({ tagSha: 'aaaaaaa1', releaseAssets: ['porthole-0.5.0.vsix'], ovsxRun: { status: 'queued' }, marketplace: '0.5.0' });
+    let waits = 0;
+    const world = worldOf(s);
+    world.sleep = async () => { waits++; if (waits === 5) { s.ovsx = '0.5.0'; } };   // later than the plain bound of 3 checks
+    const r = await release(world, { ...opts, ovsxFallback: true });
+    expect(r.ok).toBe(true);
+    expect(s.calls).toEqual([]);
+    expect(states(r)['open vsx']).toBe('acted');
+    expect(r.steps.find(x => x.name === 'open vsx')?.detail).toMatch(/trusted publishing/);
+  });
+
+  it('reports "already published" from the fallback as done, not as published with the token', async () => {
+    const s = fresh({ tagSha: 'aaaaaaa1', releaseAssets: ['porthole-0.5.0.vsix'], ovsxRun: { status: 'completed', conclusion: 'failure' }, ovsxTokenResult: { alreadyPublished: true }, marketplace: '0.5.0' });
+    const r = await release(worldOf(s), { ...opts, ovsxFallback: true });
+    expect(r.ok).toBe(true);
+    expect(states(r)['open vsx']).toBe('done');
+    expect(r.steps.find(x => x.name === 'open vsx')?.detail).not.toMatch(/with OVSX_PAT/);
+  });
 });
