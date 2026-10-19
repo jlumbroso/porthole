@@ -7,8 +7,8 @@ import {
 } from './helpers/vscodeMock';
 
 // Adding Porthole's skill for models to a project (ADR-0016, iteration 3): one
-// action, from the command palette or from a link, which never overwrites a
-// copy someone edited.
+// action, from the command palette or from a link, which replaces a copy
+// someone edited only when the person says so.
 
 const BUNDLED = '---\nname: porthole\ndescription: Put a page in front of the human.\n---\n\n# Showing a page\n';
 const target = (folder: string) => `${folder}/.claude/skills/porthole/SKILL.md`;
@@ -100,15 +100,37 @@ describe('from a link', () => {
     expect(writtenFile(target('/work'))).toBeUndefined();
   });
 
-  it('never overwrites an edited copy, and says so', async () => {
+  it('keeps an edited copy when the person says no to replacing it, and says so', async () => {
     const edited = `${stamped(BUNDLED, '0.3.9')}\nOur project's own note.\n`;
     seedFile(target('/work'), edited);
-    answerNextModal('Install It');
+    answerNextModal('Install It'); // may links install here?
+    answerNextModal(undefined);    // replace the edited copy? no
 
     await followLink('/v1/install-skill', '');
 
     expect(writtenFile(target('/work'))).toBe(edited);
     expect(shownMessages().at(-1)).toMatch(/already has an edited copy of Porthole's skill; Porthole left it as it is/);
+  });
+
+  describe('Regression tests', () => {
+    it('asks a link\'s person the same question as the palette before replacing an edited copy', async () => {
+      // Bug (Jérémie, ADR-0016 QST-CHECK-SKILL-INSTALL, 2026-10-19): from the
+      // palette, an edited copy brought "Replace it?"; from a link, Porthole
+      // asked only whether links may install, then gave up on the edited copy
+      // without asking. The person decides about their edits, whichever route.
+      const edited = `${stamped(BUNDLED, '0.3.9')}\nOur project's own note.\n`;
+      seedFile(target('/work'), edited);
+      answerNextModal('Install It');
+      answerNextModal('Replace It');
+
+      await followLink('/v1/install-skill', '');
+
+      expect(modalsShown().map(modal => modal.message)).toEqual([
+        expect.stringMatching(/asks Porthole to install its skill for models in work/),
+        expect.stringMatching(/was edited since Porthole wrote it\. Replace it/),
+      ]);
+      expect(writtenFile(target('/work'))).toBe(stamped(BUNDLED, version));
+    });
   });
 
   it('needs repo= when the window has several folders, and refuses when its setting is off', async () => {

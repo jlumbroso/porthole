@@ -63,8 +63,8 @@ async function readText(uri: vscode.Uri): Promise<string | undefined> {
 const placeIn = (folder: vscode.WorkspaceFolder) => `${folder.name}/${SKILL_PATH.join('/')}`;
 
 /**
- * Writes the skill into `folder`, unless an edited copy is there: from the
- * palette Porthole then asks before replacing it; from a link it never does.
+ * Writes the skill into `folder`. An edited copy is replaced only when the
+ * person says so, by the same question from the palette or from a link.
  */
 export async function installSkillTo(folder: vscode.WorkspaceFolder, from: 'palette' | 'link'): Promise<void> {
   if (!extensionUri) { return; }
@@ -79,16 +79,18 @@ export async function installSkillTo(folder: vscode.WorkspaceFolder, from: 'pale
     return;
   }
   if (state === 'edited') {
-    log(`skill: ${placeIn(folder)} was edited; left as it is`);
-    if (from === 'link') {
-      void vscode.window.showInformationMessage(`Porthole: ${folder.name} already has an edited copy of Porthole's skill; Porthole left it as it is.`);
-      return;
-    }
+    // The same question whichever route asked: the person decides about their
+    // edits, never the route (Jérémie, ADR-0016 QST-CHECK-SKILL-INSTALL: a link
+    // used to give up here where the palette asked).
     const answer = await vscode.window.showWarningMessage(
       `${placeIn(folder)} was edited since Porthole wrote it. Replace it with the skill from Porthole ${version}?`,
       { modal: true }, REPLACE_IT,
     );
-    if (answer !== REPLACE_IT) { return; }
+    if (answer !== REPLACE_IT) {
+      log(`skill: ${placeIn(folder)} was edited; left as it is`);
+      void vscode.window.showInformationMessage(`Porthole: ${folder.name} already has an edited copy of Porthole's skill; Porthole left it as it is.`);
+      return;
+    }
   }
   await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(folder.uri, ...SKILL_PATH.slice(0, -1)));
   await vscode.workspace.fs.writeFile(target, new TextEncoder().encode(wanted));

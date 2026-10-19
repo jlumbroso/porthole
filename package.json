@@ -228,7 +228,7 @@
         "porthole.outsideLinks.actions.installSkill": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Let outside links install Porthole's skill for models in a workspace folder (`.claude/skills/porthole/SKILL.md`). The first link in each project asks first; an edited copy is never overwritten."
+          "markdownDescription": "Let outside links install Porthole's skill for models in a workspace folder (`.claude/skills/porthole/SKILL.md`). The first link in each project asks first; a copy someone edited is replaced only if you say so."
         },
         "porthole.outsideLinks.allowWorkspaceFolders": {
           "type": "boolean",

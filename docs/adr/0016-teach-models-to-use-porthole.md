@@ -147,6 +147,28 @@ One thing:
 
 ---
 
+NOT: **Reading of the answer** (Glazier 5.5, 2026-10-19). A, with one finding, now fixed: a link that met an edited copy asked only whether links may install in this project, then gave up without the "Replace it?" question the palette asks. Jérémie: *"It feels like it is not following the same pathway as the command palette, and it should."* Both routes now ask the same question; the person decides about their edits, whichever route asked. Regression test: "asks a link's person the same question as the palette before replacing an edited copy", failing on the previous code. The test file the check wrote (`samples/site-capture/.claude/`) was deleted afterwards.
+
+### QST-NAME-REPLACE: Are the words for replacing an edited copy right?
+- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing 0.4.0
+- Why asking: **These words were left out of QST-NAME-SKILL, which was my slip**: the palette has asked them since the first build, and since the fix above a link shows them too. As built:
+  - the question (modal): "{folder}/.claude/skills/porthole/SKILL.md was edited since Porthole wrote it. Replace it with the skill from Porthole {version}?"
+  - the button: **Replace It** (and VS Code's **Cancel**); on Cancel, the notice the review already ruled: "{folder} already has an edited copy of Porthole's skill; Porthole left it as it is."
+  - the setting's description, changed to match: `porthole.outsideLinks.actions.installSkill` — "Let outside links install Porthole's skill for models in a workspace folder (`.claude/skills/porthole/SKILL.md`). The first link in each project asks first; a copy someone edited is replaced only if you say so."
+- Need: pick a letter (or override — any shape answers), or rule each line
+
+Options:
+- **A — as built**: the three lines ship as they are.
+- **B — the review's words**: the review rules each line.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-19)
+**A — as built.** *Rationale*: the button answers the question in its own words ("Replace it?" → **Replace It**), the house's button law since ADR-0021; and "replaced only if you say so" states the rule a person needs. *Confidence*: 0.6 — because "was edited since Porthole wrote it" may read as an accusation of the person who edited it. *If wrong*: B.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Revised in iteration 3 (2026-10-18): the extension adds the skill to the project, from the palette or from a link
@@ -160,7 +182,7 @@ Jérémie, 2026-10-18: *"Couldn't the extension install it in the local project 
 3. **Porthole's log**, for discovery: one line at startup names both routes, so a model that has never seen the skill, but can read Porthole's log, learns how to get it.
 
 **Settled regardless:**
-- **An existing copy**: identical to the bundled one, nothing happens; written by an older Porthole and not edited since, it is replaced and logged; **edited by anyone, it is never overwritten** without asking (from the palette) or at all (from a link). Porthole tells these apart by a comment it writes after the skill's front matter, naming the Porthole version and a checksum of the text below it.
+- **An existing copy**: identical to the bundled one, nothing happens; written by an older Porthole and not edited since, it is replaced and logged; **edited by anyone, it is replaced only if the person says so**, by the same question from the palette or from a link. (As first written, a link never replaced an edited copy and gave up without asking; Jérémie's hand check found the two routes differed, 2026-10-19, and he asked that they follow one path.) Porthole tells these apart by a comment it writes after the skill's front matter, naming the Porthole version and a checksum of the text below it.
 - **Committing is the person's**: Porthole writes the file and does not touch git.
 - **Other agents**: the file is plain Markdown; agents that do not read `.claude/skills` can be pointed to it, but no second format is written now.
 - The package gains an eighth file, the skill, which the package check names.

@@ -23,8 +23,8 @@ off, because it scrolls away.
   `open 'vscode://jlumbroso.porthole/v1/install-skill'` (add `?repo=<folder>` when the
   window has several workspace folders), or ask the human to run **Porthole: Add the
   Skill for Models to This Project**. Porthole writes `.claude/skills/porthole/SKILL.md`,
-  asks the human the first time in each project, and never overwrites a copy someone
-  edited. (Coming in the release after 0.3.0.)
+  asks the human the first time in each project, and asks again before replacing a copy
+  someone edited. (Coming in the release after 0.3.0.)
 
 ## 2. The link
 
