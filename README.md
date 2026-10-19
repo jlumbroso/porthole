@@ -112,12 +112,13 @@ window that receives it is the VS Code window you used last. Porthole's code ope
 server: the link goes through VS Code's own link handling. The page must be a local `.html`, `.htm`, `.md` or
 `.markdown` file; web addresses are not supported.
 
-**What opens without asking is yours to decide**, with five settings:
+**What a link may do is yours to decide**, with six settings:
 
 | Setting | Default | Effect |
 | --- | --- | --- |
 | `porthole.outsideLinks.enabled` | on | Links are accepted at all. |
 | `porthole.outsideLinks.actions.open` | on | Links may open pages. |
+| `porthole.outsideLinks.actions.installSkill` | on | Links may install Porthole's skill for models in a workspace folder (the first link in each project asks first). |
 | `porthole.outsideLinks.allowWorkspaceFolders` | on | Files inside the receiving window's workspace folders open without asking. |
 | `porthole.outsideLinks.allowedFolders` | none | More folders, by absolute path, whose files open without asking. |
 | `porthole.outsideLinks.allowLocalFiles` | off | Any other local file opens without asking. |
