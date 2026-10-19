@@ -111,6 +111,38 @@ Excellent, thank you naming review, approved as recommended.
 
 ---
 
+### QST-CHECK-SKILL-INSTALL: Does the command install the skill in a project, and does a link do it after asking once?
+- Status: unanswered
+- Why asking: **What this finds out.** The install action passes eleven tests against a mocked VS Code, and the skill is confirmed inside the installed 0.4.0 package (identical to the repository's copy). What only a real VS Code shows: that the command finds the bundled skill in the installed extension and writes it into a workspace folder; that its notices read right; and that a link from a terminal asks once, then goes ahead. **Safe**: it writes one file, `samples/site-capture/.claude/skills/porthole/SKILL.md`, which is not tracked; I delete it afterwards. Porthole 0.4.0 is installed in your VS Code, not published.
+- Need: pick a letter (or override — any shape answers). About two minutes.
+
+**Where to do this.** The **Porthole screenshot** window (title **Porthole screenshot**; open it with `code --new-window ~/Programming/porthole/samples/site-capture/porthole-screenshot.code-workspace` from your porthole workspace window's terminal if it is closed). Its one workspace folder is `site-capture`. No debug window.
+
+**Before you start.** In the Porthole screenshot window, run **Developer: Reload Window** (press **Shift+Cmd+P**, type `Reload Window`, press **Enter**).
+
+**Steps.** One action each.
+
+1. **Install from the palette.** Press **Shift+Cmd+P**, type `Porthole: Install the Skill for Models in This Project`, press **Enter**. A notice should say **"Porthole installed its skill for models: site-capture/.claude/skills/porthole/SKILL.md."**, and in the Explorer (**Shift+Cmd+E**) a folder `.claude` should appear in `site-capture`.
+2. **Run it again.** The same command again. The notice should say **"Porthole: site-capture/.claude/skills/porthole/SKILL.md is already up to date."** Nothing else changes.
+3. **Look at the file.** Open `.claude/skills/porthole/SKILL.md` in the Explorer. Its first lines should be the skill's front matter (`---`, `name: porthole`, …, `---`), then one line beginning `<!-- written by Porthole 0.4.0; sha256 …`.
+4. **Edit it, then install from a link.** Add a word anywhere below that line and save (**Cmd+S**). Then click into the Porthole screenshot window's terminal panel (**Ctrl+`**) and paste `open 'vscode://jlumbroso.porthole/v1/install-skill'`, pressing **Enter**. Porthole should first ask **"A link from outside VS Code asks Porthole to install its skill for models in site-capture (.claude/skills/porthole/SKILL.md). Install it?"** with **Install It** and **Cancel**. Click **Install It**. Then a notice should say **"Porthole: site-capture already has an edited copy of Porthole's skill; Porthole left it as it is."**, and your word should still be in the file.
+5. **Tidy up.** Close the file. I delete the `.claude` folder afterwards.
+
+Options:
+- **A — all as described**: installed in step 1, up to date in step 2, the mark in step 3, asked once and the edit kept in step 4.
+- **B — step 1 said nothing, or an error**: the command did not find the skill inside the installed extension.
+- **C — step 4 overwrote your edit.**
+- **D — step 4 did not ask**, or nothing happened at all.
+- **E — something else**: say what you saw.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-10-19)
+**A — all as described** (a prediction). *Rationale*: the installed package was inspected (the skill is at `.claude/skills/porthole/SKILL.md` inside it, identical to the repository's); the link handler is the one `open` has used since 0.3.0; and the edited-copy rule is tested, with a mutation of it caught by three tests. *Confidence*: 0.7 — because `workspace.fs` writing a new folder and file in a real workspace, and the order of the link's question and the edited-copy notice, have only run against the mock. *If wrong*: B means the extension's own folder is read differently in a real install, which the log line "the copy inside the extension is missing" will confirm; C would be a safety bug, fixed with a regression test before anything ships; D means the link went to the other VS Code window (send it with the Porthole screenshot window used last) or its setting is off.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Revised in iteration 3 (2026-10-18): the extension adds the skill to the project, from the palette or from a link
