@@ -1576,5 +1576,24 @@
     "source": "panel",
     "archivedAt": "2026-10-19T03:59:00.795Z",
     "reason": "promoted"
+  },
+  {
+    "key": "jlumbroso-porthole:16::caf561ef34f7::0",
+    "adrPath": "docs/adr/0016-teach-models-to-use-porthole.md",
+    "adrNumber": 16,
+    "questionText": "Are the words for replacing an edited copy right?",
+    "draftText": "Approving the naming review's recommendation exactly as stated, with thanks and gratitude.",
+    "updatedAt": "2026-10-19T04:07:58.361Z",
+    "history": [
+      "Approving the namin",
+      "Approving the naming reviews ",
+      "Approving the naming review's ",
+      "Approving the naming review's recom",
+      "Approving the naming review's recommendation exactly as stated, with thanks and gratitude"
+    ],
+    "totalOccurrences": 1,
+    "source": "panel",
+    "archivedAt": "2026-10-19T04:07:58.549Z",
+    "reason": "promoted"
   }
 ]

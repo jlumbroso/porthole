@@ -150,7 +150,7 @@ One thing:
 NOT: **Reading of the answer** (Glazier 5.5, 2026-10-19). A, with one finding, now fixed: a link that met an edited copy asked only whether links may install in this project, then gave up without the "Replace it?" question the palette asks. Jérémie: *"It feels like it is not following the same pathway as the command palette, and it should."* Both routes now ask the same question; the person decides about their edits, whichever route asked. Regression test: "asks a link's person the same question as the palette before replacing an edited copy", failing on the previous code. The test file the check wrote (`samples/site-capture/.claude/`) was deleted afterwards.
 
 ### QST-NAME-REPLACE: Are the words for replacing an edited copy right?
-- Status: unanswered — routed to the naming review, then Jérémie; blocks releasing 0.4.0
+- Status: answered
 - Why asking: **These words were left out of QST-NAME-SKILL, which was my slip**: the palette has asked them since the first build, and since the fix above a link shows them too. As built:
   - the question (modal): "{folder}/.claude/skills/porthole/SKILL.md was edited since Porthole wrote it. Replace it with the skill from Porthole {version}?"
   - the button: **Replace It** (and VS Code's **Cancel**); on Cancel, the notice the review already ruled: "{folder} already has an edited copy of Porthole's skill; Porthole left it as it is."
@@ -175,7 +175,7 @@ Options:
 **"Replace It" stands as built** — it answers the question in its own words, per the standing button law; and the Cancel-path notice already ruled ("Porthole left it as it is") now pairs exactly with the detail line's promise. Mini-doctrine for the guard-copy family, minted here: **never name an actor for a change you are about to destroy — name the change as property.** *Confidence*: 0.8. *If wrong*: the as-built words were already serviceable (Glazier's A was defensible); these edits cost three strings and no code.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+Approving the naming review's recommendation exactly as stated, with thanks and gratitude.
 
 ---
 
