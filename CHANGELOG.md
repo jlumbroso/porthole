@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-19
+
+The skill that teaches models to use Porthole, installed from Porthole itself.
+Checked by hand on macOS with VS Code 1.141.0 (ADR-0016).
+
 - **Install the skill for models in a project**: a command, **Porthole: Install the Skill for Models in
   This Project**, and a link, `vscode://jlumbroso.porthole/v1/install-skill`, write the skill that teaches
   models to use Porthole to `.claude/skills/porthole/SKILL.md`; the first link in a project asks

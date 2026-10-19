@@ -144,7 +144,10 @@ the file is how an agent updates a page: the window follows the file.
 When a link is refused (a setting is off, the file does not exist, a relative path matches two
 folders), porthole says why in a message and in the "Porthole" output channel. Turning
 `porthole.outsideLinks.enabled` off turns all of this off. A [skill for models](.claude/skills/porthole/SKILL.md)
-describes the same link in the terms an agent needs.
+describes the same link in the terms an agent needs. **Porthole: Install the Skill for Models in This
+Project** writes it into your workspace folder (`.claude/skills/porthole/SKILL.md`), where Claude Code
+sessions find it; an agent can do the same with `open 'vscode://jlumbroso.porthole/v1/install-skill'`, which
+asks you the first time in each project. An edited copy is replaced only if you say so.
 
 ## Install
 

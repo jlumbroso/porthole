@@ -24,7 +24,7 @@ off, because it scrolls away.
   window has several workspace folders), or ask the human to run **Porthole: Add the
   Skill for Models to This Project**. Porthole writes `.claude/skills/porthole/SKILL.md`,
   asks the human the first time in each project, and asks again before replacing an
-  edited copy. (Coming in the release after 0.3.0.)
+  edited copy. (Porthole 0.4.0 or later.)
 
 ## 2. The link
 
