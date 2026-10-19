@@ -588,8 +588,8 @@ spike:
 # ─── Release (Purser 5.5; Glazier agreed to these recipes, 2026-10-13) ───────
 # Policy lives in docs/release/RELEASE-PLAN.md and the playbook in
 # .claude/skills/extension-marketplace-publishing. Neither recipe takes an
-# argument, so nothing needs quoting. `publish` reads the tokens from .env and
-# talks to both registries. Any seat runs it when a release is decided; there is
+# argument, so nothing needs quoting (`release` takes a version, quoted).
+# `release` reads the tokens from .env and talks to both registries. Any seat runs it when a release is decided; there is
 # no "human only" step here (Jérémie, 2026-10-14: "The publishing step is not
 # mine to run. I asked you to publish it"). Its typed-version prompt is a guard
 # against a slip, answered by whoever runs it, for example `echo 0.2.0 | just publish`.
@@ -606,42 +606,35 @@ publish-check:
 publish-check-no-tokens:
     node scripts/publish-check.mjs --no-tokens
 
-# THE publish. Instant, public, and the extension ID is permanent. No new user-facing
-# name ships without the naming review first (Jérémie, 2026-10-14).
+# `release` asserts a destination: "X.Y.Z is released everywhere". Every step reads its own result from the world
+# (the git remote, GitHub, both registries), skips what is done and resumes at the first step that is not, so it is
+# safe to run again after any failure (ADR-0012, option D; docs/adr/0012-*.md has the table of steps).
+# Instant, public, and the extension ID is permanent. No new user-facing name ships without the naming review first.
+# Any seat runs it once a release is decided; its typed-version prompt is a guard against a slip, answered by whoever
+# runs it, for example `echo 0.5.0 | just release 0.5.0`. --ovsx-fallback keeps OVSX_PAT as the fallback for Open VSX
+# until one real release has gone through the workflow's trusted publishing (ADR-0012).
 [group('project')]
-[doc("Publish to the VS Code Marketplace and Open VSX. Irreversible: type the version to confirm")]
-publish:
+[doc("Release X.Y.Z everywhere (tag, GitHub Release, Open VSX, Marketplace). Idempotent; type the version to confirm")]
+release version:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "▸ gate"
     just gate
-    echo "▸ publish-check (every line must be ✓)"
-    # ALLOW_PRIVATE_REPO=1 just publish: publish before the repo is public (Jérémie, 2026-10-13)
-    node scripts/publish-check.mjs ${ALLOW_PRIVATE_REPO:+--allow-private-repo}
-    VERSION=$(node -p "require('./package.json').version")
-    NAME=$(node -p "require('./package.json').name")
-    ID=$(node -p "require('./package.json').publisher + '.' + require('./package.json').name")
+    node scripts/release.mjs "{{version}}" --dry-run
     echo
-    echo "This publishes ${ID} ${VERSION} to BOTH registries, live at once, with no review."
-    echo "The ID is permanent; there is no undo. Spike 0 on the version the listing claims is on you."
-    read -r -p "Type the version (${VERSION}) to go ahead: " ANSWER
-    if [[ "${ANSWER}" != "${VERSION}" ]]; then echo "Not confirmed. Nothing was published."; exit 1; fi
-    mkdir -p releases
-    npm run package
-    VSIX="releases/${NAME}-${VERSION}.vsix"
-    set -a; source .env; set +a   # VSCE_PAT and OVSX_PAT stay in this process only
-    echo "▸ VS Code Marketplace"
-    node_modules/.bin/vsce publish --packagePath "${VSIX}"
-    echo "▸ Open VSX"
-    npx --yes ovsx@1.2.0 publish "${VSIX}"
-    echo "▸ confirm each registry on its own (playbook I and V.3)"
-    node_modules/.bin/vsce show "${ID}" | head -12 || true
-    # Open VSX validates a new upload before showing it: "not found" for a few minutes is normal (met 2026-10-13)
-    for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
-        OV=$(curl -s "https://open-vsx.org/api/${ID%%.*}/${NAME}" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log(j.version ?? '')})")
-        if [[ -n "${OV}" ]]; then echo "Open VSX: ${OV}"; break; fi
-        echo "Open VSX: not visible yet (attempt ${attempt} of 12; a new upload is validated first), waiting 20 s"
-        sleep 20
-    done
-    if [[ -z "${OV:-}" ]]; then echo "Open VSX: still not visible after 4 minutes; check https://open-vsx.org/extension/${ID%%.*}/${NAME} later"; fi
-    echo "✅ done. The listing page can lag a few minutes; vsce show and the API are the truth."
+    echo "This releases porthole {{version}} to BOTH registries, live at once. The ID is permanent; there is no undo."
+    read -r -p "Type the version ({{version}}) to go ahead: " ANSWER
+    if [[ "${ANSWER}" != "{{version}}" ]]; then echo "Not confirmed. Nothing was released."; exit 1; fi
+    node scripts/release.mjs "{{version}}" --ovsx-fallback
+
+# Read-only: what each step of a release finds for this version and what `release` would do. Changes nothing.
+[group('project')]
+[doc("What a release of X.Y.Z has done and would do. Read-only")]
+release-status version:
+    node scripts/release.mjs "{{version}}" --dry-run
+
+# Kept for the old habit: releases the version in package.json (same command as `release`).
+[group('project')]
+[doc("Release the version in package.json: alias of `just release <that version>`")]
+publish:
+    just release "$(node -p "require('./package.json').version")"

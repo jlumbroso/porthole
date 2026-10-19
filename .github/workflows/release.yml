@@ -3,11 +3,9 @@
 # Marketplace or Open VSX: that is `just publish`, run from a machine that holds the tokens
 # (the tokens are deliberately not stored as repository secrets). A tag whose version does
 # not match package.json, or has no CHANGELOG section, fails here before anything is created.
-# After the Release exists it asks publish-open-vsx.yml to run; that waits for the `open-vsx`
-# environment's reviewer before anything reaches Open VSX (reasons in that file's header). Today
-# `just publish` has already reached Open VSX by then, so the dispatched run can only fail as a
-# duplicate and is cancelled each time; ADR-0012, QST-OVSX-GATE, asks what to do about that.
-# (An earlier comment here called the approval a "human act" rule; that rule was never Jérémie's.)
+# After the Release exists it asks publish-open-vsx.yml to run, which publishes this same .vsix to Open VSX
+# with a short-lived OIDC token (no approval; its header says what guards it instead, ADR-0012). The
+# Marketplace is published by `just release`, which also waits for and verifies both.
 name: release
 
 on:
@@ -16,7 +14,7 @@ on:
 
 permissions:
   contents: write
-  actions: write   # to ask publish-open-vsx.yml to run, which then waits for approval
+  actions: write   # to ask publish-open-vsx.yml to run
 
 jobs:
   release:
@@ -64,7 +62,7 @@ jobs:
             --title "porthole ${version}" \
             --notes-file release-notes.md \
             --verify-tag
-      - name: Ask for the Open VSX publish (it waits for approval)
+      - name: Ask for the Open VSX publish
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run publish-open-vsx.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f tag="$GITHUB_REF_NAME"
