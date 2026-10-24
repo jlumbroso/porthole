@@ -219,6 +219,7 @@ The skill is still written only after the verbs it teaches have shipped.
 
 - [x] Answer QST-SKILL-HOME — Owner: Jérémie (2026-10-13)
 - [ ] Write the skill after the verbs ship, and run the stranger test — Owner: Glazier (2026-10-18: written for `open`, the one verb built, `.claude/skills/porthole/SKILL.md`, at Jérémie's request ahead of the release; stranger test not yet run; shipping it inside the extension needs a command, whose title goes to the naming review first)
+- [ ] Install the skill for Agent Skills too, not only Claude Code: Jérémie learned (2026-10-24, from John Papa) that `~/.agents/skills/` is the vendor-neutral Agent Skills directory (agentskills.io) that Codex and Cursor both read; *"That's an insight we can probably backport to Porthole as well."* Keyhole does it first (keyhole ADR-0008, with Surveyor's reading of the convention: home versus project folder, format, readers); then the same addition here, in `src/skill.ts`, with the home folder as the person's separate choice — Owner: Glazier
 - [x] Build the install action (command, link verb, log line, version comment, eighth package file) with tests — Owner: Glazier (`6370252`, renamed to the ruled names after; eleven tests; not yet released)
 - [x] Rule on QST-NAME-SKILL — Owner: the naming review, then Jérémie (2026-10-19: B, `install-skill`; applied)
 - [x] Answer QST-SKILL-LINK-ASK — Owner: Jérémie (2026-10-19: A, as built)
