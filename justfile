@@ -633,6 +633,14 @@ release version:
 release-status version:
     node scripts/release.mjs "{{version}}" --dry-run
 
+# The four GitHub guardrails the Open VSX workflow assumes (ADR-0012): two v* tag rulesets, and the open-vsx
+# environment limited to v* tags. Idempotent: reads first, creates only what is missing, reads back. `--check`
+# only reads. Runs gh with your login; a seat's permission layer may refuse it, so Jérémie runs it.
+[group('project')]
+[doc("Apply the release guardrails (tag rulesets, open-vsx environment); --check only reads")]
+repo-guardrails *args:
+    node scripts/repo-guardrails.mjs {{args}}
+
 # Kept for the old habit: releases the version in package.json (same command as `release`).
 [group('project')]
 [doc("Release the version in package.json: alias of `just release <that version>`")]
