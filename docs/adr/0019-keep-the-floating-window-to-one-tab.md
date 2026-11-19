@@ -185,7 +185,7 @@ Option A. I hope I did it correctly. I wasn't sure what you were trying to see. 
 ---
 
 ### QST-TABAPI-RECHECK: On VS Code 1.147, does the reported active window now follow your clicks, and does the pop-out still work?
-- Status: unanswered
+- Status: answered — run by Jérémie on 2026-11-19 ("I just ran the experiment, but I can't read the log. You'll have to answer."); the log read in the Decision section
 - Why asking: **What this finds out.** In October, VS Code kept telling extensions that the floating window's group was the active one after you clicked back into the main window, in all five rounds (QST-TABAPI-REPRO above; filed as microsoft/vscode#341430). On 2026-11-18 a VS Code developer closed that issue as fixed in VS Code 1.146 and asked us to say if it still lags. You updated to **1.147.0** today, so this run decides our reply: "fixed, thank you", or "still lags, here is the log". It is also the Spike 0 re-run that every VS Code update calls for: if the pop-out itself broke in 1.147, step 4 shows it. Only a real VS Code shows either. **Safe**: the spike runs in a separate debug window and changes nothing in your settings or files; you only follow steps, and I read the log afterwards (`spike/.run/spike.log`).
 - Need: pick a letter (or override — any shape answers). About four minutes.
 
@@ -218,6 +218,8 @@ Options:
 ---
 
 ## Decision
+
+**Upstream fixed, checked by hand on VS Code 1.147.0 (QST-TABAPI-RECHECK, 2026-11-19)**: microsoft/vscode#341430 was closed on 2026-11-18 as fixed in 1.146 (#345945; #346350 for focus outside a window's editors). Jérémie ran the check on 1.147.0 (commit `8a14f0c`), and Glazier read `spike/.run/spike.log` (from 17:23:58 UTC): the one-shot pop-out worked (returned in 272 ms; 2 groups, the new floating window's group active from the first snapshot at 0.25 s), and **all 16 snapshots alternate exactly**, the floating window's group (column 2) active, then the debug window's (column 1), eight trips back and forth. In October the floating window's group stayed active through every trip. What this does not show: the page was popped out once, not once per round, so the race at a window's creation was sampled once (active at once; it did not occur in October's run either, only in ADR-0010's skipped locks). Jérémie also clicked his porthole window once, a separate VS Code the spike cannot see, which leaves the result intact. Porthole keeps `windowToResize`'s fallback while it supports versions before 1.146 (the floor is 1.134.0).
 
 ### Chosen: VS Code's auto-lock setting, asked for with consent; Surveyor's explanation confirmed
 
