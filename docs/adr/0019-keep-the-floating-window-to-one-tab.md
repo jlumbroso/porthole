@@ -184,6 +184,39 @@ Option A. I hope I did it correctly. I wasn't sure what you were trying to see. 
 
 ---
 
+### QST-TABAPI-RECHECK: On VS Code 1.147, does the reported active window now follow your clicks, and does the pop-out still work?
+- Status: unanswered
+- Why asking: **What this finds out.** In October, VS Code kept telling extensions that the floating window's group was the active one after you clicked back into the main window, in all five rounds (QST-TABAPI-REPRO above; filed as microsoft/vscode#341430). On 2026-11-18 a VS Code developer closed that issue as fixed in VS Code 1.146 and asked us to say if it still lags. You updated to **1.147.0** today, so this run decides our reply: "fixed, thank you", or "still lags, here is the log". It is also the Spike 0 re-run that every VS Code update calls for: if the pop-out itself broke in 1.147, step 4 shows it. Only a real VS Code shows either. **Safe**: the spike runs in a separate debug window and changes nothing in your settings or files; you only follow steps, and I read the log afterwards (`spike/.run/spike.log`).
+- Need: pick a letter (or override — any shape answers). About four minutes.
+
+**Where to do this.** Your porthole project window: the VS Code window with the folder `porthole` open (its title bar ends with `porthole`), on VS Code 1.147.0. Close any other `[Extension Development Host]` window first.
+
+**Steps.** One action each. "The debug window" is the second VS Code window the spike opens, titled `[Extension Development Host]`; "the floating window" is the small window step 4 opens.
+
+1. **Open the Run and Debug view** in the porthole window: press **Shift+Cmd+D**.
+2. **Choose the spike.** In the drop-down at the top of that view, choose **Spike 0 — one-shot pop-out**.
+3. **Start it.** Click the green ▶ next to the drop-down. The debug window opens. Do the rest there.
+4. **Pop out the sample page.** Press **Shift+Cmd+P**, type `Pop out the sample`, press **Enter** on "Porthole Spike: 1 — Pop out the sample page (one-shot call)". The floating window should appear with the sample task page. *(If it does not, stop here: that is answer B.)*
+5. **Click into the page** in the floating window, once, on its white background (not on a checkbox).
+6. **Write the tab groups to the log, from the floating window.** With the floating window in front, press **Shift+Cmd+P**, type `Write the current tab groups`, press **Enter**.
+7. **Click the debug window** on its empty editor area (not the floating window).
+8. **Write the tab groups to the log again, from the debug window**: **Shift+Cmd+P**, type `Write the current tab groups`, **Enter**.
+9. **Repeat steps 4 to 8 four more times** (five rounds in all, as in October). Each step 4 opens the page in a fresh floating window, which also tests the race at a window's creation.
+10. **Tidy up.** Close the debug window.
+
+Options:
+- **A — all steps worked**: I read the log and say whether the active group followed you.
+- **B — the pop-out failed at step 4** (no floating window, or the page did not show): say what you saw. That is a Spike 0 failure on 1.147, and a different finding.
+- **C — another step did not work**: say which, and what happened instead.
+
+**Recommendation**: (by Glazier 5.5, Claude Opus 5.5, 2026-11-19)
+**A — all steps worked**, and my prediction of the log: in every round, the floating window's group is `"active":true` at step 6 and the debug window's group is `"active":true` at step 8. *Rationale*: the fix lramos15 cites, microsoft/vscode#345945, adds exactly the listener our trace named (`onDidChangeActiveGroup` in `MainThreadEditorTabs`), and #346350 covers focus outside a window's editors; both shipped in 1.146, before your 1.147.0. *Confidence*: 0.75 — because the fix is read from the developer's account and Surveyor has not yet read the code at 1.146/1.147, and the integrated browser takes focus its own way. *If wrong*: if the active group still sticks in any round, our reply says so with the log and the version (his own request), and Porthole's workaround stays as it is; if only a fresh window's group comes up not active at step 4, the creation race survived, which is a narrower reply; B means Spike 0 broke on 1.147, which comes before any reply.
+
+**ANS:** (by Jérémie Lumbroso)
+[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+
+---
+
 ## Decision
 
 ### Chosen: VS Code's auto-lock setting, asked for with consent; Surveyor's explanation confirmed
