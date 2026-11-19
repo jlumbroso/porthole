@@ -11,7 +11,7 @@ carry the filed text; the drafts here are kept as written, before final edits
 | [02 — macOS Ctrl text-editing keys never reach a page](02-macos-ctrl-text-keys-swallowed.md) | [#341243](https://github.com/microsoft/vscode/issues/341243) | bug | first real use, 2026-10-12; traced by Surveyor 5.1 |
 | [03 — let compact floating windows hide the browser toolbar](03-hide-browser-toolbar-in-compact-windows.md) | [#341244](https://github.com/microsoft/vscode/issues/341244) | feature request | Spike 0 screenshots, 2026-10-12; traced by Surveyor 5.1 |
 | [04 — a public way to open an editor in a sized floating window](04-public-api-for-auxiliary-window-open.md) | [#341245](https://github.com/microsoft/vscode/issues/341245) | feature request | the design brief, 2026-10-12 |
-| [05 — `tabGroups.activeTabGroup` does not follow the active group across windows](05-active-group-ignores-window-activation.md) | [#341430](https://github.com/microsoft/vscode/issues/341430) | bug | Cycle Window Size misses and skipped locks, 2026-10-13; traced by Surveyor 5.1, confirmed by hand |
+| [05 — `tabGroups.activeTabGroup` does not follow the active group across windows](05-active-group-ignores-window-activation.md) | [#341430](https://github.com/microsoft/vscode/issues/341430) | bug | Cycle Window Size misses and skipped locks, 2026-10-13; traced by Surveyor 5.1, confirmed by hand. **Fixed in VS Code 1.146** (#345945, #346350; closed 2026-11-18); confirmed by hand on 1.147.0 and [answered](05-reply-2026-11-19.md) 2026-11-19 |
 | [06 — open into a new floating window without taking focus](06-open-floating-window-without-focus.md) | not filed yet | feature request | Spike 1, 2026-10-13 |
 
 **Conventions for every draft**
