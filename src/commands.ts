@@ -112,6 +112,10 @@ export function markdownFilesShown(): vscode.Uri[] {
  * it can name the wrong window (confirmed by hand, ADR-0019; filed upstream as
  * microsoft/vscode#341430). When the active group is not one of ours and
  * exactly one porthole window is open, that one is meant.
+ *
+ * Fixed upstream in VS Code 1.146 (microsoft/vscode#345945, with #346350 for
+ * focus outside a window's editors; closed 2026-11-18). Keep this fallback
+ * while Porthole supports versions before 1.146 (the floor is 1.134.0).
  */
 function windowToResize(): MiniWindow | undefined {
   const active = vscode.window.tabGroups.activeTabGroup;
