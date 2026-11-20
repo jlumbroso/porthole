@@ -47,7 +47,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 ## Questions
 
 ### QST-MARKDOWN-OFF: When VS Code's built-in Markdown extension is disabled and a Markdown page is sent to Porthole, what should Porthole do?
-- Status: unanswered
+- Status: answered
 - Why asking: Porthole shows a Markdown file in VS Code's own Markdown preview, which belongs to the built-in **Markdown Language Features** extension. When that built-in is disabled (Jérémie had disabled it to save resources, on another session's advice), a Markdown page sent to Porthole on 2026-11-19 opened as two windows, one with the file's source as text and one empty, and the only explanation was a warning shown once per session, which he did not see. Porthole can check whether the built-in is enabled before it opens anything (`vscode.extensions.getExtension('vscode.markdown-language-features')`). HTML pages are not affected: they open in VS Code's integrated browser.
 - Need: pick a letter (or override — any shape answers)
 
@@ -60,7 +60,9 @@ Options:
 **A — open nothing, and say why every time.** *Rationale*: Porthole's promise is a page you can read beside your work; a window of raw Markdown is not that page, and today's run shows the half-open state is the confusing one (two windows, one empty, no explanation). Refusing is what Porthole already does for every other link it cannot honor (a file outside the allowed folders, a newer version), so the person and the model meet one behavior: nothing opens, and the notice says exactly what to change. *Confidence*: 0.65 — because a person may still want to read the text right away, which B serves. *If wrong*: B, if reading the source at once matters more than a clean refusal; C, if a floating window of source text is itself the confusing part.
 
 **ANS:** (by Jérémie Lumbroso)
-[Fill this in]   <!-- literal placeholder — parser-significant, do not paraphrase -->
+I endorse Option A, and I think while that should be the default behavior, we should also *have a setting to override this behavior and set this to Option B, with the same notice this time explaining why the behavior happened; there should be a setting to quiet that notice too. In other words, your Option A is excellent, but we also need some granularity to customize this behavior because:
+- we are making a decision based in judgment (that alarming the user to some problem is more important than gracefully degrading)
+- we are notifying the user of this (when the user might have intentionally stripped of Markdown, is okay with the source output, and would resent getting a notification that somehow implies something is wrong — nothing is wrong, instead we want to ensure the user knows what they are doing, so we should have a mechanism for them to say "yes, chill, I know what I'm doing" and for us to remember that for the foreseeable future.
 
 ---
 
