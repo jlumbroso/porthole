@@ -9,8 +9,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # When VS Code's built-in Markdown extension is disabled
 
 - **Date**: 2026-11-19
-- **Iteration**: 1
-- **Status**: Draft
+- **Iteration**: 2
+- **Status**: Accepted
 - **Deciders**: Jérémie Lumbroso; Glazier 5.5 (Claude Opus 5.5); Surveyor 5.1 (the empty window, in VS Code's source); the naming review (the new words)
 
 **TL;DR**: With VS Code's built-in Markdown Language Features disabled, a Markdown page sent to Porthole opened as two windows, one with the source as text and one empty, and the only explanation was a one-time warning easily missed; Porthole should check before it opens anything, open no window it cannot fill, say why every time with a way to fix it, and its documentation should say it needs that built-in.
@@ -68,16 +68,25 @@ I endorse Option A, and I think while that should be the default behavior, we sh
 
 ## Decision
 
-Not yet: QST-MARKDOWN-OFF, and Surveyor's reading of the second window.
+### Chosen: open nothing and say why, by default; a setting to show the source instead, and a setting to stop explaining
+
+**QST-MARKDOWN-OFF, A as the default, with two settings (Jérémie, 2026-11-19)**. His reason for the settings, kept whole: *"we are making a decision based in judgment (that alarming the user to some problem is more important than gracefully degrading); we are notifying the user of this (when the user might have intentionally stripped of Markdown, is okay with the source output, and would resent getting a notification that somehow implies something is wrong — nothing is wrong, instead we want to ensure the user knows what they are doing, so we should have a mechanism for them to say 'yes, chill, I know what I'm doing' and for us to remember that for the foreseeable future."*
+
+The design, by Glazier (names provisional until the naming review, following Porthole's `porthole.markdown.*` family):
+- **Before any window opens**, Porthole checks that VS Code's built-in Markdown Language Features is enabled (how, exactly, from Surveyor's reading: `getExtension` on a disabled built-in, and where the empty window came from).
+- **The default, `porthole.markdown.withoutPreview: "openNothing"`**: no window; a notice every time, saying the page needs that built-in, with a button that opens it in the Extensions view (one click enables it), and a button that answers "I know" (below). The log says the same, for a model that sent the link.
+- **The override, `"showSource"`**: one floating window with the file as plain text, and the notice, worded as an explanation of what happened rather than a fault ("shown as text because…").
+- **"Yes, chill, I know what I'm doing"**: a setting, provisionally `porthole.markdown.explainWithoutPreview` (true by default), that stops the notice in either mode; the notice's own "I know" button sets it, so saying it once is remembered, as Jérémie asked, and the setting undoes it. The log keeps recording each case either way.
+- The once-per-session warning (`warnIfOpenedAsText`) stays for the other text case (an HTML page the integrated browser did not take), unchanged.
 
 ---
 
 ## Action Items
 
-- [ ] Answer QST-MARKDOWN-OFF — Owner: Jérémie
+- [x] Answer QST-MARKDOWN-OFF — Owner: Jérémie (2026-11-19: A by default, with a setting for B and a setting to quiet the notice)
 - [ ] Read, at tag 1.147.0, what `_workbench.openWith` into group `-3` does with an editor id whose extension is disabled: where the empty floating window comes from, and whether a check before the open avoids it entirely — Owner: Surveyor 5.1
 - [ ] Build the check before the open, the chosen behavior, and a regression test that fails on today's code (a disabled built-in leads to no empty window, and the notice every time) — Owner: Glazier
-- [ ] Name the notice and its button — Owner: the naming review
+- [ ] Name the notice, its two buttons, and the two settings (`porthole.markdown.withoutPreview`, `porthole.markdown.explainWithoutPreview`, provisional) — Owner: the naming review (briefed 2026-11-19)
 - [ ] Say in the README, the listing, the manual and the skill for models that Markdown pages need VS Code's built-in Markdown Language Features enabled (and that disabling it to save resources turns that off) — Owner: Purser (README, listing), Sounder 6 (manual), Glazier (skill)
 
 ---
@@ -89,6 +98,12 @@ Not yet: QST-MARKDOWN-OFF, and Surveyor's reading of the second window.
 - Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
 - Changes: the failure read in Porthole's log; the cause; one question; the empty window sent to Surveyor
 - Outcome: `Draft`
+
+### Iteration 2 (2026-11-19)
+- Trigger: Jérémie's answer (A by default, with two settings)
+- Contributors: Jérémie Lumbroso, Glazier 5.5 (Claude Opus 5.5)
+- Changes: the decision and the design; the naming review briefed for the notice and the settings
+- Outcome: `Draft → Accepted` (built after Surveyor's reading and the naming review)
 
 ---
 
